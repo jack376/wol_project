@@ -28,7 +28,8 @@ ResourceMgr::~ResourceMgr()
 
 void ResourceMgr::Init()
 {
-	//LoadFromCSV("scripts/DefaultResourceList.csv", true);
+	LoadFromCSV("scripts/DefaultResourceList.csv", true);
+	LoadFromCSV("scripts/SceneEditorResourceList.csv", true);
 }
 
 void ResourceMgr::UnLoadAll()

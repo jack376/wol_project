@@ -98,4 +98,11 @@ enum class PatternObjectType
 	Count,
 
 };
+
+enum class UiType
+{
+	Text,
+	Box,
+};
+
 #include "AnimationClip.h"
