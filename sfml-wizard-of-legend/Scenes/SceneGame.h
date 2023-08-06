@@ -5,11 +5,12 @@ class UIButton;
 class TextGo;
 class SpriteGo;
 
+class Player;
 
 class SceneGame : public Scene
 {
 protected:
-
+	Player* player;
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

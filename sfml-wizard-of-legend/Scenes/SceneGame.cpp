@@ -7,6 +7,7 @@
 #include "Framework.h"
 #include "TextGo.h"
 #include "SpriteGo.h"
+#include "Player.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -24,7 +25,7 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
-
+	player = (Player*)AddGo(new Player());
 
 	for (auto go : gameObjects)
 	{
