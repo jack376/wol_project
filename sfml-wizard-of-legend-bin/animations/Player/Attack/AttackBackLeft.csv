@@ -1,9 +1,13 @@
-ID,FPS,LOOPTYPE
-AttackBackLeft,10,1
-,,
-TEXTURE ID,,
-graphics/Player/Attack/Left/AttackBackLeft1.png,,
-graphics/Player/Attack/Left/AttackBackLeft2.png,,
-graphics/Player/Attack/Left/AttackBackLeft3.png,,
-graphics/Player/Attack/Left/AttackBackLeft4.png,,
-graphics/Player/Attack/Left/AttackBackLeft5.png,,
+ID,FPS,LOOPTYPE,,
+AttackBackLeft,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/WizardSprite.png,402,456,14,17
+graphics/Player/WizardSprite.png,384,456,15,17
+graphics/Player/WizardSprite.png,366,454,15,19
+graphics/Player/WizardSprite.png,344,454,13,19
+graphics/Player/WizardSprite.png,323,457,14,16
+graphics/Player/WizardSprite.png,306,457,13,16
+graphics/Player/WizardSprite.png,290,457,13,16
+graphics/Player/WizardSprite.png,273,457,13,16
+graphics/Player/WizardSprite.png,263,457,13,16

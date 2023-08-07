@@ -1,5 +1,5 @@
-ID,FPS,LOOPTYPE
-IdleDown,10,0
-,,
-TEXTURE ID,,
-graphics/Player/Idle/IdleDown.png,,
+ID,FPS,LOOPTYPE,,
+IdleDown,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/WizardSprite.png,3,259,10,18

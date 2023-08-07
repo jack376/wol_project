@@ -1,0 +1,6 @@
+ID,FPS,LOOPTYPE,,
+DashRight,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/WizardSprite.png,289,125,18,12
+graphics/Player/WizardSprite.png,313,125,18,12

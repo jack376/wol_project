@@ -1,15 +1,15 @@
-ID,FPS,LOOPTYPE
-AttackBackUp,10,1
-,,
-TEXTURE ID,,
-graphics/Player/Attack/Up/AttackBackUp1.png,,
-graphics/Player/Attack/Up/AttackBackUp2.png,,
-graphics/Player/Attack/Up/AttackBackUp3.png,,
-graphics/Player/Attack/Up/AttackBackUp4.png,,
-graphics/Player/Attack/Up/AttackBackUp5.png,,
-graphics/Player/Attack/Up/AttackBackUp6.png,,
-graphics/Player/Attack/Up/AttackBackUp7.png,,
-graphics/Player/Attack/Up/AttackBackUp8.png,,
-graphics/Player/Attack/Up/AttackBackUp9.png,,
-graphics/Player/Attack/Up/AttackBackUp10.png,,
-graphics/Player/Attack/Up/AttackBackUp11.png,,
+ID,FPS,LOOPTYPE,,
+AttackBackUp,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/WizardSprite.png,8,197,9,15
+graphics/Player/WizardSprite.png,33,197,10,15
+graphics/Player/WizardSprite.png,53,197,14,17
+graphics/Player/WizardSprite.png,76,197,15,17
+graphics/Player/WizardSprite.png,100,197,15,17
+graphics/Player/WizardSprite.png,123,197,16,17
+graphics/Player/WizardSprite.png,148,197,15,17
+graphics/Player/WizardSprite.png,175,197,12,17
+graphics/Player/WizardSprite.png,199,197,12,17
+graphics/Player/WizardSprite.png,223,197,11,15
+graphics/Player/WizardSprite.png,248,196,9,16

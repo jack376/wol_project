@@ -1,14 +1,14 @@
-ID,FPS,LOOPTYPE
-RunDown,10,1
-,,
-TEXTURE ID,,
-graphics/Player/Run/Down/RunDown1.png,,
-graphics/Player/Run/Down/RunDown2.png,,
-graphics/Player/Run/Down/RunDown3.png,,
-graphics/Player/Run/Down/RunDown4.png,,
-graphics/Player/Run/Down/RunDown5.png,,
-graphics/Player/Run/Down/RunDown6.png,,
-graphics/Player/Run/Down/RunDown7.png,,
-graphics/Player/Run/Down/RunDown8.png,,
-graphics/Player/Run/Down/RunDown9.png,,
-graphics/Player/Run/Down/RunDown10.png,,
+ID,FPS,LOOPTYPE,,
+RunDown,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/WizardSprite.png,5,29,14,14
+graphics/Player/WizardSprite.png,29,29,14,14
+graphics/Player/WizardSprite.png,53,29,14,15
+graphics/Player/WizardSprite.png,77,28,13,16
+graphics/Player/WizardSprite.png,101,28,13,16
+graphics/Player/WizardSprite.png,125,29,14,14
+graphics/Player/WizardSprite.png,149,29,14,14
+graphics/Player/WizardSprite.png,173,29,14,15
+graphics/Player/WizardSprite.png,198,28,13,16
+graphics/Player/WizardSprite.png,221,28,14,16

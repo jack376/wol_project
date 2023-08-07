@@ -30,6 +30,7 @@ private:
 
 	sf::Vector2f dir;
 	float speed = 400.f;
+	float dashSpeed = 1600.f;
 
 	// 상태변수
 	bool isRun = false;

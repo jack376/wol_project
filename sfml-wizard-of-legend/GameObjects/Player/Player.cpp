@@ -45,6 +45,11 @@ void Player::Update(float dt)
 
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
 	
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+	{
+		ChangeState(States::Dash);
+	}
 	//std::cout << dir.x << std::endl;
 	//std::cout << dir.y << std::endl;
 
@@ -89,8 +94,6 @@ void Player::Update(float dt)
 
 	anim.Update(dt);
 	SetOrigin(origin);
-
-
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -177,7 +180,26 @@ void Player::RunUpdate(float dt)
 
 void Player::DashUpdate(float dt)
 {
-
+	if (currentDir == Dir::Up)
+	{
+		float movePos = sprite.getPosition().y;
+		//movePos += dir * dashSpeed * dt;
+	}
+	else if (currentDir == Dir::Right)
+	{
+		sf::Vector2f movePos = sprite.getPosition();
+		movePos += dir * dashSpeed * dt;
+	}
+	else if (currentDir == Dir::Down)
+	{
+		sf::Vector2f movePos = sprite.getPosition();
+		movePos += dir * dashSpeed * dt;
+	}
+	else if (currentDir == Dir::Left)
+	{
+		sf::Vector2f movePos = sprite.getPosition();
+		movePos += dir * dashSpeed * dt;
+	}
 }
 
 void Player::AttackUpdate(float dt)

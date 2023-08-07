@@ -51,14 +51,14 @@ void AnimationController::Update(float dt)
 		}
 	}
 
-	if (currentClip->frames[currentFrame].action != nullptr)
-	{
-		currentClip->frames[currentFrame].action();
-	}
+	//if (currentClip->frames[currentFrame].action != nullptr)
+	//{
+	//	currentClip->framesSheet[currentFrame].action();
+	//}
 
 	if (target != nullptr)
 	{
-		SetFrame(currentClip->frames[currentFrame]);
+		SetFrame(currentClip->framesSheet[currentFrame]);
 	}
 }
 
