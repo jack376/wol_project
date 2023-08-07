@@ -9,17 +9,16 @@ protected:
 	ResourceMgr() = default;
 	virtual ~ResourceMgr() override;
 	
+	
 	std::map<std::string, std::tuple<sf::Texture*, bool>> mapTexture;
 	std::map<std::string, std::tuple<sf::Font*, bool>> mapFont;
 	std::map<std::string, std::tuple<sf::SoundBuffer*, bool>> mapSoundBuffer;
 	std::map<std::string, std::tuple<AnimationClip*, bool>> mapAnimationClip;
 
 public:
-
 	void Init();
 
 	void UnLoadAll();
-
 	void LoadFromCSV(const std::string path, bool isDefault = false);
 	void Load(ResourceTypes t, const std::string path, bool isDefault = false);
 	void Unload(ResourceTypes t, const std::string path);
