@@ -16,15 +16,15 @@ Monster::~Monster()
 void Monster::Init()
 {
     MonsterInfo info = DATATABLE_MGR.Get<MonsterTable>(DataTable::Ids::Monster)->Get((int)monsterId);
-    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animation/" + info.name + "_Run.csv"));
-    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animation/" + info.name + "_Attact.csv"));
-    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animation/" + info.name + "_Death.csv"));
+    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + info.name + "_Run.csv"));
+    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + info.name + "_Attack.csv"));
+    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + info.name + "_Death.csv"));
+    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + info.name + "_Idle.csv"));
+    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + info.name + "_Hurt.csv"));
     animation.SetTarget(&sprite);
-    textureId = "sprites/"
     sortLayer = 10;
     
     //SetPlayer();  씬 전환 시에 (마을 <-> 던전) 플레이어 객체를 어떻게 관리할지에 따라 Init() 또는 Reset()에서 해줄지 결정.
-
 }
 
 void Monster::Release()
@@ -33,12 +33,17 @@ void Monster::Release()
 
 void Monster::Reset()
 {
-    SpriteGo::Reset();
+    animation.Play("GhoulRun");
+    SetOrigin(origin);
+    SetPosition({ 0, 0 });
+    SetFlipX(false);
 }
 
 void Monster::Update(float dt)
 {
-    HandleBehavior(dt);
+    animation.Update(dt);
+
+    //HandleBehavior(dt);
     HandleState();
 }
 
@@ -95,22 +100,22 @@ void Monster::SetLook(sf::Vector2f playerPos)
     sprite.setRotation(Utils::Angle(look));
 }
 
-void Monster::HandleBehavior(float dt)
-{
-    if (player == nullptr)
-        return;
-    else
-    {
-        sf::Vector2f playerPos = player->GetPosition();
-        float distance = Utils::Distance(playerPos, position);
-
-        if (distance <= searchRange)  //공격범위 ~ 탐색 범위
-        {
-            SetLook(playerPos);
-            if (distance <= stat.attackRange)
-                Attack();
-            else
-                Move(dt);
-        }
-    }
-}
+//void Monster::HandleBehavior(float dt)
+//{
+//    if (player == nullptr)
+//        return;
+//    else
+//    {
+//        sf::Vector2f playerPos = player->GetPosition();
+//        float distance = Utils::Distance(playerPos, position);
+//
+//        if (distance <= searchRange)  //공격범위 ~ 탐색 범위
+//        {
+//            SetLook(playerPos);
+//            if (distance <= stat.attackRange)
+//                Attack();
+//            else
+//                Move(dt);
+//        }
+//    }
+//}

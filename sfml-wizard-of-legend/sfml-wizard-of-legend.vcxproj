@@ -188,11 +188,11 @@
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
+    <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="GameObjects\Background.h" />
     <ClInclude Include="GameObjects\Items\Coin.h" />
     <ClInclude Include="GameObjects\Cookies\Cookie.h" />
     <ClInclude Include="DataTables\DataTable.h" />
-    <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="GameObjects\Effects\EffectSpeedUp.h" />
     <ClInclude Include="Framework\DataTableMgr.h" />
     <ClInclude Include="Framework\ObjectPool.h" />

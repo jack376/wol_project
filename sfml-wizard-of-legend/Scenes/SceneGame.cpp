@@ -11,7 +11,6 @@
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
-	resourceListPath = "scripts/default_resource_list_park.csv";
 }
 
 void SceneGame::Init()
@@ -19,7 +18,8 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
-	AddGo(new Monster());
+	GameObject* go = AddGo(new Monster(MonsterId::Ghoul));
+	SetInitValue(go, Origins::MC, size * 0.5f);
 
 	for (auto go : gameObjects)
 	{
@@ -56,10 +56,17 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
-
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+}
+
+void SceneGame::SetInitValue(GameObject* go, Origins origin, sf::Vector2f pos, float angle, int layer)
+{
+	go->SetOrigin(origin);
+	go->SetPosition(pos);
+	//go->SetRotation(angle);
+	go->sortLayer = layer;
 }

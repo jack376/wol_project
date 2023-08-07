@@ -51,9 +51,6 @@
     <ClCompile Include="DataTables\DataTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DataTables\StringTable.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\DataTableMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -82,6 +79,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MonsterTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTables\StringTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -129,9 +129,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DataTables\DataTable.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DataTables\StringTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Framework\DataTableMgr.h">
@@ -237,6 +234,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MonsterTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DataTables\StringTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
