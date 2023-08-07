@@ -28,7 +28,7 @@ ResourceMgr::~ResourceMgr()
 
 void ResourceMgr::Init()
 {
-	//LoadFromCSV("scripts/DefaultResourceList.csv", true);
+	LoadFromCSV("scripts/DefaultResourceList_ojy.csv", true);
 }
 
 void ResourceMgr::UnLoadAll()

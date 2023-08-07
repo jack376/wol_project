@@ -140,18 +140,21 @@ float InputMgr::GetAxisRaw(Axis axis)
 	const AxisInfo& info = it->second;
 
 	auto rit = ingList.rbegin();
+
+	float raw = 0.f;
+
 	while (rit != ingList.rend())
 	{
 		int code = *rit;
 		if (std::find(info.positivies.begin(), info.positivies.end(), code) != info.positivies.end())
 		{
-			return 1.f;
+			raw+= 1.f;
 		}
 		if (std::find(info.negatives.begin(), info.negatives.end(), code) != info.negatives.end())
 		{
-			return -1.f;
+			raw += -1.f;
 		}
 		++rit;
 	}
-	return 0.0f;
+	return raw;
 }

@@ -2,28 +2,6 @@
 
 #define _USE_MATH_DEFINES
 
-enum class CookieTypes
-{
-	None = -1,
-	Pancake,
-	Pirate,
-	Moonlighter,
-};
-
-enum class SkinType
-{
-	None = -1,
-	Normal,
-	Skin1,
-};
-
-enum class LobbyType
-{
-	None = -1,
-	Temple,
-	WizardryTower,
-	Cathedral,
-};
 
 
 enum class Languages
@@ -60,10 +38,10 @@ enum class ResourceTypes
 enum class SceneId
 {
 	None = -1,
-	Title,
-	Editor,
-	Lobby,
 	Game,
+	Title,
+	//Editor,
+	//Lobby,
 	Count,
 };
 

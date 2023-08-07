@@ -1,0 +1,9 @@
+ID,FPS,LOOPTYPE
+AttackBackLeft,10,1
+,,
+TEXTURE ID,,
+graphics/Player/Attack/Left/AttackBackLeft1.png,,
+graphics/Player/Attack/Left/AttackBackLeft2.png,,
+graphics/Player/Attack/Left/AttackBackLeft3.png,,
+graphics/Player/Attack/Left/AttackBackLeft4.png,,
+graphics/Player/Attack/Left/AttackBackLeft5.png,,
