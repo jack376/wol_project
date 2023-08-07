@@ -175,6 +175,7 @@
     </ClCompile>
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="GameObjects\Monster.cpp" />
+    <ClCompile Include="MonsterTable.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
     <ClCompile Include="Framework\SceneMgr.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
     <ClInclude Include="GameObjects\Monster.h" />
+    <ClInclude Include="MonsterTable.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />

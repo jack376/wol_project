@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "Monster.h"
+#include "MonsterTable.h"
+#include "DataTableMgr.h"
+#include "ResourceMgr.h"
 
-Monster::Monster(const std::string& textureId, const std::string& n)
+Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
+    : monsterId(id)
 {
 }
 
@@ -11,7 +15,16 @@ Monster::~Monster()
 
 void Monster::Init()
 {
+    MonsterInfo info = DATATABLE_MGR.Get<MonsterTable>(DataTable::Ids::Monster)->Get((int)monsterId);
+    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animation/" + info.name + "_Run.csv"));
+    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animation/" + info.name + "_Attact.csv"));
+    animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animation/" + info.name + "_Death.csv"));
+    animation.SetTarget(&sprite);
+    textureId = "sprites/"
+    sortLayer = 10;
+    
     //SetPlayer();  씬 전환 시에 (마을 <-> 던전) 플레이어 객체를 어떻게 관리할지에 따라 Init() 또는 Reset()에서 해줄지 결정.
+
 }
 
 void Monster::Release()
@@ -68,7 +81,7 @@ void Monster::Attack()
 void Monster::Move(float dt)
 {
     SetState(MonsterState::Moving);
-    SetPosition(look * speed * dt);
+    SetPosition(look * stat.speed * dt);
 }
 
 void Monster::Die()
@@ -91,10 +104,10 @@ void Monster::HandleBehavior(float dt)
         sf::Vector2f playerPos = player->GetPosition();
         float distance = Utils::Distance(playerPos, position);
 
-        if (distance <= range)  //공격범위 ~ 탐색 범위
+        if (distance <= searchRange)  //공격범위 ~ 탐색 범위
         {
             SetLook(playerPos);
-            if (distance <= attackRange)
+            if (distance <= stat.attackRange)
                 Attack();
             else
                 Move(dt);

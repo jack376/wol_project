@@ -1,0 +1,11 @@
+ID,FPS,LOOPTYPE,,
+GhoulDeath,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/monster sheets/ghoulSheet.png,96,0,48,48
+graphics/monster sheets/ghoulSheet.png,144,0,48,48
+graphics/monster sheets/ghoulSheet.png,192,0,48,48
+graphics/monster sheets/ghoulSheet.png,240,0,48,48
+graphics/monster sheets/ghoulSheet.png,288,0,48,48
+graphics/monster sheets/ghoulSheet.png,336,0,48,48
+graphics/monster sheets/ghoulSheet.png,384,0,48,48

@@ -1,0 +1,6 @@
+ID,FPS,LOOPTYPE,,
+GhoulAttack,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/monster sheets/ghoulSheet.png,0,0,48,48
+graphics/monster sheets/ghoulSheet.png,48,0,48,48

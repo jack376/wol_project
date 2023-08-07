@@ -4,19 +4,33 @@
 
 class Player;
 
-enum class MonsterState {
+enum class MonsterState 
+{
 	Idle,
 	Moving,
 	Attacking,
 	Dead,
+	KnockBack,
 };
+
+enum class MonsterId
+{
+	Ghoul,
+	Knight,
+};
+
 
 class Monster :
     public SpriteGo
 {
 protected:
+	MonsterId monsterId;
 	MonsterState currentState = MonsterState::Idle;
 	AnimationController animation;
+
+	MonsterInfo stat;
+	int hp;
+	float attackTimer = 0.f; //timer가 rate보다 커지면 공격 타이밍
 
 	Player* player = nullptr;
 
@@ -24,7 +38,7 @@ protected:
 	sf::Vector2f direction; //이동하는 방향
 
 public:
-	Monster(const std::string& textureId = "", const std::string& n = "");
+	Monster(MonsterId id, const std::string& textureId = "", const std::string& n = "");
 	virtual ~Monster() override;
 
 	virtual void Init() override;

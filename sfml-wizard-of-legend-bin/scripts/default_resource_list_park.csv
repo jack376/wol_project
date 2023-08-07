@@ -1,0 +1,5 @@
+"RESOURCE TYPE (0. Texture, 1. Font, 2. SoundBuffer, 3. AnimationClip)",RESOURCE ID
+0,graphics/monster sheets/ghoulSheet.png
+3,animations/Ghoul_Attack.csv
+3,animations/Ghoul_Death.csv
+3,animations/Ghoul_Run.csv

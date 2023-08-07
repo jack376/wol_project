@@ -7,16 +7,11 @@
 #include "Framework.h"
 #include "TextGo.h"
 #include "SpriteGo.h"
+#include "Monster.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/sprite_sheet.png"));
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/RubySheet.png"));
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button.png"));
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button2.png"));
-
-	// ¿¹Á¦
-	//resourceListPath = "scripts/SceneGameResourceList.csv";
+	resourceListPath = "scripts/default_resource_list_park.csv";
 }
 
 void SceneGame::Init()
@@ -24,7 +19,7 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
-
+	AddGo(new Monster());
 
 	for (auto go : gameObjects)
 	{
