@@ -9,7 +9,7 @@ BaseUI::BaseUI(const std::string& n, UiType uiType) : GameObject(n), uiType(uiTy
     switch (uiType)
     {
     case UiType::Text:
-        bodyColor = sf::Color(0, 0, 0, 192);
+        bodyColor = sf::Color::Black;
         break;
     case UiType::Box:
         bodyColor = sf::Color::Black;
@@ -272,6 +272,13 @@ void BaseUI::SetStrokeColor(sf::Color(color))
             sideStrokes[i].setColor(strokeColor);
         }
     }
+    if (cornerStrokes.size() >= 4)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            cornerStrokes[i].setColor(strokeColor);
+        }
+    }
 }
 
 void BaseUI::SetString(const std::string& string)
@@ -297,4 +304,3 @@ void BaseUI::SetPosition(float x, float y)
     buttonModifyPosition = sf::Vector2f(x, y);
     buttonCollider.setPosition(x, y);
 }
-

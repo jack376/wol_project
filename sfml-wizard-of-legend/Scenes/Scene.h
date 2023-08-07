@@ -28,6 +28,8 @@ protected:
 	float blinkTimer = 0.f;
 	float blinkDuration = 0.5f;
 
+	float currentZoom = 1.0f;
+
 public:
 
 	Scene(SceneId id = SceneId::None);
@@ -61,6 +63,7 @@ public:
 	virtual void Draw(sf::RenderWindow& window);
 
 	void Blink(TextGo* go);
+	void Zoom(float factor);
 
 	void SetIsPlaying(bool isPlaying) { this->isPlaying = isPlaying; }
 };

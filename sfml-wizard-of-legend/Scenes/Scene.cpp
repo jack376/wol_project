@@ -221,3 +221,9 @@ void Scene::Blink(TextGo* go)
 	if (blinkTimer > blinkDuration * 2.0f)
 		blinkTimer = 0.f;
 }
+
+void Scene::Zoom(float factor) 
+{
+	currentZoom *= factor;
+	worldView.zoom(factor);
+}

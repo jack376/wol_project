@@ -13,7 +13,6 @@ protected:
 	float buttonSizeY = 0.0f;
 	float textHeight = 0.0f;
 
-	sf::Text text;
 	sf::Color textColor;
 
 	sf::RectangleShape body;
@@ -39,6 +38,8 @@ protected:
 	sf::RectangleShape buttonCollider;
 
 public:
+	sf::Text text;
+	
 	std::function<void()> OnClick;
 	std::function<void()> OnEnter;
 	std::function<void()> OnExit;

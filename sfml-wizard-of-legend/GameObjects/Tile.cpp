@@ -4,8 +4,9 @@
 #include "InputMgr.h"
 #include "SceneMgr.h"
 #include "ResourceMgr.h"
+#include "Framework.h"
 
-Tile::Tile(const std::string& n, TileType type) : GameObject(n)
+Tile::Tile(const std::string& n, TileState type) : GameObject(n)
 {
 }
 
@@ -20,10 +21,9 @@ void Tile::Init()
 
 void Tile::Reset()
 {
-    sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/editor/temp.png"));
+    sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/editor/Temp.png"));
     sprite.setOrigin(0.0f, 0.0f);
-
-    shape.setOutlineThickness(1.0f);
+    shape.setOutlineThickness(0.5f);
 }
 
 void Tile::Update(float dt)
@@ -48,11 +48,28 @@ void Tile::Update(float dt)
             OnExit();
         }
     }
-    if (isHover && INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
+    if (isHover)
     {
-        if (OnClick != nullptr)
+        if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
         {
-            OnClick();
+            if (OnClickDown != nullptr)
+            {
+                OnClickDown();
+            }
+        }
+        else if (INPUT_MGR.GetMouseButton(sf::Mouse::Left))
+        {
+            if (OnClickDrag != nullptr)
+            {
+                OnClickDrag();
+            }
+        }
+        else if (INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
+        {
+            if (OnClickUp != nullptr)
+            {
+                OnClickUp();
+            }
         }
     }
 }
@@ -77,4 +94,19 @@ void Tile::SetStrokeColor(sf::Color color)
 void Tile::SetShapePosition(float x, float y)
 {
     shape.setPosition(x, y);
+}
+
+void Tile::SetState(TileState state)
+{
+    this->state = state;
+}
+
+void Tile::SetStateColor(TileState state)
+{
+    shape.setFillColor(stateColor[state]);
+}
+
+Tile::TileState Tile::GetState() const
+{
+    return state;
 }
