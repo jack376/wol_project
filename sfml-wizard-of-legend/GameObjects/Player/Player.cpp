@@ -16,10 +16,22 @@ void Player::Init()
 {
 	SpriteGo::Init();
 	SetOrigin(Origins::MC);
+
+	// Reset인지 Init()인지 생각
+	destPos.push_back({ dashDistance , dashDistance });
+	destPos.push_back({ -dashDistance , dashDistance });
+	destPos.push_back({ dashDistance , -dashDistance });
+	destPos.push_back({ -dashDistance , -dashDistance });
+	destPos.push_back({ 0 , -dashDistance });
+	destPos.push_back({ dashDistance , 0 });
+	destPos.push_back({ 0 , dashDistance });
+	destPos.push_back({ -dashDistance , 0 });
 }
 
 void Player::Release()
 {
+	// 클리어를 해줘야 하는지 결정해야함
+	destPos.clear();
 	SpriteGo::Release();
 
 }
@@ -33,6 +45,12 @@ void Player::Reset()
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Idle/IdleDown.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Idle/IdleRight.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Idle/IdleUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Dash/DashDown.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Dash/DashRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Dash/DashUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Slide/SlideDown.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Slide/SlideRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Slide/SlideUp.csv"));
 
 	anim.SetTarget(&sprite);
 	anim.Play("IdleDown");
@@ -191,56 +209,72 @@ void Player::RunUpdate(float dt)
 
 void Player::DashUpdate(float dt)
 {
-	switch (currentDir)
+
+	if (!isDash)
 	{
-	case Dir::UpRight:
-		anim.Play("DashUp");
+		switch (currentDir)
+		{
+		case Dir::UpRight:
+			anim.Play("DashUp");
 
-		break;
-	case Dir::UpLeft:
-		anim.Play("DashUp");
+			break;
+		case Dir::UpLeft:
+			anim.Play("DashUp");
 
-		break;
-	case Dir::DownRight:
-		anim.Play("DashDown");
+			break;
+		case Dir::DownRight:
+			anim.Play("DashDown");
 
-		break;
-	case Dir::DownLeft:
-		anim.Play("DashDown");
+			break;
+		case Dir::DownLeft:
+			anim.Play("DashDown");
 
-		break;
-	case Dir::Up:
-		anim.Play("DashUp");
+			break;
+		case Dir::Up:
+			anim.Play("DashUp");
 
-		break;
-	case Dir::Right:
-		anim.Play("DashRight");
+			break;
+		case Dir::Right:
+			anim.Play("DashRight");
 
 
-		break;
-	case Dir::Down:
-		anim.Play("DashDown");
+			break;
+		case Dir::Down:
+			anim.Play("DashDown");
 
-		break;
-	case Dir::Left:
-		SetFlipX(true);
-		anim.Play("DashRight");
+			break;
+		case Dir::Left:
+			SetFlipX(true);
+			anim.Play("DashRight");
 
-		break;
+			break;
+		}
+
+		CalDashDistance(currentDir);
 	}
 
-	sf::Vector2f movePos = sprite.getPosition();
-	movePos += dir * dashSpeed * dt;
-	if (anim.IsAnimEndFrame())
-	{
-		ChangeState(States::Idle);
-	}
 
-	if (dir.x == 0 && dir.y == 0)
-	{
-		isRun = false;
-		ChangeState(States::Idle);
-	}
+	isDash = true;
+
+
+
+	//sf::Vector2f movePos = sprite.getPosition();
+	//movePos += dir * dashSpeed * dt;
+	//SetPosition(movePos);
+
+
+	// 임시 보류
+	//if (anim.IsAnimEndFrame() && isDash)
+	//{
+	//	isDash = false;
+	//	ChangeState(States::Idle);
+	//}
+
+	//if (dir.x == 0 && dir.y == 0)
+	//{
+	//	isRun = false;
+	//	ChangeState(States::Idle);
+	//}
 }
 
 void Player::AttackUpdate(float dt)
@@ -297,6 +331,12 @@ void Player::CalDir()
 void Player::SetHp(int value)
 {
 	hp -= value;
+}
+
+float Player::CalDashDistance(Dir dir)
+{
+	destPos[(int)dir] += GetPosition();
+	return Utils::Distance(destPos[(int)dir], GetPosition());
 }
 
 void Player::ChangeState(States state)

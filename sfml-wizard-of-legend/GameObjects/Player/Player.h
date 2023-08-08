@@ -35,6 +35,7 @@ private:
 	int hp = 100;
 
 	sf::Vector2f dir;
+	std::vector<sf::Vector2f> destPos;
 	float speed = 400.f;
 	float dashSpeed = 1700.f;
 	float dashDistance = 400.f;
@@ -67,11 +68,12 @@ public:
 
 	// 데미지 : -, 회복 : +
 	void SetHp(int value);
+	bool IsAlive() { return isAlive; }
 	
+	float CalDashDistance(Dir dir);
 
 	void ChangeState(States state);
 
-	bool IsAlive() { return isAlive; }
 
 	//void PlayerTextureReset();
 };

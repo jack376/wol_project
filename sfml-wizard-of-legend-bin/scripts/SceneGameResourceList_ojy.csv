@@ -18,3 +18,6 @@
 3,animations/Player/Run/RunUp.csv
 0,graphics/Player/NormalSprite.png
 0,graphics/Player/NewWizard.png
+3,animations/Player/Slide/SlideDown.csv
+3,animations/Player/Slide/SlideRight.csv
+3,animations/Player/Slide/SlideUp.csv
