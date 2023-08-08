@@ -24,6 +24,7 @@ void SceneGame::Init()
 	player->sprite.setScale(4.5, 4.5);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 20;
+	player->SetScene(this);
 
 	//GameObject* go = AddGo(new Monster(MonsterId::Ghoul));
 	//SetInitValue(go, Origins::MC, size * 0.5f);

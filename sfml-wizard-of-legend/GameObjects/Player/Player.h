@@ -25,6 +25,8 @@ enum class States
 	Dead,
 };
 
+class SceneGame;
+
 class Player : public SpriteGo
 {
 private:
@@ -33,11 +35,23 @@ private:
 	Dir currentDir = Dir::Down;
 	Dir slideDir = Dir::Down;
 
+
+	SceneGame* scene;
+
+	SpriteGo* dirIcon;
+
 	int hp = 100;
 
+	// 방향 sf::Vector2f
 	sf::Vector2f dir;
 	sf::Vector2f dashDir;
+	sf::Vector2f look;
+
+	// 좌표 sf::Vector2f
 	std::vector<sf::Vector2f> destPos;
+	sf::Vector2f dashStart;
+	sf::Vector2f dashDest;
+
 	float speed = 400.f;
 	float dashDistance = 400.f;
 
@@ -51,8 +65,6 @@ private:
 	float dashCoolTimer = 0.f;
 	float dashCoolDuration = 0.3f;
 
-	sf::Vector2f dashStart;
-	sf::Vector2f dashDest;
 
 	// 상태변수
 	bool isAlive = true;
@@ -82,6 +94,10 @@ public:
 
 	void CalDir();
 
+
+	void SetScene(SceneGame* scene) { this->scene = scene; }
+	void SetDirIconPos();
+	void SetDirIconDir();
 
 	// 데미지 : -, 회복 : +
 	void SetHp(int value);

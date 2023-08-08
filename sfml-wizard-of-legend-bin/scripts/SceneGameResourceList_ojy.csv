@@ -21,3 +21,10 @@
 3,animations/Player/Slide/SlideDown.csv
 3,animations/Player/Slide/SlideRight.csv
 3,animations/Player/Slide/SlideUp.csv
+0,graphics/UI/MouseCursor.png
+0,graphics/Player/UI/PlayerMarker.png
+0,graphics/Player/UI/PlayerPieceBase.png
+0,graphics/Player/Attck_Basic/WindSlash/WindSlash.png
+3,animations/Player/Attck_Basic/WindSlash/WindSlashLarge.csv
+3,animations/Player/Attck_Basic/WindSlash/WindSlashMed.csv
+3,animations/Player/Attck_Basic/WindSlash/WindSlashSmall.csv

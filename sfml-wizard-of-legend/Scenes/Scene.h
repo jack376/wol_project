@@ -2,6 +2,7 @@
 
 class GameObject;
 class TextGo;
+class SpriteGo;
 
 class Scene
 {
@@ -24,6 +25,9 @@ protected:
 	sf::View uiView;
 
 	sf::RenderWindow& window;
+
+	// UI
+	SpriteGo* mouseCursor;
 
 	float blinkTimer = 0.f;
 	float blinkDuration = 0.5f;
@@ -63,5 +67,6 @@ public:
 	void Blink(TextGo* go);
 
 	void SetIsPlaying(bool isPlaying) { this->isPlaying = isPlaying; }
-};
 
+	void SetMousePos();
+};

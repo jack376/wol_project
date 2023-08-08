@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "ResourceMgr.h"
 #include "InputMgr.h"
+#include "SceneGame.h"
+#include "SceneMgr.h"
 
 Player::Player(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -26,6 +28,15 @@ void Player::Init()
 	destPos.push_back({ dashDistance , 0 });
 	destPos.push_back({ 0 , dashDistance });
 	destPos.push_back({ -dashDistance , 0 });
+
+	//SCENE_MGR.GetCurrScene()->ScreenToUiPos(GetPosition());
+	dirIcon = (SpriteGo*)scene->AddGo(new SpriteGo("graphics/Player/UI/PlayerMarker.png"));
+	dirIcon->sprite.setScale(5, 5);
+	dirIcon->sprite.setColor(sf::Color::Color(255, 255, 255, 100));
+	dirIcon->SetPosition(GetPosition());
+	dirIcon->SetOrigin(Origins::MC);
+	dirIcon->sortLayer = 20;
+	dirIcon->sortOrder = -1;
 }
 
 void Player::Release()
@@ -60,6 +71,9 @@ void Player::Reset()
 void Player::Update(float dt)
 {
 	SpriteGo::Update(dt);
+	// 방향아이콘 움직임 플레이어와 동기화
+	SetDirIconPos();
+	SetDirIconDir();
 
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
 
@@ -397,6 +411,21 @@ void Player::CalDir()
 		currentDir = Dir::Up;
 	}
 
+}
+
+void Player::SetDirIconPos()
+{
+	dirIcon->SetPosition(GetPosition().x, GetPosition().y + 80.f);
+}
+
+void Player::SetDirIconDir()
+{
+	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
+	sf::Vector2f iconScreenPos = SCENE_MGR.GetCurrScene()->WorldPosToScreen(dirIcon->GetPosition());
+
+	look = Utils::Normalize(mousePos - iconScreenPos);
+	float angle = Utils::Angle(look) + 90;
+	dirIcon->sprite.setRotation(angle);
 }
 
 void Player::SetHp(int value)

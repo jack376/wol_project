@@ -4,9 +4,13 @@
 #include "ResourceMgr.h"
 #include "Framework.h"
 #include "TextGo.h"
+#include "SpriteGo.h"
+#include "SceneMgr.h"
+#include "InputMgr.h"
 
 Scene::Scene(SceneId id) : sceneId(id), window(FRAMEWORK.GetWindow())
 {
+	window.setMouseCursorVisible(false);
 }
 
 Scene::~Scene()
@@ -119,6 +123,11 @@ void Scene::Enter()
 {
 	RESOURCE_MGR.LoadFromCSV(resourceListPath);
 
+	mouseCursor = (SpriteGo*)AddGo(new SpriteGo("graphics/UI/MouseCursor.png"));
+	mouseCursor->SetOrigin(Origins::MC);
+	mouseCursor->sprite.setScale(3.5, 3.5);
+	mouseCursor->sortLayer = 101;
+
 	for (auto go : gameObjects)
 	{
 		go->Reset();
@@ -142,6 +151,7 @@ void Scene::Exit()
 
 void Scene::Update(float dt)
 {
+	SetMousePos();
 	if (isPlaying)
 	{
 		for (auto go : gameObjects)
@@ -218,4 +228,10 @@ void Scene::Blink(TextGo* go)
 
 	if (blinkTimer > blinkDuration * 2.0f)
 		blinkTimer = 0.f;
+}
+
+void Scene::SetMousePos()
+{
+	sf::Vector2f mousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(INPUT_MGR.GetMousePos());
+	mouseCursor->SetPosition(INPUT_MGR.GetMousePos());
 }
