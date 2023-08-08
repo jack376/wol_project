@@ -4,6 +4,10 @@
 
 enum class Dir
 {
+	UpRight,
+	UpLeft,
+	DownRight,
+	DownLeft,
 	Up,
 	Right,
 	Down,
@@ -28,12 +32,17 @@ private:
 	States currentState = States::Idle;
 	Dir currentDir = Dir::Down;
 
+	int hp = 100;
+
 	sf::Vector2f dir;
 	float speed = 400.f;
-	float dashSpeed = 1600.f;
+	float dashSpeed = 1700.f;
+	float dashDistance = 400.f;
 
 	// 상태변수
+	bool isAlive = true;
 	bool isRun = false;
+	bool isDash = false;
 
 public:
 	Player(const std::string& textureId = "", const std::string& n = "");
@@ -53,8 +62,16 @@ public:
 	void KnockBackUpdate(float dt);
 	void DeadUpdate(float dt);
 
+	void CalDir();
+
+
+	// 데미지 : -, 회복 : +
+	void SetHp(int value);
+	
 
 	void ChangeState(States state);
+
+	bool IsAlive() { return isAlive; }
 
 	//void PlayerTextureReset();
 };

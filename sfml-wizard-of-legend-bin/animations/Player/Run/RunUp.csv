@@ -2,13 +2,13 @@ ID,FPS,LOOPTYPE,,
 RunUp,10,1,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/Player/NewWizard.png,6,4,12,17
-graphics/Player/NewWizard.png,29,4,14,15
-graphics/Player/NewWizard.png,53,5,14,14
-graphics/Player/NewWizard.png,77,5,13,16
-graphics/Player/NewWizard.png,102,4,12,17
-graphics/Player/NewWizard.png,126,4,12,17
-graphics/Player/NewWizard.png,149,4,14,15
-graphics/Player/NewWizard.png,173,5,14,14
-graphics/Player/NewWizard.png,198,5,13,16
-graphics/Player/NewWizard.png,222,4,12,17
+graphics/Player/NewWizard.png,12,8,24,34
+graphics/Player/NewWizard.png,58,8,28,30
+graphics/Player/NewWizard.png,106,10,28,28
+graphics/Player/NewWizard.png,154,10,26,32
+graphics/Player/NewWizard.png,204,8,24,34
+graphics/Player/NewWizard.png,252,8,24,34
+graphics/Player/NewWizard.png,298,8,28,30
+graphics/Player/NewWizard.png,346,10,28,28
+graphics/Player/NewWizard.png,396,10,26,32
+graphics/Player/NewWizard.png,444,8,24,34

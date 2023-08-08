@@ -2,4 +2,4 @@ ID,FPS,LOOPTYPE,,
 IdleRight,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/Player/WizardSprite.png,19,259,8,18
+graphics/Player/NewWizard.png,38,518,16,36

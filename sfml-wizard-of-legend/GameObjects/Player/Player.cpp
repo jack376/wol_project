@@ -44,6 +44,9 @@ void Player::Update(float dt)
 	SpriteGo::Update(dt);
 
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
+
+	// 입력에 따른 방향 설정
+	CalDir();
 	
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
@@ -106,6 +109,20 @@ void Player::IdleUpdate(float dt)
 {
 	switch (currentDir)
 	{
+	case Dir::UpRight:
+		anim.Play("IdleRight");
+		break;
+	case Dir::UpLeft:
+		SetFlipX(true);
+		anim.Play("IdleRight");
+		break;
+	case Dir::DownRight:
+		anim.Play("IdleRight");
+		break;
+	case Dir::DownLeft:
+		SetFlipX(true);
+		anim.Play("IdleRight");
+		break;
 	case Dir::Up:
 		anim.Play("IdleUp");
 		break;
@@ -121,7 +138,6 @@ void Player::IdleUpdate(float dt)
 		break;
 	}
 
-
 	if (dir.x != 0 || dir.y != 0)
 	{
 		ChangeState(States::Run);
@@ -130,29 +146,24 @@ void Player::IdleUpdate(float dt)
 
 void Player::RunUpdate(float dt)
 {
-
 	if (dir.y > 0 && !isRun)
 	{
-		currentDir = Dir::Down;
 		anim.Play("RunDown");
 	}
 
 	if (dir.y < 0 && !isRun)
 	{
-		currentDir = Dir::Up;
 		anim.Play("RunUp");
 	}
 
 	if (dir.x > 0 && !isRun)
 	{
-		currentDir = Dir::Right;
 		anim.Play("RunRight");
 		SetFlipX(false);
 	}
 
 	if (dir.x < 0 && !isRun)
 	{
-		currentDir = Dir::Left;
 		anim.Play("RunRight");
 		SetFlipX(true);
 	}
@@ -180,25 +191,55 @@ void Player::RunUpdate(float dt)
 
 void Player::DashUpdate(float dt)
 {
-	if (currentDir == Dir::Up)
+	switch (currentDir)
 	{
-		float movePos = sprite.getPosition().y;
-		//movePos += dir * dashSpeed * dt;
+	case Dir::UpRight:
+		anim.Play("DashUp");
+
+		break;
+	case Dir::UpLeft:
+		anim.Play("DashUp");
+
+		break;
+	case Dir::DownRight:
+		anim.Play("DashDown");
+
+		break;
+	case Dir::DownLeft:
+		anim.Play("DashDown");
+
+		break;
+	case Dir::Up:
+		anim.Play("DashUp");
+
+		break;
+	case Dir::Right:
+		anim.Play("DashRight");
+
+
+		break;
+	case Dir::Down:
+		anim.Play("DashDown");
+
+		break;
+	case Dir::Left:
+		SetFlipX(true);
+		anim.Play("DashRight");
+
+		break;
 	}
-	else if (currentDir == Dir::Right)
+
+	sf::Vector2f movePos = sprite.getPosition();
+	movePos += dir * dashSpeed * dt;
+	if (anim.IsAnimEndFrame())
 	{
-		sf::Vector2f movePos = sprite.getPosition();
-		movePos += dir * dashSpeed * dt;
+		ChangeState(States::Idle);
 	}
-	else if (currentDir == Dir::Down)
+
+	if (dir.x == 0 && dir.y == 0)
 	{
-		sf::Vector2f movePos = sprite.getPosition();
-		movePos += dir * dashSpeed * dt;
-	}
-	else if (currentDir == Dir::Left)
-	{
-		sf::Vector2f movePos = sprite.getPosition();
-		movePos += dir * dashSpeed * dt;
+		isRun = false;
+		ChangeState(States::Idle);
 	}
 }
 
@@ -214,6 +255,48 @@ void Player::KnockBackUpdate(float dt)
 
 void Player::DeadUpdate(float dt)
 {
+}
+
+void Player::CalDir()
+{
+	if (dir.y < 0 && dir.x > 0)
+	{
+		currentDir = Dir::UpRight;
+	}
+	else if (dir.y < 0 && dir.x < 0)
+	{
+		currentDir = Dir::UpLeft;
+	}
+	else if (dir.y > 0 && dir.x > 0)
+	{
+		currentDir = Dir::DownRight;
+	}
+	else if (dir.y > 0 && dir.x < 0)
+	{
+		currentDir = Dir::DownLeft;
+	}
+	else if (dir.x > 0)
+	{
+		currentDir = Dir::Right;
+	}
+	else if (dir.x < 0)
+	{
+		currentDir = Dir::Left;
+	}
+	else if (dir.y > 0)
+	{
+		currentDir = Dir::Down;
+	}
+	else if (dir.y < 0)
+	{
+		currentDir = Dir::Up;
+	}
+
+}
+
+void Player::SetHp(int value)
+{
+	hp -= value;
 }
 
 void Player::ChangeState(States state)

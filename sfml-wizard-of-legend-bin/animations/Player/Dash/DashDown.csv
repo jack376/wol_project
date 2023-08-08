@@ -2,4 +2,4 @@ ID,FPS,LOOPTYPE,,
 DashDown,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/Player/WizardSprite.png,0,358,16,13
+graphics/Player/NewWizard.png,0,716,32,26

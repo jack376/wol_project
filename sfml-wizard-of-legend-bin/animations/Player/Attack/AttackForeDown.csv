@@ -2,12 +2,12 @@ ID,FPS,LOOPTYPE,,
 AttackForeDown,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/Player/WizardSprite.png,7,172,10,17
-graphics/Player/WizardSprite.png,29,171,15,19
-graphics/Player/WizardSprite.png,53,170,13,20
-graphics/Player/WizardSprite.png,72,172,17,18
-graphics/Player/WizardSprite.png,98,172,15,18
-graphics/Player/WizardSprite.png,123,173,14,17
-graphics/Player/WizardSprite.png,150,173,11,17
-graphics/Player/WizardSprite.png,174,173,12,17
-graphics/Player/WizardSprite.png,199,172,9,18
+graphics/Player/NewWizard.png,14,344,20,34
+graphics/Player/NewWizard.png,58,342,30,38
+graphics/Player/NewWizard.png,106,340,26,40
+graphics/Player/NewWizard.png,144,344,34,36
+graphics/Player/NewWizard.png,196,344,30,36
+graphics/Player/NewWizard.png,246,346,28,34
+graphics/Player/NewWizard.png,300,346,22,34
+graphics/Player/NewWizard.png,348,346,24,34
+graphics/Player/NewWizard.png,398,344,18,36

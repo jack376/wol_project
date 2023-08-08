@@ -85,7 +85,7 @@ sf::Vector2f Utils::Lerp(const sf::Vector2f& a, const sf::Vector2f& b, float t, 
 	{
 		t = Utils::Clamp(t, 0.f , 1.f);
 	}
-	return  a + Utils::Normalize(b - a) * (Utils::Distance(a, b) * t);;
+	return  a + Utils::Normalize(b - a) * (Utils::Distance(a, b) * t);
 }
 
 sf::Color Utils::Lerp(const sf::Color& a, const sf::Color& b, float t, bool clamping)

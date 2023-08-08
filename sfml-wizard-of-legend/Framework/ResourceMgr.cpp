@@ -28,7 +28,8 @@ ResourceMgr::~ResourceMgr()
 
 void ResourceMgr::Init()
 {
-	LoadFromCSV("scripts/DefaultResourceList_ojy.csv", true);
+
+	LoadFromCSV("scripts/SceneGameResourceList_ojy.csv" , true);
 }
 
 void ResourceMgr::UnLoadAll()
@@ -37,7 +38,7 @@ void ResourceMgr::UnLoadAll()
 		auto it = mapTexture.begin();
 		while (it != mapTexture.end())
 		{
-			if(!std::get<1>(it->second))
+			if (!std::get<1>(it->second))
 			{
 				delete std::get<0>(it->second);
 				it = mapTexture.erase(it);
@@ -48,12 +49,11 @@ void ResourceMgr::UnLoadAll()
 			}
 		}
 	}
-
 	{
 		auto it = mapFont.begin();
 		while (it != mapFont.end())
 		{
-			if(!std::get<1>(it->second))
+			if (!std::get<1>(it->second))
 			{
 				delete std::get<0>(it->second);
 				it = mapFont.erase(it);
@@ -64,12 +64,11 @@ void ResourceMgr::UnLoadAll()
 			}
 		}
 	}
-
 	{
 		auto it = mapSoundBuffer.begin();
 		while (it != mapSoundBuffer.end())
 		{
-			if(!std::get<1>(it->second))
+			if (!std::get<1>(it->second))
 			{
 				delete std::get<0>(it->second);
 				it = mapSoundBuffer.erase(it);
@@ -80,12 +79,11 @@ void ResourceMgr::UnLoadAll()
 			}
 		}
 	}
-
 	{
 		auto it = mapAnimationClip.begin();
 		while (it != mapAnimationClip.end())
 		{
-			if(!std::get<1>(it->second))
+			if (!std::get<1>(it->second))
 			{
 				delete std::get<0>(it->second);
 				it = mapAnimationClip.erase(it);
@@ -96,6 +94,8 @@ void ResourceMgr::UnLoadAll()
 			}
 		}
 	}
+
+
 }
 
 void ResourceMgr::LoadFromCSV(const std::string path, bool isDefault)
@@ -103,10 +103,10 @@ void ResourceMgr::LoadFromCSV(const std::string path, bool isDefault)
 	rapidcsv::Document doc(path);
 	std::vector<int> types = doc.GetColumn<int>(0);
 	std::vector<std::string> paths = doc.GetColumn<std::string>(1);
-
 	for (int i = 0; i < types.size(); i++)
 	{
 		Load((ResourceTypes)types[i], paths[i], isDefault);
+		//SCENE_MGR.GetCreentScene().resours.push_back(types[i], paths[i]);
 	}
 }
 
@@ -132,7 +132,7 @@ void ResourceMgr::Load(ResourceTypes t, const std::string path, bool isDefault)
 		{
 			auto font = new sf::Font();
 			font->loadFromFile(path);
-			mapFont.insert({ path, {font, isDefault} });
+			mapFont.insert({ path, {font, true} });
 		}
 	}
 	break;
@@ -143,10 +143,9 @@ void ResourceMgr::Load(ResourceTypes t, const std::string path, bool isDefault)
 		{
 			auto sb = new sf::SoundBuffer();
 			sb->loadFromFile(path);
-			mapSoundBuffer.insert({ path, {sb, isDefault} });
+			mapSoundBuffer.insert({ path, {sb, true} });
 		}
 	}
-	break;
 	case ResourceTypes::AnimationClip:
 	{
 		auto it = mapAnimationClip.find(path);
@@ -154,25 +153,13 @@ void ResourceMgr::Load(ResourceTypes t, const std::string path, bool isDefault)
 		{
 			auto clip = new AnimationClip();
 			clip->LoadFromFile(path);
-			mapAnimationClip.insert({ path, {clip, isDefault} });
-		}
-	}
-	break;
-	case ResourceTypes::AnimationSheetClip:
-	{
-		auto it = mapAnimationClip.find(path);
-		if (mapAnimationClip.end() == it)
-		{
-			auto clip = new AnimationClip();
-			clip->LoadFromFileSheet(path);
-			mapAnimationClip.insert({ path, {clip, isDefault} });
+			mapAnimationClip.insert({ path, {clip, true} });
 		}
 	}
 	break;
 	}
-
-
 }
+
 
 void ResourceMgr::Unload(ResourceTypes t, const std::string id)
 {
@@ -183,7 +170,7 @@ void ResourceMgr::Unload(ResourceTypes t, const std::string id)
 		auto it = mapTexture.find(id);
 		if (it != mapTexture.end())
 		{
-			if (!std::get<1>(it->second))
+			if (std::get<1>(it->second))
 			{
 				delete std::get<0>(it->second);
 				mapTexture.erase(it);
@@ -192,6 +179,7 @@ void ResourceMgr::Unload(ResourceTypes t, const std::string id)
 			{
 				std::cout << "ERR: Default Resource" << std::endl;
 			}
+
 		}
 	}
 	break;
@@ -200,7 +188,7 @@ void ResourceMgr::Unload(ResourceTypes t, const std::string id)
 		auto it = mapFont.find(id);
 		if (it != mapFont.end())
 		{
-			if (!std::get<1>(it->second))
+			if (std::get<1>(it->second))
 			{
 				delete std::get<0>(it->second);
 				mapFont.erase(it);
@@ -217,7 +205,7 @@ void ResourceMgr::Unload(ResourceTypes t, const std::string id)
 		auto it = mapSoundBuffer.find(id);
 		if (it != mapSoundBuffer.end())
 		{
-			if (!std::get<1>(it->second))
+			if (std::get<1>(it->second))
 			{
 				delete std::get<0>(it->second);
 				mapSoundBuffer.erase(it);
@@ -234,7 +222,7 @@ void ResourceMgr::Unload(ResourceTypes t, const std::string id)
 		auto it = mapAnimationClip.find(id);
 		if (it != mapAnimationClip.end())
 		{
-			if (!std::get<1>(it->second))
+			if (std::get<1>(it->second))
 			{
 				delete std::get<0>(it->second);
 				mapAnimationClip.erase(it);
@@ -255,6 +243,7 @@ sf::Texture* ResourceMgr::GetTexture(const std::string& id)
 	auto it = mapTexture.find(id);
 	if (it != mapTexture.end())
 	{
+
 		return std::get<0>(it->second);
 	}
 	return nullptr;
