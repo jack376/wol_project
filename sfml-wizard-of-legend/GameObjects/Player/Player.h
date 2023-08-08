@@ -31,19 +31,35 @@ private:
 	AnimationController anim;
 	States currentState = States::Idle;
 	Dir currentDir = Dir::Down;
+	Dir slideDir = Dir::Down;
 
 	int hp = 100;
 
 	sf::Vector2f dir;
+	sf::Vector2f dashDir;
 	std::vector<sf::Vector2f> destPos;
 	float speed = 400.f;
-	float dashSpeed = 1700.f;
 	float dashDistance = 400.f;
+
+	float dashDuration = 0.3f;
+	float dashTimer = 0.f;
+
+	// 슬라이딩 도중 방향전환 방지용
+	float slideDuration = 0.3f;
+	float slideTimer = 0.f;
+
+	float dashCoolTimer = 0.f;
+	float dashCoolDuration = 0.3f;
+
+	sf::Vector2f dashStart;
+	sf::Vector2f dashDest;
 
 	// 상태변수
 	bool isAlive = true;
 	bool isRun = false;
 	bool isDash = false;
+	bool isSlide = false;
+	bool isDashCool = false;
 
 public:
 	Player(const std::string& textureId = "", const std::string& n = "");
@@ -59,6 +75,7 @@ public:
 	void IdleUpdate(float dt);
 	void RunUpdate(float dt);
 	void DashUpdate(float dt);
+	void SlideUpdate(float dt);
 	void AttackUpdate(float dt);
 	void KnockBackUpdate(float dt);
 	void DeadUpdate(float dt);

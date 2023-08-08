@@ -18,10 +18,10 @@ void Player::Init()
 	SetOrigin(Origins::MC);
 
 	// Reset인지 Init()인지 생각
-	destPos.push_back({ dashDistance , dashDistance });
-	destPos.push_back({ -dashDistance , dashDistance });
 	destPos.push_back({ dashDistance , -dashDistance });
 	destPos.push_back({ -dashDistance , -dashDistance });
+	destPos.push_back({ dashDistance , dashDistance });
+	destPos.push_back({ -dashDistance , dashDistance });
 	destPos.push_back({ 0 , -dashDistance });
 	destPos.push_back({ dashDistance , 0 });
 	destPos.push_back({ 0 , dashDistance });
@@ -63,16 +63,26 @@ void Player::Update(float dt)
 
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
 
+
 	// 입력에 따른 방향 설정
 	CalDir();
 	
+	// 대쉬 쿨타임 계산
+	if(isDashCool)
+		dashCoolTimer += dt;
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
+	if (dashCoolTimer > dashCoolDuration && isDashCool)
+	{
+		isDashCool = false;
+		dashCoolTimer = 0.f;
+	}
+
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide)
 	{
 		ChangeState(States::Dash);
 	}
-	//std::cout << dir.x << std::endl;
-	//std::cout << dir.y << std::endl;
+
 
 	float magnitude = Utils::Magnitude(dir);
 
@@ -98,6 +108,10 @@ void Player::Update(float dt)
 
 	case States::Dash:
 		DashUpdate(dt);
+		break;	
+	
+	case States::Slide:
+		SlideUpdate(dt);
 		break;
 
 	case States::Attack:
@@ -185,6 +199,7 @@ void Player::RunUpdate(float dt)
 		anim.Play("RunRight");
 		SetFlipX(true);
 	}
+
 	sf::Vector2f movePos = sprite.getPosition();
 	movePos += dir * speed * dt;
 
@@ -209,7 +224,6 @@ void Player::RunUpdate(float dt)
 
 void Player::DashUpdate(float dt)
 {
-
 	if (!isDash)
 	{
 		switch (currentDir)
@@ -250,31 +264,88 @@ void Player::DashUpdate(float dt)
 			break;
 		}
 
-		CalDashDistance(currentDir);
+		dashDir = dir;	// sf::Vector2f
+		slideDir = currentDir;	// Dir,  슬라이딩 도중 방향전환 방지용
+		dashDest = destPos[(int)currentDir] + GetPosition();
+		dashStart = GetPosition();
+
 	}
-
-
 	isDash = true;
 
+	if (isDash)
+	{
+		dashTimer += dt;
+	}
+
+	float t = Utils::Clamp(dashTimer / dashDuration, 0.f, 1.f);
+	SetPosition(Utils::Lerp(dashStart, dashDest, t));
+
+	if (t >= 1.0f)
+	{
+		dashTimer = 0.f;
+		isDash = false;
+		isRun = false;
+		isSlide = false;
+		isDashCool = true;
+		ChangeState(States::Slide);
+	}
+}
+
+void Player::SlideUpdate(float dt)
+{
+	if (!isSlide)
+	{
+		switch (slideDir)
+		{
+		case Dir::UpRight:
+			anim.Play("SlideUp");
+
+			break;
+		case Dir::UpLeft:
+			anim.Play("SlideUp");
+
+			break;
+		case Dir::DownRight:
+			anim.Play("SlideDown");
+
+			break;
+		case Dir::DownLeft:
+			anim.Play("SlideDown");
+
+			break;
+		case Dir::Up:
+			anim.Play("SlideUp");
+
+			break;
+		case Dir::Right:
+			anim.Play("SlideRight");
 
 
-	//sf::Vector2f movePos = sprite.getPosition();
-	//movePos += dir * dashSpeed * dt;
-	//SetPosition(movePos);
+			break;
+		case Dir::Down:
+			anim.Play("SlideDown");
 
+			break;
+		case Dir::Left:
+			SetFlipX(true);
+			anim.Play("SlideRight");
 
-	// 임시 보류
-	//if (anim.IsAnimEndFrame() && isDash)
-	//{
-	//	isDash = false;
-	//	ChangeState(States::Idle);
-	//}
+			break;
+		}
+	}
+	isSlide = true;
 
-	//if (dir.x == 0 && dir.y == 0)
-	//{
-	//	isRun = false;
-	//	ChangeState(States::Idle);
-	//}
+	if (isSlide)
+		slideTimer += dt;
+
+	if (anim.IsAnimEndFrame() && slideTimer > slideDuration)
+	{
+		slideTimer = 0.f;
+		isDash = false;
+		isRun = false;
+		isSlide = false;
+		ChangeState(States::Idle);
+	}
 }
 
 void Player::AttackUpdate(float dt)
@@ -335,8 +406,7 @@ void Player::SetHp(int value)
 
 float Player::CalDashDistance(Dir dir)
 {
-	destPos[(int)dir] += GetPosition();
-	return Utils::Distance(destPos[(int)dir], GetPosition());
+	return 0;
 }
 
 void Player::ChangeState(States state)
