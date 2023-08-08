@@ -93,11 +93,11 @@ void Monster::Attack(float dt)
     {
         animation.Play(stat.name + "Attack");
         attackTimer = 0.f;
-        if (player->isAlive && sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
-        {
-            attackTimer = 0.f;
-            player->SetHp(-stat.damage);
-        }
+        //if (player->isAlive && sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+        //{
+        //    attackTimer = 0.f;
+        //    player->SetHp(-stat.damage);
+        //}
     }
 }
 

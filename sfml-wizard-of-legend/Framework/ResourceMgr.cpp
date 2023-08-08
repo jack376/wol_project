@@ -28,8 +28,8 @@ ResourceMgr::~ResourceMgr()
 
 void ResourceMgr::Init()
 {
-
 	LoadFromCSV("scripts/SceneGameResourceList_ojy.csv" , true);
+	LoadFromCSV("scripts/default_resource_list_park.csv" , true);
 }
 
 void ResourceMgr::UnLoadAll()
