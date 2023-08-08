@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+DashDown,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,0,716,32,26

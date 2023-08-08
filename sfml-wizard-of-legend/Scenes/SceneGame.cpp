@@ -7,6 +7,7 @@
 #include "Framework.h"
 #include "TextGo.h"
 #include "SpriteGo.h"
+#include "Player.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -16,7 +17,7 @@ SceneGame::SceneGame() : Scene(SceneId::Game)
 	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button2.png"));
 
 	// ¿¹Á¦
-	//resourceListPath = "scripts/SceneGameResourceList.csv";
+	
 }
 
 void SceneGame::Init()
@@ -24,7 +25,11 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
-
+	player = (Player*)AddGo(new Player());
+	player->SetPosition(0, 0);
+	player->sprite.setScale(4.5, 4.5);
+	player->SetOrigin(Origins::MC);
+	player->sortLayer = 1;
 
 	for (auto go : gameObjects)
 	{
