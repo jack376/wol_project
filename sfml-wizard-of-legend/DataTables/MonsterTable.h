@@ -1,10 +1,12 @@
 #pragma once
 #include "DataTable.h"
+#include "Monster.h"
+
 class MonsterTable :
     public DataTable
 {
 protected:
-	std::unordered_map<int, MonsterInfo> table;
+	std::unordered_map<int, MonsterStat> table;
 
 public:
 	MonsterTable() : DataTable(DataTable::Ids::Monster), table() {}
@@ -13,5 +15,5 @@ public:
 	virtual bool Load() override;
 	virtual void Release() override;
 
-	const MonsterInfo& Get(int id) const;
+	const MonsterStat& Get(int id) const;
 };

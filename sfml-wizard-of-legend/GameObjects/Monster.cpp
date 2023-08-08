@@ -4,9 +4,10 @@
 #include "DataTableMgr.h"
 #include "ResourceMgr.h"
 #include "SceneGame.h"
-#include "SceneMgr.h"   //test
+#include "SceneMgr.h"
 #include "Player.h"
 
+#include "InputMgr.h"   //Test
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -26,11 +27,6 @@ void Monster::Init()
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Death.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Hurt.csv"));
-    animation.SetTarget(&sprite);
-    sprite.setScale({ 4.5f, 4.5f });
-    sortLayer = 10;
-
-
 }
 
 void Monster::Release()
@@ -42,15 +38,20 @@ void Monster::Reset()
     SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
     player = scene->GetPlayer();
 
+    animation.SetTarget(&sprite);
+    sprite.setScale({ 3.f, 3.f });
     animation.Play(stat.name + "Idle");
+
     SetOrigin(origin);
     SetPosition({ 0, 0 });
     SetFlipX(false);
+    sortLayer = 10;
+
+    
     hp = stat.maxHp;
     attackTimer = stat.attackRate;
 
-
-    //디버그 모드
+    //Debug Mode
     {
         searchRange.setRadius(stat.searchRange);
         attackRange.setRadius(stat.attackRange);
@@ -62,7 +63,7 @@ void Monster::Reset()
         attackRange.setOutlineColor(sf::Color::Red);
         searchRange.setFillColor(sf::Color::Transparent);
         attackRange.setFillColor(sf::Color::Transparent);
-    } 
+    }   
 }
 
 void Monster::Update(float dt)
@@ -71,14 +72,21 @@ void Monster::Update(float dt)
 
     HandleBehavior(dt);
     HandleState();
-
+ 
+    //Debug Mode
     searchRange.setPosition(position);
     attackRange.setPosition(position);
+    //Test
+    if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
+    {
+        OnAttacked(2);
+    }
 }
 
 void Monster::Draw(sf::RenderWindow& window)
 {
     SpriteGo::Draw(window);
+    //Debug Mode
     window.draw(searchRange);
     window.draw(attackRange);
 }
@@ -113,6 +121,12 @@ void Monster::HandleState()
     }
 }
 
+void Monster::Idle()
+{
+    SetState(MonsterState::Idle);
+    animation.Play(stat.name + "Idle");
+}
+
 void Monster::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
@@ -142,7 +156,16 @@ void Monster::Die()
     SetState(MonsterState::Dead);
     if (animation.GetCurrentClipId() != stat.name + "Death")
         animation.Play(stat.name + "Death");
-    //else 현재 재생중인 애니메이션이 끝나면 (마지막 프레임이면) SetActive(false)
+    else if (animation.IsAnimEndFrame())
+    {
+        SetActive(false);
+    }
+}
+
+void Monster::KnockBack()
+{
+    SetState(MonsterState::KnockBack);
+    animation.Play(stat.name + "Hurt");
 }
 
 void Monster::SetLook(sf::Vector2f playerPos)
@@ -154,10 +177,13 @@ void Monster::SetLook(sf::Vector2f playerPos)
         SetFlipX(false);
 }
 
-void Monster::OnAttacked(float damage)
+void Monster::OnAttacked(float damage)  //플레이어에서 몬스터를 공격할 때 호출
 {
-    hp -= damage;
-    animation.Play(stat.name + "Hurt");
+    if (currentState != MonsterState::Dead)
+    {
+        KnockBack();
+        hp -= damage;
+    }
 }
 
 void Monster::HandleBehavior(float dt)
@@ -169,7 +195,22 @@ void Monster::HandleBehavior(float dt)
         sf::Vector2f playerPos = player->GetPosition();
         float distance = Utils::Distance(playerPos, position);
 
-        if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
+        if (hp <= 0)
+        {
+            Die();
+            return;
+        }
+        if (currentState == MonsterState::KnockBack)
+        {
+            SetPosition(position + -look * 500.f * dt);  //공격 당한 반대 방향으로 이동 (공격의 주체가 플레이어가 아니라 발사체라면 발사체의 위치를 넘겨 받아 수정)
+            knockBackTimer += dt;
+            if (knockBackTimer > knockBackTime)
+            {
+                knockBackTimer = 0;
+                Idle();
+            }
+        }
+        else if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
         {
             SetLook(playerPos);
             if (distance <= stat.attackRange)
@@ -178,8 +219,6 @@ void Monster::HandleBehavior(float dt)
                 Move(dt);
         }
         else
-            animation.Play(stat.name + "Idle");
-        if (hp <= 0)
-            Die();
+            animation.Play(stat.name + "Idle");  
     }
 }

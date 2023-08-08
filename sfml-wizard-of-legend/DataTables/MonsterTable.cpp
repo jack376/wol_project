@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "rapidcsv.h"
 #include "MonsterTable.h"
+#include "Monster.h"
 
-const MonsterInfo& MonsterTable::Get(int id) const
+const MonsterStat& MonsterTable::Get(int id) const
 {
 	auto find = table.find(id);
 	if (find == table.end())
@@ -16,7 +17,7 @@ bool MonsterTable::Load()
 {
 	rapidcsv::Document doc("tables/MonsterInfo.csv");
 	std::vector<int> id = doc.GetColumn<int>(0);
-	std::vector<MonsterInfo> stats;
+	std::vector<MonsterStat> stats;
 
 	std::vector<std::string> names = doc.GetColumn<std::string>(1);
 	std::vector<int> types = doc.GetColumn<int>(2);

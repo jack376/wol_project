@@ -2,23 +2,7 @@
 
 #define _USE_MATH_DEFINES
 
-enum class AttactType
-{
-	Melee,
-	Ranged,
-};
 
-struct MonsterInfo
-{
-	std::string name;
-	AttactType type;
-	int maxHp;
-	float speed;
-	int damage;
-	float attackRate;	 //공격 속도
-	float attackRange;	//공격 범위
-	float searchRange;	//탐색 범위
-};
 
 
 enum class ElementTypes

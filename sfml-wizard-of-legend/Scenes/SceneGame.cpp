@@ -21,7 +21,7 @@ void SceneGame::Init()
 
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
-	player->sprite.setScale(4.5, 4.5);
+	player->sprite.setScale(3.f, 3.f);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 1;
 
