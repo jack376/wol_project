@@ -3,8 +3,9 @@
 #include "MonsterTable.h"
 #include "DataTableMgr.h"
 #include "ResourceMgr.h"
-#include "InputMgr.h"   //test
+#include "SceneGame.h"
 #include "SceneMgr.h"   //test
+#include "Player.h"
 
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
@@ -19,16 +20,17 @@ Monster::~Monster()
 void Monster::Init()
 {
     stat = DATATABLE_MGR.Get<MonsterTable>(DataTable::Ids::Monster)->Get((int)monsterId);
+
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Run.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Attack.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Death.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Hurt.csv"));
     animation.SetTarget(&sprite);
-    sprite.setScale({ 2, 2 });
+    sprite.setScale({ 4.5f, 4.5f });
     sortLayer = 10;
-    
-    //SetPlayer();  씬 전환 시에 (마을 <-> 던전) 플레이어 객체를 어떻게 관리할지에 따라 Init() 또는 Reset()에서 해줄지 결정.
+
+
 }
 
 void Monster::Release()
@@ -37,13 +39,30 @@ void Monster::Release()
 
 void Monster::Reset()
 {
+    SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
+    player = scene->GetPlayer();
+
     animation.Play(stat.name + "Idle");
     SetOrigin(origin);
     SetPosition({ 0, 0 });
     SetFlipX(false);
-
     hp = stat.maxHp;
     attackTimer = stat.attackRate;
+
+
+    //디버그 모드
+    {
+        searchRange.setRadius(stat.searchRange);
+        attackRange.setRadius(stat.attackRange);
+        Utils::SetOrigin(searchRange, Origins::MC);
+        Utils::SetOrigin(attackRange, Origins::MC);
+        searchRange.setOutlineThickness(1.f);
+        attackRange.setOutlineThickness(1.f);
+        searchRange.setOutlineColor(sf::Color::Green);
+        attackRange.setOutlineColor(sf::Color::Red);
+        searchRange.setFillColor(sf::Color::Transparent);
+        attackRange.setFillColor(sf::Color::Transparent);
+    } 
 }
 
 void Monster::Update(float dt)
@@ -52,11 +71,16 @@ void Monster::Update(float dt)
 
     HandleBehavior(dt);
     HandleState();
+
+    searchRange.setPosition(position);
+    attackRange.setPosition(position);
 }
 
 void Monster::Draw(sf::RenderWindow& window)
 {
     SpriteGo::Draw(window);
+    window.draw(searchRange);
+    window.draw(attackRange);
 }
 
 void Monster::SetState(MonsterState newState)
@@ -82,6 +106,10 @@ void Monster::HandleState()
     case MonsterState::Dead:
         std::cout << "Monster is dead.\n";
         break;
+
+    case MonsterState::KnockBack:
+        std::cout << "Monster is KnockBack.\n";
+        break;
     }
 }
 
@@ -93,11 +121,11 @@ void Monster::Attack(float dt)
     {
         animation.Play(stat.name + "Attack");
         attackTimer = 0.f;
-        //if (player->isAlive && sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
-        //{
-        //    attackTimer = 0.f;
-        //    player->SetHp(-stat.damage);
-        //}
+        if (player->IsAlive() && sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+        {
+            attackTimer = 0.f;
+            player->SetHp(-stat.damage);
+        }
     }
 }
 
@@ -115,7 +143,6 @@ void Monster::Die()
     if (animation.GetCurrentClipId() != stat.name + "Death")
         animation.Play(stat.name + "Death");
     //else 현재 재생중인 애니메이션이 끝나면 (마지막 프레임이면) SetActive(false)
-    
 }
 
 void Monster::SetLook(sf::Vector2f playerPos)
@@ -127,22 +154,24 @@ void Monster::SetLook(sf::Vector2f playerPos)
         SetFlipX(false);
 }
 
+void Monster::OnAttacked(float damage)
+{
+    hp -= damage;
+    animation.Play(stat.name + "Hurt");
+}
+
 void Monster::HandleBehavior(float dt)
 {
-    if (player != nullptr)
+    if (player == nullptr)
         return;
     else
     {
-        //sf::Vector2f playerPos = player->GetPosition();
-        //float distance = Utils::Distance(playerPos, position);
+        sf::Vector2f playerPos = player->GetPosition();
+        float distance = Utils::Distance(playerPos, position);
 
-        sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
-        sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
-        float distance = Utils::Distance(worldMousePos, position);
-
-        if (distance <= 1000.f)  //공격범위 ~ 탐색 범위
+        if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
         {
-            SetLook(worldMousePos);
+            SetLook(playerPos);
             if (distance <= stat.attackRange)
                 Attack(dt);
             else
@@ -150,7 +179,6 @@ void Monster::HandleBehavior(float dt)
         }
         else
             animation.Play(stat.name + "Idle");
-
         if (hp <= 0)
             Die();
     }

@@ -37,6 +37,9 @@ protected:
 	sf::Vector2f look; //바라보는 방향
 	sf::Vector2f direction; //이동하는 방향
 
+	sf::CircleShape searchRange;
+	sf::CircleShape attackRange;
+
 public:
 	Monster(MonsterId id, const std::string& textureId = "", const std::string& n = "");
 	virtual ~Monster() override;
@@ -57,6 +60,7 @@ public:
 	
 	void SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
+	void OnAttacked(float damage);
 	void HandleBehavior(float dt);
 };
 

@@ -32,10 +32,6 @@ bool MonsterTable::Load()
 		stats.push_back({ names[i], (AttactType)types[i], maxHps[i], speeds[i], damages[i], attactRates[i], attactRanges[i], searchRanges[i]});
 		table.insert({ id[i], stats[i] });
 	}
-	/*for (int j = 0; j < id.size(); j++)
-	{
-		table.insert({ id[j], stats[j] });
-	}*/
 	return true;
 }
 
