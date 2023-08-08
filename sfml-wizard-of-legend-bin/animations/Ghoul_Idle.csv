@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-GhoulIdle,10,0,,
+GhoulIdle,1,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/monster sheets/ghoulSheet.png,576,0,48,48
+graphics/Texture2D/GhoulSource.png,0,0,48,48

@@ -51,7 +51,7 @@ public:
     void SetState(MonsterState newState);
 	void HandleState();
 
-	virtual void Attack();
+	virtual void Attack(float dt);
 	void Move(float dt);
 	void Die();
 	

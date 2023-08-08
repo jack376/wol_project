@@ -29,7 +29,6 @@ void AnimationController::Update(float dt)
 			std::string id = queue.front();
 			queue.pop();
 			Play(id, false);
-
 		}
 		else
 		{

@@ -2,9 +2,9 @@ ID,FPS,LOOPTYPE,,
 GhoulRun,10,1,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/monster sheets/ghoulSheet.png,624,0,48,48
-graphics/monster sheets/ghoulSheet.png,672,0,48,48
-graphics/monster sheets/ghoulSheet.png,720,0,48,48
-graphics/monster sheets/ghoulSheet.png,768,0,48,48
-graphics/monster sheets/ghoulSheet.png,816,0,48,48
-graphics/monster sheets/ghoulSheet.png,864,0,48,48
+graphics/Texture2D/GhoulSource.png,192,0,48,48
+graphics/Texture2D/GhoulSource.png,0,48,48,48
+graphics/Texture2D/GhoulSource.png,48,48,48,48
+graphics/Texture2D/GhoulSource.png,96,48,48,48
+graphics/Texture2D/GhoulSource.png,144,48,48,48
+graphics/Texture2D/GhoulSource.png,192,48,48,48

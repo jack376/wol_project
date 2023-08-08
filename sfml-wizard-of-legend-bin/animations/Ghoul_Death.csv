@@ -2,10 +2,12 @@ ID,FPS,LOOPTYPE,,
 GhoulDeath,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/monster sheets/ghoulSheet.png,96,0,48,48
-graphics/monster sheets/ghoulSheet.png,144,0,48,48
-graphics/monster sheets/ghoulSheet.png,192,0,48,48
-graphics/monster sheets/ghoulSheet.png,240,0,48,48
-graphics/monster sheets/ghoulSheet.png,288,0,48,48
-graphics/monster sheets/ghoulSheet.png,336,0,48,48
-graphics/monster sheets/ghoulSheet.png,384,0,48,48
+graphics/Texture2D/GhoulSource.png,48,96,48,48
+graphics/Texture2D/GhoulSource.png,96,96,48,48
+graphics/Texture2D/GhoulSource.png,144,96,48,48
+graphics/Texture2D/GhoulSource.png,192,96,48,48
+graphics/Texture2D/GhoulSource.png,0,144,48,48
+graphics/Texture2D/GhoulSource.png,48,144,48,48
+graphics/Texture2D/GhoulSource.png,96,144,48,48
+graphics/Texture2D/GhoulSource.png,144,144,48,48
+graphics/Texture2D/GhoulSource.png,192,144,48,48

@@ -2,4 +2,4 @@ ID,FPS,LOOPTYPE,,
 GhoulHurt,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/monster sheets/ghoulSheet.png,528,0,48,48
+graphics/Texture2D/GhoulSource.png,0,96,48,48
