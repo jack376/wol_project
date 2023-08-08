@@ -16,11 +16,13 @@ public:
     };
     enum class TileState
     {
-        None,
+        Blank,
         Select,
         Copy,
         Paste,
         Cut,
+        UI,
+        SelectUI,
     };
 
 protected:
@@ -29,18 +31,23 @@ protected:
 
     bool isCollision = false;
     bool isHover = false;
+    
+    const float tileSize = 16.0f;
+    const int textureAtlasSize = 512;
 
-    sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(16.0f, 16.0f));
+    sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
     sf::Sprite sprite;
     sf::Text text;
 
     std::map<TileState, sf::Color> stateColor =
     {
-        { TileState::None, sf::Color::Transparent },
-        { TileState::Select, sf::Color::Cyan },
-        { TileState::Copy, sf::Color::Yellow },
-        { TileState::Paste, sf::Color::Green },
-        { TileState::Cut, sf::Color::Magenta },
+        { TileState::Blank,    sf::Color::Color(0, 0, 0, 0)       },
+        { TileState::Select,   sf::Color::Color(0, 128, 0, 128)   },
+        { TileState::Copy,     sf::Color::Color(192, 128, 0, 128) },
+        { TileState::Paste,    sf::Color::Color(128, 0, 0, 128)   },
+        { TileState::Cut,      sf::Color::Color(0, 128, 128, 128) },
+        { TileState::UI,       sf::Color::Color(0, 0, 0, 0)       },
+        { TileState::SelectUI, sf::Color::Color(0, 128, 192, 128) },
     };
 
 public:
@@ -50,7 +57,7 @@ public:
     std::function<void()> OnEnter;
     std::function<void()> OnExit;
 
-    Tile(const std::string& n = "", TileState state = TileState::None);
+    Tile(const std::string& n = "", TileState state = TileState::Blank);
     virtual ~Tile();
 
     virtual void Init();
@@ -63,9 +70,17 @@ public:
     void SetShapeColor(sf::Color color);
     void SetShapePosition(float x, float y);
     void SetStrokeColor(sf::Color color = sf::Color::Transparent);
+    void SetSpritePosition(float x, float y);
 
-    void SetState(TileState state = TileState::None);
-    void SetStateColor(TileState state = TileState::None);
+    void SetState(TileState state = TileState::Blank);
+    void SetStateColor(TileState state = TileState::Blank);
+
     TileState GetState() const;
+
+    void SetTexture(const sf::Texture& tex);
+    void SetTextureRect(const sf::IntRect& rect);
+
+    sf::IntRect GetTextureRect(int tileIndex = 0) const;
+    sf::Vector2f GetMousePosBasedOnState() const;
 };
 

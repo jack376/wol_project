@@ -9,6 +9,7 @@
 #include "TextGo.h"
 #include "BaseUI.h"
 #include "Tile.h"
+#include <iomanip>
 
 SceneEditor::SceneEditor() : Scene(SceneId::Editor)
 {
@@ -18,78 +19,61 @@ SceneEditor::SceneEditor() : Scene(SceneId::Editor)
 void SceneEditor::Init()
 {
 	Release();
-	
-	// Tile
-	int rows = 64;
-	int cols = 64;
-	tiles.resize(rows, std::vector<Tile*>(cols, nullptr));
 
+	windowSize = FRAMEWORK.GetWindowSize();
+	resolutionScaleFactor = windowSize.x / fhdWidth;
+
+	// Tile
+	const int rows = 32;
+	const int cols = 32;
+
+	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
 	for (int i = 0; i < rows; i++)
 	{
 		for (int j = 0; j < cols; j++)
 		{
 			Tile* tile = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
-			tiles[i][j] = tile;
-			AddGo(tile);
-			std::cout << "Loading : Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")" << std::endl;
+			tilesWorld[i][j] = tile;
+			//std::cout << "Loading : Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")" << std::endl;
 		}
 	}
 
-	// Button
-	sf::Vector2f windowSize = FRAMEWORK.GetWindowSize();
-	resolutionScaleFactor = windowSize.x / 1920.0f;
+	// Test
+	SpriteGo* atlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "AtlasPreview"));
+	atlasPreview->sortLayer = 105;
+	atlasPreview->SetOrigin(Origins::TL);
+	atlasPreview->SetPosition(blankPos, blankPos);
 
-	BaseUI* zoomInButton = (BaseUI*)AddGo(new BaseUI("ZoomInButton", UiType::Text));
-	zoomInButton->sortLayer = 100;
-	zoomInButton->text.setString(L"ZOOM+ (Z)");
-	zoomInButton->SetCharacterSize(32);
-	zoomInButton->SetPosition(50.0f, 50.0f * resolutionScaleFactor);
-	zoomInButton->SetColor(sf::Color::Black);
-	zoomInButton->SetTextColor(sf::Color::White);
-	zoomInButton->SetStrokeColor(sf::Color::White);
-	zoomInButton->OnEnter = [zoomInButton, this]()
-	{
-		isUiButtonActive = true;
-		zoomInButton->SetStrokeColor(sf::Color::Cyan);
-	};
-	zoomInButton->OnExit = [zoomInButton, this]()
-	{
-		isUiButtonActive = false;
-		zoomInButton->SetStrokeColor(sf::Color::White);
-	};
-	zoomInButton->OnClick = [zoomInButton, this]()
-	{
-		isUiButtonActive = true;
-		Scene* scene = SCENE_MGR.GetCurrScene();
-		scene->Zoom(zoomInFactor);
-		zoomInButton->SetStrokeColor(sf::Color::Green);
-	};
+	// TextureRect
+	const int tilesPerRow = atlasTextureSize / tileTextureSize;
+	const int uiSort = 110;
 
-	BaseUI* zoomOutButton = (BaseUI*)AddGo(new BaseUI("ZoomOutButton", UiType::Text));
-	zoomOutButton->sortLayer = 100;
-	zoomOutButton->text.setString(L"ZOOM- (X)");
-	zoomOutButton->SetCharacterSize(32);
-	zoomOutButton->SetPosition(50.0f, 150.0f * resolutionScaleFactor);
-	zoomOutButton->SetColor(sf::Color::Black);
-	zoomOutButton->SetTextColor(sf::Color::White);
-	zoomOutButton->SetStrokeColor(sf::Color::White);
-	zoomOutButton->OnEnter = [zoomOutButton, this]()
+	for (int y = 0; y < tilesPerRow; ++y)
 	{
-		isUiButtonActive = true;
-		zoomOutButton->SetStrokeColor(sf::Color::Cyan);
-	};
-	zoomOutButton->OnExit = [zoomOutButton, this]()
+		std::vector<sf::IntRect> rowTiles;
+		for (int x = 0; x < tilesPerRow; ++x)
+		{
+			sf::IntRect tileRect(x * tileTextureSize, y * tileTextureSize, tileTextureSize, tileTextureSize);
+			rowTiles.push_back(tileRect);
+		}
+		tileTextureAtlas.push_back(rowTiles);
+	}
+
+	tilesUi.resize(tilesPerRow, std::vector<Tile*>(tilesPerRow, nullptr));
+	for (int i = 0; i < tilesPerRow; i++)
 	{
-		isUiButtonActive = false;
-		zoomOutButton->SetStrokeColor(sf::Color::White);
-	};
-	zoomOutButton->OnClick = [zoomOutButton, this]()
-	{
-		isUiButtonActive = true;
-		Scene* scene = SCENE_MGR.GetCurrScene();
-		scene->Zoom(zoomOutFactor);
-		zoomOutButton->SetStrokeColor(sf::Color::Green);
-	};
+		for (int j = 0; j < tilesPerRow; j++)
+		{
+			Tile* tile = CreateTilePreview("TilePreview(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileTextureSize, j * tileTextureSize, uiSort);
+			tilesUi[i][j] = tile;
+		}
+	}
+
+	BaseUI* uiBackGround = (BaseUI*)AddGo(new BaseUI("UiBackGround", UiType::Box));
+	uiBackGround->sortLayer = 100;
+	uiBackGround->SetSizeAdd(atlasTextureSize + blankPos * 2.0f, windowSize.y);
+	uiBackGround->SetColor(sf::Color(16, 16, 16, 255));
+	uiBackGround->SetStrokeColor(sf::Color(32, 32, 64, 255));
 
 	for (auto go : gameObjects)
 	{
@@ -104,7 +88,7 @@ void SceneEditor::Release()
 		//go->Release();
 		delete go;
 	}
-	tiles.clear();
+	tilesWorld.clear();
 }
 
 void SceneEditor::Enter()
@@ -156,7 +140,19 @@ void SceneEditor::Update(float dt)
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 	{
 		std::vector<Tile*> allTiles = GetAllTiles();
-		SetSelectedTilesState(allTiles, Tile::TileState::None);
+		SetSelectedTilesState(allTiles, Tile::TileState::Blank);
+	}
+
+	// Test
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
+	{
+		int x = endPreviewIndex.x;
+		int y = endPreviewIndex.y;
+		SetSelectedTilesRect(selectedTiles, tileTextureAtlas[y][x]);
+
+		std::vector<Tile*> allTiles = GetAllTiles();
+		SetSelectedTilesState(allTiles, Tile::TileState::Blank);
+		//std::cout << x << ", " << y << std::endl;
 	}
 
 	// Copy
@@ -185,37 +181,41 @@ void SceneEditor::Draw(sf::RenderWindow& window)
 	Scene::Draw(window);
 }
 
-Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY)
+Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, int sort)
 {
 	Tile* tile = (Tile*)AddGo(new Tile(name));
-	tile->sortLayer = 0;
+	tile->sortLayer = sort;
 	tile->SetShapePosition(posX, posY);
-	tile->SetStateColor(Tile::TileState::None);
-	tile->OnEnter = [tile]()
+	tile->SetSpritePosition(posX, posY);
+	tile->SetState();
+	tile->SetStateColor(Tile::TileState::Blank);
+	tile->SetStrokeColor(sf::Color(64, 64, 64, 96));
+	tile->OnEnter = [tile, this]()
 	{
-		if (tile->GetState() == Tile::TileState::None)
+		if (!isUiButtonActive && tile->GetState() == Tile::TileState::Blank)
 		{
-			tile->SetShapeColor(sf::Color::Red);
+			tile->SetShapeColor(sf::Color(128, 0, 0, 128));
 		}
 	};
-	tile->OnExit = [tile]()
+	tile->OnExit = [tile, this]()
 	{
-		if (tile->GetState() == Tile::TileState::None)
+		if (!isUiButtonActive && tile->GetState() == Tile::TileState::Blank)
 		{
-			tile->SetStateColor(Tile::TileState::None);
+			tile->SetStateColor(Tile::TileState::Blank);
 		}
 	};
 	tile->OnClickDown = [tile, this]()
 	{
-		if (!isUiButtonActive)
+		if (!isUiButtonActive && tile->GetState() == Tile::TileState::Blank)
 		{
 			startTileIndex = GetCurrentTileIntIndex();
-			isMouseSelect = true;
+			isUiMouseSelect = false;
+			isWorldMouseSelect = true;
 		}
 	};
 	tile->OnClickDrag = [tile, this]()
 	{
-		if (!isUiButtonActive && isMouseSelect)
+		if (!isUiButtonActive && isWorldMouseSelect && tile->GetState() == Tile::TileState::Blank)
 		{
 			endTileIndex = GetCurrentTileIntIndex();
 			SetSelectedTilesArea();
@@ -223,10 +223,11 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY)
 	};
 	tile->OnClickUp = [tile, this]()
 	{
-		if (!isUiButtonActive && isMouseSelect)
+		if (!isUiButtonActive && isWorldMouseSelect && tile->GetState() == Tile::TileState::Blank)
 		{
 			endTileIndex = GetCurrentTileIntIndex();
-			isMouseSelect = false;
+			isUiMouseSelect = true;
+			isWorldMouseSelect = false;
 		}
 	};
 	return tile;
@@ -234,8 +235,7 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY)
 
 std::vector<Tile*> SceneEditor::GetAllTiles()
 {
-	std::vector<Tile*> allTiles;
-	for (auto& row : tiles)
+	for (auto& row : tilesWorld)
 	{
 		for (Tile* tile : row)
 		{
@@ -247,8 +247,7 @@ std::vector<Tile*> SceneEditor::GetAllTiles()
 
 std::vector<Tile*> SceneEditor::GetSelectedTiles()
 {
-	std::vector<Tile*> selectedTiles;
-	for (auto& row : tiles) 
+	for (auto& row : tilesWorld) 
 	{
 		for (Tile* tile : row) 
 		{
@@ -268,16 +267,34 @@ void SceneEditor::SetSelectedTilesState(std::vector<Tile*>& selectedTiles, Tile:
 		tile->SetState(state);
 		tile->SetStateColor(state);
 	}
+	selectedTiles.clear();
+}
+
+void SceneEditor::SetSelectedTilesRect(std::vector<Tile*>& selectedTiles, const sf::IntRect& rect)
+{
+	for (Tile* tile : selectedTiles)
+	{
+		tile->SetTextureRect(rect);
+	}
+	selectedTiles.clear();
 }
 
 void SceneEditor::SetSelectedTilesArea()
 {
+	for (Tile* tile : selectedTiles)
+	{
+		tile->SetState(Tile::TileState::Blank);
+		tile->SetStateColor(Tile::TileState::Blank);
+	}
+	selectedTiles.clear();
+
 	for (int x = std::min(startTileIndex.x, endTileIndex.x); x <= std::max(startTileIndex.x, endTileIndex.x); ++x)
 	{
 		for (int y = std::min(startTileIndex.y, endTileIndex.y); y <= std::max(startTileIndex.y, endTileIndex.y); ++y)
 		{
-			tiles[x][y]->SetState(Tile::TileState::Select);
-			tiles[x][y]->SetStateColor(Tile::TileState::Select);
+			tilesWorld[x][y]->SetState(Tile::TileState::Select);
+			tilesWorld[x][y]->SetStateColor(Tile::TileState::Select);
+			selectedTiles.push_back(tilesWorld[x][y]);
 		}
 	}
 }
@@ -291,4 +308,142 @@ sf::Vector2i SceneEditor::GetCurrentTileIntIndex()
 	int yIndex = static_cast<int>(worldMousePos.y) / tileSize;
 
 	return sf::Vector2i(xIndex, yIndex);
+}
+
+
+Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float posY, int sort)
+{
+	Tile* tilePreview = (Tile*)AddGo(new Tile(name));
+	tilePreview->sortLayer = sort;
+	tilePreview->SetShapePosition(posX + blankPos, posY + blankPos);
+	tilePreview->SetSpritePosition(posX + blankPos, posY + blankPos);
+	tilePreview->SetState(Tile::TileState::UI);
+	tilePreview->SetStateColor(Tile::TileState::UI);
+	tilePreview->SetStrokeColor(sf::Color(64, 64, 64, 96));
+	tilePreview->OnEnter = [tilePreview]()
+	{
+		if (tilePreview->GetState() == Tile::TileState::UI)
+		{
+			tilePreview->SetShapeColor(sf::Color(128, 0, 0, 128));
+		}
+	};
+	tilePreview->OnExit = [tilePreview]()
+	{
+		if (tilePreview->GetState() == Tile::TileState::UI)
+		{
+			tilePreview->SetStateColor(Tile::TileState::UI);
+		}
+	};
+	tilePreview->OnClickDown = [tilePreview, this]()
+	{
+		if (tilePreview->GetState() == Tile::TileState::UI)
+		{
+			startPreviewIndex = GetCurrentPreviewIntIndex();
+			isUiMouseSelect = true;
+			isWorldMouseSelect = false;
+		}
+
+	};
+	tilePreview->OnClickDrag = [tilePreview, this]()
+	{
+		if (isUiMouseSelect && tilePreview->GetState() == Tile::TileState::UI)
+		{
+			endPreviewIndex = GetCurrentPreviewIntIndex();
+			SetSelectedPreviewArea();
+		}
+	};
+	tilePreview->OnClickUp = [tilePreview, this]()
+	{
+		if (isUiMouseSelect && tilePreview->GetState() == Tile::TileState::UI)
+		{
+			endPreviewIndex = GetCurrentPreviewIntIndex();
+			isUiMouseSelect = false;
+			isWorldMouseSelect = true;
+		}
+	};
+	return tilePreview;
+}
+
+std::vector<Tile*> SceneEditor::GetAllPreview()
+{
+	for (auto& row : tilesUi)
+	{
+		for (Tile* tile : row)
+		{
+			allPreview.push_back(tile);
+		}
+	}
+	return allPreview;
+}
+
+std::vector<Tile*> SceneEditor::GetSelectedPreview()
+{
+	for (auto& row : tilesUi)
+	{
+		for (Tile* tile : row)
+		{
+			if (tile->GetState() == Tile::TileState::SelectUI)
+			{
+				selectedPreview.push_back(tile);
+			}
+		}
+	}
+	return selectedPreview;
+}
+
+void SceneEditor::SetSelectedPreviewState(std::vector<Tile*>& selectedPreview, Tile::TileState state)
+{
+	for (Tile* tile : selectedPreview)
+	{
+		tile->SetState(state);
+		tile->SetStateColor(state);
+	}
+	selectedPreview.clear();
+}
+
+void SceneEditor::SetSelectedPreviewRect(std::vector<Tile*>& selectedPreview, const sf::IntRect& rect)
+{
+	for (Tile* tile : selectedPreview)
+	{
+		tile->SetTextureRect(rect);
+	}
+	selectedPreview.clear();
+}
+
+void SceneEditor::SetSelectedPreviewArea()
+{
+	for (Tile* tile : selectedPreview)
+	{
+		tile->SetState(Tile::TileState::UI);
+		tile->SetStateColor(Tile::TileState::UI);
+	}
+	selectedPreview.clear();
+
+	for (int x = std::min(startPreviewIndex.x, endPreviewIndex.x); x <= std::max(startPreviewIndex.x, endPreviewIndex.x); ++x)
+	{
+		for (int y = std::min(startPreviewIndex.y, endPreviewIndex.y); y <= std::max(startPreviewIndex.y, endPreviewIndex.y); ++y)
+		{
+			tilesUi[x][y]->SetState(Tile::TileState::SelectUI);
+			tilesUi[x][y]->SetStateColor(Tile::TileState::SelectUI);
+			selectedPreview.push_back(tilesUi[x][y]);
+		}
+	}
+}
+
+sf::Vector2i SceneEditor::GetCurrentPreviewIntIndex()
+{
+	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
+	sf::Vector2f UiMousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
+
+	int xIndex = static_cast<int>(UiMousePos.x - blankPos) / tileSize;
+	int yIndex = static_cast<int>(UiMousePos.y - blankPos) / tileSize;
+
+	std::cout << "SELECT INDEX : " << xIndex << ", " << yIndex << std::endl;
+
+	return sf::Vector2i(xIndex, yIndex);
+}
+
+int SceneEditor::ToOneDimensionIndex(int row, int col, int numCols)
+{
+	return row * numCols + col;
 }

@@ -1,5 +1,9 @@
 "RESOURCE_TYPES (0: 텍스쳐, 1: 폰트, 2: 사운드 클립, 3: 애니메이션 클립, 4: 애니메이션 스프라이트 클립)",RESOURCE_PATH
 1,fonts/neodgm_code.ttf
+1,fonts/NanumSquareB.ttf
+1,fonts/NanumSquareEB.ttf
+1,fonts/NanumSquareL.ttf
+1,fonts/NanumSquareR.ttf
 0,graphics/ui/corner.png
 0,graphics/ui/corner_side.png
 0,graphics/ui/stroke_corner.png

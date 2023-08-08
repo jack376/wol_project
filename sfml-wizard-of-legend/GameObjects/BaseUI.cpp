@@ -44,7 +44,7 @@ void BaseUI::Reset()
     sideStroke.setOrigin(0.0f, 0.0f);
     sideStroke.setColor(strokeColor);
 
-    text.setFont(*RESOURCE_MGR.GetFont("fonts/neodgm_code.ttf"));
+    text.setFont(*RESOURCE_MGR.GetFont("fonts/NanumSquareB.ttf"));
     text.setCharacterSize(fontSize);
     text.setLetterSpacing(1.0f);
 
