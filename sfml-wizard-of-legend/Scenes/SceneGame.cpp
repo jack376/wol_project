@@ -7,17 +7,11 @@
 #include "Framework.h"
 #include "TextGo.h"
 #include "SpriteGo.h"
+#include "Monster.h"
 #include "Player.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/sprite_sheet.png"));
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/RubySheet.png"));
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button.png"));
-	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button2.png"));
-
-	// ¿¹Á¦
-	
 }
 
 void SceneGame::Init()
@@ -30,6 +24,9 @@ void SceneGame::Init()
 	player->sprite.setScale(4.5, 4.5);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 1;
+
+	GameObject* go = AddGo(new Monster(MonsterId::Ghoul));
+	SetInitValue(go, Origins::MC, size * 0.5f);
 
 	for (auto go : gameObjects)
 	{
@@ -66,10 +63,17 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
-
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+}
+
+void SceneGame::SetInitValue(GameObject* go, Origins origin, sf::Vector2f pos, float angle, int layer)
+{
+	go->SetOrigin(origin);
+	go->SetPosition(pos);
+	//go->SetRotation(angle);
+	go->sortLayer = layer;
 }

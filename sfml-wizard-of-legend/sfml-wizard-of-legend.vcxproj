@@ -175,6 +175,8 @@
     </ClCompile>
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="GameObjects\Player\Player.cpp" />
+    <ClCompile Include="GameObjects\Monster.cpp" />
+    <ClCompile Include="MonsterTable.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
     <ClCompile Include="Framework\SceneMgr.cpp" />
@@ -187,11 +189,11 @@
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
+    <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="GameObjects\Background.h" />
     <ClInclude Include="GameObjects\Items\Coin.h" />
     <ClInclude Include="GameObjects\Cookies\Cookie.h" />
     <ClInclude Include="DataTables\DataTable.h" />
-    <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="GameObjects\Effects\EffectSpeedUp.h" />
     <ClInclude Include="Framework\DataTableMgr.h" />
     <ClInclude Include="Framework\ObjectPool.h" />
@@ -199,6 +201,8 @@
     <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
+    <ClInclude Include="GameObjects\Monster.h" />
+    <ClInclude Include="MonsterTable.h" />
     <ClInclude Include="GameObjects\Player\Player.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
