@@ -1,0 +1,13 @@
+ID,FPS,LOOPTYPE,,
+GhoulDeath,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/GhoulSource.png,48,96,48,48
+graphics/Texture2D/GhoulSource.png,96,96,48,48
+graphics/Texture2D/GhoulSource.png,144,96,48,48
+graphics/Texture2D/GhoulSource.png,192,96,48,48
+graphics/Texture2D/GhoulSource.png,0,144,48,48
+graphics/Texture2D/GhoulSource.png,48,144,48,48
+graphics/Texture2D/GhoulSource.png,96,144,48,48
+graphics/Texture2D/GhoulSource.png,144,144,48,48
+graphics/Texture2D/GhoulSource.png,192,144,48,48

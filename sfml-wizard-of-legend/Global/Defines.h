@@ -2,27 +2,32 @@
 
 #define _USE_MATH_DEFINES
 
-enum class CookieTypes
+enum class AttactType
 {
-	None = -1,
-	Pancake,
-	Pirate,
-	Moonlighter,
+	Melee,
+	Ranged,
 };
 
-enum class SkinType
+struct MonsterInfo
 {
-	None = -1,
-	Normal,
-	Skin1,
+	std::string name;
+	AttactType type;
+	int maxHp;
+	float speed;
+	int damage;
+	float attackRate;	 //공격 속도
+	float attackRange;	//공격 범위
+	float searchRange;	//탐색 범위
 };
 
-enum class LobbyType
+
+enum class ElementTypes
 {
-	None = -1,
-	Temple,
-	WizardryTower,
-	Cathedral,
+	Fire,
+	Water,
+	Thunder,
+	Earth,
+	Wind,
 };
 
 
@@ -61,8 +66,6 @@ enum class SceneId
 {
 	None = -1,
 	Title,
-	Editor,
-	Lobby,
 	Game,
 	Count,
 };

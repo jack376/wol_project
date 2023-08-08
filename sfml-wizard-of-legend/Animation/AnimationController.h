@@ -12,14 +12,13 @@ protected:
 	AnimationClip* currentClip = nullptr;
 	int currentFrame = -1;
 	int totalFrame = 0;
-	float clipDuration = 0.f;
+	float clipDuration = 0.f;	//몇 프레임에 sprite를 교체할 건지
 	float accumTime = 0.f;
 
 	sf::Sprite* target = nullptr;
 
 public:
 	void AddClip(const AnimationClip& newClip);
-	void ResetClip();
 	void SetTarget(sf::Sprite* sprite) { target = sprite; }
 	sf::Sprite* GetTarget() const { return target; }
 	bool IsPlaying() { return isPlaying; }
@@ -28,12 +27,13 @@ public:
 
 	void Update(float dt);
 
-	void Play(const std::string& clipId, bool clearQueue = true);
-	void PlayQueue(const std::string& clipId);
+	void Play(const std::string& clipid, bool clearQueue = true);
+	void PlayQueue(const std::string& clipid);
 	void Stop();
 
 	void SetFrame(const AnimationFrame& frame);
-	void SetFrame(const AnimationSheetFrame& frame);
-	std::string GetCurrentClipId() const;
-	AnimationClip* GetCurrentClip() const;
+	 sf::FloatRect GetCurrentRect();
+
+	 const std::string& GetCurrentClipId() { return currentClip->id; }
 };
+

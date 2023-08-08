@@ -7,7 +7,6 @@
 
 Scene::Scene(SceneId id) : sceneId(id), window(FRAMEWORK.GetWindow())
 {
-
 }
 
 Scene::~Scene()
@@ -118,7 +117,6 @@ sf::Vector2f Scene::WorldPosToUiPos(sf::Vector2f worldPos)
 
 void Scene::Enter()
 {
-	//scripts/[SceneId]ResourceList.csv
 	RESOURCE_MGR.LoadFromCSV(resourceListPath);
 
 	for (auto go : gameObjects)
