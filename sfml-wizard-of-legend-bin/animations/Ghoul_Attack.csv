@@ -1,0 +1,6 @@
+ID,FPS,LOOPTYPE,,
+GhoulAttack,3,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/GhoulSource.png,48,0,48,48
+graphics/Texture2D/GhoulSource.png,96,0,48,48
