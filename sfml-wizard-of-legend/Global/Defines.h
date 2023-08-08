@@ -2,6 +2,7 @@
 
 #define _USE_MATH_DEFINES
 
+<<<<<<< HEAD
 enum class AttactType
 {
 	Melee,
@@ -29,6 +30,8 @@ enum class ElementTypes
 	Earth,
 	Wind,
 };
+=======
+>>>>>>> feature/player
 
 
 enum class Languages
@@ -65,8 +68,14 @@ enum class ResourceTypes
 enum class SceneId
 {
 	None = -1,
+<<<<<<< HEAD
 	Title,
+=======
+>>>>>>> feature/player
 	Game,
+	Title,
+	//Editor,
+	//Lobby,
 	Count,
 };
 

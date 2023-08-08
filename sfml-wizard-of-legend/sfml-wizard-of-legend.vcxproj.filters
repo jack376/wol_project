@@ -75,6 +75,7 @@
     <ClCompile Include="GameObjects\UIButton.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="GameObjects\Monster.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -82,6 +83,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DataTables\StringTable.cpp">
+=======
+    <ClCompile Include="GameObjects\Player\Player.cpp">
+>>>>>>> feature/player
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -230,6 +234,7 @@
     <ClInclude Include="GameObjects\UIButton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="GameObjects\Monster.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -237,6 +242,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DataTables\StringTable.h">
+=======
+    <ClInclude Include="GameObjects\Player\Player.h">
+>>>>>>> feature/player
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

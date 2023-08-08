@@ -1,0 +1,14 @@
+ID,FPS,LOOPTYPE,,
+RunDown,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,10,58,28,28
+graphics/Player/NewWizard.png,58,58,28,28
+graphics/Player/NewWizard.png,106,58,28,30
+graphics/Player/NewWizard.png,154,56,26,32
+graphics/Player/NewWizard.png,202,56,26,32
+graphics/Player/NewWizard.png,250,58,28,28
+graphics/Player/NewWizard.png,298,58,28,28
+graphics/Player/NewWizard.png,346,58,28,30
+graphics/Player/NewWizard.png,396,56,26,32
+graphics/Player/NewWizard.png,442,56,28,32

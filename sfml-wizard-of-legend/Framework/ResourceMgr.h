@@ -8,8 +8,13 @@ class ResourceMgr : public Singleton<ResourceMgr>
 protected:
 	ResourceMgr() = default;
 	virtual ~ResourceMgr() override;
+<<<<<<< HEAD
 	
 	
+=======
+
+
+>>>>>>> feature/player
 	std::map<std::string, std::tuple<sf::Texture*, bool>> mapTexture;
 	std::map<std::string, std::tuple<sf::Font*, bool>> mapFont;
 	std::map<std::string, std::tuple<sf::SoundBuffer*, bool>> mapSoundBuffer;

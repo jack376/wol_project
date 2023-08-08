@@ -10,6 +10,14 @@ void AnimationController::AddClip(const AnimationClip& newClip)
 	}
 }
 
+<<<<<<< HEAD
+=======
+bool AnimationController::IsAnimEndFrame()
+{
+	return currentFrame == totalFrame;
+}
+
+>>>>>>> feature/player
 void AnimationController::Update(float dt)
 {
 	if (!isPlaying)
@@ -29,6 +37,10 @@ void AnimationController::Update(float dt)
 			std::string id = queue.front();
 			queue.pop();
 			Play(id, false);
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/player
 		}
 		else
 		{
@@ -81,7 +93,11 @@ void AnimationController::Play(const std::string& clipid, bool clearQueue)
 	accumTime = 0.f;
 
 	SetFrame(currentClip->frames[currentFrame]);
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> feature/player
 }
 
 void AnimationController::PlayQueue(const std::string& clipid)
@@ -105,5 +121,9 @@ void AnimationController::SetFrame(const AnimationFrame& frame)
 
 sf::FloatRect AnimationController::GetCurrentRect()
 {
+<<<<<<< HEAD
 	return target->getGlobalBounds();	
+=======
+	return target->getGlobalBounds();
+>>>>>>> feature/player
 }

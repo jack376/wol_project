@@ -1,0 +1,13 @@
+ID,FPS,LOOPTYPE,,
+AttackBackRight,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,190,912,28,34
+graphics/Player/NewWizard.png,224,912,30,34
+graphics/Player/NewWizard.png,260,908,30,38
+graphics/Player/NewWizard.png,308,908,26,38
+graphics/Player/NewWizard.png,348,914,28,32
+graphics/Player/NewWizard.png,384,914,26,32
+graphics/Player/NewWizard.png,416,914,26,32
+graphics/Player/NewWizard.png,450,914,26,32
+graphics/Player/NewWizard.png,484,910,26,36

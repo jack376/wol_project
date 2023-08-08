@@ -8,7 +8,11 @@ enum class AnimationLoopTypes
 
 struct AnimationFrame
 {
+<<<<<<< HEAD
 	std::string textureId;	
+=======
+	std::string textureId;
+>>>>>>> feature/player
 	sf::IntRect texCoord;	//texture 좌표
 	std::function<void()> action;	//함수 포인터 대신 std::function사용
 };

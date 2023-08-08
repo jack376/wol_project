@@ -25,6 +25,8 @@ public:
 	void SetSpeed(float s) { speed = s; }
 	float Speed() const { return speed; }
 
+	bool IsAnimEndFrame();
+
 	void Update(float dt);
 
 	void Play(const std::string& clipid, bool clearQueue = true);
@@ -32,8 +34,15 @@ public:
 	void Stop();
 
 	void SetFrame(const AnimationFrame& frame);
+<<<<<<< HEAD
 	 sf::FloatRect GetCurrentRect();
 
 	 const std::string& GetCurrentClipId() { return currentClip->id; }
 };
 
+=======
+	sf::FloatRect GetCurrentRect();
+
+	const std::string& GetCurrentClipId() { return currentClip->id; }
+};
+>>>>>>> feature/player

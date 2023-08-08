@@ -28,7 +28,12 @@ ResourceMgr::~ResourceMgr()
 
 void ResourceMgr::Init()
 {
+<<<<<<< HEAD
 	LoadFromCSV("scripts/default_resource_list_park.csv", true);
+=======
+
+	LoadFromCSV("scripts/SceneGameResourceList_ojy.csv" , true);
+>>>>>>> feature/player
 }
 
 void ResourceMgr::UnLoadAll()
@@ -94,7 +99,11 @@ void ResourceMgr::UnLoadAll()
 		}
 	}
 
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> feature/player
 }
 
 void ResourceMgr::LoadFromCSV(const std::string path, bool isDefault)
@@ -104,7 +113,11 @@ void ResourceMgr::LoadFromCSV(const std::string path, bool isDefault)
 	std::vector<std::string> paths = doc.GetColumn<std::string>(1);
 	for (int i = 0; i < types.size(); i++)
 	{
+<<<<<<< HEAD
 		Load((ResourceTypes)types[i], paths[i], isDefault);		
+=======
+		Load((ResourceTypes)types[i], paths[i], isDefault);
+>>>>>>> feature/player
 		//SCENE_MGR.GetCreentScene().resours.push_back(types[i], paths[i]);
 	}
 }
@@ -178,7 +191,11 @@ void ResourceMgr::Unload(ResourceTypes t, const std::string id)
 			{
 				std::cout << "ERR: Default Resource" << std::endl;
 			}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> feature/player
 		}
 	}
 	break;

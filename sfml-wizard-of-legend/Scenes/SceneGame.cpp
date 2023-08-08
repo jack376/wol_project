@@ -7,10 +7,24 @@
 #include "Framework.h"
 #include "TextGo.h"
 #include "SpriteGo.h"
+<<<<<<< HEAD
 #include "Monster.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
+=======
+#include "Player.h"
+
+SceneGame::SceneGame() : Scene(SceneId::Game)
+{
+	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/sprite_sheet.png"));
+	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/RubySheet.png"));
+	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button.png"));
+	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button2.png"));
+
+	// ¿¹Á¦
+	
+>>>>>>> feature/player
 }
 
 void SceneGame::Init()
@@ -18,8 +32,16 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
+<<<<<<< HEAD
 	GameObject* go = AddGo(new Monster(MonsterId::Ghoul));
 	SetInitValue(go, Origins::MC, size * 0.5f);
+=======
+	player = (Player*)AddGo(new Player());
+	player->SetPosition(0, 0);
+	player->sprite.setScale(4.5, 4.5);
+	player->SetOrigin(Origins::MC);
+	player->sortLayer = 1;
+>>>>>>> feature/player
 
 	for (auto go : gameObjects)
 	{

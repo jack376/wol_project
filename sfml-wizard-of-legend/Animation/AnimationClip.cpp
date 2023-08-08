@@ -19,4 +19,8 @@ bool AnimationClip::LoadFromFile(const std::string path)
     }
 
     return true;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> feature/player
