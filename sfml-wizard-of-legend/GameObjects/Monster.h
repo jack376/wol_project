@@ -34,7 +34,7 @@ struct MonsterStat
 enum class MonsterId
 {
 	Ghoul,
-	Knight,
+	GhoulLarge,
 };
 
 

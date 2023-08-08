@@ -1,0 +1,9 @@
+ID,FPS,LOOPTYPE,,
+GhoulLarge_Run,1,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/GhoulLarge.png,0,0,48,48
+graphics/Texture2D/GhoulLarge.png,48,0,48,48
+graphics/Texture2D/GhoulLarge.png,96,0,48,48
+graphics/Texture2D/GhoulLarge.png,144,0,48,48
+graphics/Texture2D/GhoulLarge.png,192,0,48,48

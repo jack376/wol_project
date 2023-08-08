@@ -1,0 +1,9 @@
+ID,FPS,LOOPTYPE,,
+GhoulDeath,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/GhoulLarge.png,49,286,46,45
+graphics/Texture2D/GhoulLarge.png,97,280,46,51
+graphics/Texture2D/GhoulLarge.png,146,276,45,53
+graphics/Texture2D/GhoulLarge.png,195,274,44,45
+graphics/Texture2D/GhoulLarge.png,243,274,41,34

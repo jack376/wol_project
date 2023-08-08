@@ -5,3 +5,9 @@
 3,animations/Ghoul_Run.csv
 3,animations/Ghoul_Idle.csv
 3,animations/Ghoul_Hurt.csv
+0,graphics/Texture2D/GhoulLarge.png
+3,animations/GhoulLarge_Attack.csv
+3,animations/GhoulLarge_Death.csv
+3,animations/GhoulLarge_Run.csv
+3,animations/GhoulLarge_Idle.csv
+3,animations/GhoulLarge_Hurt.csv

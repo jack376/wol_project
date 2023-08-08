@@ -25,7 +25,7 @@ void SceneGame::Init()
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 1;
 
-	GameObject* go = AddGo(new Monster(MonsterId::Ghoul));
+	GameObject* go = AddGo(new Monster(MonsterId::GhoulLarge));
 	SetInitValue(go, Origins::MC, size * 0.5f);
 
 	for (auto go : gameObjects)
