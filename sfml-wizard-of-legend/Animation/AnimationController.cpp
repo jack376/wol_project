@@ -12,7 +12,7 @@ void AnimationController::AddClip(const AnimationClip& newClip)
 
 bool AnimationController::IsAnimEndFrame()
 {
-	return currentFrame == totalFrame - 1;
+	return totalFrame - currentFrame == 1;
 }
 
 void AnimationController::Update(float dt)

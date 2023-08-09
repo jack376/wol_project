@@ -14,6 +14,15 @@ enum class Dir
 	Left
 };
 
+enum class AttackDir
+{
+	None = -1,
+	Up,
+	Right,
+	Down,
+	Left
+};
+
 enum class States
 {
 	Idle,
@@ -25,6 +34,16 @@ enum class States
 	Dead,
 };
 
+enum class SkillEvents
+{
+	None = -1,
+	Left,
+	Right,
+	Space,
+	Q,
+	Count,
+};
+
 class SceneGame;
 
 class Player : public SpriteGo
@@ -34,23 +53,50 @@ private:
 	States currentState = States::Idle;
 	Dir currentDir = Dir::Down;
 	Dir slideDir = Dir::Down;
-
+	AttackDir attackDir = AttackDir::None;
+	SkillEvents sEvent = SkillEvents::None;
 
 	SceneGame* scene;
 
 	SpriteGo* dirIcon;
 
+	sf::CircleShape attackPosCol;	// 스킬 생성 지점 가시화
+	sf::RectangleShape attackRangeCol;	// 실제 공격
+
+
+
+
+	// 스킬 클래스
+	//4개는 고정이란 뜻
+	// 스킬 매니저 생성 swap함수 느낌으로
+	//Skill fireball;
+	//Skill wdash;
+	//Skill wslash;
+
 	int hp = 100;
+
+	// 공격 포즈
+	int attackCount = 0;
+	int attackComboCount = 0;	// 연속 공격 횟수
 
 	// 방향 sf::Vector2f
 	sf::Vector2f dir;
 	sf::Vector2f dashDir;
 	sf::Vector2f look;
+	sf::Vector2f iconLook;
 
 	// 좌표 sf::Vector2f
 	std::vector<sf::Vector2f> destPos;
 	sf::Vector2f dashStart;
 	sf::Vector2f dashDest;
+	sf::Vector2f attackPos;
+
+	float playerLookAngle = 0.f;
+
+	float debugTimer = 0.f;
+	float debugDuration = 1.f;
+
+	float attackDistance = 100.f;
 
 	float speed = 400.f;
 	float dashDistance = 400.f;
@@ -72,6 +118,9 @@ private:
 	bool isDash = false;
 	bool isSlide = false;
 	bool isDashCool = false;
+	bool isAttack = false;
+
+	std::string attackName;
 
 public:
 	Player(const std::string& textureId = "", const std::string& n = "");
@@ -93,9 +142,12 @@ public:
 	void DeadUpdate(float dt);
 
 	void CalDir();
+	void CalLookAngle();
+
 
 
 	void SetScene(SceneGame* scene) { this->scene = scene; }
+	void SetAttackPos();
 	void SetDirIconPos();
 	void SetDirIconDir();
 
@@ -103,10 +155,5 @@ public:
 	void SetHp(int value);
 	bool IsAlive() { return isAlive; }
 	
-	float CalDashDistance(Dir dir);
-
 	void ChangeState(States state);
-
-
-	//void PlayerTextureReset();
 };

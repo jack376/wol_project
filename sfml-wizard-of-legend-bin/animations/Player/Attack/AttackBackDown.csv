@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-AttackBackDown,10,0,,
+AttackBackDown,22,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/Player/NewWizard.png,12,298,22,34
