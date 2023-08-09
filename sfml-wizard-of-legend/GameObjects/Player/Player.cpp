@@ -50,12 +50,6 @@ void Player::Init()
 	attackPosCol.setOutlineThickness(1.f);
 	attackPosCol.setOutlineColor(sf::Color::Red);
 	attackPosCol.setFillColor(sf::Color::Transparent);
-
-	attackRangeCol.setSize({ 65, 120 });
-	attackRangeCol.setOutlineThickness(1.f);
-	attackRangeCol.setOutlineColor(sf::Color::Green);
-	attackRangeCol.setFillColor(sf::Color::Transparent);
-
 }
 
 void Player::Release()
@@ -63,7 +57,6 @@ void Player::Release()
 	// 클리어를 해줘야 하는지 결정해야함
 	destPos.clear();
 	SpriteGo::Release();
-
 }
 
 void Player::Reset()
@@ -97,6 +90,8 @@ void Player::Reset()
 	anim.SetTarget(&sprite);
 	anim.Play("IdleDown");
 
+	// 플레이어 리셋
+	hp = maxHp;
 	attackCount = 0;
 }
 
@@ -205,8 +200,6 @@ void Player::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
 	window.draw(attackPosCol);
-	if(isAttack)
-		window.draw(attackRangeCol);
 }
 
 void Player::IdleUpdate(float dt)
@@ -474,7 +467,8 @@ void Player::AttackUpdate(float dt)
 	isAttack = true;
 	if (isAttack)
 	{
-		attackRangeCol.setPosition(attackPosCol.getPosition());
+		//attackRangeCol.setPosition(attackPosCol.getPosition());
+
 	}
 	if (anim.IsAnimEndFrame())
 	{
@@ -590,7 +584,12 @@ void Player::SetDirIconDir()
 
 void Player::SetHp(int value)
 {
-	hp -= value;
+	if (hp <= 0)
+	{
+		// Dead 상태
+		isAlive = false;
+	}
+	hp += value;
 }
 
 void Player::ChangeState(States state)

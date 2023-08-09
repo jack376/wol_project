@@ -1,8 +1,9 @@
 ID,FPS,LOOPTYPE,,
-WindSlashMed,10,0,,
+WindSlashMed,6,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/Player/Attck_Basic/WindSlash/WindSlash.png,353,260,30,39
 graphics/Player/Attck_Basic/WindSlash/WindSlash.png,385,260,30,29
 graphics/Player/Attck_Basic/WindSlash/WindSlash.png,418,262,30,29
 graphics/Player/Attck_Basic/WindSlash/WindSlash.png,449,260,30,29
+graphics/Player/Attck_Basic/WindSlash/WindSlash.png,480,260,30,29

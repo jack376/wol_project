@@ -6,11 +6,14 @@ class TextGo;
 class SpriteGo;
 
 class Player;
+class ElementalSpell;
 
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
+	ElementalSpell* tempWindSlash;
+
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

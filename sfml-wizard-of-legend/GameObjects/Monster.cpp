@@ -42,7 +42,7 @@ void Monster::Reset()
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
     
-    SetPosition({ 0, 0 });
+    SetPosition({ -500, 0 });
     SetOrigin(Origins::BC);
     SetFlipX(false);
     sortLayer = 10;
@@ -99,23 +99,23 @@ void Monster::HandleState()
 {
     switch (currentState) {
     case MonsterState::Idle:
-        std::cout << "Monster is idle.\n";
+        //std::cout << "Monster is idle.\n";
         break;
 
     case MonsterState::Moving:
-        std::cout << "Monster is moving.\n";
+        //std::cout << "Monster is moving.\n";
         break;
 
     case MonsterState::Attacking:
-        std::cout << "Monster is attacking.\n";
+        //std::cout << "Monster is attacking.\n";
         break;
 
     case MonsterState::Dead:
-        std::cout << "Monster is dead.\n";
+        //std::cout << "Monster is dead.\n";
         break;
 
     case MonsterState::KnockBack:
-        std::cout << "Monster is KnockBack.\n";
+        //std::cout << "Monster is KnockBack.\n";
         break;
     }
 }
