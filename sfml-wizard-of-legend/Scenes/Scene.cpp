@@ -186,7 +186,7 @@ void Scene::Update(float dt)
 
 void Scene::Draw(sf::RenderWindow& window)
 {
-	// layer 100 ╨нем╢б ui Layer
+	// layer 100 О©╫О©╫О©╫м╢О©╫ ui Layer
 
 	SortGos();
 
@@ -234,4 +234,9 @@ void Scene::SetMousePos()
 {
 	sf::Vector2f mousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(INPUT_MGR.GetMousePos());
 	mouseCursor->SetPosition(INPUT_MGR.GetMousePos());
+}
+void Scene::Zoom(float factor) 
+{
+	currentZoom *= factor;
+	worldView.zoom(factor);
 }

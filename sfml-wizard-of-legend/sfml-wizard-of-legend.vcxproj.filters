@@ -85,6 +85,13 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DataTables\StringTable.cpp">
+    <ClCompile Include="GameObjects\BaseUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Tile.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\SceneEditor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -243,6 +250,13 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DataTables\StringTable.h">
+    <ClInclude Include="GameObjects\BaseUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Tile.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SceneEditor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -50,6 +50,7 @@ enum class SceneId
 	None = -1,
 	Game,
 	Title,
+	Editor,
 	Count,
 };
 
@@ -84,4 +85,11 @@ enum class PatternObjectType
 	Count,
 
 };
+
+enum class UiType
+{
+	Text,
+	Box,
+};
+
 #include "AnimationClip.h"
