@@ -19,13 +19,14 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
+
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
 	player->sprite.setScale(4.f, 4.f);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 1;
 
-	GameObject* go = AddGo(new Monster(MonsterId::GhoulLarge));
+	GameObject* go = AddGo(new Monster(MonsterId::Lancer));
 
 	for (auto go : gameObjects)
 	{

@@ -1,0 +1,11 @@
+ID,FPS,LOOPTYPE,,
+LancerRun,7,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/LancerSource.png,0,51,48,38
+graphics/Texture2D/LancerSource.png,48,51,48,38
+graphics/Texture2D/LancerSource.png,96,51,48,38
+graphics/Texture2D/LancerSource.png,144,51,48,38
+graphics/Texture2D/LancerSource.png,192,51,48,38
+graphics/Texture2D/LancerSource.png,144,51,48,38
+graphics/Texture2D/LancerSource.png,96,51,48,38

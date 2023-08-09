@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-GhoulIdle,1,0,,
+GhoulLargeIdle,1,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/Texture2D/GhoulLarge.png,0,0,48,48
+graphics/Texture2D/GhoulLarge.png,4,11,43,46

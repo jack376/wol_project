@@ -35,6 +35,7 @@ enum class MonsterId
 {
 	Ghoul,
 	GhoulLarge,
+	Lancer,
 };
 
 

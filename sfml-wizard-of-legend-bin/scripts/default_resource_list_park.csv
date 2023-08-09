@@ -11,3 +11,11 @@
 3,animations/GhoulLarge_Run.csv
 3,animations/GhoulLarge_Idle.csv
 3,animations/GhoulLarge_Hurt.csv
+0,graphics/Texture2D/LancerSource.png
+3,animations/Lancer_Attack.csv
+3,animations/Lancer_Death.csv
+3,animations/Lancer_Run.csv
+3,animations/Lancer_Idle.csv
+3,animations/Lancer_Hurt.csv
+3,animations/Lancer_AttackUp.csv
+3,animations/Lancer_AttackDown.csv

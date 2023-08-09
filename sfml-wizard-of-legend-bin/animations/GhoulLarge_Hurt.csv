@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-GhoulHurt,1,0,,
+GhoulLargeHurt,1,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/Texture2D/GhoulLarge.png,1,288,46,43

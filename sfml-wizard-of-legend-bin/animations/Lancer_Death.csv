@@ -1,0 +1,11 @@
+ID,FPS,LOOPTYPE,,
+LancerDeath,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/LancerSource.png,57,102,45,64
+graphics/Texture2D/LancerSource.png,107,102,45,64
+graphics/Texture2D/LancerSource.png,153,102,45,64
+graphics/Texture2D/LancerSource.png,200,102,45,64
+graphics/Texture2D/LancerSource.png,247,102,45,64
+graphics/Texture2D/LancerSource.png,297,102,45,64
+graphics/Texture2D/LancerSource.png,345,102,45,64

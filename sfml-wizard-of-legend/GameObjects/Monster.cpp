@@ -43,7 +43,7 @@ void Monster::Reset()
     animation.Play(stat.name + "Idle");
     
     SetPosition({ 0, 0 });
-    SetOrigin(Origins::MC);
+    SetOrigin(Origins::BC);
     SetFlipX(false);
     sortLayer = 10;
 
@@ -107,7 +107,7 @@ void Monster::HandleState()
         break;
 
     case MonsterState::Attacking:
-       // std::cout << "Monster is attacking.\n";
+        std::cout << "Monster is attacking.\n";
         break;
 
     case MonsterState::Dead:
@@ -124,6 +124,7 @@ void Monster::Idle()
 {
     SetState(MonsterState::Idle);
     animation.Play(stat.name + "Idle");
+    SetOrigin(origin);
 }
 
 void Monster::Attack(float dt)
@@ -133,7 +134,7 @@ void Monster::Attack(float dt)
     if(attackTimer > stat.attackRate)
     {
         animation.Play(stat.name + "Attack");
-        SetOrigin(Origins::MC);
+        SetOrigin(origin);
         attackTimer = 0.f;
         if (player->IsAlive() && sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
         {
@@ -146,8 +147,11 @@ void Monster::Attack(float dt)
 void Monster::Move(float dt)
 {
     SetState(MonsterState::Moving);
-    if (animation.GetCurrentClipId() != "GhoulRun")
+    if (animation.GetCurrentClipId() != stat.name + "Run")
+    {
         animation.Play(stat.name + "Run");
+        SetOrigin(origin);
+    }
     SetPosition(position + look * stat.speed * dt);
 }
 
@@ -155,17 +159,19 @@ void Monster::Die()
 {
     SetState(MonsterState::Dead);
     if (animation.GetCurrentClipId() != stat.name + "Death")
-        animation.Play(stat.name + "Death");
-    else if (animation.IsAnimEndFrame())
     {
-        SetActive(false);
+        animation.Play(stat.name + "Death");
+        SetOrigin(origin);
     }
+    else if (animation.IsAnimEndFrame())
+        SetActive(false);
 }
 
 void Monster::KnockBack()
 {
     SetState(MonsterState::KnockBack);
     animation.Play(stat.name + "Hurt");
+    SetOrigin(origin);
 }
 
 void Monster::SetLook(sf::Vector2f playerPos)
@@ -209,6 +215,7 @@ void Monster::HandleBehavior(float dt)
                 knockBackTimer = 0;
                 Idle();
             }
+            return;
         }
         else if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
         {
@@ -219,6 +226,6 @@ void Monster::HandleBehavior(float dt)
                 Move(dt);
         }
         else
-            animation.Play(stat.name + "Idle");  
+           Idle();            
     }
 }
