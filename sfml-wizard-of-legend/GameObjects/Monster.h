@@ -52,6 +52,7 @@ protected:
 	float attackTimer = 0.f;
 	float knockBackTime = 0.15f;
 	float knockBackTimer = 0.f;
+	bool isAttacked = false;
 
 	Player* player = nullptr;
 

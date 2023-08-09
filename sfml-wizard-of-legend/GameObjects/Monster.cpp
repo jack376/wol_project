@@ -43,7 +43,7 @@ void Monster::Reset()
     animation.Play(stat.name + "Idle");
     
     SetPosition({ 0, 0 });
-    SetOrigin(Origins::BC);
+    SetOrigin(Origins::MC);
     SetFlipX(false);
     sortLayer = 10;
 
@@ -136,11 +136,14 @@ void Monster::Attack(float dt)
         animation.Play(stat.name + "Attack");
         SetOrigin(origin);
         attackTimer = 0.f;
-        if (player->IsAlive() && sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
-        {
-            attackTimer = 0.f;
-            player->SetHp(-stat.damage);
-        }
+        isAttacked = false;
+    }
+    if (!isAttacked && player->IsAlive() &&
+        sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+    {
+        attackTimer = 0.f;
+        player->SetHp(-stat.damage);
+        isAttacked = true;
     }
 }
 
