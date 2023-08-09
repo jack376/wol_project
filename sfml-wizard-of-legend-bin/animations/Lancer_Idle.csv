@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+LancerIdle,1,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/LancerSource.png,10,3,28,39

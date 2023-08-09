@@ -13,10 +13,29 @@ enum class MonsterState
 	KnockBack,
 };
 
+enum class AttactType
+{
+	Melee,
+	Ranged,
+};
+
+struct MonsterStat
+{
+	std::string name;
+	AttactType type;
+	int maxHp;
+	float speed;
+	int damage;
+	float attackRate;
+	float attackRange;	//공격 범위
+	float searchRange;	//탐색 범위
+};
+
 enum class MonsterId
 {
 	Ghoul,
-	Knight,
+	GhoulLarge,
+	Lancer,
 };
 
 
@@ -28,14 +47,19 @@ protected:
 	MonsterState currentState = MonsterState::Idle;
 	AnimationController animation;
 
-	MonsterInfo stat;
-	int hp;
-	float attackTimer = 0.f; //timer가 rate보다 커지면 공격 타이밍
+	MonsterStat stat;
+	int hp = 0;
+	float attackTimer = 0.f;
+	float knockBackTime = 0.15f;
+	float knockBackTimer = 0.f;
 
 	Player* player = nullptr;
 
 	sf::Vector2f look; //바라보는 방향
 	sf::Vector2f direction; //이동하는 방향
+
+	sf::CircleShape searchRange;
+	sf::CircleShape attackRange;
 
 public:
 	Monster(MonsterId id, const std::string& textureId = "", const std::string& n = "");
@@ -51,12 +75,15 @@ public:
     void SetState(MonsterState newState);
 	void HandleState();
 
-	virtual void Attack(float dt);
+	void Idle();
+	void Attack(float dt);
 	void Move(float dt);
 	void Die();
+	void KnockBack();
 	
 	void SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
+	void OnAttacked(float damage);
 	void HandleBehavior(float dt);
 };
 

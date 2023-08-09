@@ -25,5 +25,6 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	void SetInitValue(GameObject* go, Origins origin, sf::Vector2f pos, float angle = 0, int layer = 100);
+	Player* GetPlayer() { return player; }
 };
 

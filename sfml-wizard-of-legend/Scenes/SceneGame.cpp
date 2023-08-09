@@ -19,6 +19,7 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
+
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
 	player->sprite.setScale(4, 4);
@@ -26,8 +27,7 @@ void SceneGame::Init()
 	player->sortLayer = 20;
 	player->SetScene(this);
 
-	//GameObject* go = AddGo(new Monster(MonsterId::Ghoul));
-	//SetInitValue(go, Origins::MC, size * 0.5f);
+	GameObject* go = AddGo(new Monster(MonsterId::Lancer));
 
 	for (auto go : gameObjects)
 	{
@@ -76,5 +76,5 @@ void SceneGame::SetInitValue(GameObject* go, Origins origin, sf::Vector2f pos, f
 	go->SetOrigin(origin);
 	go->SetPosition(pos);
 	//go->SetRotation(angle);
-	go->sortLayer = layer;
+	//go->sortLayer = layer;
 }

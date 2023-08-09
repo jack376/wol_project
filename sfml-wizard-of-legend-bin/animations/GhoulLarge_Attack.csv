@@ -1,0 +1,10 @@
+ID,FPS,LOOPTYPE,,
+GhoulLargeAttack,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/GhoulLarge.png,6,202,46,64
+graphics/Texture2D/GhoulLarge.png,55,202,46,64
+graphics/Texture2D/GhoulLarge.png,103,202,46,64
+graphics/Texture2D/GhoulLarge.png,151,202,46,64
+graphics/Texture2D/GhoulLarge.png,196,202,46,64
+graphics/Texture2D/GhoulLarge.png,244,202,46,64
