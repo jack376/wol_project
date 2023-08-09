@@ -39,15 +39,14 @@ void Monster::Reset()
     player = scene->GetPlayer();
 
     animation.SetTarget(&sprite);
-    sprite.setScale({ 3.f, 3.f });
+    sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
-
-    SetOrigin(origin);
+    
     SetPosition({ 0, 0 });
+    SetOrigin(Origins::MC);
     SetFlipX(false);
     sortLayer = 10;
 
-    
     hp = stat.maxHp;
     attackTimer = stat.attackRate;
 
@@ -63,7 +62,7 @@ void Monster::Reset()
         attackRange.setOutlineColor(sf::Color::Red);
         searchRange.setFillColor(sf::Color::Transparent);
         attackRange.setFillColor(sf::Color::Transparent);
-    }   
+    }  
 }
 
 void Monster::Update(float dt)
@@ -108,7 +107,7 @@ void Monster::HandleState()
         break;
 
     case MonsterState::Attacking:
-        std::cout << "Monster is attacking.\n";
+       // std::cout << "Monster is attacking.\n";
         break;
 
     case MonsterState::Dead:
@@ -134,6 +133,7 @@ void Monster::Attack(float dt)
     if(attackTimer > stat.attackRate)
     {
         animation.Play(stat.name + "Attack");
+        SetOrigin(Origins::MC);
         attackTimer = 0.f;
         if (player->IsAlive() && sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
         {

@@ -21,12 +21,11 @@ void SceneGame::Init()
 
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
-	player->sprite.setScale(3.f, 3.f);
+	player->sprite.setScale(4.f, 4.f);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 1;
 
 	GameObject* go = AddGo(new Monster(MonsterId::GhoulLarge));
-	SetInitValue(go, Origins::MC, size * 0.5f);
 
 	for (auto go : gameObjects)
 	{
@@ -75,5 +74,5 @@ void SceneGame::SetInitValue(GameObject* go, Origins origin, sf::Vector2f pos, f
 	go->SetOrigin(origin);
 	go->SetPosition(pos);
 	//go->SetRotation(angle);
-	go->sortLayer = layer;
+	//go->sortLayer = layer;
 }

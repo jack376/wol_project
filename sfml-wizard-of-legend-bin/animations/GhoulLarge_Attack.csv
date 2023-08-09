@@ -2,21 +2,9 @@ ID,FPS,LOOPTYPE,,
 GhoulLargeAttack,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/Texture2D/GhoulLarge.png,9,72,46,49
-graphics/Texture2D/GhoulLarge.png,72,69,48,52
-graphics/Texture2D/GhoulLarge.png,137,71,47,50
-graphics/Texture2D/GhoulLarge.png,200,76,48,45
-graphics/Texture2D/GhoulLarge.png,266,79,44,43
-graphics/Texture2D/GhoulLarge.png,10,134,45,54
-graphics/Texture2D/GhoulLarge.png,74,131,45,57
-graphics/Texture2D/GhoulLarge.png,138,130,45,58
-graphics/Texture2D/GhoulLarge.png,206,132,41,56
-graphics/Texture2D/GhoulLarge.png,271,133,34,57
-graphics/Texture2D/GhoulLarge.png,330,146,44,43
-graphics/Texture2D/GhoulLarge.png,400,133,34,57
-graphics/Texture2D/GhoulLarge.png,7,202,35,62
-graphics/Texture2D/GhoulLarge.png,55,201,35,63
-graphics/Texture2D/GhoulLarge.png,103,200,35,64
-graphics/Texture2D/GhoulLarge.png,151,203,35,61
-graphics/Texture2D/GhoulLarge.png,196,218,38,42
-graphics/Texture2D/GhoulLarge.png,244,218,38,42
+graphics/Texture2D/GhoulLarge.png,6,202,46,64
+graphics/Texture2D/GhoulLarge.png,55,202,46,64
+graphics/Texture2D/GhoulLarge.png,103,202,46,64
+graphics/Texture2D/GhoulLarge.png,151,202,46,64
+graphics/Texture2D/GhoulLarge.png,196,202,46,64
+graphics/Texture2D/GhoulLarge.png,244,202,46,64
