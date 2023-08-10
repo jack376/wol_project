@@ -19,6 +19,7 @@ void SpriteEffect::Reset()
 {
 	SpriteGo::Reset();
 	animation.SetTarget(&sprite);
+	sprite.setScale({ 4.0f, 4.0f });
 	SetOrigin(Origins::BC);
 	SetActive(false);
 }
@@ -56,6 +57,6 @@ void SpriteEffect::Play(float dt, sf::Vector2f pos, sf::Vector2f dir)
 	isPlay = true;
 	SetActive(true);
 	SetPosition(pos);
-	sprite.setRotation(Utils::Angle(dir));
+	sprite.setRotation(Utils::Angle(dir) + 90);
 	animation.Play("LancerAttackEffect");
 }

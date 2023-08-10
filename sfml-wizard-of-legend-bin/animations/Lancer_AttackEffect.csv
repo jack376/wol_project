@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-LancerAttackEffect,8,0,,
+LancerAttackEffect,4,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/Texture2D/LancerSource.png,0,368,16,107
