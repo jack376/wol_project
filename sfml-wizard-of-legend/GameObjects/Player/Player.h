@@ -34,15 +34,7 @@ enum class States
 	Dead,
 };
 
-enum class SkillEvents
-{
-	None = -1,
-	Left,
-	Right,
-	Space,
-	Q,
-	Count,
-};
+
 
 class SceneGame;
 class Monster;
@@ -161,6 +153,7 @@ public:
 
 	// 스킬 생성 지점
 	sf::Vector2f GetAttackPos() { return attackPos; }
+	float GetPlayerLookAngle() { return playerLookAngle; }
 
 	bool IsAlive() { return isAlive; }
 	bool IsAttack() { return isAttack; }

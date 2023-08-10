@@ -6,6 +6,7 @@ class SpriteGo;
 class SceneGame;
 class Player;
 
+
 class ElementalSpell : public SpriteGo
 {
 protected:
@@ -16,29 +17,50 @@ protected:
 	AnimationController anim;
 	SpriteGo* collider;
 
+	std::queue <float> comboQueue;
+
 
 	// 방향 벡터 sf::Vector2f
 	sf::Vector2f dir;
 
 
-	// 속도 벡터 sf::Vector2f
-	sf::Vector2f speed;
+
+	// 위치 벡터 sf::Vector2f
+	sf::Vector2f spawnPos;
+
+
+
+	float speed;
 
 
 	// 상태 변수
+
+	bool isCombo = false;
+
+	// 스킬이 생성되었는지 여부
 	bool isSpawn = false;
 
 	// 몬스터 충돌
 	bool isCol = false;
 
+	// 스킬이 공격했는지 여부 / 중복방지
 	bool isAttack = false;
 	
+	// 중복 공격 방지
 	float attackTimer = 0.f;
 	float attackDuration = 0.5f;
 
+	// 콤보 타이머 설정
+	float prevComboTime = -100.f;
+
+	float comboTimer = 0.f;
+	float comboDuration = 0.6f;
+
+	// 콤보 횟수
 	int attackCount = 0;
 
-
+	// 애니메이션 각도
+	float angle = 0.f;
 
 public:
 	ElementalSpell(const std::string& textureId = "", const std::string& n = "");

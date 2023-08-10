@@ -45,6 +45,7 @@ void Framework::Run()
     {
         sf::Time deltaTime = clock.restart();
         float dt = deltaTime.asSeconds();
+        gamePlayTime += deltaTime;
 
         INPUT_MGR.Update(dt);
 
@@ -84,4 +85,9 @@ sf::Vector2f Framework::GetWindowSize()
 sf::RenderWindow& Framework::GetWindow()
 {
     return window;
+}
+
+float Framework::GetGamePlayTime()
+{
+    return gamePlayTime.asSeconds();
 }

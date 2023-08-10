@@ -420,7 +420,7 @@ void Player::AttackUpdate(float dt)
 		attackName = "Back";
 
 	//std::cout << attackCount << std::endl;
-	std::cout << attackName << std::endl;
+	//std::cout << attackName << std::endl;
 
 	if(!isAttack)
 	{

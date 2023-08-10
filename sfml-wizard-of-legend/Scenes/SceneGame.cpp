@@ -147,5 +147,5 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetOrigin(Origins::MC);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
-	std::cout << "SYSTEM : Load Success" << std::endl;
+	//std::cout << "SYSTEM : Load Success" << std::endl;
 }

@@ -2,8 +2,15 @@
 
 #define _USE_MATH_DEFINES
 
-
-
+enum class SkillEvents
+{
+	None = -1,
+	Left,
+	Right,
+	Space,
+	Q,
+	Count,
+};
 
 enum class ElementTypes
 {
