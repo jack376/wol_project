@@ -15,7 +15,7 @@ void SceneMgr::Init()
 	//scenes.push_back(new SceneTitle());
 	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneTitle());
-	//scenes.push_back(new SceneGame());
+	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneEditor());
 
 	for (auto scene : scenes)

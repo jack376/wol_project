@@ -190,6 +190,7 @@
     <ClCompile Include="GameObjects\Tile.cpp" />
     <ClCompile Include="Framework\SkillMgr.cpp" />
     <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="DataTables\TileInfoTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Framework\SkillMgr.h" />
     <ClInclude Include="Skill.h" />
+    <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />

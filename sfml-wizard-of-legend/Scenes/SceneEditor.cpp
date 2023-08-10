@@ -9,6 +9,7 @@
 #include "TextGo.h"
 #include "BaseUI.h"
 #include "Tile.h"
+#include "rapidcsv.h"
 #include <iomanip>
 
 SceneEditor::SceneEditor() : Scene(SceneId::Editor)
@@ -96,11 +97,12 @@ void SceneEditor::Enter()
 	sf::Vector2f windowSize = FRAMEWORK.GetWindowSize();
 	worldView.setSize(windowSize);
 	worldView.setCenter({ 0, 0 });
+	worldView.zoom(zoomDefaultFactor);
 
 	uiView.setSize(windowSize);
 	uiView.setCenter(windowSize * 0.5f);
 
-	cameraPosition = sf::Vector2f(windowSize * 0.5f);
+	cameraPosition = sf::Vector2f(windowSize.x * 0.05f, windowSize.y * 0.2f);
 
 	Scene::Enter();
 }
@@ -116,6 +118,7 @@ void SceneEditor::Update(float dt)
 
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
+	//std::cout << worldMousePos.x << ", " << worldMousePos.y << std::endl;
 
 	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
 	cameraDirection.y = INPUT_MGR.GetAxis(Axis::Vertical);
@@ -153,6 +156,11 @@ void SceneEditor::Update(float dt)
 		std::vector<Tile*> allTiles = GetAllTiles();
 		SetSelectedTilesState(allTiles, Tile::TileState::Blank);
 		//std::cout << x << ", " << y << std::endl;
+	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
+	{
+		SaveToCSV("tables/TileInfoTable.csv");
 	}
 
 	// Copy
@@ -307,9 +315,15 @@ sf::Vector2i SceneEditor::GetCurrentTileIntIndex()
 	int xIndex = static_cast<int>(worldMousePos.x) / tileSize;
 	int yIndex = static_cast<int>(worldMousePos.y) / tileSize;
 
+	int maxRangeIndex = atlasTextureSize / tileTextureSize;
+	if (xIndex < 0 || xIndex >= maxRangeIndex || yIndex < 0 || yIndex >= maxRangeIndex)
+	{
+		xIndex = std::max(0, std::min(xIndex, maxRangeIndex - 1));
+		yIndex = std::max(0, std::min(yIndex, maxRangeIndex - 1));
+	}
+
 	return sf::Vector2i(xIndex, yIndex);
 }
-
 
 Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float posY, int sort)
 {
@@ -438,12 +452,61 @@ sf::Vector2i SceneEditor::GetCurrentPreviewIntIndex()
 	int xIndex = static_cast<int>(UiMousePos.x - blankPos) / tileSize;
 	int yIndex = static_cast<int>(UiMousePos.y - blankPos) / tileSize;
 
+	int maxRangeIndex = atlasTextureSize / tileTextureSize;
+	if (xIndex < 0 || xIndex >= maxRangeIndex || yIndex < 0 || yIndex >= maxRangeIndex)
+	{
+		xIndex = std::max(0, std::min(xIndex, maxRangeIndex - 1));
+		yIndex = std::max(0, std::min(yIndex, maxRangeIndex - 1));
+	}
+
 	std::cout << "SELECT INDEX : " << xIndex << ", " << yIndex << std::endl;
 
 	return sf::Vector2i(xIndex, yIndex);
 }
 
-int SceneEditor::ToOneDimensionIndex(int row, int col, int numCols)
+void SceneEditor::SaveToCSV(const std::string& path)
 {
-	return row * numCols + col;
+	rapidcsv::Document doc;
+
+	doc.SetColumnName(0,  "tileName");
+	doc.SetColumnName(1,  "tileIndexX");
+	doc.SetColumnName(2,  "tileIndexY");
+	doc.SetColumnName(3,  "tileType");
+	doc.SetColumnName(4,  "tileSize");
+	doc.SetColumnName(5,  "tileScaleFactor");
+	doc.SetColumnName(6,  "tileLayer");
+
+	doc.SetColumnName(7,  "textureId");
+	doc.SetColumnName(8,  "textureRectLeft");
+	doc.SetColumnName(9,  "textureRectTop");
+	doc.SetColumnName(10, "textureRectWidth");
+	doc.SetColumnName(11, "textureRectHeight");
+
+	for (int i = 0; i < tilesWorld.size(); i++)
+	{
+		for (int j = 0; j < tilesWorld[i].size(); j++)
+		{
+			Tile* tile = tilesWorld[i][j];
+			if (tile) 
+			{
+				SpriteGo* atlas = (SpriteGo*)FindGo("AtlasPreview");
+				doc.SetCell<std::string>("tileName", i * tilesWorld.size() + j, "Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")");
+				doc.SetCell<int>("tileIndexX", i * tilesWorld[i].size() + j, i);
+				doc.SetCell<int>("tileIndexY", i * tilesWorld.size() + j, j);
+				doc.SetCell<int>("tileType", i * tilesWorld.size() + j, (int)tile->GetType());
+				doc.SetCell<int>("tileSize", i * tilesWorld.size() + j, (int)tileSize);
+				doc.SetCell<int>("tileScaleFactor", i * tilesWorld.size() + j, 1);
+				doc.SetCell<int>("tileLayer", i * tilesWorld.size() + j, tile->GetLayer());
+
+				sf::IntRect rect = tile->GetTextureRect();
+				doc.SetCell<std::string>("textureId", i * tilesWorld.size() + j, atlas->textureId);
+				doc.SetCell<int>("textureRectLeft", i * tilesWorld.size() + j, rect.left);
+				doc.SetCell<int>("textureRectTop", i * tilesWorld.size() + j, rect.top);
+				doc.SetCell<int>("textureRectWidth", i * tilesWorld.size() + j, rect.width);
+				doc.SetCell<int>("textureRectHeight", i * tilesWorld.size() + j, rect.height);
+			}
+		}
+	}
+	doc.Save(path);
+	std::cout << "SYSTEM : Save Success" << std::endl;
 }

@@ -40,6 +40,8 @@ protected:
 	sf::Vector2f cameraDirection;
 	sf::Vector2f cameraPosition;
 	float cameraSpeed = 1000.0f;
+
+	float zoomDefaultFactor = 0.5f;
 	float zoomInFactor = 0.5f;
 	float zoomOutFactor = 2.0f;
 
@@ -71,5 +73,6 @@ public:
 	void SetSelectedPreviewRect(std::vector<Tile*>& selectedPreview, const sf::IntRect& rect);
 	void SetSelectedPreviewArea();
 	sf::Vector2i GetCurrentPreviewIntIndex();
-	int ToOneDimensionIndex(int row, int col, int numCols);
+
+	void SaveToCSV(const std::string& path);
 };

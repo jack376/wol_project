@@ -8,6 +8,7 @@ public:
 		None = -1,
 		String,
 		Monster,
+		Tile,
 	};
 
 	DataTable(const DataTable& other) = delete;

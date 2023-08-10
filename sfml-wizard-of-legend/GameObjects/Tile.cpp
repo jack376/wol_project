@@ -6,7 +6,7 @@
 #include "ResourceMgr.h"
 #include "Framework.h"
 
-Tile::Tile(const std::string& n, TileState type) : GameObject(n)
+Tile::Tile(const std::string& n, TileState state, TileType type) : GameObject(n)
 {
 }
 
@@ -21,8 +21,9 @@ void Tile::Init()
 
 void Tile::Reset()
 {
-    sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));
-    sprite.setTextureRect(GetTextureRect(31));
+    SetTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));  // ÀÛ ¾÷ Áß..
+    //sprite.setTextureRect(sf::IntRect(0, 0, tileSize, tileSize));
+    //sprite.setColor(sf::Color::Transparent);
     shape.setOutlineThickness(1.0f);
 }
 
@@ -76,8 +77,36 @@ void Tile::Update(float dt)
 void Tile::Draw(sf::RenderWindow& window)
 {
     window.draw(sprite);
-    window.draw(shape);
+   // window.draw(shape);
     //window.draw(text);
+}
+
+void Tile::SetCollision(bool collision)
+{
+    isCollision = collision;
+}
+
+bool Tile::GetCollision()
+{
+    return isCollision;
+}
+
+void Tile::SetOrigin(Origins origin)
+{
+    sf::Vector2f originPos(sprite.getTexture()->getSize());
+    originPos.x *= ((int)origin % 3) * 0.5f;
+    originPos.y *= ((int)origin / 3) * 0.5f;
+    sprite.setOrigin(originPos);
+}
+
+void Tile::SetOrigin(float x, float y)
+{
+    sprite.setOrigin(x, y);
+}
+
+void Tile::SetTileSize(int tileSize)
+{
+    this->tileSize = tileSize;
 }
 
 void Tile::SetShapeColor(sf::Color color)
@@ -98,6 +127,21 @@ void Tile::SetShapePosition(float x, float y)
 void Tile::SetSpritePosition(float x, float y)
 {
     sprite.setPosition(x, y);
+}
+
+void Tile::SetType(TileType type)
+{
+    this->type = type;
+}
+
+Tile::TileType Tile::GetType() const
+{
+    return type;
+}
+
+int Tile::GetLayer() const
+{
+    return tileLayer;
 }
 
 void Tile::SetState(TileState state)
@@ -124,17 +168,12 @@ void Tile::SetTextureRect(const sf::IntRect& rect)
 {
     sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));
     sprite.setTextureRect(rect);
+    sprite.setColor(sf::Color::White);
 }
 
-sf::IntRect Tile::GetTextureRect(int tileIndex) const
+sf::IntRect Tile::GetTextureRect() const
 {
-    int textureRectSize = tileSize * 0.5f;
-    int tilesPerRow = textureAtlasSize / textureRectSize;
-
-    int x = (tileIndex % tilesPerRow) * tileSize;
-    int y = (tileIndex / tilesPerRow) * tileSize;
-
-    return sf::IntRect(x, y, tileSize, tileSize);
+    return sprite.getTextureRect();
 }
 
 sf::Vector2f Tile::GetMousePosBasedOnState() const

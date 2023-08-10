@@ -31,6 +31,7 @@ void ResourceMgr::Init()
 	LoadFromCSV("scripts/SceneGameResourceList_ojy.csv" , true);
 	LoadFromCSV("scripts/default_resource_list_park.csv" , true);
 	LoadFromCSV("scripts/DefaultResourceList.csv", true);
+	LoadFromCSV("scripts/SceneGameResourceList.csv", true);
 	LoadFromCSV("scripts/SceneEditorResourceList.csv", true);
 }
 
