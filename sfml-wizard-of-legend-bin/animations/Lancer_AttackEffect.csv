@@ -2,9 +2,9 @@ ID,FPS,LOOPTYPE,,
 LancerAttackEffect,8,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/Texture2D/LancerSource.png,0,368,16,123
-graphics/Texture2D/LancerSource.png,19,368,16,123
-graphics/Texture2D/LancerSource.png,35,368,16,123
+graphics/Texture2D/LancerSource.png,0,368,16,107
+graphics/Texture2D/LancerSource.png,19,368,16,107
+graphics/Texture2D/LancerSource.png,35,368,16,107
 graphics/Texture2D/LancerSource.png,49,368,16,123
 graphics/Texture2D/LancerSource.png,65,368,16,123
 graphics/Texture2D/LancerSource.png,82,368,16,123

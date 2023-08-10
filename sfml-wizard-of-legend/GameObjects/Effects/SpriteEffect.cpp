@@ -18,14 +18,20 @@ void SpriteEffect::Init()
 void SpriteEffect::Reset()
 {
 	SpriteGo::Reset();
-	SetOrigin(Origins::MC);
+	animation.SetTarget(&sprite);
+	SetOrigin(Origins::BC);
 	SetActive(false);
 }
 
 void SpriteEffect::Update(float dt)
 {
 	if (isPlay)
+	{
 		animation.Update(dt);
+		SetOrigin(Origins::BC);
+		std::cout << "SE Anime Update \n";
+	}
+		
 	if (animation.IsAnimEndFrame())
 	{
 		SetActive(false);
@@ -51,4 +57,5 @@ void SpriteEffect::Play(float dt, sf::Vector2f pos, sf::Vector2f dir)
 	SetActive(true);
 	SetPosition(pos);
 	sprite.setRotation(Utils::Angle(dir));
+	animation.Play("LancerAttackEffect");
 }

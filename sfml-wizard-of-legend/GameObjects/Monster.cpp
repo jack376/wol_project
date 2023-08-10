@@ -33,18 +33,8 @@ void Monster::Init()
     {
         animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackUp.csv"));
         animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackDown.csv"));
-        //attackEffect = (SpriteEffect*)SCENE_MGR.GetCurrScene()->AddGo(new SpriteEffect("", "a"));
-        //김혜준 깔짝
-        //Scene* scene = SCENE_MGR.GetCurrScene();
-        attackEffect = (SpriteEffect*)scene->AddGo(new SpriteEffect());
-
-        attackEffect = new SpriteEffect("", "a");
-        attackEffect->textureId = "animations/" + stat.name + "_AttackEffect.csv";
-        attackEffect->Init();
-        attackEffect->Reset();
-        SCENE_MGR.GetCurrScene()->AddGo(attackEffect);
-
-
+        attackEffect.textureId = "animations/" + stat.name + "_AttackEffect.csv";
+        attackEffect.Init();
     }
 }
 
@@ -57,14 +47,16 @@ void Monster::Reset()
     SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
     player = scene->GetPlayer();
 
+    attackEffect.Reset();
+
     animation.SetTarget(&sprite);
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
-    
 
     SetPosition({ -500, 0 });
     SetOrigin(Origins::MC);
     SetFlipX(false);
+    SetRectBox();
     sortLayer = 10;
 
     hp = stat.maxHp;
@@ -88,6 +80,8 @@ void Monster::Reset()
 void Monster::Update(float dt)
 {
     animation.Update(dt);
+    if (attackEffect.GetActive())
+        attackEffect.Update(dt);
 
     HandleBehavior(dt);
     HandleState(dt);
@@ -95,30 +89,25 @@ void Monster::Update(float dt)
     //Debug Mode
     searchRange.setPosition(position);
     attackRange.setPosition(position);
-    //애니메이션 클립마다 사이즈가 다르기 때문에 Play에서 한 번만 해주면 됨(수정 필요)
-    {
-        sf::FloatRect spriteBounds = sprite.getGlobalBounds();
-        rect.setSize({ spriteBounds.width, spriteBounds.height });
-    }
     rect.setPosition(position);
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineColor(sf::Color::Blue);
     rect.setOutlineThickness(1.f);
     //Test
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-    {
         OnAttacked(2);
-    }
 }
 
 void Monster::Draw(sf::RenderWindow& window)
 {
     SpriteGo::Draw(window);
+
+    if(attackEffect.GetActive())
+        attackEffect.Draw(window);
+
     //Debug Mode
     window.draw(searchRange);
     window.draw(attackRange);
-
-    window.draw(attackEffect->sprite);
 }
 
 void Monster::SetState(MonsterState newState)
@@ -157,6 +146,7 @@ void Monster::Idle()
     SetState(MonsterState::Idle);
     animation.Play(stat.name + "Idle");
     SetOrigin(origin);
+    SetRectBox();
 }
 
 void Monster::Attack(float dt)
@@ -175,9 +165,10 @@ void Monster::Attack(float dt)
                 animation.Play(stat.name + "AttackDown");
             else
                 animation.Play(stat.name + "AttackUp");
-            attackEffect->Play(dt, position, look);
+            attackEffect.Play(dt, position, look);
         }
         SetOrigin(origin);
+        SetRectBox();
         attackTimer = 0.f;
         isAttacked = false;
     }
@@ -199,6 +190,7 @@ void Monster::Move(float dt)
     {
         animation.Play(stat.name + "Run");
         SetOrigin(origin);
+        SetRectBox();
     }
     SetPosition(position + look * stat.speed * dt);
 }
@@ -210,6 +202,7 @@ void Monster::Die()
     {
         animation.Play(stat.name + "Death");
         SetOrigin(origin);
+        SetRectBox();
     }
     else if (animation.IsAnimEndFrame())
         SetActive(false);
@@ -220,6 +213,7 @@ void Monster::KnockBack()
     SetState(MonsterState::KnockBack);
     animation.Play(stat.name + "Hurt");
     SetOrigin(origin);
+    SetRectBox();
 }
 
 void Monster::SetLook(sf::Vector2f playerPos)
@@ -276,4 +270,11 @@ void Monster::HandleBehavior(float dt)
         else
            Idle();            
     }
+}
+
+void Monster::SetRectBox()
+{
+    sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+    rect.setSize({ spriteBounds.width, spriteBounds.height });
+    Utils::SetOrigin(rect, Origins::MC);
 }

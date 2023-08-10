@@ -51,7 +51,6 @@ void SceneGame::Init()
 	tempWindSlash->sortLayer = 21;
 
 	Monster* go = (Monster*)AddGo(new Monster(MonsterId::Lancer));
-	go->SetScene(this);
 	player->SetMonster(go);
 
 	for (auto go : gameObjects)

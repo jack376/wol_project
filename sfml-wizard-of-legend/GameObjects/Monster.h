@@ -50,8 +50,7 @@ protected:
 	MonsterStat stat;
 	AnimationController animation;
 	AnimationController attackEffectAnime;
-	SpriteEffect* attackEffect;
-	SceneGame* scene;
+	SpriteEffect attackEffect;
 
 	int hp = 0;
 	float attackTimer = 0.f;
@@ -94,5 +93,5 @@ public:
 	void OnAttacked(float damage);
 	void HandleBehavior(float dt);
 
-	void SetScene(SceneGame* scene) { this->scene = scene; }
+	void SetRectBox();
 };
