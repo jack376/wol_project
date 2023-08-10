@@ -4,11 +4,12 @@
 class UIButton;
 class TextGo;
 class SpriteGo;
-
+class Tile;
 
 class SceneGame : public Scene
 {
 protected:
+	std::vector<std::vector<Tile*>> tilesWorld;
 
 public:
 	SceneGame();
@@ -23,5 +24,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
+	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
+	void LoadFromCSV(const std::string& path);
 };
 

@@ -7,6 +7,9 @@
 #include "Framework.h"
 #include "TextGo.h"
 #include "SpriteGo.h"
+#include "TileInfoTable.h"
+#include "rapidcsv.h"
+#include "Tile.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -15,8 +18,7 @@ SceneGame::SceneGame() : Scene(SceneId::Game)
 	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button.png"));
 	//resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/button2.png"));
 
-	// 예제
-	//resourceListPath = "scripts/SceneGameResourceList.csv";
+	resourceListPath = "scripts/SceneGameResourceList.csv";
 }
 
 void SceneGame::Init()
@@ -24,7 +26,20 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
+	const int rows = 32;
+	const int cols = 32;
+	const float tileSize = 16.0f;
 
+	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			Tile* tile = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
+			tilesWorld[i][j] = tile;
+		}
+	}
+	LoadFromCSV("tables/TileInfoTable.csv");
 
 	for (auto go : gameObjects)
 	{
@@ -62,9 +77,58 @@ void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
 
+	// Test Code
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
+	{
+		SCENE_MGR.ChangeScene(SceneId::Editor);
+	}
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+}
+
+Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)
+{
+	Tile* tile = (Tile*)AddGo(new Tile(name));
+	tile->sortLayer = sort;
+	tile->SetShapePosition(posX, posY);
+	tile->SetSpritePosition(posX, posY);
+
+	return tile;
+}
+
+void SceneGame::LoadFromCSV(const std::string& path)
+{
+	rapidcsv::Document doc(path);
+
+	for (size_t i = 0; i < doc.GetRowCount(); i++)
+	{
+		std::string tileName = doc.GetCell<std::string>("tileName", i);
+		int tileIndexX = doc.GetCell<int>("tileIndexX", i);
+		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
+		int tileType = doc.GetCell<int>("tileType", i);
+		int tileSize = doc.GetCell<int>("tileSize", i);
+		int tileScaleFactor = doc.GetCell<int>("tileScaleFactor", i); // 일단 보류
+		int tileLayer = doc.GetCell<int>("tileLayer", i); // 일단 보류
+
+		std::string textureId = doc.GetCell<std::string>("textureId", i); // 일단 보류
+		sf::IntRect textureRect
+		(
+			doc.GetCell<int>("textureRectLeft", i),
+			doc.GetCell<int>("textureRectTop", i),
+			doc.GetCell<int>("textureRectWidth", i),
+			doc.GetCell<int>("textureRectHeight", i)
+		);
+
+		Tile* tile = (Tile*)FindGo(tileName);
+		tile->SetTileSize(tileSize);
+		tile->SetType(static_cast<Tile::TileType>(tileType));
+		tile->SetTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));
+		tile->SetTextureRect(textureRect);
+		tile->SetOrigin(Origins::MC);
+		tilesWorld[tileIndexX][tileIndexY] = tile;
+	}
+	std::cout << "SYSTEM : Load Success" << std::endl;
 }

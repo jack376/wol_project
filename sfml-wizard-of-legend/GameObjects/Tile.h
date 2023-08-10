@@ -29,16 +29,15 @@ protected:
     TileType type;
     TileState state;
 
+    int tileLayer = 0; // 아직 안 쓰임 NPC, 오브젝트 클래스 제작 후 사용할 예정
+    float tileSize = 16.0f;
+
     bool isCollision = false;
     bool isHover = false;
-    
-    const float tileSize = 16.0f;
-    const int textureAtlasSize = 512;
 
     sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
-    sf::Sprite sprite;
     sf::Text text;
-
+    sf::Sprite sprite;
     std::map<TileState, sf::Color> stateColor =
     {
         { TileState::Blank,    sf::Color::Color(0, 0, 0, 0)       },
@@ -57,7 +56,7 @@ public:
     std::function<void()> OnEnter;
     std::function<void()> OnExit;
 
-    Tile(const std::string& n = "", TileState state = TileState::Blank);
+    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::None);
     virtual ~Tile();
 
     virtual void Init();
@@ -65,22 +64,29 @@ public:
     virtual void Update(float dt);
     virtual void Draw(sf::RenderWindow& window);
 
-    void SetCollision(bool collision) { isCollision = collision; }
+    void SetCollision(bool collision);
+    bool GetCollision();
 
+    void SetTileSize(int tileSize);
+    void SetOrigin(Origins origin);
+    void SetOrigin(float x, float y);
     void SetShapeColor(sf::Color color);
     void SetShapePosition(float x, float y);
     void SetStrokeColor(sf::Color color = sf::Color::Transparent);
     void SetSpritePosition(float x, float y);
 
+    void SetType(TileType type = TileType::None);
+    TileType GetType() const;
+    int GetLayer() const;
+
     void SetState(TileState state = TileState::Blank);
     void SetStateColor(TileState state = TileState::Blank);
-
     TileState GetState() const;
 
     void SetTexture(const sf::Texture& tex);
     void SetTextureRect(const sf::IntRect& rect);
+    sf::IntRect GetTextureRect() const;
 
-    sf::IntRect GetTextureRect(int tileIndex = 0) const;
     sf::Vector2f GetMousePosBasedOnState() const;
 };
 

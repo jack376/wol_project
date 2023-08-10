@@ -8,7 +8,7 @@ protected:
 	std::unordered_map<DataTable::Ids, DataTable*> tables;
 
 	DataTableMgr(const DataTableMgr& other) = delete;
-	bool operator==(const DataTableMgr& other) const = delete;
+	bool operator=(const DataTableMgr& other) const = delete;
 
 public:
 	DataTableMgr() = default;

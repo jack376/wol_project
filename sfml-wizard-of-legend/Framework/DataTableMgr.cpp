@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "DataTableMgr.h"
 #include "StringTable.h"
+#include "TileInfoTable.h"
 
 void DataTableMgr::LoadAll()
 {
 	tables.insert({ DataTable::Ids::String, new StringTable() });
+	tables.insert({ DataTable::Ids::Tile, new TileInfoTable() });
 
 	for (auto pair : tables)
 	{
