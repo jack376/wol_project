@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
+    <ClCompile Include="ElementalSpell.cpp" />
     <ClCompile Include="GameObjects\BaseUI.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\StringTable.cpp" />
@@ -187,12 +188,15 @@
     <ClCompile Include="GameObjects\TextGo.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="GameObjects\Tile.cpp" />
+    <ClCompile Include="Framework\SkillMgr.cpp" />
+    <ClCompile Include="Skill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="DataTables\StringTable.h" />
+    <ClInclude Include="ElementalSpell.h" />
     <ClInclude Include="GameObjects\BaseUI.h" />
     <ClInclude Include="GameObjects\Background.h" />
     <ClInclude Include="GameObjects\Items\Coin.h" />
@@ -210,6 +214,8 @@
     <ClInclude Include="GameObjects\Player\Player.h" />
     <ClInclude Include="GameObjects\Tile.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
+    <ClInclude Include="Framework\SkillMgr.h" />
+    <ClInclude Include="Skill.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />

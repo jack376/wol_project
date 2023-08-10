@@ -45,6 +45,7 @@ enum class SkillEvents
 };
 
 class SceneGame;
+class Monster;
 
 class Player : public SpriteGo
 {
@@ -57,11 +58,10 @@ private:
 	SkillEvents sEvent = SkillEvents::None;
 
 	SceneGame* scene;
-
+	Monster* monster;
 	SpriteGo* dirIcon;
 
 	sf::CircleShape attackPosCol;	// 스킬 생성 지점 가시화
-	sf::RectangleShape attackRangeCol;	// 실제 공격
 
 
 
@@ -73,6 +73,7 @@ private:
 	//Skill wdash;
 	//Skill wslash;
 
+	int maxHp = 100;
 	int hp = 100;
 
 	// 공격 포즈
@@ -147,13 +148,22 @@ public:
 
 
 	void SetScene(SceneGame* scene) { this->scene = scene; }
+	void SetMonster(Monster* monster) { this->monster = monster; }	// 하드 코딩용
 	void SetAttackPos();
 	void SetDirIconPos();
 	void SetDirIconDir();
 
+
+	Monster* GetMonster() { return monster; }
+
 	// 데미지 : -, 회복 : +
 	void SetHp(int value);
+
+	// 스킬 생성 지점
+	sf::Vector2f GetAttackPos() { return attackPos; }
+
 	bool IsAlive() { return isAlive; }
+	bool IsAttack() { return isAttack; }
 	
 	void ChangeState(States state);
 };

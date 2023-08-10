@@ -9,6 +9,8 @@
 #include "SpriteGo.h"
 #include "Monster.h"
 #include "Player.h"
+#include "ElementalSpell.h"
+#include "Monster.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -27,12 +29,23 @@ void SceneGame::Init()
 	player->sortLayer = 20;
 	player->SetScene(this);
 
-	GameObject* go = AddGo(new Monster(MonsterId::Lancer));
+	tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
+	tempWindSlash->SetScene(this);
+	tempWindSlash->SetPlayer(player);
+	tempWindSlash->sortLayer = 21;
+
+	Monster* go = (Monster*)AddGo(new Monster(MonsterId::Ghoul));
+
+	player->SetMonster(go);
 
 	for (auto go : gameObjects)
 	{
 		go->Init();
 	}
+
+
+
+
 }
 
 void SceneGame::Release()
