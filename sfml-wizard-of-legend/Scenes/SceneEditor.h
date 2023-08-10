@@ -10,17 +10,22 @@ class Tile;
 class SceneEditor : public Scene
 {
 protected:
+	int rows = 32;
+	int cols = 32;
+
 	sf::Vector2f windowSize;
 	float fhdWidth = 1920.0f;
 	float blankPos = 32.0f;
 	float resolutionScaleFactor = 1.0f;
 
+	std::string textureId = "graphics/editor/FireTileSet.png";
 	std::vector<std::vector<sf::IntRect>> tileTextureAtlas;
 	int atlasTextureSize = 512;
 	int tileTextureSize = 16;
+	int tileScaleFactor = 4;
 
 	std::vector<std::vector<Tile*>> tilesWorld;
-	std::vector<std::vector<Tile*>> tilesUi;
+	std::vector<std::vector<Tile*>> tilesPreview;
 	float tileSize = 16.0f;
 
 	std::vector<Tile*> allTiles;
@@ -61,18 +66,15 @@ public:
 	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
 	std::vector<Tile*> GetAllTiles();
 	std::vector<Tile*> GetSelectedTiles();
-	void SetSelectedTilesState(std::vector<Tile*>& selectedTiles, Tile::TileState state);
-	void SetSelectedTilesRect(std::vector<Tile*>& selectedTiles, const sf::IntRect& rect);
+	void SetSelectedTilesState(Tile::TileState state);
+	void SetSelectedTilesDraw();
 	void SetSelectedTilesArea();
 	sf::Vector2i GetCurrentTileIntIndex();
 
 	Tile* CreateTilePreview(const std::string& name, float posX, float posY, int sort = 100);
-	std::vector<Tile*> GetAllPreview();
-	std::vector<Tile*> GetSelectedPreview();
-	void SetSelectedPreviewState(std::vector<Tile*>& selectedPreview, Tile::TileState state);
-	void SetSelectedPreviewRect(std::vector<Tile*>& selectedPreview, const sf::IntRect& rect);
 	void SetSelectedPreviewArea();
 	sf::Vector2i GetCurrentPreviewIntIndex();
 
 	void SaveToCSV(const std::string& path);
+	void LoadFromCSV(const std::string& path);
 };

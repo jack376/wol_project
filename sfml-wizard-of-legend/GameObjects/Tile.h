@@ -35,6 +35,9 @@ protected:
     bool isCollision = false;
     bool isHover = false;
 
+    int tileIndexX = 0;
+    int tileIndexY = 0;
+
     sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
     sf::Text text;
     sf::Sprite sprite;
@@ -67,17 +70,22 @@ public:
     void SetCollision(bool collision);
     bool GetCollision();
 
-    void SetTileSize(int tileSize);
     void SetOrigin(Origins origin);
     void SetOrigin(float x, float y);
+    void SetTileSize(int tileSize);
     void SetShapeColor(sf::Color color);
     void SetShapePosition(float x, float y);
     void SetStrokeColor(sf::Color color = sf::Color::Transparent);
     void SetSpritePosition(float x, float y);
     void SetScale(float scale = 1.0f);
 
+    void SetIndex(int x, int y);
+    sf::Vector2i GetIndex() const;
+
     void SetType(TileType type = TileType::None);
     TileType GetType() const;
+
+    void SetLayer(int tileLayer = 0);
     int GetLayer() const;
 
     void SetState(TileState state = TileState::Blank);
@@ -85,7 +93,7 @@ public:
     TileState GetState() const;
 
     void SetTexture(const sf::Texture& tex);
-    void SetTextureRect(const sf::IntRect& rect);
+    void SetTextureRect(const sf::IntRect& rect, const std::string& path);
     sf::IntRect GetTextureRect() const;
 
     sf::Vector2f GetMousePosBasedOnState() const;

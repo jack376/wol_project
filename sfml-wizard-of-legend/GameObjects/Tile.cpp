@@ -21,14 +21,18 @@ void Tile::Init()
 
 void Tile::Reset()
 {
-    SetTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));  // ÀÛ ¾÷ Áß..
+    int indexLeft = 31;
+    int indexTop = 0;
+
+    SetTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));
+    SetTextureRect(sf::IntRect(indexLeft * tileSize, indexTop * tileSize, tileSize, tileSize), "graphics/editor/FireTileSet.png");
+    shape.setFillColor(sf::Color::Transparent);
 
     if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
     {
-        sprite.setTextureRect(sf::IntRect(0, 0, tileSize, tileSize));
         sprite.setColor(sf::Color::Transparent);
+        shape.setOutlineThickness(1.0f);
     }
-    shape.setOutlineThickness(1.0f);
 }
 
 void Tile::Update(float dt)
@@ -138,6 +142,18 @@ void Tile::SetScale(float scale)
     sprite.setScale(scale, scale);
 }
 
+
+void Tile::SetIndex(int x, int y)
+{
+    tileIndexX = x;
+    tileIndexY = y;
+}
+
+sf::Vector2i Tile::GetIndex() const
+{
+    return sf::Vector2i(tileIndexX, tileIndexY);
+}
+
 void Tile::SetType(TileType type)
 {
     this->type = type;
@@ -146,6 +162,11 @@ void Tile::SetType(TileType type)
 Tile::TileType Tile::GetType() const
 {
     return type;
+}
+
+void Tile::SetLayer(int tileLayer)
+{
+    this->tileLayer = tileLayer;
 }
 
 int Tile::GetLayer() const
@@ -173,9 +194,9 @@ void Tile::SetTexture(const sf::Texture& tex)
     sprite.setTexture(tex);
 }
 
-void Tile::SetTextureRect(const sf::IntRect& rect)
+void Tile::SetTextureRect(const sf::IntRect& rect, const std::string& path)
 {
-    sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));
+    sprite.setTexture(*RESOURCE_MGR.GetTexture(path));
     sprite.setTextureRect(rect);
     sprite.setColor(sf::Color::White);
 }

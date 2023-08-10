@@ -14,7 +14,6 @@
 
 SceneEditor::SceneEditor() : Scene(SceneId::Editor)
 {
-	resourceListPath = "scripts/SceneEditorResourceList.csv";
 }
 
 void SceneEditor::Init()
@@ -25,9 +24,6 @@ void SceneEditor::Init()
 	resolutionScaleFactor = windowSize.x / fhdWidth;
 
 	// Tile
-	const int rows = 32;
-	const int cols = 32;
-
 	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
 	for (int i = 0; i < rows; i++)
 	{
@@ -39,7 +35,7 @@ void SceneEditor::Init()
 		}
 	}
 
-	// Test
+	// Texture Atlas
 	SpriteGo* atlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "AtlasPreview"));
 	atlasPreview->sortLayer = 105;
 	atlasPreview->SetOrigin(Origins::TL);
@@ -51,22 +47,22 @@ void SceneEditor::Init()
 
 	for (int y = 0; y < tilesPerRow; ++y)
 	{
-		std::vector<sf::IntRect> rowTiles;
+		std::vector<sf::IntRect> colTiles;
 		for (int x = 0; x < tilesPerRow; ++x)
 		{
-			sf::IntRect tileRect(x * tileTextureSize, y * tileTextureSize, tileTextureSize, tileTextureSize);
-			rowTiles.push_back(tileRect);
+			sf::IntRect tileRect(y * tileTextureSize, x * tileTextureSize, tileTextureSize, tileTextureSize);
+			colTiles.push_back(tileRect);
 		}
-		tileTextureAtlas.push_back(rowTiles);
+		tileTextureAtlas.push_back(colTiles);
 	}
 
-	tilesUi.resize(tilesPerRow, std::vector<Tile*>(tilesPerRow, nullptr));
+	tilesPreview.resize(tilesPerRow, std::vector<Tile*>(tilesPerRow, nullptr));
 	for (int i = 0; i < tilesPerRow; i++)
 	{
 		for (int j = 0; j < tilesPerRow; j++)
 		{
 			Tile* tile = CreateTilePreview("TilePreview(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileTextureSize, j * tileTextureSize, uiSort);
-			tilesUi[i][j] = tile;
+			tilesPreview[i][j] = tile;
 		}
 	}
 
@@ -138,24 +134,21 @@ void SceneEditor::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C))
 	{
 		std::vector<Tile*> selectedTiles = GetSelectedTiles();
-		SetSelectedTilesState(selectedTiles, Tile::TileState::Copy);
+		SetSelectedTilesState(Tile::TileState::Copy);
 	}
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
 	{
 		std::vector<Tile*> allTiles = GetAllTiles();
-		SetSelectedTilesState(allTiles, Tile::TileState::Blank);
+		SetSelectedTilesState(Tile::TileState::Blank);
 	}
 
 	// Test
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
 	{
-		int x = endPreviewIndex.x;
-		int y = endPreviewIndex.y;
-		SetSelectedTilesRect(selectedTiles, tileTextureAtlas[y][x]);
+		SetSelectedTilesDraw();
 
 		std::vector<Tile*> allTiles = GetAllTiles();
-		SetSelectedTilesState(allTiles, Tile::TileState::Blank);
-		//std::cout << x << ", " << y << std::endl;
+		SetSelectedTilesState(Tile::TileState::Blank);
 	}
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
@@ -268,7 +261,7 @@ std::vector<Tile*> SceneEditor::GetSelectedTiles()
 	return selectedTiles;
 }
 
-void SceneEditor::SetSelectedTilesState(std::vector<Tile*>& selectedTiles, Tile::TileState state)
+void SceneEditor::SetSelectedTilesState(Tile::TileState state)
 {
 	for (Tile* tile : selectedTiles)
 	{
@@ -278,13 +271,32 @@ void SceneEditor::SetSelectedTilesState(std::vector<Tile*>& selectedTiles, Tile:
 	selectedTiles.clear();
 }
 
-void SceneEditor::SetSelectedTilesRect(std::vector<Tile*>& selectedTiles, const sf::IntRect& rect)
+void SceneEditor::SetSelectedTilesDraw()
 {
-	for (Tile* tile : selectedTiles)
+	if (selectedTiles.empty() || selectedPreview.empty())
 	{
-		tile->SetTextureRect(rect);
+		return;
 	}
-	selectedTiles.clear();
+
+	sf::Vector2i indexPreviewStart = selectedPreview[0]->GetIndex();
+	int size = tileSize;
+	int previewWidth  = std::abs(endPreviewIndex.x - startPreviewIndex.x) + 1;
+	int previewHeight = std::abs(endPreviewIndex.y - startPreviewIndex.y) + 1;
+
+	for (Tile* worldTile : selectedTiles)
+	{
+		sf::Vector2i indexWorld = worldTile->GetIndex();
+
+		int offsetX = indexWorld.x % previewWidth;
+		int offsetY = indexWorld.y % previewHeight;
+
+		sf::Vector2i matchPreviewIndex(indexPreviewStart.x + offsetX, indexPreviewStart.y + offsetY);
+
+		Tile* previewTile = tilesPreview[matchPreviewIndex.x][matchPreviewIndex.y];
+
+		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * size, previewTile->GetIndex().y * size, size, size);
+		worldTile->SetTextureRect(previewRect, textureId);
+	}
 }
 
 void SceneEditor::SetSelectedTilesArea()
@@ -302,6 +314,7 @@ void SceneEditor::SetSelectedTilesArea()
 		{
 			tilesWorld[x][y]->SetState(Tile::TileState::Select);
 			tilesWorld[x][y]->SetStateColor(Tile::TileState::Select);
+			tilesWorld[x][y]->SetIndex(x, y);
 			selectedTiles.push_back(tilesWorld[x][y]);
 		}
 	}
@@ -378,52 +391,6 @@ Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float 
 	return tilePreview;
 }
 
-std::vector<Tile*> SceneEditor::GetAllPreview()
-{
-	for (auto& row : tilesUi)
-	{
-		for (Tile* tile : row)
-		{
-			allPreview.push_back(tile);
-		}
-	}
-	return allPreview;
-}
-
-std::vector<Tile*> SceneEditor::GetSelectedPreview()
-{
-	for (auto& row : tilesUi)
-	{
-		for (Tile* tile : row)
-		{
-			if (tile->GetState() == Tile::TileState::SelectUI)
-			{
-				selectedPreview.push_back(tile);
-			}
-		}
-	}
-	return selectedPreview;
-}
-
-void SceneEditor::SetSelectedPreviewState(std::vector<Tile*>& selectedPreview, Tile::TileState state)
-{
-	for (Tile* tile : selectedPreview)
-	{
-		tile->SetState(state);
-		tile->SetStateColor(state);
-	}
-	selectedPreview.clear();
-}
-
-void SceneEditor::SetSelectedPreviewRect(std::vector<Tile*>& selectedPreview, const sf::IntRect& rect)
-{
-	for (Tile* tile : selectedPreview)
-	{
-		tile->SetTextureRect(rect);
-	}
-	selectedPreview.clear();
-}
-
 void SceneEditor::SetSelectedPreviewArea()
 {
 	for (Tile* tile : selectedPreview)
@@ -437,9 +404,10 @@ void SceneEditor::SetSelectedPreviewArea()
 	{
 		for (int y = std::min(startPreviewIndex.y, endPreviewIndex.y); y <= std::max(startPreviewIndex.y, endPreviewIndex.y); ++y)
 		{
-			tilesUi[x][y]->SetState(Tile::TileState::SelectUI);
-			tilesUi[x][y]->SetStateColor(Tile::TileState::SelectUI);
-			selectedPreview.push_back(tilesUi[x][y]);
+			tilesPreview[x][y]->SetState(Tile::TileState::SelectUI);
+			tilesPreview[x][y]->SetStateColor(Tile::TileState::SelectUI);
+			tilesPreview[x][y]->SetIndex(x, y);
+			selectedPreview.push_back(tilesPreview[x][y]);
 		}
 	}
 }
@@ -458,8 +426,6 @@ sf::Vector2i SceneEditor::GetCurrentPreviewIntIndex()
 		xIndex = std::max(0, std::min(xIndex, maxRangeIndex - 1));
 		yIndex = std::max(0, std::min(yIndex, maxRangeIndex - 1));
 	}
-
-	std::cout << "SELECT INDEX : " << xIndex << ", " << yIndex << std::endl;
 
 	return sf::Vector2i(xIndex, yIndex);
 }
@@ -495,7 +461,7 @@ void SceneEditor::SaveToCSV(const std::string& path)
 				doc.SetCell<int>("tileIndexY", i * tilesWorld.size() + j, j);
 				doc.SetCell<int>("tileType", i * tilesWorld.size() + j, (int)tile->GetType());
 				doc.SetCell<int>("tileSize", i * tilesWorld.size() + j, (int)tileSize);
-				doc.SetCell<int>("tileScaleFactor", i * tilesWorld.size() + j, 1);
+				doc.SetCell<int>("tileScaleFactor", i * tilesWorld.size() + j, tileScaleFactor);
 				doc.SetCell<int>("tileLayer", i * tilesWorld.size() + j, tile->GetLayer());
 
 				sf::IntRect rect = tile->GetTextureRect();
@@ -509,4 +475,41 @@ void SceneEditor::SaveToCSV(const std::string& path)
 	}
 	doc.Save(path);
 	std::cout << "SYSTEM : Save Success" << std::endl;
+}
+
+void SceneEditor::LoadFromCSV(const std::string& path)
+{
+	rapidcsv::Document doc(path);
+
+	for (size_t i = 0; i < doc.GetRowCount(); i++)
+	{
+		std::string tileName = doc.GetCell<std::string>("tileName", i);
+		int tileIndexX = doc.GetCell<int>("tileIndexX", i);
+		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
+		int tileType = doc.GetCell<int>("tileType", i);
+		int tileSize = doc.GetCell<int>("tileSize", i);
+		int tileScaleFactor = doc.GetCell<int>("tileScaleFactor", i); 
+		int tileLayer = doc.GetCell<int>("tileLayer", i);
+
+		std::string textureId = doc.GetCell<std::string>("textureId", i);
+		sf::IntRect textureRect
+		(
+			doc.GetCell<int>("textureRectLeft", i),
+			doc.GetCell<int>("textureRectTop", i),
+			doc.GetCell<int>("textureRectWidth", i) * tileScaleFactor,
+			doc.GetCell<int>("textureRectHeight", i) * tileScaleFactor
+		);
+
+		Tile* tile = (Tile*)FindGo(tileName);
+		tile->SetIndex(tileIndexX, tileIndexY);
+		tile->SetType(static_cast<Tile::TileType>(tileType));
+		tile->SetTileSize(tileSize);
+		tile->SetScale(tileScaleFactor);
+		tile->SetLayer(tileLayer);
+		tile->SetTexture(*RESOURCE_MGR.GetTexture(textureId));
+		tile->SetTextureRect(textureRect, textureId);
+		tile->SetOrigin(Origins::TL);
+		tilesWorld[tileIndexX][tileIndexY] = tile;
+	}
+	std::cout << "SYSTEM : Load Success" << std::endl;
 }
