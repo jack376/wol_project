@@ -12,8 +12,6 @@ void SceneMgr::Init()
 	{
 		Release();
 	}
-	//scenes.push_back(new SceneTitle());
-	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneTitle());
 	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneEditor());
@@ -67,4 +65,9 @@ void SceneMgr::ChangeScene(SceneId id)
 Scene* SceneMgr::GetCurrScene() const
 {
 	return currentScene;
+}
+
+SceneId SceneMgr::GetCurrSceneId()
+{
+	return currentSceneId;
 }

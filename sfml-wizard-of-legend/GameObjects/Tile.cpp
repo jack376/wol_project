@@ -22,8 +22,12 @@ void Tile::Init()
 void Tile::Reset()
 {
     SetTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));  // ÀÛ ¾÷ Áß..
-    //sprite.setTextureRect(sf::IntRect(0, 0, tileSize, tileSize));
-    //sprite.setColor(sf::Color::Transparent);
+
+    if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
+    {
+        sprite.setTextureRect(sf::IntRect(0, 0, tileSize, tileSize));
+        sprite.setColor(sf::Color::Transparent);
+    }
     shape.setOutlineThickness(1.0f);
 }
 
@@ -77,7 +81,7 @@ void Tile::Update(float dt)
 void Tile::Draw(sf::RenderWindow& window)
 {
     window.draw(sprite);
-   // window.draw(shape);
+    window.draw(shape);
     //window.draw(text);
 }
 
@@ -127,6 +131,11 @@ void Tile::SetShapePosition(float x, float y)
 void Tile::SetSpritePosition(float x, float y)
 {
     sprite.setPosition(x, y);
+}
+
+void Tile::SetScale(float scale)
+{
+    sprite.setScale(scale, scale);
 }
 
 void Tile::SetType(TileType type)

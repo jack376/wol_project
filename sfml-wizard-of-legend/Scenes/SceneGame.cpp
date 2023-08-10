@@ -26,7 +26,7 @@ void SceneGame::Init()
 
 	const int rows = 32;
 	const int cols = 32;
-	const float tileSize = 16.0f;
+	const float tileSize = 64.0f;
 
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
@@ -130,20 +130,23 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		int tileScaleFactor = doc.GetCell<int>("tileScaleFactor", i); // 일단 보류
 		int tileLayer = doc.GetCell<int>("tileLayer", i); // 일단 보류
 
+		float tempTileScaleFactor = tileScaleFactor * 4;
+
 		std::string textureId = doc.GetCell<std::string>("textureId", i); // 일단 보류
 		sf::IntRect textureRect
 		(
 			doc.GetCell<int>("textureRectLeft", i),
 			doc.GetCell<int>("textureRectTop", i),
-			doc.GetCell<int>("textureRectWidth", i),
-			doc.GetCell<int>("textureRectHeight", i)
+			doc.GetCell<int>("textureRectWidth", i) * tempTileScaleFactor,
+			doc.GetCell<int>("textureRectHeight", i) * tempTileScaleFactor
 		);
 
 		Tile* tile = (Tile*)FindGo(tileName);
-		tile->SetTileSize(tileSize);
+		tile->SetTileSize(tileSize); 
 		tile->SetType(static_cast<Tile::TileType>(tileType));
 		tile->SetTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));
 		tile->SetTextureRect(textureRect);
+		tile->SetScale(tempTileScaleFactor);
 		tile->SetOrigin(Origins::MC);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}

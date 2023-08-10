@@ -74,6 +74,7 @@ public:
     void SetShapePosition(float x, float y);
     void SetStrokeColor(sf::Color color = sf::Color::Transparent);
     void SetSpritePosition(float x, float y);
+    void SetScale(float scale = 1.0f);
 
     void SetType(TileType type = TileType::None);
     TileType GetType() const;

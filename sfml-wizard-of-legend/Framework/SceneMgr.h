@@ -25,7 +25,7 @@ public:
 
 	void ChangeScene(SceneId id);
 	Scene* GetCurrScene() const;
-
+	SceneId GetCurrSceneId();
 };
 
 #define SCENE_MGR (SceneMgr::Instance())
