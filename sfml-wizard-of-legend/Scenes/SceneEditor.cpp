@@ -283,12 +283,14 @@ void SceneEditor::SetSelectedTilesDraw()
 	int previewWidth  = std::abs(endPreviewIndex.x - startPreviewIndex.x) + 1;
 	int previewHeight = std::abs(endPreviewIndex.y - startPreviewIndex.y) + 1;
 
+	sf::Vector2i indexTilesStart = selectedTiles[0]->GetIndex();
+
 	for (Tile* worldTile : selectedTiles)
 	{
 		sf::Vector2i indexWorld = worldTile->GetIndex();
 
-		int offsetX = indexWorld.x % previewWidth;
-		int offsetY = indexWorld.y % previewHeight;
+		int offsetX = (indexWorld.x - indexTilesStart.x) % previewWidth;
+		int offsetY = (indexWorld.y - indexTilesStart.y) % previewHeight;
 
 		sf::Vector2i matchPreviewIndex(indexPreviewStart.x + offsetX, indexPreviewStart.y + offsetY);
 
@@ -389,6 +391,16 @@ Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float 
 		}
 	};
 	return tilePreview;
+}
+
+void SceneEditor::SetSelectedPreviewState(Tile::TileState state)
+{
+	for (Tile* tile : selectedPreview)
+	{
+		tile->SetState(state);
+		tile->SetStateColor(state);
+	}
+	selectedPreview.clear();
 }
 
 void SceneEditor::SetSelectedPreviewArea()
