@@ -100,10 +100,10 @@ void Monster::Update(float dt)
 
 void Monster::Draw(sf::RenderWindow& window)
 {
-    SpriteGo::Draw(window);
-
-    if(attackEffect.GetActive())
+    if (attackEffect.GetActive())
         attackEffect.Draw(window);
+
+    SpriteGo::Draw(window);
 
     //Debug Mode
     window.draw(searchRange);
@@ -172,15 +172,24 @@ void Monster::Attack(float dt)
         attackTimer = 0.f;
         isAttacked = false;
     }
-    if (!isAttacked && player->IsAlive() &&
-        sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+    if ((int)monsterId < 2 && !isAttacked && player->IsAlive())
     {
-        attackTimer = 0.f;
-        player->SetHp(-stat.damage);
-        isAttacked = true;
+        if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+        {
+            attackTimer = 0.f;
+            player->SetHp(-stat.damage);
+            isAttacked = true;
+        }
     }
-
-    
+    else if ((int)monsterId >= 2 && !isAttacked && player->IsAlive())
+    {
+        if (attackEffect.sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+        {
+            attackTimer = 0.f;
+            player->SetHp(-stat.damage);
+            isAttacked = true;
+        }
+    }
 }
 
 void Monster::Move(float dt)
