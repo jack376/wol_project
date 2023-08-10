@@ -24,13 +24,9 @@ void Tile::Reset()
     int indexLeft = 31;
     int indexTop = 0;
 
-    SetTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));
-    SetTextureRect(sf::IntRect(indexLeft * tileSize, indexTop * tileSize, tileSize, tileSize), "graphics/editor/FireTileSet.png");
     shape.setFillColor(sf::Color::Transparent);
-
     if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
     {
-        sprite.setColor(sf::Color::Transparent);
         shape.setOutlineThickness(1.0f);
     }
 }
@@ -141,7 +137,6 @@ void Tile::SetScale(float scale)
 {
     sprite.setScale(scale, scale);
 }
-
 
 void Tile::SetIndex(int x, int y)
 {

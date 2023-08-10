@@ -24,9 +24,9 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
-	const int rows = 32;
-	const int cols = 32;
-	const float tileSize = 64.0f;
+	int rows = 32;
+	int cols = 32;
+	float tileSize = 64.0f;
 
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
@@ -34,6 +34,7 @@ void SceneGame::Init()
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 20;
 	player->SetScene(this);
+
 	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
 	for (int i = 0; i < rows; i++)
 	{
@@ -58,10 +59,6 @@ void SceneGame::Init()
 	{
 		go->Init();
 	}
-
-
-
-
 }
 
 void SceneGame::Release()
@@ -135,8 +132,8 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		(
 			doc.GetCell<int>("textureRectLeft", i),
 			doc.GetCell<int>("textureRectTop", i),
-			doc.GetCell<int>("textureRectWidth", i) * tileScaleFactor,
-			doc.GetCell<int>("textureRectHeight", i) * tileScaleFactor
+			doc.GetCell<int>("textureRectWidth", i),
+			doc.GetCell<int>("textureRectHeight", i)
 		);
 
 		Tile* tile = (Tile*)FindGo(tileName);

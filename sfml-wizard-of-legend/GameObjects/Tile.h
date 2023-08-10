@@ -29,7 +29,7 @@ protected:
     TileType type;
     TileState state;
 
-    int tileLayer = 0; // 아직 안 쓰임 NPC, 오브젝트 클래스 제작 후 사용할 예정
+    int tileLayer = 0;
     float tileSize = 16.0f;
 
     bool isCollision = false;

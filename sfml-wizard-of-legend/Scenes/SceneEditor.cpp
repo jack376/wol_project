@@ -72,6 +72,8 @@ void SceneEditor::Init()
 	uiBackGround->SetColor(sf::Color(16, 16, 16, 255));
 	uiBackGround->SetStrokeColor(sf::Color(32, 32, 64, 255));
 
+	LoadFromCSV("tables/TileInfoTable.csv");
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -500,7 +502,7 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
 		int tileType = doc.GetCell<int>("tileType", i);
 		int tileSize = doc.GetCell<int>("tileSize", i);
-		int tileScaleFactor = doc.GetCell<int>("tileScaleFactor", i); 
+		int tileScaleFactor = doc.GetCell<int>("tileScaleFactor", i);
 		int tileLayer = doc.GetCell<int>("tileLayer", i);
 
 		std::string textureId = doc.GetCell<std::string>("textureId", i);
@@ -508,15 +510,15 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		(
 			doc.GetCell<int>("textureRectLeft", i),
 			doc.GetCell<int>("textureRectTop", i),
-			doc.GetCell<int>("textureRectWidth", i) * tileScaleFactor,
-			doc.GetCell<int>("textureRectHeight", i) * tileScaleFactor
+			doc.GetCell<int>("textureRectWidth", i),
+			doc.GetCell<int>("textureRectHeight", i)
 		);
 
 		Tile* tile = (Tile*)FindGo(tileName);
 		tile->SetIndex(tileIndexX, tileIndexY);
 		tile->SetType(static_cast<Tile::TileType>(tileType));
 		tile->SetTileSize(tileSize);
-		tile->SetScale(tileScaleFactor);
+		//tile->SetScale(tileScaleFactor);
 		tile->SetLayer(tileLayer);
 		tile->SetTexture(*RESOURCE_MGR.GetTexture(textureId));
 		tile->SetTextureRect(textureRect, textureId);
