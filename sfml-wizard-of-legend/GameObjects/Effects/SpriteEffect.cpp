@@ -7,50 +7,29 @@
 SpriteEffect::SpriteEffect(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
 {
-
 }
 
 void SpriteEffect::Init()
 {
 	SpriteGo::Init();
-	SetOrigin(Origins::MC);
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip(textureId));
 }
 
 void SpriteEffect::Reset()
 {
 	SpriteGo::Reset();
-	timer = 0.f;
-	sprite.setColor({ 255, 255, 255, 255 });
-	if(type == EffectTypes::SpeedUp)
-		animation.Play("EffectSpeedUp");
+	SetOrigin(Origins::MC);
+	SetActive(false);
 }
 
 void SpriteEffect::Update(float dt)
 {
-	timer += dt;
-	//UINT8 a = Utils::Lerp(255, 0, (timer / duration));
-	//sprite.setColor({ 255, 255, 255, a });
-	//animation.Update(dt);
-
-	if (timer > duration)
+	if (isPlay)
+		animation.Update(dt);
+	if (animation.IsAnimEndFrame())
 	{
-		if (pool != nullptr)
-		{
-			pool->Return(this);
-			SCENE_MGR.GetCurrScene()->RemoveGo(this);
-		}
-		else
-		{
-			SetActive(false);
-		}
-	}
-	switch (type)
-	{
-	case EffectTypes::SpeedUp:
-		float movePos = GetPosition().x;
-		movePos += -speed * dt;
-		SetPosition(movePos, GetPosition().y);
-		break;
+		SetActive(false);
+		isPlay = false;
 	}
 
 }
@@ -64,4 +43,12 @@ void SpriteEffect::SetAnim(const std::string& path)
 void SpriteEffect::SetType(const EffectTypes type)
 {
 	this->type = type;
+}
+
+void SpriteEffect::Play(float dt, sf::Vector2f pos, sf::Vector2f dir)
+{
+	isPlay = true;
+	SetActive(true);
+	SetPosition(pos);
+	sprite.setRotation(Utils::Angle(dir));
 }

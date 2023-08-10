@@ -6,9 +6,7 @@
 enum class EffectTypes
 {
 	None = -1,
-	SpeedUp,
-	Invincibility,	// 무적
-	Magnet,			// 자석
+	Attack,
 };
 
 class SpriteEffect : public SpriteGo
@@ -17,10 +15,11 @@ protected:
 	float duration = 0.f;
 	float timer = 0.f;
 
+	bool isPlay = false;
+
 	ObjectPool<SpriteEffect>* pool = nullptr;
 	AnimationController animation;
 
-	float speed = 1300.f;
 	EffectTypes type = EffectTypes::None;
 
 public:
@@ -36,5 +35,7 @@ public:
 	virtual void Update(float dt) override;
 	void SetAnim(const std::string& path);
 	void SetType(const EffectTypes type);
+
+	void Play(float dt, sf::Vector2f pos, sf::Vector2f dir);
 };
 

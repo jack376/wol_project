@@ -50,18 +50,18 @@ void SceneGame::Init()
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
 
-	Monster* go = (Monster*)AddGo(new Monster(MonsterId::Ghoul));
-
+	Monster* go = (Monster*)AddGo(new Monster(MonsterId::Lancer));
+	go->SetScene(this);
 	player->SetMonster(go);
 
 	for (auto go : gameObjects)
 	{
+		if (go->GetName() == "a")
+		{
+			std::cout << "";
+		}
 		go->Init();
 	}
-
-
-
-
 }
 
 void SceneGame::Release()

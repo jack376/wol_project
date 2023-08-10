@@ -1,6 +1,7 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
+#include "SpriteEffect.h";
 
 class Player;
 
@@ -38,6 +39,7 @@ enum class MonsterId
 	Lancer,
 };
 
+class SceneGame;
 
 class Monster :
     public SpriteGo
@@ -45,9 +47,12 @@ class Monster :
 protected:
 	MonsterId monsterId;
 	MonsterState currentState = MonsterState::Idle;
-	AnimationController animation;
-
 	MonsterStat stat;
+	AnimationController animation;
+	AnimationController attackEffectAnime;
+	SpriteEffect* attackEffect;
+	SceneGame* scene;
+
 	int hp = 0;
 	float attackTimer = 0.f;
 	float knockBackTime = 0.15f;
@@ -58,6 +63,7 @@ protected:
 
 	sf::Vector2f look; //바라보는 방향
 	sf::Vector2f direction; //이동하는 방향
+
 
 	sf::CircleShape searchRange;
 	sf::CircleShape attackRange;
@@ -74,10 +80,11 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
     void SetState(MonsterState newState);
-	void HandleState();
+	void HandleState(float dt);
 
 	void Idle();
 	void Attack(float dt);
+	void AttackEffect(float dt);
 	void Move(float dt);
 	void Die();
 	void KnockBack();
@@ -86,10 +93,6 @@ public:
 	void SetPlayer(Player* player) { this->player = player; }
 	void OnAttacked(float damage);
 	void HandleBehavior(float dt);
+
+	void SetScene(SceneGame* scene) { this->scene = scene; }
 };
-
-
-//생성
-//배치(스폰)
-//탐색(플레이어)
-//이동 및 공격

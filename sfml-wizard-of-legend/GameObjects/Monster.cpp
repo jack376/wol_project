@@ -6,12 +6,13 @@
 #include "SceneGame.h"
 #include "SceneMgr.h"
 #include "Player.h"
+#include "SpriteEffect.h"
 
 #include "InputMgr.h"   //Test
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
-{
+{   
 }
 
 Monster::~Monster()
@@ -27,6 +28,24 @@ void Monster::Init()
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Death.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Hurt.csv"));
+    
+    if ((int)monsterId >= 2)
+    {
+        animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackUp.csv"));
+        animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackDown.csv"));
+        //attackEffect = (SpriteEffect*)SCENE_MGR.GetCurrScene()->AddGo(new SpriteEffect("", "a"));
+        //김혜준 깔짝
+        //Scene* scene = SCENE_MGR.GetCurrScene();
+        attackEffect = (SpriteEffect*)scene->AddGo(new SpriteEffect());
+
+        attackEffect = new SpriteEffect("", "a");
+        attackEffect->textureId = "animations/" + stat.name + "_AttackEffect.csv";
+        attackEffect->Init();
+        attackEffect->Reset();
+        SCENE_MGR.GetCurrScene()->AddGo(attackEffect);
+
+
+    }
 }
 
 void Monster::Release()
@@ -71,11 +90,20 @@ void Monster::Update(float dt)
     animation.Update(dt);
 
     HandleBehavior(dt);
-    HandleState();
+    HandleState(dt);
  
     //Debug Mode
     searchRange.setPosition(position);
     attackRange.setPosition(position);
+    //애니메이션 클립마다 사이즈가 다르기 때문에 Play에서 한 번만 해주면 됨(수정 필요)
+    {
+        sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+        rect.setSize({ spriteBounds.width, spriteBounds.height });
+    }
+    rect.setPosition(position);
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setOutlineColor(sf::Color::Blue);
+    rect.setOutlineThickness(1.f);
     //Test
     if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
     {
@@ -89,6 +117,8 @@ void Monster::Draw(sf::RenderWindow& window)
     //Debug Mode
     window.draw(searchRange);
     window.draw(attackRange);
+
+    window.draw(attackEffect->sprite);
 }
 
 void Monster::SetState(MonsterState newState)
@@ -96,7 +126,7 @@ void Monster::SetState(MonsterState newState)
 	currentState = newState;
 }
 
-void Monster::HandleState()
+void Monster::HandleState(float dt)
 {
     switch (currentState) {
     case MonsterState::Idle:
@@ -109,6 +139,7 @@ void Monster::HandleState()
 
     case MonsterState::Attacking:
         //std::cout << "Monster is attacking.\n";
+        attackTimer += dt;
         break;
 
     case MonsterState::Dead:
@@ -131,10 +162,21 @@ void Monster::Idle()
 void Monster::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
-    attackTimer += dt;
-    if(attackTimer > stat.attackRate)
+    //attackTimer += dt;
+    if (attackTimer >= stat.attackRate)
     {
-        animation.Play(stat.name + "Attack");
+        if ((int)monsterId < 2)
+            animation.Play(stat.name + "Attack");
+        else
+        {
+            if (abs(look.x) >= abs(look.y))
+                animation.Play(stat.name + "Attack");
+            else if (look.y > 0)
+                animation.Play(stat.name + "AttackDown");
+            else
+                animation.Play(stat.name + "AttackUp");
+            attackEffect->Play(dt, position, look);
+        }
         SetOrigin(origin);
         attackTimer = 0.f;
         isAttacked = false;
@@ -146,6 +188,8 @@ void Monster::Attack(float dt)
         player->SetHp(-stat.damage);
         isAttacked = true;
     }
+
+    
 }
 
 void Monster::Move(float dt)
@@ -226,7 +270,7 @@ void Monster::HandleBehavior(float dt)
             SetLook(playerPos);
             if (distance <= stat.attackRange)
                 Attack(dt);
-            else
+            else if (attackTimer >= stat.attackRate)
                 Move(dt);
         }
         else

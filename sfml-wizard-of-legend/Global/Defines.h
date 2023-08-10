@@ -2,9 +2,6 @@
 
 #define _USE_MATH_DEFINES
 
-
-
-
 enum class ElementTypes
 {
 	Fire,
@@ -48,8 +45,8 @@ enum class ResourceTypes
 enum class SceneId
 {
 	None = -1,
-	Game,
 	Title,
+	Game,
 	Editor,
 	Count,
 };
@@ -63,28 +60,6 @@ enum class ObjectType
 	Count,
 };
 
-enum class PatternObjectType
-{
-	None = -1,
-	Platform,
-	Obstacle,
-	ItemSpeedUp,
-	ItemBigHealPack,
-	ItemHealPack,
-	ItemMagnet,
-	ItemBig,
-	//ItemBonus,
-	ItemCoin,
-	Coin,
-	BigCoin,
-	GoldCoin,
-	BigGoldCoin,
-	Diamond,
-	DiamondBox,
-	LuckyBox,
-	Count,
-
-};
 
 enum class UiType
 {
