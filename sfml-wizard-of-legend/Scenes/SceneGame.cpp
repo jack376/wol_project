@@ -92,6 +92,21 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);	
 
 	// Test Code
+	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
+	cameraDirection.y = INPUT_MGR.GetAxis(Axis::Vertical);
+
+	float magnitude = Utils::Magnitude(cameraDirection);
+	if (magnitude > 0.0f)
+	{
+		if (magnitude > 1.f)
+		{
+			cameraDirection /= magnitude;
+		}
+		cameraPosition += cameraDirection * cameraSpeed * dt;
+		camera.setPosition(cameraPosition);
+	}
+	worldView.setCenter(cameraPosition);
+
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
@@ -144,7 +159,7 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetLayer(tileLayer);
 		tile->SetTexture(*RESOURCE_MGR.GetTexture(textureId));
 		tile->SetTextureRect(textureRect, textureId);
-		tile->SetOrigin(256.0f, 384.0f);
+		tile->SetOrigin(256.0f, 256.0f);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
 	std::cout << "SYSTEM : Load Success" << std::endl;

@@ -34,23 +34,14 @@ protected:
 
     bool isCollision = false;
     bool isHover = false;
+    bool isTypeView = false;
 
     int tileIndexX = 0;
     int tileIndexY = 0;
 
     sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
-    sf::Text text;
-    sf::Sprite sprite;
-    std::map<TileState, sf::Color> stateColor =
-    {
-        { TileState::Blank,    sf::Color::Color(0, 0, 0, 0)       },
-        { TileState::Select,   sf::Color::Color(0, 128, 0, 128)   },
-        { TileState::Copy,     sf::Color::Color(192, 128, 0, 128) },
-        { TileState::Paste,    sf::Color::Color(128, 0, 0, 128)   },
-        { TileState::Cut,      sf::Color::Color(0, 128, 128, 128) },
-        { TileState::UI,       sf::Color::Color(0, 0, 0, 0)       },
-        { TileState::SelectUI, sf::Color::Color(0, 128, 192, 128) },
-    };
+    sf::Sprite spriteTop;
+    sf::Sprite spriteBottom;
 
 public:
     std::function<void()> OnClickDown;
@@ -82,11 +73,15 @@ public:
     void SetIndex(int x, int y);
     sf::Vector2i GetIndex() const;
 
-    void SetType(TileType type = TileType::None);
-    TileType GetType() const;
+    void SetTypeView(bool isTypeView);
+    bool IsTypeView() const;
 
     void SetLayer(int tileLayer = 0);
     int GetLayer() const;
+
+    void SetType(TileType type = TileType::None);
+    void SetTypeColor(TileType type);
+    TileType GetType() const;
 
     void SetState(TileState state = TileState::Blank);
     void SetStateColor(TileState state = TileState::Blank);

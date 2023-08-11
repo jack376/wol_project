@@ -10,7 +10,6 @@
 #include "BaseUI.h"
 #include "Tile.h"
 #include "rapidcsv.h"
-#include <iomanip>
 
 SceneEditor::SceneEditor() : Scene(SceneId::Editor)
 {
@@ -44,7 +43,6 @@ void SceneEditor::Init()
 	// TextureRect
 	const int tilesPerRow = atlasTextureSize / tileTextureSize;
 	const int uiSort = 110;
-
 	for (int y = 0; y < tilesPerRow; ++y)
 	{
 		std::vector<sf::IntRect> colTiles;
@@ -66,13 +64,48 @@ void SceneEditor::Init()
 		}
 	}
 
-	BaseUI* uiBackGround = (BaseUI*)AddGo(new BaseUI("UiBackGround", UiType::Box));
-	uiBackGround->sortLayer = 100;
-	uiBackGround->SetSizeAdd(atlasTextureSize + blankPos * 2.0f, windowSize.y);
-	uiBackGround->SetColor(sf::Color(16, 16, 16, 255));
-	uiBackGround->SetStrokeColor(sf::Color(32, 32, 64, 255));
-
+	// Load CSV
 	LoadFromCSV("tables/TileInfoTable.csv");
+
+	// UI backgorund
+	BaseUI* uiBackground = (BaseUI*)AddGo(new BaseUI("UiBackGround", UiType::Box));
+	uiBackground->sortLayer = 100;
+	uiBackground->SetSizeAdd(atlasTextureSize + blankPos * 2.0f, windowSize.y);
+	uiBackground->SetColor(sf::Color(16, 16, 16, 255));
+	uiBackground->SetStrokeColor(sf::Color(32, 32, 64, 255));
+
+	// UI Palette Button
+	/*
+	std::map<int, std::function<void()>> paletteIndex =
+	{
+		{ 1,  [this]() { selectPaletteIndex = 1; }   },
+		{ 2,  [this]() { selectPaletteIndex = 5; }   },
+		{ 3,  [this]() { selectPaletteIndex = 12; }  },
+		{ 4,  [this]() { selectPaletteIndex = 33; }  },
+		{ 5,  [this]() { selectPaletteIndex = 37; }  },
+		{ 6,  [this]() { selectPaletteIndex = 44; }  },
+		{ 7,  [this]() { selectPaletteIndex = 69; }  },
+		{ 8,  [this]() { selectPaletteIndex = 101; } },
+		{ 9,  [this]() { selectPaletteIndex = 136; } },
+		{ 10, [this]() { selectPaletteIndex = 353; } },
+		{ 11, [this]() { selectPaletteIndex = 355; } },
+		{ 12, [this]() { selectPaletteIndex = 364; } },
+	};
+
+	float buttonSize = 32.0f;
+	float buttonPosX = blankPos;
+	float buttonPosY = atlasTextureSize + blankPos * 2;
+	float buttonsGap = buttonSize + buttonSize * 0.25f;
+	int buttonTexIdx = 0;
+	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 0, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
+	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 1, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
+	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 2, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
+	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 3, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
+	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 4, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
+	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 5, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
+	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 6, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
+	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 7, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
+	*/
 
 	for (auto go : gameObjects)
 	{
@@ -116,56 +149,11 @@ void SceneEditor::Update(float dt)
 
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
-	//std::cout << worldMousePos.x << ", " << worldMousePos.y << std::endl;
 
+	// Camera
 	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
 	cameraDirection.y = INPUT_MGR.GetAxis(Axis::Vertical);
 
-	// Zoom
-	Scene* scene = SCENE_MGR.GetCurrScene();
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
-	{
-		scene->Zoom(zoomInFactor);
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X))
-	{
-		scene->Zoom(zoomOutFactor);
-	}
-
-	// Select, Deselect
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C))
-	{
-		std::vector<Tile*> selectedTiles = GetSelectedTiles();
-		SetSelectedTilesState(Tile::TileState::Copy);
-	}
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
-	{
-		std::vector<Tile*> allTiles = GetAllTiles();
-		SetSelectedTilesState(Tile::TileState::Blank);
-	}
-
-	// Test
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
-	{
-		SetSelectedTilesDraw();
-
-		std::vector<Tile*> allTiles = GetAllTiles();
-		SetSelectedTilesState(Tile::TileState::Blank);
-	}
-
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
-	{
-		SaveToCSV("tables/TileInfoTable.csv");
-	}
-
-	// Copy
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::M))
-	{
-		std::vector<Tile*> selectedTiles = GetSelectedTiles();
-		SetSelectedTilesArea();
-	}
-
-	// Camera Move
 	float magnitude = Utils::Magnitude(cameraDirection);
 	if (magnitude > 0.0f)
 	{
@@ -177,6 +165,84 @@ void SceneEditor::Update(float dt)
 		camera.setPosition(cameraPosition);
 	}
 	worldView.setCenter(cameraPosition);
+
+	// Zoom
+	Scene* scene = SCENE_MGR.GetCurrScene();
+	if (!INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
+	{
+		scene->Zoom(zoomInFactor);
+	}
+	if (!INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::X))
+	{
+		scene->Zoom(zoomOutFactor);
+	}
+
+	// Copy(Unused)
+	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::C))
+	{
+		std::vector<Tile*> selectedTiles = GetSelectedTiles();
+		SetSelectedTilesState(Tile::TileState::Copy);
+	}
+
+	// Paste(Unused)
+	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::V))
+	{
+		std::vector<Tile*> selectedTiles = GetSelectedTiles();
+		SetSelectedTilesArea();
+	}
+
+	// Deselect
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
+	{
+		SetSelectedTilesState(Tile::TileState::Blank);
+	}
+
+	// Draw
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
+	{
+		SetSelectedTilesDraw();
+		SetSelectedTilesState(Tile::TileState::Blank);
+	}
+
+	// Save
+	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::S))
+	{
+		SaveToCSV("tables/TileInfoTable.csv");
+	}
+
+	// Undo
+	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
+	{
+		std::cout << "Undo Key" << std::endl;
+	}
+
+	// Redo
+	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKey(sf::Keyboard::LShift) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
+	{
+		std::cout << "Redo Key" << std::endl;
+	}
+
+	// SetTileType
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
+	{
+		SetSelectedTilesType(Tile::TileType::Ground);
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
+	{
+		SetSelectedTilesType(Tile::TileType::Cliff);
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
+	{
+		SetSelectedTilesType(Tile::TileType::Wall);
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
+	{
+		SetSelectedTilesType(Tile::TileType::MonsterSpawn);
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
+	{
+		SetSelectedTilesType(Tile::TileType::EventTrigger);
+	}
 }
 
 void SceneEditor::Draw(sf::RenderWindow& window)
@@ -197,14 +263,18 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, i
 	{
 		if (!isUiButtonActive && tile->GetState() == Tile::TileState::Blank)
 		{
-			tile->SetShapeColor(sf::Color(128, 0, 0, 128));
+			tile->SetStateColor(Tile::TileState::Select);
 		}
 	};
 	tile->OnExit = [tile, this]()
 	{
 		if (!isUiButtonActive && tile->GetState() == Tile::TileState::Blank)
 		{
-			tile->SetStateColor(Tile::TileState::Blank);
+			tile->SetStateColor(tile->GetState());
+			if (tile->IsTypeView())
+			{
+				tile->SetTypeColor(tile->GetType());
+			}
 		}
 	};
 	tile->OnClickDown = [tile, this]()
@@ -273,6 +343,16 @@ void SceneEditor::SetSelectedTilesState(Tile::TileState state)
 	selectedTiles.clear();
 }
 
+void SceneEditor::SetSelectedTilesType(Tile::TileType type)
+{
+	for (Tile* tile : selectedTiles)
+	{
+		tile->SetType(type);
+		tile->SetTypeColor(type);
+	}
+	SetSelectedTilesState();
+}
+
 void SceneEditor::SetSelectedTilesDraw()
 {
 	if (selectedTiles.empty() || selectedPreview.empty())
@@ -281,7 +361,7 @@ void SceneEditor::SetSelectedTilesDraw()
 	}
 
 	sf::Vector2i indexPreviewStart = selectedPreview[0]->GetIndex();
-	int size = tileSize;
+
 	int previewWidth  = std::abs(endPreviewIndex.x - startPreviewIndex.x) + 1;
 	int previewHeight = std::abs(endPreviewIndex.y - startPreviewIndex.y) + 1;
 
@@ -298,7 +378,7 @@ void SceneEditor::SetSelectedTilesDraw()
 
 		Tile* previewTile = tilesPreview[matchPreviewIndex.x][matchPreviewIndex.y];
 
-		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * size, previewTile->GetIndex().y * size, size, size);
+		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * tileSize, previewTile->GetIndex().y * tileSize, tileSize, tileSize);
 		worldTile->SetTextureRect(previewRect, textureId);
 	}
 }
@@ -309,6 +389,10 @@ void SceneEditor::SetSelectedTilesArea()
 	{
 		tile->SetState(Tile::TileState::Blank);
 		tile->SetStateColor(Tile::TileState::Blank);
+		if (tile->IsTypeView())
+		{
+			tile->SetTypeColor(tile->GetType());
+		}
 	}
 	selectedTiles.clear();
 
@@ -320,6 +404,8 @@ void SceneEditor::SetSelectedTilesArea()
 			tilesWorld[x][y]->SetStateColor(Tile::TileState::Select);
 			tilesWorld[x][y]->SetIndex(x, y);
 			selectedTiles.push_back(tilesWorld[x][y]);
+
+			std::cout << "TileType : " << (int)tilesWorld[x][y]->GetType() << std::endl;
 		}
 	}
 }
@@ -338,7 +424,6 @@ sf::Vector2i SceneEditor::GetCurrentTileIntIndex()
 		xIndex = std::max(0, std::min(xIndex, maxRangeIndex - 1));
 		yIndex = std::max(0, std::min(yIndex, maxRangeIndex - 1));
 	}
-
 	return sf::Vector2i(xIndex, yIndex);
 }
 
@@ -349,6 +434,7 @@ Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float 
 	tilePreview->SetShapePosition(posX + blankPos, posY + blankPos);
 	tilePreview->SetSpritePosition(posX + blankPos, posY + blankPos);
 	tilePreview->SetState(Tile::TileState::UI);
+	tilePreview->SetType(Tile::TileType::None);
 	tilePreview->SetStateColor(Tile::TileState::UI);
 	tilePreview->SetStrokeColor(sf::Color(64, 64, 64, 96));
 	tilePreview->OnEnter = [tilePreview]()
@@ -373,7 +459,6 @@ Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float 
 			isUiMouseSelect = true;
 			isWorldMouseSelect = false;
 		}
-
 	};
 	tilePreview->OnClickDrag = [tilePreview, this]()
 	{
@@ -422,6 +507,8 @@ void SceneEditor::SetSelectedPreviewArea()
 			tilesPreview[x][y]->SetStateColor(Tile::TileState::SelectUI);
 			tilesPreview[x][y]->SetIndex(x, y);
 			selectedPreview.push_back(tilesPreview[x][y]);
+
+			//std::cout << "TileType : " << (int)tilesPreview[x][y]->GetType() << std::endl;
 		}
 	}
 }
@@ -440,7 +527,6 @@ sf::Vector2i SceneEditor::GetCurrentPreviewIntIndex()
 		xIndex = std::max(0, std::min(xIndex, maxRangeIndex - 1));
 		yIndex = std::max(0, std::min(yIndex, maxRangeIndex - 1));
 	}
-
 	return sf::Vector2i(xIndex, yIndex);
 }
 
@@ -526,4 +612,25 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
 	std::cout << "SYSTEM : Load Success" << std::endl;
+}
+
+BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& text, float posX, float posY, float size, int texIndex, std::function<void()> onClickAction)
+{
+	//SpriteGo* newIcon = (SpriteGo*)AddGo(new SpriteGo(iconId, iconName));
+	//newIcon->sortLayer = 111;
+
+	BaseUI* newButton = (BaseUI*)AddGo(new BaseUI(name, UiType::Box));
+	newButton->sortLayer = 110;
+	newButton->SetPosition(posX, posY);
+	newButton->SetColor(sf::Color::Green);
+	newButton->SetSizeAdd(size, size);
+	newButton->OnEnter = [newButton]()
+	{
+	};
+	newButton->OnExit = [newButton]()
+	{
+	};
+	newButton->OnClick = onClickAction;
+
+	return newButton;
 }

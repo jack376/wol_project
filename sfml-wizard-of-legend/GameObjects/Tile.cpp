@@ -21,10 +21,6 @@ void Tile::Init()
 
 void Tile::Reset()
 {
-    int indexLeft = 31;
-    int indexTop = 0;
-
-    shape.setFillColor(sf::Color::Transparent);
     if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
     {
         shape.setOutlineThickness(1.0f);
@@ -38,6 +34,7 @@ void Tile::Update(float dt)
     bool prevHover = isHover;
     isHover = shape.getGlobalBounds().contains(mousePos);
 
+    // Button Action
     if (!prevHover && isHover)
     {
         if (OnEnter != nullptr)
@@ -76,13 +73,28 @@ void Tile::Update(float dt)
             }
         }
     }
+
+    // TileType View Mode
+    if (!isTypeView && INPUT_MGR.GetKeyDown(sf::Keyboard::T))
+    {
+        isTypeView = !isTypeView;
+    }
+    else if (isTypeView && INPUT_MGR.GetKeyDown(sf::Keyboard::T))
+    {
+        shape.setFillColor(sf::Color::Transparent);
+        isTypeView = !isTypeView;
+    }
+    if (isTypeView && !INPUT_MGR.GetMouseButton(sf::Mouse::Left))
+    {
+        SetTypeColor(GetType());
+    }
 }
 
 void Tile::Draw(sf::RenderWindow& window)
 {
-    window.draw(sprite);
-    window.draw(shape);
-    //window.draw(text);
+    window.draw(spriteBottom);
+    window.draw(spriteTop);
+    window.draw(shape, sf::BlendAlpha);
 }
 
 void Tile::SetCollision(bool collision)
@@ -97,15 +109,15 @@ bool Tile::GetCollision()
 
 void Tile::SetOrigin(Origins origin)
 {
-    sf::Vector2f originPos(sprite.getTexture()->getSize());
+    sf::Vector2f originPos(spriteTop.getTexture()->getSize());
     originPos.x *= ((int)origin % 3) * 0.5f;
     originPos.y *= ((int)origin / 3) * 0.5f;
-    sprite.setOrigin(originPos);
+    spriteTop.setOrigin(originPos);
 }
 
 void Tile::SetOrigin(float x, float y)
 {
-    sprite.setOrigin(x, y);
+    spriteTop.setOrigin(x, y);
 }
 
 void Tile::SetTileSize(int tileSize)
@@ -130,12 +142,12 @@ void Tile::SetShapePosition(float x, float y)
 
 void Tile::SetSpritePosition(float x, float y)
 {
-    sprite.setPosition(x, y);
+    spriteTop.setPosition(x, y);
 }
 
 void Tile::SetScale(float scale)
 {
-    sprite.setScale(scale, scale);
+    spriteTop.setScale(scale, scale);
 }
 
 void Tile::SetIndex(int x, int y)
@@ -154,11 +166,6 @@ void Tile::SetType(TileType type)
     this->type = type;
 }
 
-Tile::TileType Tile::GetType() const
-{
-    return type;
-}
-
 void Tile::SetLayer(int tileLayer)
 {
     this->tileLayer = tileLayer;
@@ -169,6 +176,35 @@ int Tile::GetLayer() const
     return tileLayer;
 }
 
+void Tile::SetTypeColor(TileType type)
+{
+    std::map<TileType, sf::Color> typeColor =
+    {
+        { TileType::None,         sf::Color::Transparent      },
+        { TileType::Ground,       sf::Color(0, 192, 0, 128)   },
+        { TileType::Cliff,        sf::Color(255, 0, 0, 128)   },
+        { TileType::Wall,         sf::Color(255, 160, 0, 128) },
+        { TileType::MonsterSpawn, sf::Color(128, 0, 255, 128) },
+        { TileType::EventTrigger, sf::Color(0, 0, 255, 128)   },
+    };
+    shape.setFillColor(typeColor[type]);
+}
+
+Tile::TileType Tile::GetType() const
+{
+    return type;
+}
+
+void Tile::SetTypeView(bool typeView)
+{
+    isTypeView = typeView;
+}
+
+bool Tile::IsTypeView() const
+{
+    return isTypeView;
+}
+
 void Tile::SetState(TileState state)
 {
     this->state = state;
@@ -176,6 +212,16 @@ void Tile::SetState(TileState state)
 
 void Tile::SetStateColor(TileState state)
 {
+    std::map<TileState, sf::Color> stateColor =
+    {
+        { TileState::Blank,    sf::Color::Transparent     },
+        { TileState::Select,   sf::Color(0, 0, 128, 64)   },
+        { TileState::Copy,     sf::Color(192, 128, 0, 64) },
+        { TileState::Paste,    sf::Color(128, 0, 0, 64)   },
+        { TileState::Cut,      sf::Color(0, 128, 128, 64) },
+        { TileState::UI,       sf::Color::Transparent     },
+        { TileState::SelectUI, sf::Color(0, 128, 192, 64) },
+    };
     shape.setFillColor(stateColor[state]);
 }
 
@@ -186,19 +232,19 @@ Tile::TileState Tile::GetState() const
 
 void Tile::SetTexture(const sf::Texture& tex)
 {
-    sprite.setTexture(tex);
+    spriteTop.setTexture(tex);
 }
 
 void Tile::SetTextureRect(const sf::IntRect& rect, const std::string& path)
 {
-    sprite.setTexture(*RESOURCE_MGR.GetTexture(path));
-    sprite.setTextureRect(rect);
-    sprite.setColor(sf::Color::White);
+    spriteTop.setTexture(*RESOURCE_MGR.GetTexture(path));
+    spriteTop.setTextureRect(rect);
+    spriteTop.setColor(sf::Color::White);
 }
 
 sf::IntRect Tile::GetTextureRect() const
 {
-    return sprite.getTextureRect();
+    return spriteTop.getTextureRect();
 }
 
 sf::Vector2f Tile::GetMousePosBasedOnState() const

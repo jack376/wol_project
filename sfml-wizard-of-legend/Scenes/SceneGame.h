@@ -16,6 +16,11 @@ protected:
 	ElementalSpell* tempWindSlash;
 	std::vector<std::vector<Tile*>> tilesWorld;
 
+	sf::Sprite camera;
+	sf::Vector2f cameraDirection;
+	sf::Vector2f cameraPosition;
+	float cameraSpeed = 400.0f;
+
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

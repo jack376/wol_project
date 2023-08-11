@@ -50,6 +50,8 @@ protected:
 	float zoomInFactor = 0.5f;
 	float zoomOutFactor = 2.0f;
 
+	sf::Vector2i selectPaletteIndex;
+
 public:
 	SceneEditor();
 	virtual ~SceneEditor() override = default;
@@ -66,7 +68,8 @@ public:
 	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
 	std::vector<Tile*> GetAllTiles();
 	std::vector<Tile*> GetSelectedTiles();
-	void SetSelectedTilesState(Tile::TileState state);
+	void SetSelectedTilesState(Tile::TileState state = Tile::TileState::Blank);
+	void SetSelectedTilesType(Tile::TileType type);
 	void SetSelectedTilesDraw();
 	void SetSelectedTilesArea();
 	sf::Vector2i GetCurrentTileIntIndex();
@@ -78,4 +81,6 @@ public:
 
 	void SaveToCSV(const std::string& path);
 	void LoadFromCSV(const std::string& path);
+
+	BaseUI* CreateButton(const std::string& name, const std::string& text, float posX, float posY, float size, int texIndex, std::function<void()> onClickAction);
 };
