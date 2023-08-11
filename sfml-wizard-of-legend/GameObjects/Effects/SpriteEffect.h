@@ -15,7 +15,7 @@ protected:
 	float duration = 0.f;
 	float timer = 0.f;
 
-	bool isPlay = false;
+	
 
 	ObjectPool<SpriteEffect>* pool = nullptr;
 	AnimationController animation;
@@ -23,6 +23,8 @@ protected:
 	EffectTypes type = EffectTypes::None;
 
 public:
+	sf::Vector2f dir = { 0, 0 };
+
 	SpriteEffect(const std::string& textureId = "", const std::string& n = "");
 	virtual ~SpriteEffect() override { };
 
@@ -35,7 +37,12 @@ public:
 	virtual void Update(float dt) override;
 	void SetAnim(const std::string& path);
 	void SetType(const EffectTypes type);
+	void SetIsPlay(bool value) { isPlay = value; }
 
-	void Play(float dt, sf::Vector2f pos, sf::Vector2f dir);
+	void Play(sf::Vector2f pos, sf::Vector2f dir);
+	void SetRotation(sf::Vector2f dir);
+	AnimationController* GetAnimation() { return &animation; }
+
+	std::function<void()> PlaySup;
 };
 

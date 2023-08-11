@@ -8,6 +8,8 @@ class Tile;
 
 class Player;
 class ElementalSpell;
+class Monster;
+enum class MonsterId;
 
 class SceneGame : public Scene
 {
@@ -32,5 +34,6 @@ public:
 	Player* GetPlayer() { return player; }
 	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
 	void LoadFromCSV(const std::string& path);
+	Monster* CreatMonster(MonsterId id);
 };
 

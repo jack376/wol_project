@@ -109,6 +109,12 @@ void AnimationController::SetFrame(const AnimationFrame& frame)
 	target->setTextureRect(frame.texCoord);
 }
 
+void AnimationController::SetFramePos(int index, sf::Vector2f pos)
+{
+	if (currentFrame == index)
+		target->setPosition(pos);
+}
+
 sf::FloatRect AnimationController::GetCurrentRect()
 {
 	return target->getGlobalBounds();

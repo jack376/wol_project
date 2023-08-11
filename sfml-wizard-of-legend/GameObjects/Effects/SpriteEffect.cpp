@@ -26,19 +26,11 @@ void SpriteEffect::Reset()
 
 void SpriteEffect::Update(float dt)
 {
-	if (isPlay)
+	if (animation.IsPlaying())
 	{
 		animation.Update(dt);
 		SetOrigin(Origins::BC);
-		std::cout << "SE Anime Update \n";
 	}
-		
-	if (animation.IsAnimEndFrame())
-	{
-		SetActive(false);
-		isPlay = false;
-	}
-
 }
 
 void SpriteEffect::SetAnim(const std::string& path)
@@ -52,11 +44,17 @@ void SpriteEffect::SetType(const EffectTypes type)
 	this->type = type;
 }
 
-void SpriteEffect::Play(float dt, sf::Vector2f pos, sf::Vector2f dir)
+void SpriteEffect::Play(sf::Vector2f pos, sf::Vector2f dir)
 {
-	isPlay = true;
+	this->dir = dir;
+	sprite.setRotation(Utils::Angle(this->dir) + 90);
 	SetActive(true);
 	SetPosition(pos);
+	animation.Play(name);
+	isPlay = true;
+}
+
+void SpriteEffect::SetRotation(sf::Vector2f dir)
+{
 	sprite.setRotation(Utils::Angle(dir) + 90);
-	animation.Play("LancerAttackEffect");
 }

@@ -17,7 +17,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="GameObjects\Player\Player.cpp" />
-    <ClCompile Include="GameObjects\Monster.cpp" />
+    <ClCompile Include="GameObjects\Monster\Monster.cpp" />
     <ClCompile Include="DataTables\MonsterTable.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -31,6 +31,8 @@
     <ClCompile Include="Framework\SkillMgr.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
+    <ClCompile Include="DataTables\TileInfoTable.cpp" />
+    <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -49,7 +51,7 @@
     <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
-    <ClInclude Include="GameObjects\Monster.h" />
+    <ClInclude Include="GameObjects\Monster\Monster.h" />
     <ClInclude Include="DataTables\MonsterTable.h" />
     <ClInclude Include="GameObjects\Player\Player.h" />
     <ClInclude Include="GameObjects\Tile.h" />
@@ -163,9 +165,8 @@
     <ClCompile Include="Scenes\SceneEditor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DataTables\TileInfoTable.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <ClInclude Include="DataTables\TileInfoTable.h" />
+    <ClInclude Include="GameObjects\Monster\Lancer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -322,9 +323,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\SceneEditor.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DataTables\TileInfoTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -49,7 +49,6 @@ protected:
 	MonsterState currentState = MonsterState::Idle;
 	MonsterStat stat;
 	AnimationController animation;
-	AnimationController attackEffectAnime;
 	SpriteEffect attackEffect;
 
 	int hp = 0;
@@ -74,7 +73,6 @@ public:
 	virtual void Init() override;
 	virtual void Release() override;
 	virtual void Reset() override;
-
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
@@ -82,8 +80,7 @@ public:
 	void HandleState(float dt);
 
 	void Idle();
-	void Attack(float dt);
-	void AttackEffect(float dt);
+	virtual void Attack(float dt);
 	void Move(float dt);
 	void Die();
 	void KnockBack();

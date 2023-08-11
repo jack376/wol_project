@@ -8,6 +8,7 @@
 #include "TextGo.h"
 #include "SpriteGo.h"
 #include "Monster.h"
+#include "Lancer.h"
 #include "Player.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
@@ -32,7 +33,7 @@ void SceneGame::Init()
 	player->SetPosition(0, 0);
 	player->sprite.setScale(4, 4);
 	player->SetOrigin(Origins::MC);
-	player->sortLayer = 20;
+	player->sortLayer = 5;
 	player->SetScene(this);
 	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
 	for (int i = 0; i < rows; i++)
@@ -50,7 +51,7 @@ void SceneGame::Init()
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
 
-	Monster* go = (Monster*)AddGo(new Monster(MonsterId::Lancer));
+	Monster* go = CreatMonster(MonsterId::Lancer);
 	player->SetMonster(go);
 
 	for (auto go : gameObjects)
@@ -147,4 +148,22 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
 	std::cout << "SYSTEM : Load Success" << std::endl;
+}
+
+Monster* SceneGame::CreatMonster(MonsterId id)
+{
+	Monster* monster = nullptr;
+	switch (id)
+	{
+	case MonsterId::Ghoul:
+		monster = dynamic_cast<Monster*>(AddGo(new Monster(id)));
+		break;
+	case MonsterId::GhoulLarge:
+		monster = dynamic_cast<Monster*>(AddGo(new Monster(id)));
+		break;
+	case MonsterId::Lancer:
+		monster = dynamic_cast<Monster*>(AddGo(new Lancer(id)));
+		break;
+	}
+	return monster;
 }
