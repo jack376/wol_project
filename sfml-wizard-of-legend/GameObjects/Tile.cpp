@@ -75,7 +75,7 @@ void Tile::Update(float dt)
         }
     }
 
-    // TileType View Mode
+    // TileType View Mode On/Off
     if (!isTypeView && INPUT_MGR.GetKeyDown(sf::Keyboard::T))
     {
         isTypeView = !isTypeView;
@@ -88,6 +88,18 @@ void Tile::Update(float dt)
     if (isTypeView && !INPUT_MGR.GetMouseButton(sf::Mouse::Left))
     {
         SetTypeColor(GetType());
+    }
+
+    // Tile Grid View Mode On/Off
+    if (!isGridView && INPUT_MGR.GetKeyDown(sf::Keyboard::Y))
+    {
+        isGridView = !isGridView;
+        shape.setOutlineThickness(0.0f);
+    }
+    else if (isGridView && INPUT_MGR.GetKeyDown(sf::Keyboard::Y))
+    {
+        isGridView = !isGridView;
+        shape.setOutlineThickness(1.0f);
     }
 }
 

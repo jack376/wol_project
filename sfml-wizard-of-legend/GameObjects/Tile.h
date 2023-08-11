@@ -35,6 +35,7 @@ protected:
     bool isCollision = false;
     bool isHover = false;
     bool isTypeView = false;
+    bool isGridView = false;
 
     int tileIndexX = 0;
     int tileIndexY = 0;

@@ -213,14 +213,12 @@ void SceneEditor::Update(float dt)
 	// Undo
 	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
 	{
-		std::cout << "Undo Key" << std::endl;
-		commandInvoker.undo();
+		commandInvoker.undo();	
 	}
 
 	// Redo
-	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKey(sf::Keyboard::LShift) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
+	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::X))
 	{
-		std::cout << "Redo Key" << std::endl;
 		commandInvoker.redo();
 	}
 
@@ -644,12 +642,12 @@ BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& te
 TileCommand::TileState SceneEditor::captureTileState(const Tile* tile)
 {
 	TileCommand::TileState state;
-	state.type = tile->GetType();
-	state.index = tile->GetIndex();
 	state.textureId = textureId;
-	state.textureRect = tile->GetTextureRect();
-	state.size = tile->GetTileSize();
-	state.layer = tile->GetLayer();
+	state.type        = tile-> GetType();
+	state.index       = tile-> GetIndex();
+	state.textureRect = tile-> GetTextureRect();
+	state.size        = tile-> GetTileSize();
+	state.layer       = tile-> GetLayer();
 
 	return state;
 }

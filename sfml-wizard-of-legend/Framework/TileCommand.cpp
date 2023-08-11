@@ -13,9 +13,9 @@ void TileCommand::undo()
 
 void TileCommand::applyState(Tile* tile, const TileState& state)
 {
+    tile->SetTexture(state.textureId);
     tile->SetType(state.type);
     tile->SetIndex(state.index.x, state.index.y);
-    tile->SetTexture(state.textureId);
     tile->SetTextureRect(state.textureRect, state.textureId);
     tile->SetTileSize(state.size);
     tile->SetLayer(state.layer);

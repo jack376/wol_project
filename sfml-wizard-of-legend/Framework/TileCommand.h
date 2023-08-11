@@ -8,9 +8,9 @@ class TileCommand : public Command
 public:
     struct TileState
     {
+        std::string textureId;
         Tile::TileType type;
         sf::Vector2i index;
-        std::string textureId;
         sf::IntRect textureRect;
         int size;
         int layer;
