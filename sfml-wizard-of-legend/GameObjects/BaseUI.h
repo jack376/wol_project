@@ -37,9 +37,9 @@ protected:
 
 	sf::RectangleShape buttonCollider;
 
-public:
+public:	
 	sf::Text text;
-	
+
 	std::function<void()> OnClick;
 	std::function<void()> OnEnter;
 	std::function<void()> OnExit;

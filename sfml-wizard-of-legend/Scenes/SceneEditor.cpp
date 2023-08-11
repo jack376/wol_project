@@ -214,12 +214,14 @@ void SceneEditor::Update(float dt)
 	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
 	{
 		std::cout << "Undo Key" << std::endl;
+		commandInvoker.undo();
 	}
 
 	// Redo
 	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKey(sf::Keyboard::LShift) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
 	{
 		std::cout << "Redo Key" << std::endl;
+		commandInvoker.redo();
 	}
 
 	// SetTileType
@@ -254,8 +256,7 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, i
 {
 	Tile* tile = (Tile*)AddGo(new Tile(name));
 	tile->sortLayer = sort;
-	tile->SetShapePosition(posX, posY);
-	tile->SetSpritePosition(posX, posY);
+	tile->SetPosition(posX, posY);
 	tile->SetState();
 	tile->SetStateColor(Tile::TileState::Blank);
 	tile->SetStrokeColor(sf::Color(64, 64, 64, 96));
@@ -369,6 +370,8 @@ void SceneEditor::SetSelectedTilesDraw()
 
 	for (Tile* worldTile : selectedTiles)
 	{
+		TileCommand::TileState before = captureTileState(worldTile);
+
 		sf::Vector2i indexWorld = worldTile->GetIndex();
 
 		int offsetX = (indexWorld.x - indexTilesStart.x) % previewWidth;
@@ -380,6 +383,11 @@ void SceneEditor::SetSelectedTilesDraw()
 
 		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * tileSize, previewTile->GetIndex().y * tileSize, tileSize, tileSize);
 		worldTile->SetTextureRect(previewRect, textureId);
+
+		TileCommand::TileState after = captureTileState(worldTile);
+
+		std::unique_ptr<Command> cmd = std::make_unique<TileCommand>(worldTile, before, after);
+		commandInvoker.execute(std::move(cmd));
 	}
 }
 
@@ -431,8 +439,7 @@ Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float 
 {
 	Tile* tilePreview = (Tile*)AddGo(new Tile(name));
 	tilePreview->sortLayer = sort;
-	tilePreview->SetShapePosition(posX + blankPos, posY + blankPos);
-	tilePreview->SetSpritePosition(posX + blankPos, posY + blankPos);
+	tilePreview->SetPosition(posX + blankPos, posY + blankPos);
 	tilePreview->SetState(Tile::TileState::UI);
 	tilePreview->SetType(Tile::TileType::None);
 	tilePreview->SetStateColor(Tile::TileState::UI);
@@ -591,7 +598,7 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		int tileScaleFactor = doc.GetCell<int>("tileScaleFactor", i);
 		int tileLayer = doc.GetCell<int>("tileLayer", i);
 
-		std::string textureId = doc.GetCell<std::string>("textureId", i);
+		textureId = doc.GetCell<std::string>("textureId", i);
 		sf::IntRect textureRect
 		(
 			doc.GetCell<int>("textureRectLeft", i),
@@ -604,9 +611,8 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		tile->SetIndex(tileIndexX, tileIndexY);
 		tile->SetType(static_cast<Tile::TileType>(tileType));
 		tile->SetTileSize(tileSize);
-		//tile->SetScale(tileScaleFactor);
 		tile->SetLayer(tileLayer);
-		tile->SetTexture(*RESOURCE_MGR.GetTexture(textureId));
+		tile->SetTexture(textureId);
 		tile->SetTextureRect(textureRect, textureId);
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
@@ -633,4 +639,17 @@ BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& te
 	newButton->OnClick = onClickAction;
 
 	return newButton;
+}
+
+TileCommand::TileState SceneEditor::captureTileState(const Tile* tile)
+{
+	TileCommand::TileState state;
+	state.type = tile->GetType();
+	state.index = tile->GetIndex();
+	state.textureId = textureId;
+	state.textureRect = tile->GetTextureRect();
+	state.size = tile->GetTileSize();
+	state.layer = tile->GetLayer();
+
+	return state;
 }

@@ -156,6 +156,8 @@
   <ItemGroup>
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
+    <ClCompile Include="Framework\Command.cpp" />
+    <ClCompile Include="Framework\CommandInvoker.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
     <ClCompile Include="GameObjects\BaseUI.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
@@ -191,11 +193,14 @@
     <ClCompile Include="Framework\SkillMgr.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
+    <ClCompile Include="Framework\TileCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
+    <ClInclude Include="Framework\Command.h" />
+    <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="ElementalSpell.h" />
     <ClInclude Include="GameObjects\BaseUI.h" />
@@ -218,6 +223,7 @@
     <ClInclude Include="Framework\SkillMgr.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
+    <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />

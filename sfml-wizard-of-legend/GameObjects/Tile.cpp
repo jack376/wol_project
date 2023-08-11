@@ -21,6 +21,7 @@ void Tile::Init()
 
 void Tile::Reset()
 {
+    shape.setFillColor(sf::Color::Transparent);
     if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
     {
         shape.setOutlineThickness(1.0f);
@@ -112,17 +113,17 @@ void Tile::SetOrigin(Origins origin)
     sf::Vector2f originPos(spriteTop.getTexture()->getSize());
     originPos.x *= ((int)origin % 3) * 0.5f;
     originPos.y *= ((int)origin / 3) * 0.5f;
+
     spriteTop.setOrigin(originPos);
+    spriteBottom.setOrigin(originPos);
+    shape.setOrigin(originPos);
 }
 
 void Tile::SetOrigin(float x, float y)
 {
     spriteTop.setOrigin(x, y);
-}
-
-void Tile::SetTileSize(int tileSize)
-{
-    this->tileSize = tileSize;
+    spriteBottom.setOrigin(x, y);
+    shape.setOrigin(x, y);
 }
 
 void Tile::SetShapeColor(sf::Color color)
@@ -135,19 +136,28 @@ void Tile::SetStrokeColor(sf::Color color)
     shape.setOutlineColor(sf::Color(color));
 }
 
-void Tile::SetShapePosition(float x, float y)
-{
-    shape.setPosition(x, y);
-}
-
-void Tile::SetSpritePosition(float x, float y)
+void Tile::SetPosition(float x, float y)
 {
     spriteTop.setPosition(x, y);
+    spriteBottom.setPosition(x, y);
+    shape.setPosition(x, y);
 }
 
 void Tile::SetScale(float scale)
 {
     spriteTop.setScale(scale, scale);
+    spriteBottom.setScale(scale, scale);
+    shape.setScale(scale, scale);
+}
+
+void Tile::SetTileSize(int tileSize)
+{
+    this->tileSize = tileSize;
+}
+
+int Tile::GetTileSize() const
+{
+    return tileSize;
 }
 
 void Tile::SetIndex(int x, int y)
@@ -230,9 +240,9 @@ Tile::TileState Tile::GetState() const
     return state;
 }
 
-void Tile::SetTexture(const sf::Texture& tex)
+void Tile::SetTexture(const std::string& path)
 {
-    spriteTop.setTexture(tex);
+    spriteTop.setTexture(*RESOURCE_MGR.GetTexture(path));
 }
 
 void Tile::SetTextureRect(const sf::IntRect& rect, const std::string& path)

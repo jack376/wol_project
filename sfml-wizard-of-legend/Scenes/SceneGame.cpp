@@ -122,8 +122,7 @@ Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int
 {
 	Tile* tile = (Tile*)AddGo(new Tile(name));
 	tile->sortLayer = sort;
-	tile->SetShapePosition(posX, posY);
-	tile->SetSpritePosition(posX, posY);
+	tile->SetPosition(posX, posY);
 
 	return tile;
 }
@@ -157,9 +156,9 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetTileSize(tileSize);
 		tile->SetScale(tileScaleFactor);
 		tile->SetLayer(tileLayer);
-		tile->SetTexture(*RESOURCE_MGR.GetTexture(textureId));
+		tile->SetTexture(textureId);
 		tile->SetTextureRect(textureRect, textureId);
-		tile->SetOrigin(256.0f, 256.0f);
+		tile->SetOrigin(Origins::MC);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
 	std::cout << "SYSTEM : Load Success" << std::endl;

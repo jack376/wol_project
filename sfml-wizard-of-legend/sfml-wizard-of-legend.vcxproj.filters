@@ -31,6 +31,10 @@
     <ClCompile Include="Framework\SkillMgr.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
+    <ClCompile Include="DataTables\TileInfoTable.cpp" />
+    <ClCompile Include="Framework\Command.cpp" />
+    <ClCompile Include="Framework\TileCommand.cpp" />
+    <ClCompile Include="Framework\CommandInvoker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -163,9 +167,10 @@
     <ClCompile Include="Scenes\SceneEditor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DataTables\TileInfoTable.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <ClInclude Include="DataTables\TileInfoTable.h" />
+    <ClInclude Include="Framework\Command.h" />
+    <ClInclude Include="Framework\TileCommand.h" />
+    <ClInclude Include="Framework\CommandInvoker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -322,9 +327,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\SceneEditor.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DataTables\TileInfoTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

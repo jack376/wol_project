@@ -1,6 +1,8 @@
 #pragma once
 #include "Scene.h"
 #include "Tile.h"
+#include "TileCommand.h"
+#include "CommandInvoker.h"
 
 class TextGo;
 class SpriteGo;
@@ -52,6 +54,8 @@ protected:
 
 	sf::Vector2i selectPaletteIndex;
 
+	CommandInvoker commandInvoker;
+
 public:
 	SceneEditor();
 	virtual ~SceneEditor() override = default;
@@ -83,4 +87,5 @@ public:
 	void LoadFromCSV(const std::string& path);
 
 	BaseUI* CreateButton(const std::string& name, const std::string& text, float posX, float posY, float size, int texIndex, std::function<void()> onClickAction);
+	TileCommand::TileState captureTileState(const Tile* tile);
 };

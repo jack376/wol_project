@@ -63,12 +63,13 @@ public:
 
     void SetOrigin(Origins origin);
     void SetOrigin(float x, float y);
-    void SetTileSize(int tileSize);
     void SetShapeColor(sf::Color color);
-    void SetShapePosition(float x, float y);
     void SetStrokeColor(sf::Color color = sf::Color::Transparent);
-    void SetSpritePosition(float x, float y);
+    void SetPosition(float x, float y);
     void SetScale(float scale = 1.0f);
+
+    void SetTileSize(int tileSize);
+    int GetTileSize() const;
 
     void SetIndex(int x, int y);
     sf::Vector2i GetIndex() const;
@@ -87,7 +88,7 @@ public:
     void SetStateColor(TileState state = TileState::Blank);
     TileState GetState() const;
 
-    void SetTexture(const sf::Texture& tex);
+    void SetTexture(const std::string& path);
     void SetTextureRect(const sf::IntRect& rect, const std::string& path);
     sf::IntRect GetTextureRect() const;
 
