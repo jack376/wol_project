@@ -1,7 +1,7 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
-
+#include "BoxCollider2D.h"
 enum class Dir
 {
 	UpRight,
@@ -55,7 +55,7 @@ private:
 
 	sf::CircleShape attackPosCol;	// 스킬 생성 지점 가시화
 
-
+	BoxCollider2D obb;
 
 
 	// 스킬 클래스

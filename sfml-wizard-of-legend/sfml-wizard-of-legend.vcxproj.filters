@@ -32,6 +32,7 @@
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
+    <ClCompile Include="BoxCollider2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -150,6 +151,7 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClInclude Include="DataTables\TileInfoTable.h" />
+    <ClInclude Include="BoxCollider2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -221,40 +223,16 @@
     <ClInclude Include="UI\InGame\UIButton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Cookies\Cookie.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\Cookies\Pancake.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Items\Item.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Map.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Background.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\Platforms\Platform.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Items\ItemSpeedUp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Effects\EffectSpeedUp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Items\Coin.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="UI\InGame\UIHp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Items\ItemBigHealPack.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Items\ItemBig.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\TextGo.h">
@@ -269,31 +247,10 @@
     <ClInclude Include="UI\InGame\Pause.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\SceneLobby.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Lobby\Lobby.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Lobby\LobbyCookie.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\Cookies\Pirate.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Cookies\Moonlighter.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Lobby\StorageBox.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\PatternEditor.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\PatternEditor\PatternObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\InGame\GameOver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\UIButton.h">

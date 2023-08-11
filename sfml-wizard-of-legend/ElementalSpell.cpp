@@ -23,7 +23,7 @@ void ElementalSpell::Init()
 	collider->rect.setOutlineThickness(1.f);
 	collider->rect.setOutlineColor(sf::Color::Blue);
 	collider->rect.setFillColor(sf::Color::Transparent);
-	collider->rect.setSize({ 100, 100 });
+	collider->rect.setSize({ 100, 80 });
 	collider->SetPosition(0, 0);
 	collider->SetActive(false);
 }
@@ -70,6 +70,7 @@ void ElementalSpell::Update(float dt)
 		collider->SetPosition(player->GetAttackPos());
 		SetPosition(player->GetAttackPos());
 		sprite.setRotation(angle);
+		collider->rect.setRotation(angle);
 		comboQueue.push(FRAMEWORK.GetGamePlayTime());
 	}
 
@@ -111,7 +112,8 @@ void ElementalSpell::Update(float dt)
 
 
 	// 점을 기준으로 충돌
-	isCol = collider->rect.getGlobalBounds().contains(player->GetMonster()->GetPosition());
+	isCol = obbManager.ObbCol(collider->rect, monster->rect);
+	//isCol = collider->rect.getGlobalBounds().contains(player->GetMonster()->GetPosition());
 
 	// 면을 기준으로 충돌
 	//isCol = collider->rect.getGlobalBounds().intersects(player->GetMonster()->sprite.getGlobalBounds());

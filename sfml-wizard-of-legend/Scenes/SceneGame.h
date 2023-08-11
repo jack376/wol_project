@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "BoxCollider2D.h"
 
 class UIButton;
 class TextGo;
@@ -7,6 +8,7 @@ class SpriteGo;
 class Tile;
 
 class Player;
+class Monster;
 class ElementalSpell;
 
 class SceneGame : public Scene
@@ -16,6 +18,14 @@ protected:
 	ElementalSpell* tempWindSlash;
 	std::vector<std::vector<Tile*>> tilesWorld;
 
+	BoxCollider2D colliderManager;
+
+	Monster* monster;
+
+	bool isCol = false;
+
+	float debugTimer = 0.f;
+	float debugDuration = 1.f;
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;

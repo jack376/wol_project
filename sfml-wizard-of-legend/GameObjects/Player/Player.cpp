@@ -20,10 +20,11 @@ void Player::Init()
 	SetOrigin(Origins::MC);
 
 	// Reset인지 Init()인지 생각
-	destPos.push_back({ dashDistance , -dashDistance });
-	destPos.push_back({ -dashDistance , -dashDistance });
-	destPos.push_back({ dashDistance , dashDistance });
-	destPos.push_back({ -dashDistance , dashDistance });
+	sf::Vector2f normalize = Utils::Normalize({ 1, 1 });
+	destPos.push_back({ dashDistance * normalize.x , -dashDistance * normalize.y });
+	destPos.push_back({ -dashDistance * normalize.x, -dashDistance * normalize.y });
+	destPos.push_back({ dashDistance * normalize.x , dashDistance * normalize.y });
+	destPos.push_back({ -dashDistance * normalize.x, dashDistance * normalize.y });
 	destPos.push_back({ 0 , -dashDistance });
 	destPos.push_back({ dashDistance , 0 });
 	destPos.push_back({ 0 , dashDistance });

@@ -100,3 +100,4 @@ enum class UiType
 };
 
 #include "AnimationClip.h"
+using RectVertexArray = std::array<sf::Vector2f, 4>;

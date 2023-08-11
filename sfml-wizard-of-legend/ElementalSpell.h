@@ -1,10 +1,12 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
+#include "BoxCollider2D.h"
 
 class SpriteGo;
 class SceneGame;
 class Player;
+class Monster;
 
 
 class ElementalSpell : public SpriteGo
@@ -13,8 +15,11 @@ protected:
 	// 현재는 하드코딩이지만 데이터를 넘겨 받는 식으로 수정
 	SceneGame* scene;
 	Player* player;
+	Monster* monster;
 
 	AnimationController anim;
+	
+	BoxCollider2D obbManager;
 	SpriteGo* collider;
 
 	std::queue <float> comboQueue;
@@ -76,5 +81,8 @@ public:
 
 	void SetScene(SceneGame* scene) { this->scene = scene; }
 	void SetPlayer(Player* player) { this->player = player; }
+	void SetMonster(Monster* monster) { this->monster = monster; }
+
+	sf::RectangleShape& GetCollider() const { return collider->rect; }
 };
 
