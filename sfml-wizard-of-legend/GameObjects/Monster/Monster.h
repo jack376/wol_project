@@ -56,6 +56,7 @@ protected:
 	float knockBackTime = 0.15f;
 	float knockBackTimer = 0.f;
 	bool isAttacked = false;
+	bool isAttacking = false;
 
 	Player* player = nullptr;
 
@@ -80,7 +81,7 @@ public:
 	void HandleState(float dt);
 
 	void Idle();
-	virtual void Attack(float dt);
+	virtual void Attack();
 	void Move(float dt);
 	void Die();
 	void KnockBack();

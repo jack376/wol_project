@@ -4,6 +4,7 @@ enum class AnimationLoopTypes
 {
 	Single,
 	Loop,
+	Custom,
 };
 
 struct AnimationFrame

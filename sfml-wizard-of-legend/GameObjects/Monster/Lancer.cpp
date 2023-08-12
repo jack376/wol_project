@@ -2,6 +2,7 @@
 #include "Lancer.h"
 #include "ResourceMgr.h"
 #include "Player.h"
+//#include "AnimationController.h"
 
 Lancer::Lancer(MonsterId id, const std::string& textureId, const std::string& n)
 	: Monster(id, textureId, n)
@@ -18,20 +19,28 @@ void Lancer::Init()
 
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackUp.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackDown.csv"));
-    spear.SetName(stat.name + "Spear");
-    spear.textureId = "animations/" + stat.name + "_Spear.csv";
-    spear.Init();
+    spear.AddClip("animations/Lancer_Spear.csv");
     SpriteEffect* ptr = &spear;
     spear.PlaySup = [this, ptr]() {
-        spear.GetAnimation()->SetFramePos(0, {position.x, position.y - 10.f});
-        if (ptr->dir.x > 0)
-            spear.GetAnimation()->SetFramePos(1, sf::Vector2f(position.x + 50, position.y - 10.f));
+        if (animation.GetCurrentClipId() == "LancerAttack")
+        {
+            spear.SetOrigin(Origins::BC);
+            if (ptr->dir.x > 0)
+                spear.GetAnimation()->SetFramePos(1, sf::Vector2f(position.x + 50, position.y - 10.f));
+            else
+                spear.GetAnimation()->SetFramePos(1, sf::Vector2f(position.x - 50, position.y - 10.f));
+        }
         else
-            spear.GetAnimation()->SetFramePos(1, sf::Vector2f(position.x - 50, position.y - 10.f));   
+        {
+            spear.SetOrigin(Origins::BC);
+            if (ptr->dir.y > 0)
+                spear.GetAnimation()->SetFramePos(1, { position.x + 30, position.y - 5 });
+            else
+                spear.GetAnimation()->SetFramePos(1, { position.x + 30, position.y - 15 });
+        }
+        spear.SetPosition(spear.sprite.getPosition());
     };
-    attackEffect.SetName(stat.name + "AttackEffect");
-    attackEffect.textureId = "animations/" + stat.name + "_AttackEffect.csv";
-    attackEffect.Init();
+    attackEffect.AddClip("animations/Lancer_AttackEffect.csv");
     ptr = &attackEffect;
     attackEffect.PlaySup = [this, ptr]() {
         if (ptr->GetAnimation()->IsAnimEndFrame())
@@ -54,61 +63,78 @@ void Lancer::Reset()
 void Lancer::Update(float dt)
 {
     Monster::Update(dt);
-    if (currentState != MonsterState::Attacking)
-    {
-        spear.SetActive(false);
-        attackEffect.SetActive(false);
-    }
 
-    if (spear.GetActive())
+    if (currentState != MonsterState::Attacking)
+        spear.SetActive(false);
+    else
     {
         spear.Update(dt);
         spear.PlaySup();
-        if (spear.GetAnimation()->IsAnimEndFrame())
-            attackEffect.Play(spear.GetPosition() + spear.dir * 50.f, spear.dir);
     }
-        
-    if (attackEffect.GetActive())
+
+    if (!isEffect && spear.GetAnimation()->IsPlaying())
     {
-        attackEffect.Update(dt);
-        attackEffect.PlaySup();
+        chargeTimer += dt;
+        if (chargeTimer >= chargeRate)
+        {
+            attackEffect.Play("LancerAttackEffect", spear.sprite.getPosition(), spear.dir);
+            isEffect = true;
+            chargeTimer = 0.f;
+        }      
     }
+   
+    attackEffect.Update(dt);
+    attackEffect.PlaySup();
 }
 
 void Lancer::Draw(sf::RenderWindow& window)
 {
-    if (attackEffect.GetActive())
-        attackEffect.Draw(window);
     if (spear.GetActive())
         spear.Draw(window);
     Monster::Draw(window);
+    if (attackEffect.GetActive())
+        attackEffect.Draw(window);
 }
 
-void Lancer::Attack(float dt)
+void Lancer::Attack()
 {
     SetState(MonsterState::Attacking);
     if (attackTimer >= stat.attackRate)
     {
         if (abs(look.x) >= abs(look.y))
         {
-            animation.Play(stat.name + "AttackCharge");
-            spear.Play("SpearCharge", position, look);
+            animation.Play(stat.name + "Attack");
+            spear.Play("LancerSpear", position, look);
         }
-        else if (look.y > 0)
-            animation.Play(stat.name + "AttackDown");
         else
-            animation.Play(stat.name + "AttackUp");
-
+        {
+            spear.SetOrigin(Origins::MC);
+            if (look.y > 0)
+            {
+                animation.Play(stat.name + "AttackDown");
+                spear.Play("LancerSpear", { position.x + 20, position.y - 70 }, look);
+            }
+            else
+            {
+                animation.Play(stat.name + "AttackUp");
+                spear.Play("LancerSpear", { position.x + 20, position.y + 70 }, look);
+            }
+            SetFlipX(false);
+        }
         SetOrigin(origin);
         SetRectBox();
+        spear.SetActive(true);
+        attackEffect.SetActive(true);
         attackTimer = 0.f; 
         isAttacked = false;
+        isAttacking = true;
+        isEffect = false;
     }
     if (!isAttacked && player->IsAlive())
     {
+        //OBB적용 필요
         if (attackEffect.sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
         {
-            attackTimer = 0.f;
             player->SetHp(-stat.damage);
             isAttacked = true;
         }

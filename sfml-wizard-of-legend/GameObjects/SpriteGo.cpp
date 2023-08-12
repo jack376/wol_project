@@ -83,6 +83,7 @@ void SpriteGo::Reset()
 
 void SpriteGo::Update(float dt)
 {
+	
 }
 
 void SpriteGo::Draw(sf::RenderWindow& window)

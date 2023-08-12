@@ -5,7 +5,9 @@ class Lancer :
 {
 protected:
 	SpriteEffect spear;
-	float chargeRate = 1.f; 
+	float chargeRate = 0.5f; 
+	float chargeTimer = 0.f;
+	bool isEffect = false;
 
 public:
 	Lancer(MonsterId id, const std::string& textureId = "", const std::string& n = "");
@@ -17,6 +19,6 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	virtual void Attack(float dt);
+	virtual void Attack();
 };
 

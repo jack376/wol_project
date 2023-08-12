@@ -38,5 +38,5 @@ public:
 	sf::FloatRect GetCurrentRect();
 
 	const std::string& GetCurrentClipId() { return currentClip->id; }
-	
+	float GetAccumTime() { return accumTime; }
 };

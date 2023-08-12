@@ -62,6 +62,9 @@ void Monster::Reset()
         attackRange.setOutlineColor(sf::Color::Red);
         searchRange.setFillColor(sf::Color::Transparent);
         attackRange.setFillColor(sf::Color::Transparent);
+        rect.setFillColor(sf::Color::Transparent);
+        rect.setOutlineColor(sf::Color::Blue);
+        rect.setOutlineThickness(1.f);
     }  
 }
 
@@ -76,9 +79,6 @@ void Monster::Update(float dt)
     searchRange.setPosition(position);
     attackRange.setPosition(position);
     rect.setPosition(position);
-    rect.setFillColor(sf::Color::Transparent);
-    rect.setOutlineColor(sf::Color::Blue);
-    rect.setOutlineThickness(1.f);
 }
 
 void Monster::Draw(sf::RenderWindow& window)
@@ -100,23 +100,28 @@ void Monster::HandleState(float dt)
     switch (currentState) {
     case MonsterState::Idle:
         //std::cout << "Monster is idle.\n";
+        isAttacking = false;
         break;
 
     case MonsterState::Moving:
         //std::cout << "Monster is moving.\n";
+        isAttacking = false;
         break;
 
     case MonsterState::Attacking:
         //std::cout << "Monster is attacking.\n";
         attackTimer += dt;
+        isAttacking = attackTimer >= stat.attackRate ? false : true;
         break;
 
     case MonsterState::Dead:
         //std::cout << "Monster is dead.\n";
+        isAttacking = false;
         break;
 
     case MonsterState::KnockBack:
         //std::cout << "Monster is KnockBack.\n";
+        isAttacking = false;
         break;
     }
 }
@@ -129,7 +134,7 @@ void Monster::Idle()
     SetRectBox();
 }
 
-void Monster::Attack(float dt)
+void Monster::Attack()
 {
     SetState(MonsterState::Attacking);
     //attackTimer += dt;
@@ -230,11 +235,11 @@ void Monster::HandleBehavior(float dt)
         }
         else if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
         {
-            if (currentState != MonsterState::Attacking)
+            if (!isAttacking)
                 SetLook(playerPos);
             if (distance <= stat.attackRange)
-                Attack(dt);
-            else if (attackTimer >= stat.attackRate)
+                Attack();
+            else if (!isAttacking)
                 Move(dt);
         }
         else
