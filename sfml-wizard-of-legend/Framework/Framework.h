@@ -13,7 +13,7 @@ protected:
 	sf::RenderWindow window;
 	sf::Clock clock;
 
-	int screenWidth = 2400;
+	int screenWidth = 1920;
 	int screenHeight = 900;
 	std::string title = "SFML_Wizard_Of_Legend";
 

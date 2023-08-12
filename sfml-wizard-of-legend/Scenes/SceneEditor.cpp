@@ -255,6 +255,13 @@ void SceneEditor::Update(float dt)
 		isTileLeyer = false;
 		std::cout << "Current Layer : Bottom" << std::endl;
 	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
+	{
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::J))
+	{
+	}
 }
 
 void SceneEditor::Draw(sf::RenderWindow& window)

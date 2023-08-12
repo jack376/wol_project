@@ -25,8 +25,7 @@ void CommandInvoker::Undo()
         {
             command->Undo();
         }
-        //std::cout << "undo ID : " << commandId << std::endl;
-        //std::cout << "undoStack ID : " << undoStack.top() << std::endl;
+        std::cout << "UndoStack Command ID : " << undoStack.top() << std::endl;
 
         redoStack.push(commandId);
         undoStack.pop();
@@ -42,8 +41,7 @@ void CommandInvoker::Redo()
         {
             command->Execute();
         }
-        //std::cout << "redo ID : " << commandId << std::endl;
-        //std::cout << "redoStack ID : " << redoStack.top() << std::endl;
+        std::cout << "RedoStack Command ID : " << redoStack.top() << std::endl;
 
         undoStack.push(commandId);
         redoStack.pop();
