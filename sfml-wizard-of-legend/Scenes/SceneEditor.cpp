@@ -213,13 +213,13 @@ void SceneEditor::Update(float dt)
 	// Undo
 	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
 	{
-		commandInvoker.undo();	
+		commandInvoker.Undo();	
 	}
 
 	// Redo
 	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::X))
 	{
-		commandInvoker.redo();
+		commandInvoker.Redo();
 	}
 
 	// SetTileType
@@ -370,35 +370,35 @@ void SceneEditor::SetSelectedTilesDraw()
 	{
 		return;
 	}
+	currentCommandId++;
+	std::vector<std::unique_ptr<Command>> tileCommands;
 
 	sf::Vector2i indexPreviewStart = selectedPreview[0]->GetIndex();
-
 	int previewWidth  = std::abs(endPreviewIndex.x - startPreviewIndex.x) + 1;
 	int previewHeight = std::abs(endPreviewIndex.y - startPreviewIndex.y) + 1;
-
 	sf::Vector2i indexTilesStart = selectedTiles[0]->GetIndex();
 
 	for (Tile* worldTile : selectedTiles)
 	{
-		TileCommand::TileState before = captureTileState(worldTile);
+		TileCommand::TileState before = CaptureTileState(worldTile);
 
 		sf::Vector2i indexWorld = worldTile->GetIndex();
-
 		int offsetX = (indexWorld.x - indexTilesStart.x) % previewWidth;
 		int offsetY = (indexWorld.y - indexTilesStart.y) % previewHeight;
-
 		sf::Vector2i matchPreviewIndex(indexPreviewStart.x + offsetX, indexPreviewStart.y + offsetY);
 
 		Tile* previewTile = tilesPreview[matchPreviewIndex.x][matchPreviewIndex.y];
 
 		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * tileSize, previewTile->GetIndex().y * tileSize, tileSize, tileSize);
+		
 		isTileLeyer ? worldTile->SetTextureRectTop(previewRect, textureId) : worldTile->SetTextureRectBottom(previewRect, textureId);
 
-		TileCommand::TileState after = captureTileState(worldTile);
+		TileCommand::TileState after = CaptureTileState(worldTile);
 
-		std::unique_ptr<Command> cmd = std::make_unique<TileCommand>(worldTile, before, after);
-		commandInvoker.execute(std::move(cmd));
+		std::unique_ptr<Command> command = std::make_unique<TileCommand>(worldTile, before, after);
+		tileCommands.push_back(std::move(command));
 	}
+	commandInvoker.Execute(std::move(tileCommands), currentCommandId);
 }
 
 void SceneEditor::SetSelectedTilesArea()
@@ -651,7 +651,7 @@ BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& te
 	return newButton;
 }
 
-TileCommand::TileState SceneEditor::captureTileState(const Tile* tile)
+TileCommand::TileState SceneEditor::CaptureTileState(const Tile* tile)
 {
 	TileCommand::TileState state;
 	state.textureId = textureId;

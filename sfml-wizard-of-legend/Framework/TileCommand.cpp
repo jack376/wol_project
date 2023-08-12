@@ -1,17 +1,17 @@
 #include "stdafx.h"
 #include "TileCommand.h"
 
-void TileCommand::execute()
+void TileCommand::Execute()
 {
-    applyState(targetTile, afterState);
+    ApplyState(targetTile, afterState);
 }
 
-void TileCommand::undo()
+void TileCommand::Undo()
 {
-    applyState(targetTile, beforeState);
+    ApplyState(targetTile, beforeState);
 }
 
-void TileCommand::applyState(Tile* tile, const TileState& state)
+void TileCommand::ApplyState(Tile* tile, const TileState& state)
 {
     tile->SetTexture(state.textureId);
     tile->SetType(state.type);

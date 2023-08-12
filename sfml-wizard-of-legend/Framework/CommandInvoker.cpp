@@ -1,32 +1,51 @@
 #include "stdafx.h"
 #include "CommandInvoker.h"
 
-void CommandInvoker::execute(std::unique_ptr<Command> command)
+void CommandInvoker::Execute(std::vector<std::unique_ptr<Command>> commands, int commandId)
 {
-    command->execute();
-    undoStack.push(std::move(command));
+    for (auto& command : commands)
+    {
+        command->Execute();
+        commandStorage[commandId].push_back(std::move(command));
+    }
+    undoStack.push(commandId);
+
     while (!redoStack.empty())
     {
         redoStack.pop();
     }
 }
 
-void CommandInvoker::undo()
+void CommandInvoker::Undo()
 {
     if (!undoStack.empty())
     {
-        undoStack.top()->undo();
-        redoStack.push(std::move(undoStack.top()));
+        int commandId = undoStack.top();
+        for (auto& command : commandStorage[commandId]) 
+        {
+            command->Undo();
+        }
+        //std::cout << "undo ID : " << commandId << std::endl;
+        //std::cout << "undoStack ID : " << undoStack.top() << std::endl;
+
+        redoStack.push(commandId);
         undoStack.pop();
     }
 }
 
-void CommandInvoker::redo()
+void CommandInvoker::Redo()
 {
     if (!redoStack.empty())
     {
-        redoStack.top()->execute();
-        undoStack.push(std::move(redoStack.top()));
+        int commandId = redoStack.top();
+        for (auto& command : commandStorage[commandId]) 
+        {
+            command->Execute();
+        }
+        //std::cout << "redo ID : " << commandId << std::endl;
+        //std::cout << "redoStack ID : " << redoStack.top() << std::endl;
+
+        undoStack.push(commandId);
         redoStack.pop();
     }
 }

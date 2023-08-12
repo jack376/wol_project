@@ -55,6 +55,7 @@ protected:
 	sf::Vector2i selectPaletteIndex;
 
 	CommandInvoker commandInvoker;
+	int currentCommandId = 0;
 
 	bool isTileLeyer = false;
 
@@ -89,5 +90,5 @@ public:
 	void LoadFromCSV(const std::string& path);
 
 	BaseUI* CreateButton(const std::string& name, const std::string& text, float posX, float posY, float size, int texIndex, std::function<void()> onClickAction);
-	TileCommand::TileState captureTileState(const Tile* tile);
+	TileCommand::TileState CaptureTileState(const Tile* tile);
 };

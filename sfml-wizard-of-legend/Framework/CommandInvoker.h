@@ -4,11 +4,13 @@
 class CommandInvoker
 {
 protected:
-    std::stack<std::unique_ptr<Command>> undoStack;
-    std::stack<std::unique_ptr<Command>> redoStack;
+    std::map<int, std::vector<std::unique_ptr<Command>>> commandStorage;
+
+    std::stack<int> undoStack;
+    std::stack<int> redoStack;
 
 public:
-    void execute(std::unique_ptr<Command> command);
-    void undo();
-    void redo();
+    void Execute(std::vector<std::unique_ptr<Command>> commands, int commandId);
+    void Undo();
+    void Redo();
 };

@@ -26,9 +26,9 @@ public:
     TileCommand(Tile* tile, const TileState& before, const TileState& after)
         : targetTile(tile), beforeState(before), afterState(after) {}
 
-    void execute() override;
-    void undo() override;
+    void Execute() override;
+    void Undo() override;
 
-    void applyState(Tile* tile, const TileState& state);
+    void ApplyState(Tile* tile, const TileState& state);
 };
 
