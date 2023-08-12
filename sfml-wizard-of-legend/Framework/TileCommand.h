@@ -11,7 +11,8 @@ public:
         std::string textureId;
         Tile::TileType type;
         sf::Vector2i index;
-        sf::IntRect textureRect;
+        sf::IntRect topRect;
+        sf::IntRect bottomRect;
         int size;
         int layer;
     };

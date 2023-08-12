@@ -243,6 +243,18 @@ void SceneEditor::Update(float dt)
 	{
 		SetSelectedTilesType(Tile::TileType::EventTrigger);
 	}
+
+	// SetTileLayer
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
+	{
+		isTileLeyer = true;
+		std::cout << "Current Layer : Top" << std::endl;
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R))
+	{
+		isTileLeyer = false;
+		std::cout << "Current Layer : Bottom" << std::endl;
+	}
 }
 
 void SceneEditor::Draw(sf::RenderWindow& window)
@@ -380,7 +392,7 @@ void SceneEditor::SetSelectedTilesDraw()
 		Tile* previewTile = tilesPreview[matchPreviewIndex.x][matchPreviewIndex.y];
 
 		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * tileSize, previewTile->GetIndex().y * tileSize, tileSize, tileSize);
-		worldTile->SetTextureRect(previewRect, textureId);
+		isTileLeyer ? worldTile->SetTextureRectTop(previewRect, textureId) : worldTile->SetTextureRectBottom(previewRect, textureId);
 
 		TileCommand::TileState after = captureTileState(worldTile);
 
@@ -411,7 +423,7 @@ void SceneEditor::SetSelectedTilesArea()
 			tilesWorld[x][y]->SetIndex(x, y);
 			selectedTiles.push_back(tilesWorld[x][y]);
 
-			std::cout << "TileType : " << (int)tilesWorld[x][y]->GetType() << std::endl;
+			//std::cout << "TileType : " << (int)tilesWorld[x][y]->GetType() << std::endl;
 		}
 	}
 }
@@ -512,8 +524,6 @@ void SceneEditor::SetSelectedPreviewArea()
 			tilesPreview[x][y]->SetStateColor(Tile::TileState::SelectUI);
 			tilesPreview[x][y]->SetIndex(x, y);
 			selectedPreview.push_back(tilesPreview[x][y]);
-
-			//std::cout << "TileType : " << (int)tilesPreview[x][y]->GetType() << std::endl;
 		}
 	}
 }
@@ -544,14 +554,14 @@ void SceneEditor::SaveToCSV(const std::string& path)
 	doc.SetColumnName(2,  "tileIndexY");
 	doc.SetColumnName(3,  "tileType");
 	doc.SetColumnName(4,  "tileSize");
-	doc.SetColumnName(5,  "tileScaleFactor");
+	doc.SetColumnName(5,  "tileScale");
 	doc.SetColumnName(6,  "tileLayer");
 
 	doc.SetColumnName(7,  "textureId");
-	doc.SetColumnName(8,  "textureRectLeft");
-	doc.SetColumnName(9,  "textureRectTop");
-	doc.SetColumnName(10, "textureRectWidth");
-	doc.SetColumnName(11, "textureRectHeight");
+	doc.SetColumnName(8,  "topTextureRectL");
+	doc.SetColumnName(9,  "topTextureRectT");
+	doc.SetColumnName(10, "bottomTextureRectL");
+	doc.SetColumnName(11, "bottomTextureRectT");
 
 	for (int i = 0; i < tilesWorld.size(); i++)
 	{
@@ -562,19 +572,23 @@ void SceneEditor::SaveToCSV(const std::string& path)
 			{
 				SpriteGo* atlas = (SpriteGo*)FindGo("AtlasPreview");
 				doc.SetCell<std::string>("tileName", i * tilesWorld.size() + j, "Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")");
+
 				doc.SetCell<int>("tileIndexX", i * tilesWorld[i].size() + j, i);
 				doc.SetCell<int>("tileIndexY", i * tilesWorld.size() + j, j);
-				doc.SetCell<int>("tileType", i * tilesWorld.size() + j, (int)tile->GetType());
-				doc.SetCell<int>("tileSize", i * tilesWorld.size() + j, (int)tileSize);
-				doc.SetCell<int>("tileScaleFactor", i * tilesWorld.size() + j, tileScaleFactor);
-				doc.SetCell<int>("tileLayer", i * tilesWorld.size() + j, tile->GetLayer());
+				doc.SetCell<int>("tileType",   i * tilesWorld.size() + j, (int)tile-> GetType());
+				doc.SetCell<int>("tileSize",   i * tilesWorld.size() + j, (int)tileSize);
+				doc.SetCell<int>("tileScale",  i * tilesWorld.size() + j, tileScaleFactor);
+				doc.SetCell<int>("tileLayer",  i * tilesWorld.size() + j, tile-> GetLayer());
 
-				sf::IntRect rect = tile->GetTextureRect();
 				doc.SetCell<std::string>("textureId", i * tilesWorld.size() + j, atlas->textureId);
-				doc.SetCell<int>("textureRectLeft", i * tilesWorld.size() + j, rect.left);
-				doc.SetCell<int>("textureRectTop", i * tilesWorld.size() + j, rect.top);
-				doc.SetCell<int>("textureRectWidth", i * tilesWorld.size() + j, rect.width);
-				doc.SetCell<int>("textureRectHeight", i * tilesWorld.size() + j, rect.height);
+
+				sf::IntRect topRect = tile->GetTextureRectTop();
+				doc.SetCell<int>("topTextureRectL", i * tilesWorld.size() + j, topRect.left);
+				doc.SetCell<int>("topTextureRectT", i * tilesWorld.size() + j, topRect.top);
+
+				sf::IntRect bottomRect = tile->GetTextureRectBottom();
+				doc.SetCell<int>("bottomTextureRectL", i * tilesWorld.size() + j, bottomRect.left);
+				doc.SetCell<int>("bottomTextureRectT", i * tilesWorld.size() + j, bottomRect.top);
 			}
 		}
 	}
@@ -588,22 +602,19 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 
 	for (size_t i = 0; i < doc.GetRowCount(); i++)
 	{
-		std::string tileName = doc.GetCell<std::string>("tileName", i);
+		std::string tileName   = doc.GetCell<std::string>("tileName", i);
+
 		int tileIndexX = doc.GetCell<int>("tileIndexX", i);
 		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
-		int tileType = doc.GetCell<int>("tileType", i);
-		int tileSize = doc.GetCell<int>("tileSize", i);
-		int tileScaleFactor = doc.GetCell<int>("tileScaleFactor", i);
-		int tileLayer = doc.GetCell<int>("tileLayer", i);
+		int tileType   = doc.GetCell<int>("tileType", i);
+		int tileSize   = doc.GetCell<int>("tileSize", i);
+		int tileScale  = doc.GetCell<int>("tileScale", i);
+		int tileLayer  = doc.GetCell<int>("tileLayer", i);
 
 		textureId = doc.GetCell<std::string>("textureId", i);
-		sf::IntRect textureRect
-		(
-			doc.GetCell<int>("textureRectLeft", i),
-			doc.GetCell<int>("textureRectTop", i),
-			doc.GetCell<int>("textureRectWidth", i),
-			doc.GetCell<int>("textureRectHeight", i)
-		);
+
+		sf::IntRect topTextureRect(doc.GetCell<int>("topTextureRectL", i), doc.GetCell<int>("topTextureRectT", i), tileSize, tileSize);
+		sf::IntRect bottomTextureRect(doc.GetCell<int>("bottomTextureRectL", i), doc.GetCell<int>("bottomTextureRectT", i), tileSize, tileSize);
 
 		Tile* tile = (Tile*)FindGo(tileName);
 		tile->SetIndex(tileIndexX, tileIndexY);
@@ -611,7 +622,8 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		tile->SetTileSize(tileSize);
 		tile->SetLayer(tileLayer);
 		tile->SetTexture(textureId);
-		tile->SetTextureRect(textureRect, textureId);
+		tile->SetTextureRectTop(topTextureRect, textureId);
+		tile->SetTextureRectBottom(bottomTextureRect, textureId);
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
@@ -643,11 +655,12 @@ TileCommand::TileState SceneEditor::captureTileState(const Tile* tile)
 {
 	TileCommand::TileState state;
 	state.textureId = textureId;
-	state.type        = tile-> GetType();
-	state.index       = tile-> GetIndex();
-	state.textureRect = tile-> GetTextureRect();
-	state.size        = tile-> GetTileSize();
-	state.layer       = tile-> GetLayer();
+	state.type       = tile-> GetType();
+	state.index      = tile-> GetIndex();
+	state.topRect    = tile-> GetTextureRectTop();
+	state.bottomRect = tile-> GetTextureRectBottom();
+	state.size       = tile-> GetTileSize();
+	state.layer      = tile-> GetLayer();
 
 	return state;
 }

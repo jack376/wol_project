@@ -56,6 +56,8 @@ protected:
 
 	CommandInvoker commandInvoker;
 
+	bool isTileLeyer = false;
+
 public:
 	SceneEditor();
 	virtual ~SceneEditor() override = default;

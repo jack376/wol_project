@@ -255,18 +255,31 @@ Tile::TileState Tile::GetState() const
 void Tile::SetTexture(const std::string& path)
 {
     spriteTop.setTexture(*RESOURCE_MGR.GetTexture(path));
+    spriteBottom.setTexture(*RESOURCE_MGR.GetTexture(path));
 }
 
-void Tile::SetTextureRect(const sf::IntRect& rect, const std::string& path)
+void Tile::SetTextureRectTop(const sf::IntRect& rect, const std::string& path)
 {
     spriteTop.setTexture(*RESOURCE_MGR.GetTexture(path));
     spriteTop.setTextureRect(rect);
     spriteTop.setColor(sf::Color::White);
 }
 
-sf::IntRect Tile::GetTextureRect() const
+sf::IntRect Tile::GetTextureRectTop() const
 {
     return spriteTop.getTextureRect();
+}
+
+void Tile::SetTextureRectBottom(const sf::IntRect& rect, const std::string& path)
+{
+    spriteBottom.setTexture(*RESOURCE_MGR.GetTexture(path));
+    spriteBottom.setTextureRect(rect);
+    spriteBottom.setColor(sf::Color::White);
+}
+
+sf::IntRect Tile::GetTextureRectBottom() const
+{
+    return spriteBottom.getTextureRect();
 }
 
 sf::Vector2f Tile::GetMousePosBasedOnState() const

@@ -10,7 +10,15 @@
 
 Scene::Scene(SceneId id) : sceneId(id), window(FRAMEWORK.GetWindow())
 {
-	window.setMouseCursorVisible(false);
+	switch (sceneId)
+	{
+	case SceneId::Game:
+		window.setMouseCursorVisible(false);
+		break;
+	default:
+		window.setMouseCursorVisible(true);
+		break;
+	}
 }
 
 Scene::~Scene()
@@ -151,7 +159,11 @@ void Scene::Exit()
 
 void Scene::Update(float dt)
 {
-	SetMousePos();
+	if (sceneId == SceneId::Game)
+	{
+		SetMousePos();
+	}
+
 	if (isPlaying)
 	{
 		for (auto go : gameObjects)

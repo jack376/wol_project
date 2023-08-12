@@ -4,18 +4,20 @@
 struct TileInfo
 {
     std::string tileName;
+
     int tileIndexX;
     int tileIndexY;
     int tileType;
     int tileSize;
-    int tileScaleFactor;
+    int tileScale;
     int tileLayer;
 
     std::string textureId;
-    int textureRectLeft;
-    int textureRectTop;
-    int textureRectWidth;
-    int textureRectHeight;
+
+    int topTextureRectL;
+    int topTextureRectT;
+    int bottomTextureRectL;
+    int bottomTextureRectT;
 };
 
 class TileInfoTable : public DataTable

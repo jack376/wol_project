@@ -41,6 +41,7 @@ protected:
     int tileIndexY = 0;
 
     sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
+
     sf::Sprite spriteTop;
     sf::Sprite spriteBottom;
 
@@ -90,8 +91,10 @@ public:
     TileState GetState() const;
 
     void SetTexture(const std::string& path);
-    void SetTextureRect(const sf::IntRect& rect, const std::string& path);
-    sf::IntRect GetTextureRect() const;
+    void SetTextureRectTop(const sf::IntRect& rect, const std::string& path);
+    sf::IntRect GetTextureRectTop() const;
+    void SetTextureRectBottom(const sf::IntRect& rect, const std::string& path);
+    sf::IntRect GetTextureRectBottom() const;
 
     sf::Vector2f GetMousePosBasedOnState() const;
 };

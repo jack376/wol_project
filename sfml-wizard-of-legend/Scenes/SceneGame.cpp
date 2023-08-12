@@ -134,30 +134,27 @@ void SceneGame::LoadFromCSV(const std::string& path)
 	for (size_t i = 0; i < doc.GetRowCount(); i++)
 	{
 		std::string tileName = doc.GetCell<std::string>("tileName", i);
+
 		int tileIndexX = doc.GetCell<int>("tileIndexX", i);
 		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
-		int tileType = doc.GetCell<int>("tileType", i);
-		int tileSize = doc.GetCell<int>("tileSize", i);
-		int tileScaleFactor = doc.GetCell<int>("tileScaleFactor", i);
-		int tileLayer = doc.GetCell<int>("tileLayer", i);
+		int tileType   = doc.GetCell<int>("tileType", i);
+		int tileSize   = doc.GetCell<int>("tileSize", i);
+		int tileScale  = doc.GetCell<int>("tileScale", i);
+		int tileLayer  = doc.GetCell<int>("tileLayer", i);
 
 		std::string textureId = doc.GetCell<std::string>("textureId", i);
-		sf::IntRect textureRect
-		(
-			doc.GetCell<int>("textureRectLeft", i),
-			doc.GetCell<int>("textureRectTop", i),
-			doc.GetCell<int>("textureRectWidth", i),
-			doc.GetCell<int>("textureRectHeight", i)
-		);
+		sf::IntRect topTextureRect(doc.GetCell<int>("topTextureRectL", i), doc.GetCell<int>("topTextureRectT", i), tileSize, tileSize);
+		sf::IntRect bottomTextureRect(doc.GetCell<int>("bottomTextureRectL", i), doc.GetCell<int>("bottomTextureRectT", i), tileSize, tileSize);
 
 		Tile* tile = (Tile*)FindGo(tileName);
 		tile->SetIndex(tileIndexX, tileIndexY);
 		tile->SetType(static_cast<Tile::TileType>(tileType));
 		tile->SetTileSize(tileSize);
-		tile->SetScale(tileScaleFactor);
+		tile->SetScale(tileScale);
 		tile->SetLayer(tileLayer);
 		tile->SetTexture(textureId);
-		tile->SetTextureRect(textureRect, textureId);
+		tile->SetTextureRectTop(topTextureRect, textureId);
+		tile->SetTextureRectBottom(bottomTextureRect, textureId);
 		tile->SetOrigin(Origins::MC);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
