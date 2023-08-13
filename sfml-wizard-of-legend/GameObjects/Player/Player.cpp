@@ -405,7 +405,7 @@ void Player::AttackUpdate(float dt)
 
 void Player::HitUpdate(float dt)
 {
-	anim.Play(hitId[(int)currentDir]);
+	//anim.Play(hitId[(int)currentDir]);
 
 }
 
