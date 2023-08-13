@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
+    <ClCompile Include="GameObjects\DestructibleGo.cpp" />
     <ClCompile Include="Framework\Command.cpp" />
     <ClCompile Include="Framework\CommandInvoker.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
+    <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="Framework\Command.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="DataTables\StringTable.h" />

@@ -227,6 +227,16 @@ bool Tile::IsTypeView() const
     return isTypeView;
 }
 
+void Tile::SetGridView(bool gridView)
+{
+    isGridView = gridView;
+}
+
+bool Tile::IsGridView() const
+{
+    return isGridView;
+}
+
 void Tile::SetState(TileState state)
 {
     this->state = state;
@@ -262,7 +272,6 @@ void Tile::SetTextureRectTop(const sf::IntRect& rect, const std::string& path)
 {
     spriteTop.setTexture(*RESOURCE_MGR.GetTexture(path));
     spriteTop.setTextureRect(rect);
-    spriteTop.setColor(sf::Color::White);
 }
 
 sf::IntRect Tile::GetTextureRectTop() const
@@ -274,7 +283,6 @@ void Tile::SetTextureRectBottom(const sf::IntRect& rect, const std::string& path
 {
     spriteBottom.setTexture(*RESOURCE_MGR.GetTexture(path));
     spriteBottom.setTextureRect(rect);
-    spriteBottom.setColor(sf::Color::White);
 }
 
 sf::IntRect Tile::GetTextureRectBottom() const

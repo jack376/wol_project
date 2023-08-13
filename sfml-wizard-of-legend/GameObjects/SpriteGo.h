@@ -30,6 +30,5 @@ public:
 
 	void SetFlipX(bool flip);
 	void SetFlipY(bool flip);
-
 };
 

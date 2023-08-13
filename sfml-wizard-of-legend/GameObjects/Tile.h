@@ -76,8 +76,11 @@ public:
     void SetIndex(int x, int y);
     sf::Vector2i GetIndex() const;
 
-    void SetTypeView(bool isTypeView);
+    void SetTypeView(bool typeView);
     bool IsTypeView() const;
+
+    void SetGridView(bool gridView);
+    bool IsGridView() const;
 
     void SetLayer(int tileLayer = 0);
     int GetLayer() const;

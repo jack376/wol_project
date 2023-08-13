@@ -12,8 +12,8 @@ class Tile;
 class SceneEditor : public Scene
 {
 protected:
-	int rows = 64;
-	int cols = 64;
+	int rows = 24;
+	int cols = 24;
 
 	sf::Vector2f windowSize;
 	float fhdWidth = 1920.0f;
@@ -63,6 +63,8 @@ protected:
 
 	bool isTileLeyer = false;
 
+	std::vector<std::vector<TileCommand::TileState>> tempTileStates;
+
 public:
 	SceneEditor();
 	virtual ~SceneEditor() override = default;
@@ -77,6 +79,8 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
+	void CreateTile2dVector(int rows, int cols);
+
 	std::vector<Tile*> GetAllTiles();
 	std::vector<Tile*> GetSelectedTiles();
 	void SetSelectedTilesState(Tile::TileState state = Tile::TileState::Blank);
@@ -99,4 +103,6 @@ public:
 	void ApplyTileState(Tile* tile, const TileCommand::TileState& state);
 	void CopySelectedTiles();
 	void PasteSelectedTiles();
+
+	void ResizeWorld(int newRows, int newCols);
 };

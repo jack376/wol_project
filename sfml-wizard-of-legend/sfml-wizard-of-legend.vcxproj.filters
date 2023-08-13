@@ -35,6 +35,7 @@
     <ClCompile Include="Framework\Command.cpp" />
     <ClCompile Include="Framework\TileCommand.cpp" />
     <ClCompile Include="Framework\CommandInvoker.cpp" />
+    <ClCompile Include="GameObjects\DestructibleGo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Framework\Command.h" />
     <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
+    <ClInclude Include="GameObjects\DestructibleGo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

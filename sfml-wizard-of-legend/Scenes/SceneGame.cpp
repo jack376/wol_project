@@ -24,8 +24,8 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
-	int rows = 32;
-	int cols = 32;
+	int rows = 24;
+	int cols = 24;
 	float tileSize = 64.0f;
 
 	player = (Player*)AddGo(new Player());

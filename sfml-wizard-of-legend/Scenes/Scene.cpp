@@ -10,15 +10,7 @@
 
 Scene::Scene(SceneId id) : sceneId(id), window(FRAMEWORK.GetWindow())
 {
-	switch (sceneId)
-	{
-	case SceneId::Game:
-		window.setMouseCursorVisible(false);
-		break;
-	default:
-		window.setMouseCursorVisible(true);
-		break;
-	}
+	window.setMouseCursorVisible(true);
 }
 
 Scene::~Scene()
@@ -162,6 +154,10 @@ void Scene::Update(float dt)
 	if (sceneId == SceneId::Game)
 	{
 		SetMousePos();
+	}
+	else if (sceneId == SceneId::Editor)
+	{
+		mouseCursor->SetActive(false);
 	}
 
 	if (isPlaying)

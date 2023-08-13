@@ -22,17 +22,8 @@ void SceneEditor::Init()
 	windowSize = FRAMEWORK.GetWindowSize();
 	resolutionScaleFactor = windowSize.x / fhdWidth;
 
-	// Tile
-	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			Tile* tile = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
-			tilesWorld[i][j] = tile;
-			//std::cout << "Loading : Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")" << std::endl;
-		}
-	}
+	// Default Tile Size
+	CreateTile2dVector(rows, cols);
 
 	// Texture Atlas
 	SpriteGo* atlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "AtlasPreview"));
@@ -65,7 +56,7 @@ void SceneEditor::Init()
 	}
 
 	// Load CSV
-	//LoadFromCSV("tables/TileInfoTable.csv");
+	LoadFromCSV("tables/TileInfoTable.csv");
 
 	// UI backgorund
 	BaseUI* uiBackground = (BaseUI*)AddGo(new BaseUI("UiBackGround", UiType::Box));
@@ -74,39 +65,24 @@ void SceneEditor::Init()
 	uiBackground->SetColor(sf::Color(16, 16, 16, 255));
 	uiBackground->SetStrokeColor(sf::Color(32, 32, 64, 255));
 
-	// UI Palette Button
-	/*
-	std::map<int, std::function<void()>> paletteIndex =
-	{
-		{ 1,  [this]() { selectPaletteIndex = 1; }   },
-		{ 2,  [this]() { selectPaletteIndex = 5; }   },
-		{ 3,  [this]() { selectPaletteIndex = 12; }  },
-		{ 4,  [this]() { selectPaletteIndex = 33; }  },
-		{ 5,  [this]() { selectPaletteIndex = 37; }  },
-		{ 6,  [this]() { selectPaletteIndex = 44; }  },
-		{ 7,  [this]() { selectPaletteIndex = 69; }  },
-		{ 8,  [this]() { selectPaletteIndex = 101; } },
-		{ 9,  [this]() { selectPaletteIndex = 136; } },
-		{ 10, [this]() { selectPaletteIndex = 353; } },
-		{ 11, [this]() { selectPaletteIndex = 355; } },
-		{ 12, [this]() { selectPaletteIndex = 364; } },
-	};
+	// UIButton
+	float size  = 32.0f;
+	float posX  = blankPos;
+	float posY  = atlasTextureSize + blankPos * 2;
+	float gap   = size + size * 0.25f;
+	int   index = 0;
 
-	float buttonSize = 32.0f;
-	float buttonPosX = blankPos;
-	float buttonPosY = atlasTextureSize + blankPos * 2;
-	float buttonsGap = buttonSize + buttonSize * 0.25f;
-	int buttonTexIdx = 0;
-	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 0, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
-	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 1, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
-	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 2, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
-	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 3, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
-	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 4, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
-	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 5, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
-	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 6, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
-	CreateButton("typeSelectButton", "None", buttonPosX + buttonsGap * 7, buttonPosY, buttonSize, buttonTexIdx, [this]() { std::cout << "Button On" << std::endl; });
-	*/
-
+	CreateButton("q", "None", posX + gap * 0, posY, size, index, [this]() { std::cout << "Button q" << std::endl; });
+	CreateButton("w", "None", posX + gap * 1, posY, size, index, [this]() { std::cout << "Button w" << std::endl; });
+	CreateButton("e", "None", posX + gap * 2, posY, size, index, [this]() { std::cout << "Button e" << std::endl; });
+	CreateButton("r", "None", posX + gap * 3, posY, size, index, [this]() { std::cout << "Button r" << std::endl; });
+	CreateButton("a", "None", posX + gap * 4, posY, size, index, [this]() { std::cout << "Button a" << std::endl; });
+	CreateButton("s", "None", posX + gap * 5, posY, size, index, [this]() { std::cout << "Button s" << std::endl; });
+	CreateButton("d", "None", posX + gap * 6, posY, size, index, [this]() { std::cout << "Button d" << std::endl; });
+	CreateButton("f", "None", posX + gap * 7, posY, size, index, [this]() { std::cout << "Button f" << std::endl; });
+	CreateButton("z", "None", posX + gap * 8, posY, size, index, [this]() { std::cout << "Button z" << std::endl; });
+	CreateButton("x", "None", posX + gap * 9, posY, size, index, [this]() { std::cout << "Button x" << std::endl; });
+	
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -150,6 +126,7 @@ void SceneEditor::Update(float dt)
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
 
+
 	// Camera
 	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
 	cameraDirection.y = INPUT_MGR.GetAxis(Axis::Vertical);
@@ -168,100 +145,40 @@ void SceneEditor::Update(float dt)
 
 	// Zoom
 	Scene* scene = SCENE_MGR.GetCurrScene();
-	if (!INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
-	{
-		scene->Zoom(zoomInFactor);
-	}
-	if (!INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::X))
-	{
-		scene->Zoom(zoomOutFactor);
-	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z) && INPUT_MGR.GetKey(sf::Keyboard::LControl) == false) { scene-> Zoom(zoomInFactor);  }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X) && INPUT_MGR.GetKey(sf::Keyboard::LControl) == false) { scene-> Zoom(zoomOutFactor); }
 
-	// Copy
-	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::C))
-	{
-	}
-
-	// Paste
-	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::V))
-	{
-	}
-
-	// Deselect
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right))
-	{
-		SetSelectedTilesState(Tile::TileState::Blank);
-	}
-
-	// Draw
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
-	{
-		SetSelectedTilesDraw();
-		SetSelectedTilesState(Tile::TileState::Blank);
-	}
+	// Copy, Paste
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { CopySelectedTiles();  }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::V) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { PasteSelectedTiles(); }
 
 	// Save
-	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::S))
-	{
-		SaveToCSV("tables/TileInfoTable.csv");
-	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::S) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { SaveToCSV("tables/TileInfoTable.csv"); }
 
-	// Undo
-	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::Z))
-	{
-		commandInvoker.Undo();	
-	}
+	// Undo, Redo
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { commandInvoker.Undo(); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { commandInvoker.Redo(); }
 
-	// Redo
-	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::X))
-	{
-		commandInvoker.Redo();
-	}
-
-	// SetTileType
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-	{
-		SetSelectedTilesType(Tile::TileType::Ground);
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-	{
-		SetSelectedTilesType(Tile::TileType::Cliff);
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-	{
-		SetSelectedTilesType(Tile::TileType::Wall);
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-	{
-		SetSelectedTilesType(Tile::TileType::MonsterSpawn);
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-	{
-		SetSelectedTilesType(Tile::TileType::EventTrigger);
-	}
+	// Draw
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q)) { SetSelectedTilesDraw(); }
 
 	// SetTileLayer
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
-	{
-		isTileLeyer = true;
-		std::cout << "Current Layer : Top" << std::endl;
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R))
-	{
-		isTileLeyer = false;
-		std::cout << "Current Layer : Bottom" << std::endl;
-	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E)) { isTileLeyer = true;  std::cout << "Current Layer : Top" << std::endl;    }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R)) { isTileLeyer = false; std::cout << "Current Layer : Bottom" << std::endl; }
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
-	{
-		CopySelectedTiles();
-		SetSelectedTilesState(Tile::TileState::Blank);
-	}
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::J))
-	{
-		PasteSelectedTiles();
-		SetSelectedTilesState(Tile::TileState::Blank);
-	}
+	// Resize
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O)) { ResizeWorld(24, 24); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(48, 48); }
+
+	// SetTileType
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(Tile::TileType::Ground); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(Tile::TileType::Cliff); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(Tile::TileType::Wall); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(Tile::TileType::MonsterSpawn); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(Tile::TileType::EventTrigger); }
+
+	// Deselect
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }
 }
 
 void SceneEditor::Draw(sf::RenderWindow& window)
@@ -322,6 +239,20 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, i
 		}
 	};
 	return tile;
+}
+
+void SceneEditor::CreateTile2dVector(int rows, int cols)
+{
+	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			Tile* tile = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
+			tilesWorld[i][j] = tile;
+			//std::cout << "Loading : Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")" << std::endl;
+		}
+	}
 }
 
 std::vector<Tile*> SceneEditor::GetAllTiles()
@@ -405,6 +336,8 @@ void SceneEditor::SetSelectedTilesDraw()
 		tileCommands.push_back(std::move(command));
 	}
 	commandInvoker.Execute(std::move(tileCommands), currentCommandId);
+
+	SetSelectedTilesState(Tile::TileState::Blank);
 }
 
 void SceneEditor::SetSelectedTilesArea()
@@ -639,15 +572,20 @@ BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& te
 	//newIcon->sortLayer = 111;
 
 	BaseUI* newButton = (BaseUI*)AddGo(new BaseUI(name, UiType::Box));
-	newButton->sortLayer = 110;
+	newButton->sortLayer = 115;
 	newButton->SetPosition(posX, posY);
-	newButton->SetColor(sf::Color::Green);
-	newButton->SetSizeAdd(size, size);
+	newButton->SetColor(sf::Color::Color(64, 64, 64, 128));
+	newButton->SetStrokeColor(sf::Color::Color(255, 255, 255, 255));
+	newButton->SetSizeAdd(size + 16.0f, size);
 	newButton->OnEnter = [newButton]()
 	{
+		newButton->SetColor(sf::Color::Color(255, 64, 64, 128));
+		newButton->SetStrokeColor(sf::Color::Color(0, 255, 255, 255));
 	};
 	newButton->OnExit = [newButton]()
 	{
+		newButton->SetColor(sf::Color::Color(64, 64, 64, 128));
+		newButton->SetStrokeColor(sf::Color::Color(255, 255, 255, 255));
 	};
 	newButton->OnClick = onClickAction;
 
@@ -694,6 +632,7 @@ void SceneEditor::CopySelectedTiles()
 		TileCommand::TileState tileState = CaptureTileState(worldTile);
 		clipboardTiles.push_back(tileState);
 	}
+	SetSelectedTilesState(Tile::TileState::Blank);
 }
 
 void SceneEditor::PasteSelectedTiles()
@@ -716,7 +655,6 @@ void SceneEditor::PasteSelectedTiles()
 
 		int indexX = indexGrid.x + offset.x;
 		int indexY = indexGrid.y + offset.y;
-
 		if (indexX < 0 || indexX >= rows || indexY < 0 || indexY >= cols)
 		{
 			continue;
@@ -736,4 +674,49 @@ void SceneEditor::PasteSelectedTiles()
 		tileCommands.push_back(std::move(command));
 	}
 	commandInvoker.Execute(std::move(tileCommands), currentCommandId);
+
+	SetSelectedTilesState(Tile::TileState::Blank);
+}
+
+void SceneEditor::ResizeWorld(int newRows, int newCols)
+{
+	std::vector<std::vector<TileCommand::TileState>> tempTileStates;
+	tempTileStates.resize(rows, std::vector<TileCommand::TileState>(cols));
+
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if (tilesWorld[i][j])
+			{
+				tempTileStates[i][j] = CaptureTileState(tilesWorld[i][j]);
+				RemoveGo(tilesWorld[i][j]);
+				tilesWorld[i][j] = nullptr;
+			}
+		}
+	}
+
+	tilesWorld.clear();
+	tilesWorld.resize(newRows, std::vector<Tile*>(newCols, nullptr));
+
+	int copyRows = std::min(rows, newRows);
+	int copyCols = std::min(cols, newCols);
+
+	rows = newRows;
+	cols = newCols;
+
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if (!tilesWorld[i][j])
+			{
+				tilesWorld[i][j] = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
+			}
+			if (i < copyRows && j < copyCols)
+			{
+				ApplyTileState(tilesWorld[i][j], tempTileStates[i][j]);
+			}
+		}
+	}
 }
