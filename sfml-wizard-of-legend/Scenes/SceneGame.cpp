@@ -14,6 +14,7 @@
 #include "TileInfoTable.h"
 #include "rapidcsv.h"
 #include "Tile.h"
+#include "BoxCollider2D.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -28,12 +29,14 @@ void SceneGame::Init()
 	const int cols = 32;
 	const float tileSize = 64.0f;
 
+
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
 	player->sprite.setScale(4, 4);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 20;
 	player->SetScene(this);
+
 	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
 	for (int i = 0; i < rows; i++)
 	{
@@ -50,9 +53,10 @@ void SceneGame::Init()
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
 
-	Monster* go = (Monster*)AddGo(new Monster(MonsterId::Ghoul));
+	monster = (Monster*)AddGo(new Monster(MonsterId::Ghoul));
+	tempWindSlash->SetMonster(monster);
 
-	player->SetMonster(go);
+	player->SetMonster(monster);
 
 	for (auto go : gameObjects)
 	{
@@ -93,6 +97,20 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
+	debugTimer += dt;
+
+	isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
+	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
+
+	//if (debugTimer > debugDuration && !isCol)
+	//{
+	//	debugTimer = 0.f;
+	//	std::cout << "OBB is Failed" << std::endl;
+	//}
+	//if (isCol)
+	//{
+	//	std::cout << "OBB is Succesd" << std::endl;
+	//}
 
 	// Test Code
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
@@ -150,5 +168,5 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetOrigin(256.0f, 384.0f);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
-	std::cout << "SYSTEM : Load Success" << std::endl;
+	//std::cout << "SYSTEM : Load Success" << std::endl;
 }

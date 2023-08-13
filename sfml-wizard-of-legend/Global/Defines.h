@@ -2,8 +2,15 @@
 
 #define _USE_MATH_DEFINES
 
-
-
+enum class SkillEvents
+{
+	None = -1,
+	Left,
+	Right,
+	Space,
+	Q,
+	Count,
+};
 
 enum class ElementTypes
 {
@@ -93,3 +100,4 @@ enum class UiType
 };
 
 #include "AnimationClip.h"
+using RectVertexArray = std::array<sf::Vector2f, 4>;

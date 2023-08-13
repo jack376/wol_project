@@ -132,3 +132,87 @@ float Utils::Angle(const sf::Vector2f& dir)
 {
 	return (float)(atan2(dir.y, dir.x) * (180.f / M_PI));
 }
+
+float Utils::DotProduct(const sf::Vector2f& a, const sf::Vector2f& b)
+{
+	return a.x * b.x + a.y * b.y;
+}
+
+sf::Vector2f Utils::GetNormal(const sf::Vector2f& v)
+{
+	return sf::Vector2f(-v.y, v.x);
+}
+
+sf::Vector2f Utils::ProjectOnAxis(const RectVertexArray& vertices, const sf::Vector2f& axis)
+{
+	float min = std::numeric_limits<float>::infinity();
+	float max = -std::numeric_limits<float>::infinity();
+	for (auto& vertex : vertices)
+	{
+		float projection = DotProduct(vertex, axis);
+		if (projection < min)
+			min = projection;
+		if (projection > max)
+			max = projection;
+	}
+	return sf::Vector2f(min, max);
+}
+
+bool Utils::AreOverlapping(const sf::Vector2f& a, const sf::Vector2f& b)
+{
+	return a.x <= b.y && a.y >= b.x;
+}
+
+float Utils::GetOverlapLength(const sf::Vector2f& a, const sf::Vector2f& b)
+{
+	if (!AreOverlapping(a, b)) return 0.f;
+	return std::min(a.y, b.y) - std::max(a.x, b.x);
+}
+
+sf::Vector2f Utils::GetCenter(const sf::RectangleShape& shape)
+{
+	const sf::Transform& transform = shape.getTransform();
+	sf::FloatRect local = shape.getLocalBounds();
+	return transform.transformPoint(local.width / 2.f , local.height / 2.f);
+}
+
+RectVertexArray Utils::GetVertices(const sf::RectangleShape& shape)
+{
+	RectVertexArray vertices;
+	const sf::Transform& transform = shape.getTransform();
+	for (std::size_t i = 0u; i < shape.getPointCount(); ++i)
+	{
+		vertices[i] = transform.transformPoint(shape.getPoint(i));
+	}
+	return vertices;
+}
+
+sf::Vector2f Utils::GetPerpendicularAxis(const RectVertexArray& vertices, std::size_t index)
+{
+	assert(index >= 0 && index < 4);
+	return GetNormal(Normalize(vertices[index + 1] - vertices[index]));
+}
+
+std::array<sf::Vector2f, 4> Utils::GetPerpendicularAxes(const RectVertexArray& vertices1, const RectVertexArray& vertices2)
+{
+	std::array<sf::Vector2f, 4> axes;
+
+	axes[0] = GetPerpendicularAxis(vertices1, 0);
+	axes[1] = GetPerpendicularAxis(vertices1, 1);
+
+	axes[2] = GetPerpendicularAxis(vertices2, 0);
+	axes[3] = GetPerpendicularAxis(vertices2, 1);
+	return axes;
+}
+
+//sf::Vector2f Utils::ProjectOnAxis(const RectVertexArray& vertices, const sf::Vector2f& axis)
+//{
+//	float min = std::numeric_limits<float>::infinity();
+//	float max = -std::numeric_limits<float>::infinity();
+//	//for (auto& vertex : vertices) {
+//		//float projection = dotProduct(vertex, axis);
+//		if (projection < min) { min = projection; }
+//		if (projection > max) { max = projection; }
+//	}
+//	return sf::Vector2f(min, max);
+//}

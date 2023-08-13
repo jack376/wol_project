@@ -1,6 +1,7 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
+#include "BoxCollider2D.h"
 
 class Player;
 
