@@ -1,17 +1,16 @@
 #pragma once
 #include "Monster.h"
-class Lancer :
+class Archer :
     public Monster
 {
 protected:
-	SpriteEffect spear;
-	float chargeRate = 0.5f; 
+	sf::Sprite bow;
+	AnimationController bowAni;
+	float chargeRate = 1.f;
 	float chargeTimer = 0.f;
-	bool isEffect = false;
-
 public:
-	Lancer(MonsterId id, const std::string& textureId = "", const std::string& n = "Lancer");
-	virtual ~Lancer() override;
+	Archer(MonsterId id, const std::string& textureId = "", const std::string& n = "Archer");
+	virtual ~Archer() override;
 
 	virtual void Init() override;
 	virtual void Release() override;

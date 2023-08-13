@@ -1,0 +1,9 @@
+ID,FPS,LOOPTYPE,,
+ArcherRun,7,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Archer2.png,64,8,22,37
+graphics/Texture2D/Archer2.png,109,8,22,37
+graphics/Texture2D/Archer2.png,157,8,22,37
+graphics/Texture2D/Archer2.png,206,8,22,37
+graphics/Texture2D/Archer2.png,255,8,22,37

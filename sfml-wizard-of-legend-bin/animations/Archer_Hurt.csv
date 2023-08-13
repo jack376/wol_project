@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+ArcherHurt,1,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Archer2.png,13,107,23,34

@@ -33,6 +33,7 @@
     <ClCompile Include="ElementalSpell.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
+    <ClCompile Include="GameObjects\Monster\Archer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -167,6 +168,7 @@
     </ClCompile>
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
+    <ClInclude Include="GameObjects\Monster\Archer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
