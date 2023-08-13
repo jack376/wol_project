@@ -65,7 +65,7 @@ void SceneEditor::Init()
 	}
 
 	// Load CSV
-	LoadFromCSV("tables/TileInfoTable.csv");
+	//LoadFromCSV("tables/TileInfoTable.csv");
 
 	// UI backgorund
 	BaseUI* uiBackground = (BaseUI*)AddGo(new BaseUI("UiBackGround", UiType::Box));
@@ -177,18 +177,14 @@ void SceneEditor::Update(float dt)
 		scene->Zoom(zoomOutFactor);
 	}
 
-	// Copy(Unused)
+	// Copy
 	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::C))
 	{
-		std::vector<Tile*> selectedTiles = GetSelectedTiles();
-		SetSelectedTilesState(Tile::TileState::Copy);
 	}
 
-	// Paste(Unused)
+	// Paste
 	if (INPUT_MGR.GetKey(sf::Keyboard::LControl) && INPUT_MGR.GetKeyDown(sf::Keyboard::V))
 	{
-		std::vector<Tile*> selectedTiles = GetSelectedTiles();
-		SetSelectedTilesArea();
 	}
 
 	// Deselect
@@ -258,9 +254,13 @@ void SceneEditor::Update(float dt)
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::H))
 	{
+		CopySelectedTiles();
+		SetSelectedTilesState(Tile::TileState::Blank);
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::J))
 	{
+		PasteSelectedTiles();
+		SetSelectedTilesState(Tile::TileState::Blank);
 	}
 }
 
@@ -397,7 +397,6 @@ void SceneEditor::SetSelectedTilesDraw()
 		Tile* previewTile = tilesPreview[matchPreviewIndex.x][matchPreviewIndex.y];
 
 		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * tileSize, previewTile->GetIndex().y * tileSize, tileSize, tileSize);
-		
 		isTileLeyer ? worldTile->SetTextureRectTop(previewRect, textureId) : worldTile->SetTextureRectBottom(previewRect, textureId);
 
 		TileCommand::TileState after = CaptureTileState(worldTile);
@@ -429,8 +428,6 @@ void SceneEditor::SetSelectedTilesArea()
 			tilesWorld[x][y]->SetStateColor(Tile::TileState::Select);
 			tilesWorld[x][y]->SetIndex(x, y);
 			selectedTiles.push_back(tilesWorld[x][y]);
-
-			//std::cout << "TileType : " << (int)tilesWorld[x][y]->GetType() << std::endl;
 		}
 	}
 }
@@ -443,11 +440,10 @@ sf::Vector2i SceneEditor::GetCurrentTileIntIndex()
 	int xIndex = static_cast<int>(worldMousePos.x) / tileSize;
 	int yIndex = static_cast<int>(worldMousePos.y) / tileSize;
 
-	int maxRangeIndex = atlasTextureSize / tileTextureSize;
-	if (xIndex < 0 || xIndex >= maxRangeIndex || yIndex < 0 || yIndex >= maxRangeIndex)
+	if (xIndex < 0 || xIndex >= rows || yIndex < 0 || yIndex >= cols)
 	{
-		xIndex = std::max(0, std::min(xIndex, maxRangeIndex - 1));
-		yIndex = std::max(0, std::min(yIndex, maxRangeIndex - 1));
+		xIndex = std::max(0, std::min(xIndex, rows - 1));
+		yIndex = std::max(0, std::min(yIndex, cols - 1));
 	}
 	return sf::Vector2i(xIndex, yIndex);
 }
@@ -661,7 +657,8 @@ BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& te
 TileCommand::TileState SceneEditor::CaptureTileState(const Tile* tile)
 {
 	TileCommand::TileState state;
-	state.textureId = textureId;
+
+	state.textureId  = textureId;
 	state.type       = tile-> GetType();
 	state.index      = tile-> GetIndex();
 	state.topRect    = tile-> GetTextureRectTop();
@@ -670,4 +667,73 @@ TileCommand::TileState SceneEditor::CaptureTileState(const Tile* tile)
 	state.layer      = tile-> GetLayer();
 
 	return state;
+}
+
+void SceneEditor::ApplyTileState(Tile* tile, const TileCommand::TileState& state)
+{
+	tile->SetTexture(state.textureId);
+	tile->SetType(state.type);
+	tile->SetIndex(state.index.x, state.index.y);
+	tile->SetTextureRectTop(state.topRect, state.textureId);
+	tile->SetTextureRectBottom(state.bottomRect, state.textureId);
+	tile->SetTileSize(state.size);
+	tile->SetLayer(state.layer);
+}
+
+void SceneEditor::CopySelectedTiles()
+{
+	clipboardTiles.clear();
+
+	if (selectedTiles.empty())
+	{
+		return;
+	}
+
+	for (Tile* worldTile : selectedTiles)
+	{
+		TileCommand::TileState tileState = CaptureTileState(worldTile);
+		clipboardTiles.push_back(tileState);
+	}
+}
+
+void SceneEditor::PasteSelectedTiles()
+{
+	if (selectedTiles.empty() || clipboardTiles.empty())
+	{
+		return;
+	}
+
+	currentCommandId++;
+	std::vector<std::unique_ptr<Command>> tileCommands;
+
+	sf::Vector2i indexGrid = selectedTiles[0]->GetIndex();
+	sf::Vector2i indexWorldTile = clipboardTiles[0].index;
+
+	for (size_t i = 0; i < clipboardTiles.size(); i++)
+	{
+		sf::Vector2i currentCopyIndex = clipboardTiles[i].index; 
+		sf::Vector2i offset = currentCopyIndex - indexWorldTile;
+
+		int indexX = indexGrid.x + offset.x;
+		int indexY = indexGrid.y + offset.y;
+
+		if (indexX < 0 || indexX >= rows || indexY < 0 || indexY >= cols)
+		{
+			continue;
+		}
+
+		Tile* worldTile = tilesWorld[indexX][indexY];
+		if (!worldTile)
+		{
+			continue;
+		}
+	
+		TileCommand::TileState before = CaptureTileState(worldTile);
+		ApplyTileState(worldTile, clipboardTiles[i]);
+		TileCommand::TileState after = CaptureTileState(worldTile);
+
+		std::unique_ptr<Command> command = std::make_unique<TileCommand>(worldTile, before, after);
+		tileCommands.push_back(std::move(command));
+	}
+	commandInvoker.Execute(std::move(tileCommands), currentCommandId);
 }

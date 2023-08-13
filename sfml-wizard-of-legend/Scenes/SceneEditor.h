@@ -12,8 +12,8 @@ class Tile;
 class SceneEditor : public Scene
 {
 protected:
-	int rows = 32;
-	int cols = 32;
+	int rows = 64;
+	int cols = 64;
 
 	sf::Vector2f windowSize;
 	float fhdWidth = 1920.0f;
@@ -57,6 +57,10 @@ protected:
 	CommandInvoker commandInvoker;
 	int currentCommandId = 0;
 
+	std::vector<TileCommand::TileState> clipboardTiles;
+	int copiedWidth = 0;
+	int copiedHeight = 0;
+
 	bool isTileLeyer = false;
 
 public:
@@ -90,5 +94,9 @@ public:
 	void LoadFromCSV(const std::string& path);
 
 	BaseUI* CreateButton(const std::string& name, const std::string& text, float posX, float posY, float size, int texIndex, std::function<void()> onClickAction);
+
 	TileCommand::TileState CaptureTileState(const Tile* tile);
+	void ApplyTileState(Tile* tile, const TileCommand::TileState& state);
+	void CopySelectedTiles();
+	void PasteSelectedTiles();
 };

@@ -18,9 +18,10 @@ public:
     };
 
 protected:
+    Tile* targetTile;
+
     TileState beforeState;
     TileState afterState;
-    Tile* targetTile;
 
 public:
     TileCommand(Tile* tile, const TileState& before, const TileState& after)

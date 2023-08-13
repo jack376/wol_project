@@ -1,6 +1,7 @@
 #pragma once
 #include "Command.h"
 
+class Tile;
 class CommandInvoker
 {
 protected:
@@ -11,6 +12,7 @@ protected:
 
 public:
     void Execute(std::vector<std::unique_ptr<Command>> commands, int commandId);
+
     void Undo();
     void Redo();
 };
