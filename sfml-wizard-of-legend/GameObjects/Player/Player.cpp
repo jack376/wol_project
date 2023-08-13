@@ -53,6 +53,8 @@ void Player::Init()
 	attackPosCol.setFillColor(sf::Color::Transparent);
 
 	InsertAnimId();
+	playerColor = sprite.getColor();
+
 }
 
 void Player::Release()
@@ -136,6 +138,12 @@ void Player::Update(float dt)
 
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
 
+
+	if (!isAlive)
+	{
+		ChangeState(States::Die);
+	}
+
 	// 무적 상태 분리
 	if (isInvincible)
 	{
@@ -145,6 +153,7 @@ void Player::Update(float dt)
 	// 맞으면 무적상태와 맞는 상태 표시
 	if (isHit)
 	{
+		CalHitLookAngle();
 		ChangeState(States::Hit);
 	}
 
@@ -207,8 +216,8 @@ void Player::Update(float dt)
 		HitUpdate(dt);
 		break;
 
-	case States::Dead:
-		DeadUpdate(dt);
+	case States::Die:
+		DieUpdate(dt);
 		break;
 	}
 
@@ -224,6 +233,7 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::IdleUpdate(float dt)
 {
+	sprite.setColor(playerColor);
 	anim.Play(idleId[(int)currentDir]);
 	switch (currentDir)
 	{
@@ -405,12 +415,72 @@ void Player::AttackUpdate(float dt)
 
 void Player::HitUpdate(float dt)
 {
-	//anim.Play(hitId[(int)currentDir]);
+
+	currentDir = (Dir)((int)hitDir + 4);
+
+	// 몬스터의 공격과 동기화가 되지 않음
+	if (!isHitAnim)
+	{
+		anim.Play(hitId[(int)hitDir]);
+		sprite.setColor(sf::Color::Red);
+		isHitAnim = true;
+	}
+
+	//애니메이션이 너무 한 프레임에 처리되어서 시간초를 둠
+	if (isHitAnim)
+	{
+		hitTimer += dt;
+	}
+
+	if (hitTimer > hitDuration)
+	{
+		hitTimer = 0.f;
+		isHitAnim = false;
+	}
+
+	// 맞을때 떄린 방향이기에
+	// 때릴때 피하고 다른 방향에서 맞아도 그게 적용
+	switch (hitDir)
+	{
+	case HitDir::Up:
+
+		std::cout << "Hit Up" << std::endl;
+		break;
+	case HitDir::Right:
+		std::cout << "Hit Right" << std::endl;
+
+		break;
+	case HitDir::Down:
+		std::cout << "Hit Down" << std::endl;
+
+		break;
+	case HitDir::Left:
+		SetFlipX(true);
+		std::cout << "Hit Left" << std::endl;
+		break;
+	}
+
+	if (anim.IsAnimEndFrame() && !isHitAnim)
+	{
+		sprite.setColor(playerColor);
+		isHit = false;
+		isHitAnim = false;
+		isRun = false;
+		isAttack = false;
+		ChangeState(States::Idle);
+	}
 
 }
 
-void Player::DeadUpdate(float dt)
+void Player::DieUpdate(float dt)
 {
+	// 죽을떄 시간 흐름 느리게 하기 생각
+	// 빨개졌다가 다시 하얘짐
+	if (!isDieAnim)
+	{
+		anim.Play("Die");
+		isDieAnim = true;
+	}
 }
 
 void Player::CalDir()
@@ -490,29 +560,31 @@ void Player::CalHitLookAngle()
 
 	hitLookAngle += 180;
 
+	// 때린 방향 반대로 전환
 	if (hitLookAngle >= 360)
 	{
 		//hitLookAngle -= 360;
 		hitLookAngle = (float)((int)hitLookAngle % 360);
 	}
 
+
 	// 각도에 따른 공격 방향 설정
 	if ((hitLookAngle < 45 && hitLookAngle >= 0) ||
 		(hitLookAngle < 360 && hitLookAngle >= 315))
 	{
-		attackDir = AttackDir::Right;
+		hitDir = HitDir::Right;
 	}
 	if (hitLookAngle < 135 && hitLookAngle >= 45)
 	{
-		attackDir = AttackDir::Down;
+		hitDir = HitDir::Down;
 	}
 	if (hitLookAngle < 225 && hitLookAngle >= 135)
 	{
-		attackDir = AttackDir::Left;
+		hitDir = HitDir::Left;
 	}
 	if (hitLookAngle < 315 && hitLookAngle >= 225)
 	{
-		attackDir = AttackDir::Up;
+		hitDir = HitDir::Up;
 	}
 
 }

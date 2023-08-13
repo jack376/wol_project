@@ -135,6 +135,7 @@ void Lancer::Attack()
         //OBB적용 필요
         if (attackEffect.sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
         {
+            player->SetHitDir(look);
             player->SetHp(-stat.damage);
             isAttacked = true;
         }
