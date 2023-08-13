@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./Scenes;./GameObjects;./GameObjects/Player;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./Scenes;./GameObjects;./GameObjects/Player;./GameObjects/Monster;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalBMIDirectories>./;./GameObjects;./Framework;./3rd;./DataTables;./Global;./Animation;./Scenes;%(AdditionalBMIDirectories)</AdditionalBMIDirectories>
     </ClCompile>
@@ -157,6 +157,7 @@
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="BoxCollider2D.cpp" />
+    <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
     <ClCompile Include="GameObjects\BaseUI.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
@@ -172,13 +173,14 @@
     <ClCompile Include="GameObjects\UIButton.cpp" />
     <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
     <ClCompile Include="Global\Utils.cpp" />
+    <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="GameObjects\Player\Player.cpp" />
-    <ClCompile Include="GameObjects\Monster.cpp" />
+    <ClCompile Include="GameObjects\Monster\Monster.cpp" />
     <ClCompile Include="DataTables\MonsterTable.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -198,6 +200,7 @@
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="BoxCollider2D.h" />
+    <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="ElementalSpell.h" />
     <ClInclude Include="GameObjects\BaseUI.h" />
@@ -208,10 +211,11 @@
     <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
-    <ClInclude Include="GameObjects\Monster.h" />
+    <ClInclude Include="GameObjects\Monster\Monster.h" />
     <ClInclude Include="DataTables\MonsterTable.h" />
     <ClInclude Include="GameObjects\Player\Player.h" />
     <ClInclude Include="GameObjects\Tile.h" />
+    <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Framework\SkillMgr.h" />
     <ClInclude Include="Skill.h" />

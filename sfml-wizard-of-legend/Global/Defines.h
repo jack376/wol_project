@@ -70,28 +70,6 @@ enum class ObjectType
 	Count,
 };
 
-enum class PatternObjectType
-{
-	None = -1,
-	Platform,
-	Obstacle,
-	ItemSpeedUp,
-	ItemBigHealPack,
-	ItemHealPack,
-	ItemMagnet,
-	ItemBig,
-	//ItemBonus,
-	ItemCoin,
-	Coin,
-	BigCoin,
-	GoldCoin,
-	BigGoldCoin,
-	Diamond,
-	DiamondBox,
-	LuckyBox,
-	Count,
-
-};
 
 enum class UiType
 {
