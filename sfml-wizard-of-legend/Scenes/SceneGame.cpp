@@ -36,6 +36,7 @@ void SceneGame::Init()
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 20;
 	player->SetScene(this);
+
 	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
 	for (int i = 0; i < rows; i++)
 	{
@@ -101,15 +102,15 @@ void SceneGame::Update(float dt)
 	isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 
-	if (debugTimer > debugDuration && !isCol)
-	{
-		debugTimer = 0.f;
-		std::cout << "OBB is Failed" << std::endl;
-	}
-	if (isCol)
-	{
-		std::cout << "OBB is Succesd" << std::endl;
-	}
+	//if (debugTimer > debugDuration && !isCol)
+	//{
+	//	debugTimer = 0.f;
+	//	std::cout << "OBB is Failed" << std::endl;
+	//}
+	//if (isCol)
+	//{
+	//	std::cout << "OBB is Succesd" << std::endl;
+	//}
 
 	// Test Code
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))

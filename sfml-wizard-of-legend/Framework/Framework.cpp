@@ -40,6 +40,7 @@ void Framework::Run()
 {
     Init(screenWidth, screenHeight, title);
     clock.restart();
+    sf::Vector2i prevPos = { 0, 0 };
 
     while (window.isOpen())
     {
@@ -48,6 +49,12 @@ void Framework::Run()
         gamePlayTime += deltaTime;
 
         INPUT_MGR.Update(dt);
+
+        prevPos = window.getPosition();
+        if (prevPos != window.getPosition())
+        {
+            dt = 0;
+        }
 
         sf::Event event;
         while (window.pollEvent(event))

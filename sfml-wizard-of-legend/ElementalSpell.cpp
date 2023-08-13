@@ -6,6 +6,7 @@
 #include "ResourceMgr.h"
 #include "InputMgr.h"
 #include "Framework.h"
+#include "BoxCollider2D.h"
 
 ElementalSpell::ElementalSpell(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -26,6 +27,8 @@ void ElementalSpell::Init()
 	collider->rect.setSize({ 100, 80 });
 	collider->SetPosition(0, 0);
 	collider->SetActive(false);
+
+	Collider = (BoxCollider2D*)scene->AddGo(new BoxCollider2D());
 }
 
 void ElementalSpell::Release()
@@ -43,11 +46,17 @@ void ElementalSpell::Reset()
 
 	sprite.setScale(2, 2);
 	anim.SetTarget(&sprite);
+
+	Collider->SetSprite(sprite);
+	Collider->SetActive(false);
 }
 
 void ElementalSpell::Update(float dt)
 {
 	SpriteGo::Update(dt);
+
+	Collider->SetSprite(sprite);
+	Collider->SetColSize();
 
 	angle = player->GetPlayerLookAngle() + 90;
 	// 부자연스러움이 있음 고쳐야함
@@ -66,11 +75,11 @@ void ElementalSpell::Update(float dt)
 	if (player->IsAttack() && !isSpawn)
 	{
 		isSpawn = true;
-		collider->SetActive(true);
-		collider->SetPosition(player->GetAttackPos());
+		Collider->SetActive(true);
+		Collider->SetPosition(player->GetAttackPos());
 		SetPosition(player->GetAttackPos());
 		sprite.setRotation(angle);
-		collider->rect.setRotation(angle);
+		Collider->GetObbCol().setRotation(angle);
 		comboQueue.push(FRAMEWORK.GetGamePlayTime());
 	}
 
@@ -103,16 +112,19 @@ void ElementalSpell::Update(float dt)
 			anim.Play("WindSlashLarge");
 		}
 
-		std::cout << attackCount << std::endl;
-		std::cout << comboQueue.front() - prevComboTime << std::endl;
+		//std::cout << attackCount << std::endl;
+		//std::cout << comboQueue.front() - prevComboTime << std::endl;
 		prevComboTime = comboQueue.front();
 		comboQueue.pop();
 	}
 
 
 
-	// 점을 기준으로 충돌
-	isCol = obbManager.ObbCol(collider->rect, monster->rect);
+	// 점을 기준으로 충돌	new를 안하고 했을때
+	//isCol = obbManager.ObbCol(collider->rect, monster->rect);
+	
+
+
 	//isCol = collider->rect.getGlobalBounds().contains(player->GetMonster()->GetPosition());
 
 	// 면을 기준으로 충돌
@@ -136,11 +148,12 @@ void ElementalSpell::Update(float dt)
 		attackTimer = 0.f;
 		isAttack = false;
 		isSpawn = false;
-		collider->SetActive(false);
+		Collider->SetActive(false);
 	}
-	SetOrigin(Origins::MC);
 
 	anim.Update(dt);
+	SetOrigin(Origins::MC);
+	Collider->SetOrigin(Origins::MC);
 }
 
 void ElementalSpell::Draw(sf::RenderWindow& window)
@@ -148,8 +161,8 @@ void ElementalSpell::Draw(sf::RenderWindow& window)
 	SpriteGo::Draw(window);
 	if (isSpawn)
 	{
-		collider->SetActive(true);
+		Collider->SetActive(true);
 	}
 	else
-		collider->SetActive(false);
+		Collider->SetActive(false);
 }

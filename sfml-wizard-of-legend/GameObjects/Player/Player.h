@@ -20,6 +20,15 @@ enum class AttackDir
 	Up,
 	Right,
 	Down,
+	Left,
+};
+
+enum class HitDir
+{
+	None = -1,
+	Up,
+	Right,
+	Down,
 	Left
 };
 
@@ -30,7 +39,7 @@ enum class States
 	Dash,
 	Slide,
 	Attack,
-	KnockBack,
+	Hit,
 	Dead,
 };
 
@@ -47,6 +56,7 @@ private:
 	Dir currentDir = Dir::Down;
 	Dir slideDir = Dir::Down;
 	AttackDir attackDir = AttackDir::None;
+	HitDir hitDir = HitDir::None;
 	SkillEvents sEvent = SkillEvents::None;
 
 	SceneGame* scene;
@@ -72,11 +82,16 @@ private:
 	int attackCount = 0;
 	int attackComboCount = 0;	// 연속 공격 횟수
 
+	// 문자열 중간 삽입
+	int attackNameInsertPos = 6;
+
 	// 방향 sf::Vector2f
 	sf::Vector2f dir;
 	sf::Vector2f dashDir;
 	sf::Vector2f look;
 	sf::Vector2f iconLook;
+
+	sf::Vector2f hitLook;
 
 	// 좌표 sf::Vector2f
 	std::vector<sf::Vector2f> destPos;
@@ -85,6 +100,7 @@ private:
 	sf::Vector2f attackPos;
 
 	float playerLookAngle = 0.f;
+	float hitLookAngle = 0.f;
 
 	float debugTimer = 0.f;
 	float debugDuration = 1.f;
@@ -112,6 +128,17 @@ private:
 	bool isSlide = false;
 	bool isDashCool = false;
 	bool isAttack = false;
+	bool isHit = false;
+	bool isInvincible = false;
+
+
+	std::vector<std::string> idleId;
+	std::vector<std::string> runId;
+	std::vector<std::string> dashId;
+	std::vector<std::string> slideId;
+	std::vector<std::string> attackId;
+	std::vector<std::string> hitId;
+	//std::vector<std::string> daedId;
 
 	std::string attackName;
 
@@ -131,11 +158,12 @@ public:
 	void DashUpdate(float dt);
 	void SlideUpdate(float dt);
 	void AttackUpdate(float dt);
-	void KnockBackUpdate(float dt);
+	void HitUpdate(float dt);
 	void DeadUpdate(float dt);
 
 	void CalDir();
 	void CalLookAngle();
+	void CalHitLookAngle();
 
 
 
@@ -150,6 +178,7 @@ public:
 
 	// 데미지 : -, 회복 : +
 	void SetHp(int value);
+	void SetHitDir(sf::Vector2f dir) { this->hitLook = dir; };
 
 	// 스킬 생성 지점
 	sf::Vector2f GetAttackPos() { return attackPos; }
@@ -159,4 +188,7 @@ public:
 	bool IsAttack() { return isAttack; }
 	
 	void ChangeState(States state);
+
+	// 애니메이션 이름 등록
+	void InsertAnimId();
 };

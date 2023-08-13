@@ -28,3 +28,7 @@
 3,animations/Player/Attck_Basic/WindSlash/WindSlashLarge.csv
 3,animations/Player/Attck_Basic/WindSlash/WindSlashMed.csv
 3,animations/Player/Attck_Basic/WindSlash/WindSlashSmall.csv
+3,animations/Player/Die/Die.csv
+3,animations/Player/Hit/HitDown.csv
+3,animations/Player/Hit/HitRight.csv
+3,animations/Player/Hit/HitUp.csv

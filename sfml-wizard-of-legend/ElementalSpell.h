@@ -7,7 +7,7 @@ class SpriteGo;
 class SceneGame;
 class Player;
 class Monster;
-
+class BoxCollider2D;
 
 class ElementalSpell : public SpriteGo
 {
@@ -19,7 +19,7 @@ protected:
 
 	AnimationController anim;
 	
-	BoxCollider2D obbManager;
+	BoxCollider2D* Collider;
 	SpriteGo* collider;
 
 	std::queue <float> comboQueue;
