@@ -34,6 +34,7 @@
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
+    <ClCompile Include="GameObjects\Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
+    <ClInclude Include="GameObjects\Bullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

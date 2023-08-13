@@ -1,0 +1,7 @@
+ID,FPS,LOOPTYPE,,
+ArcherBowPull,2,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Archer2.png,446,154,19,29
+graphics/Texture2D/Archer2.png,446,58,19,29
+graphics/Texture2D/Archer2.png,446,10,19,29

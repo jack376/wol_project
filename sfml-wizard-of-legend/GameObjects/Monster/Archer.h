@@ -1,13 +1,23 @@
 #pragma once
 #include "Monster.h"
+#include "Bullet.h"
+
 class Archer :
     public Monster
 {
 protected:
 	sf::Sprite bow;
+	sf::Sprite attackArm;
+	sf::Sprite pullArm;
 	AnimationController bowAni;
-	float chargeRate = 1.f;
-	float chargeTimer = 0.f;
+	AnimationController attackArmAni;
+	AnimationController pullArmAni;
+	Bullet arrow;
+	float ameRate = 1.f;
+	float ameTimer = 0.f;
+	float arrowSpeed = 500.f;
+	bool isAme = false;
+	bool isFire = false;
 public:
 	Archer(MonsterId id, const std::string& textureId = "", const std::string& n = "Archer");
 	virtual ~Archer() override;
@@ -18,6 +28,6 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	virtual void Attack();
+	virtual void Attack(float dt);
 };
 

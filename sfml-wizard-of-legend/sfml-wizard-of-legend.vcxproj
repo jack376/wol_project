@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
+    <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
     <ClCompile Include="GameObjects\BaseUI.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
+    <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="ElementalSpell.h" />

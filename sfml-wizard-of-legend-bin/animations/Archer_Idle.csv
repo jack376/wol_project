@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-LancerIdle,1,0,,
+ArcherIdle,1,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/Texture2D/Archer2.png,15,9,21,36
