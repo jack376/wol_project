@@ -55,6 +55,24 @@ void Player::Init()
 	InsertAnimId();
 	playerColor = sprite.getColor();
 
+
+	palette.setTexture(*RESOURCE_MGR.GetTexture("graphics/Player/WizardPalette.png"));
+
+	// 팔레트 적용시키기
+	palette.setTextureRect(sf::IntRect{0, 62, 54, 2});
+	sf::Image image = palette.getTexture()->copyToImage();
+	paletteTexture.loadFromImage(image);
+
+	// 얽히고 섥혀서 문제 발생 여지 있음..
+	// &로 넘기긴 하는데 적용이 되는건지 확인 필요
+	Utils::SetShader(currentShader, sprite, paletteTexture);
+
+	//sf::Texture* tex = RESOURCE_MGR.GetTexture(frame.textureId);
+
+	////여기서 target의 texture와 Rect를 정함!
+	//target->setTexture(*tex);
+	//target->setTextureRect(frame.texCoord);
+
 }
 
 void Player::Release()
@@ -228,6 +246,7 @@ void Player::Update(float dt)
 void Player::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
+	window.draw(sprite, &currentShader);
 	window.draw(attackPosCol);
 }
 

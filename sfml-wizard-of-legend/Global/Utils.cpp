@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Utils.h"
+#include <SFML/Graphics.hpp>
 
 std::random_device Utils::rd;
 std::mt19937 Utils::gen(Utils::rd());
@@ -131,6 +132,42 @@ float Utils::Angle(const sf::Vector2f& start, const sf::Vector2f& end)
 float Utils::Angle(const sf::Vector2f& dir)
 {
 	return (float)(atan2(dir.y, dir.x) * (180.f / M_PI));
+}
+
+void Utils::SetShader(sf::Shader& shader, sf::Sprite& sprite, sf::Texture& palette)
+{
+
+	shader.setUniform("texture", sprite.getTexture());
+	shader.setUniform("palette", palette);
+	if (!shader.loadFromMemory(
+		"uniform sampler2D texture;\n"
+		"uniform sampler2D paletteTexture;\n"
+		"void main()\n"
+		"{\n"
+		"    vec4 grayColor = texture2D(texture, gl_TexCoord[0].xy);\n"
+		"    float grayValue = grayColor.r;\n"
+		"    float paletteSize = float(texture2D(paletteTexture, vec2(0.0, 62.0)).x);\n"
+		//"    float paletteSize = float(textureSize(paletteTexture).x);\n"
+		"    vec2 paletteCoord = vec2(grayValue * (paletteSize - 1.0) / paletteSize, 0.5);\n"
+		"    vec4 paletteColor = texture2D(paletteTexture, paletteCoord);\n"
+		"    gl_FragColor = paletteColor;\n"
+		"}\n",
+		sf::Shader::Fragment
+	))
+	{
+		std::cout << "Shader Load Failed!" << std::endl;
+		//return false;
+	}
+
+
+	std::cout << "1";
+
+
+	//sf::Texture* tex = RESOURCE_MGR.GetTexture(frame.textureId);
+
+	////여기서 target의 texture와 Rect를 정함!
+	//target->setTexture(*tex);
+	//target->setTextureRect(frame.texCoord);
 }
 
 float Utils::DotProduct(const sf::Vector2f& a, const sf::Vector2f& b)

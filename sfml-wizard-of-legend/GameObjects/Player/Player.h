@@ -67,6 +67,9 @@ private:
 
 	BoxCollider2D obb;
 
+	sf::Shader currentShader;
+	sf::Sprite palette;
+	sf::Texture paletteTexture;
 
 	// 스킬 클래스
 	//4개는 고정이란 뜻

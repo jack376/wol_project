@@ -32,6 +32,10 @@ public:
 	static float Angle(const sf::Vector2f& start, const sf::Vector2f& end);
 	static float Angle(const sf::Vector2f& dir);
 
+	// 팔레트 함수
+	// 쉐이더 적용 방법 window.draw(sprite, &shader);
+	static void SetShader(sf::Shader& shader, sf::Sprite& sprite, sf::Texture& palette);
+
 	// OBB 함수
 	// 두 백터 내적 계산
 	static float DotProduct(const sf::Vector2f& a, const sf::Vector2f& b);
