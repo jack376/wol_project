@@ -54,7 +54,7 @@ void SceneGame::Init()
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
 
-	Monster* go = CreatMonster(MonsterId::Lancer);
+	//Monster* go = CreatMonster(MonsterId::Lancer);
 	monster = CreatMonster(MonsterId::Lancer);
 	monster->SetPlayer(player);
 	player->SetMonster(monster);
@@ -100,7 +100,7 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);	
 	debugTimer += dt;
 
-	isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
+	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 
 	//if (debugTimer > debugDuration && !isCol)

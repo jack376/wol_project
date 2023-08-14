@@ -12,8 +12,16 @@ enum class SkillEvents
 	Count,
 };
 
+enum class SkillTypes
+{
+	None = -1,
+	Melee,
+	Range,
+};
+
 enum class ElementTypes
 {
+	None = -1,
 	Fire,
 	Water,
 	Thunder,

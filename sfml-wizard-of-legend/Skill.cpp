@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Skill.h"
+#include "SceneMgr.h"
 
 Skill::Skill(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -12,6 +13,8 @@ Skill::~Skill()
 
 void Skill::Init()
 {
+	skillIcon = (SpriteGo*)SCENE_MGR.GetCurrScene()->AddGo(new SpriteGo(skillIconId));
+
 }
 
 void Skill::Release()

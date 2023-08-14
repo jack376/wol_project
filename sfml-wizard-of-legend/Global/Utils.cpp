@@ -136,38 +136,50 @@ float Utils::Angle(const sf::Vector2f& dir)
 
 void Utils::SetShader(sf::Shader& shader, sf::Sprite& sprite, sf::Texture& palette)
 {
-
 	shader.setUniform("texture", sprite.getTexture());
-	shader.setUniform("palette", palette);
-	if (!shader.loadFromMemory(
-		"uniform sampler2D texture;\n"
-		"uniform sampler2D paletteTexture;\n"
-		"void main()\n"
-		"{\n"
-		"    vec4 grayColor = texture2D(texture, gl_TexCoord[0].xy);\n"
-		"    float grayValue = grayColor.r;\n"
-		"    float paletteSize = float(texture2D(paletteTexture, vec2(0.0, 62.0)).x);\n"
-		//"    float paletteSize = float(textureSize(paletteTexture).x);\n"
-		"    vec2 paletteCoord = vec2(grayValue * (paletteSize - 1.0) / paletteSize, 0.5);\n"
-		"    vec4 paletteColor = texture2D(paletteTexture, paletteCoord);\n"
-		"    gl_FragColor = paletteColor;\n"
-		"}\n",
-		sf::Shader::Fragment
-	))
+	shader.setUniform("paletteTexture", palette);
+
+	if (!shader.loadFromFile("ex_fragment_shader.frag", sf::Shader::Fragment)) 
 	{
 		std::cout << "Shader Load Failed!" << std::endl;
-		//return false;
 	}
 
+	//"    vec4 grayColor = texture2D(texture, gl_TexCoord[0].xy);\n"
+	//"    float grayValue = grayColor.r / 255.0;\n"
+	//"    float paletteSize = float(textureSize(paletteTexture).x);\n"
+	//"    vec2 paletteCoord = vec2(grayValue * paletteSize, float(textureSize(paletteTexture).y));\n"
+	//"    vec4 paletteColor = texture2D(paletteTexture, paletteCoord);\n"
+	//"    gl_FragColor = vec4(paletteColor, paletteColor, paletteColor, 1.0);\n"
+}
 
-	std::cout << "1";
+sf::Sprite& Utils::SetPixelColor(sf::Image& grayImage, sf::Image& paletteImage)
+{
 
+	sf::Color paletteLine[28]; // Assuming you have a palette of 256 colors
+	for (int i = 0; i < 28; ++i) {
+		paletteLine[i] = paletteImage.getPixel(i * 2, 0);
+		paletteLine[i].a = 255;
+	}
 
-	//sf::Texture* tex = RESOURCE_MGR.GetTexture(frame.textureId);
+	sf::Vector2u imageSize = grayImage.getSize();
+	for (unsigned int x = 0; x < imageSize.x; ++x) 
+	{
+		for (unsigned int y = 0; y < imageSize.y; ++y) 
+		{
+			sf::Color pixelColor = grayImage.getPixel(x, y);
+			int grayValue = pixelColor.r; // Assuming grayscale is stored in the red channel
+			grayValue /= 28;
+			sf::Color newColor = paletteLine[grayValue];
+			grayImage.setPixel(x, y, newColor);
+		}
+	}
 
-	////여기서 target의 texture와 Rect를 정함!
-	//target->setTexture(*tex);
-	//target->setTextureRect(frame.texCoord);
+	sf::Texture resultTexture;
+	resultTexture.loadFromImage(grayImage);
+
+	// Display the result
+	sf::Sprite resultSprite(resultTexture);
+	return resultSprite;
 }
 
 float Utils::DotProduct(const sf::Vector2f& a, const sf::Vector2f& b)

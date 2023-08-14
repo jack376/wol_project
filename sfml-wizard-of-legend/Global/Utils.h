@@ -36,6 +36,9 @@ public:
 	// 쉐이더 적용 방법 window.draw(sprite, &shader);
 	static void SetShader(sf::Shader& shader, sf::Sprite& sprite, sf::Texture& palette);
 
+	// 픽셀 적용
+	static sf::Sprite& SetPixelColor(sf::Image& grayImage, sf::Image& paletteImage);
+
 	// OBB 함수
 	// 두 백터 내적 계산
 	static float DotProduct(const sf::Vector2f& a, const sf::Vector2f& b);

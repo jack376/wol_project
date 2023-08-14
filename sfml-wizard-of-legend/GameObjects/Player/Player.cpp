@@ -41,7 +41,6 @@ void Player::Init()
 
 
 	// 콜라이더
-
 	rect.setSize({65, 120});
 	rect.setOutlineThickness(1.f);
 	rect.setOutlineColor(sf::Color::Green);
@@ -55,24 +54,8 @@ void Player::Init()
 	InsertAnimId();
 	playerColor = sprite.getColor();
 
-
-	palette.setTexture(*RESOURCE_MGR.GetTexture("graphics/Player/WizardPalette.png"));
-
-	// 팔레트 적용시키기
-	palette.setTextureRect(sf::IntRect{0, 62, 54, 2});
-	sf::Image image = palette.getTexture()->copyToImage();
-	paletteTexture.loadFromImage(image);
-
-	// 얽히고 섥혀서 문제 발생 여지 있음..
-	// &로 넘기긴 하는데 적용이 되는건지 확인 필요
-	Utils::SetShader(currentShader, sprite, paletteTexture);
-
-	//sf::Texture* tex = RESOURCE_MGR.GetTexture(frame.textureId);
-
-	////여기서 target의 texture와 Rect를 정함!
-	//target->setTexture(*tex);
-	//target->setTextureRect(frame.texCoord);
-
+	//sf::Image grayImage = sprite.getTexture()->copyToImage();
+	//sf::Vector2u imageSize = grayImage.getSize();
 }
 
 void Player::Release()
@@ -122,6 +105,28 @@ void Player::Reset()
 	// 플레이어 리셋
 	hp = maxHp;
 	attackCount = 0;
+
+	// 팔레트 적용시키기
+	//palette.setTexture(*RESOURCE_MGR.GetTexture("graphics/Player/WizardPalette.png"));
+	//palette.setTextureRect(sf::IntRect{0, 62, 54, 2});
+	////palette.setScale(16, 16);
+
+	//sf::Image grayImage = sprite.getTexture()->copyToImage();
+	//sf::Image paletteImage = palette.getTexture()->copyToImage();
+	//paletteTexture.loadFromImage(grayImage);
+
+	//sprite = Utils::SetPixelColor(grayImage, paletteImage);
+
+	// 얽히고 섥혀서 문제 발생 여지 있음..
+	// &로 넘기긴 하는데 적용이 되는건지 확인 필요
+	//Utils::SetShader(currentShader, sprite, paletteTexture);
+
+	//sf::Texture* tex = RESOURCE_MGR.GetTexture(frame.textureId);
+
+	////여기서 target의 texture와 Rect를 정함!
+	//target->setTexture(*tex);
+	//target->setTextureRect(frame.texCoord);
+
 }
 
 void Player::Update(float dt)
@@ -131,6 +136,7 @@ void Player::Update(float dt)
 	SetDirIconPos();
 	SetDirIconDir();
 	
+	// 디버그 위치
 
 
 	// 콜라이더 플레이어 동기화
@@ -246,8 +252,9 @@ void Player::Update(float dt)
 void Player::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
-	window.draw(sprite, &currentShader);
+	window.draw(palette);
 	window.draw(attackPosCol);
+	//window.draw(sprite, &currentShader);
 }
 
 void Player::IdleUpdate(float dt)
@@ -329,6 +336,7 @@ void Player::DashUpdate(float dt)
 		slideDir = currentDir;	// Dir,  슬라이딩 도중 방향전환 방지용
 		dashDest = destPos[(int)currentDir] + GetPosition();
 		dashStart = GetPosition();
+
 
 	}
 	isDash = true;

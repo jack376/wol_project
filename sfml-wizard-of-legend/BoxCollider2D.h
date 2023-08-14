@@ -28,6 +28,6 @@ public:
 
 	void SetSprite(sf::Sprite& sprite) { this->sprite1 = sprite; }
 	void SetColSize();
-	bool ObbCol(const sf::RectangleShape& col1, const sf::RectangleShape& col2);
+	bool ObbCol(const sf::RectangleShape& other);
 };
 

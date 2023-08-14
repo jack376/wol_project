@@ -65,7 +65,7 @@ private:
 
 	sf::CircleShape attackPosCol;	// 스킬 생성 지점 가시화
 
-	BoxCollider2D obb;
+	//BoxCollider2D obb;
 
 	sf::Shader currentShader;
 	sf::Sprite palette;
