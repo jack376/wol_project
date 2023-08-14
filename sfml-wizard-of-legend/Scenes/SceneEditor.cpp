@@ -66,22 +66,28 @@ void SceneEditor::Init()
 	uiBackground->SetStrokeColor(sf::Color(32, 32, 64, 255));
 
 	// UIButton
-	float size  = 32.0f;
-	float posX  = blankPos;
-	float posY  = atlasTextureSize + blankPos * 2;
-	float gap   = size + size * 0.25f;
+	float size  = 64.0f;
+	float posX  = blankPos + blankPos * 0.125f;
+	float posY  = atlasTextureSize + blankPos * 2.5;
+	float gap   = size + size;
 	int   index = 0;
 
-	CreateButton("q", "None", posX + gap * 0, posY, size, index, [this]() { std::cout << "Button q" << std::endl; });
-	CreateButton("w", "None", posX + gap * 1, posY, size, index, [this]() { std::cout << "Button w" << std::endl; });
-	CreateButton("e", "None", posX + gap * 2, posY, size, index, [this]() { std::cout << "Button e" << std::endl; });
-	CreateButton("r", "None", posX + gap * 3, posY, size, index, [this]() { std::cout << "Button r" << std::endl; });
-	CreateButton("a", "None", posX + gap * 4, posY, size, index, [this]() { std::cout << "Button a" << std::endl; });
-	CreateButton("s", "None", posX + gap * 5, posY, size, index, [this]() { std::cout << "Button s" << std::endl; });
-	CreateButton("d", "None", posX + gap * 6, posY, size, index, [this]() { std::cout << "Button d" << std::endl; });
-	CreateButton("f", "None", posX + gap * 7, posY, size, index, [this]() { std::cout << "Button f" << std::endl; });
-	CreateButton("z", "None", posX + gap * 8, posY, size, index, [this]() { std::cout << "Button z" << std::endl; });
-	CreateButton("x", "None", posX + gap * 9, posY, size, index, [this]() { std::cout << "Button x" << std::endl; });
+	CreateButton("1", "NONE", posX + gap * 0, posY + size * 0, size, index, [this]()    { std::cout << "Button q" << std::endl; } );
+	CreateButton("2", "GROUND", posX + gap * 1, posY + size * 0, size, index, [this]()  { std::cout << "Button w" << std::endl; } );
+	CreateButton("3", "WALL", posX + gap * 2, posY + size * 0, size, index, [this]()    { std::cout << "Button e" << std::endl; } );
+	CreateButton("4", "CLIFF", posX + gap * 3, posY + size * 0, size, index, [this]()   { std::cout << "Button r" << std::endl; } );
+	CreateButton("Q", "SAVE", posX + gap * 0, posY + size * 1, size, index, [this]()    { std::cout << "Button q" << std::endl; } );
+	CreateButton("W", "LOAD", posX + gap * 1, posY + size * 1, size, index, [this]()    { std::cout << "Button w" << std::endl; } );
+	CreateButton("E", "OVERLAY", posX + gap * 2, posY + size * 1, size, index, [this]() { std::cout << "Button e" << std::endl; } );
+	CreateButton("R", "GRID", posX + gap * 3, posY + size * 1, size, index, [this]()    { std::cout << "Button r" << std::endl; } );
+	CreateButton("A", "DRAW", posX + gap * 0, posY + size * 2, size, index, [this]()    { std::cout << "Button a" << std::endl; } );
+	CreateButton("S", "LAYER", posX + gap * 1, posY + size * 2, size, index, [this]()   { std::cout << "Button s" << std::endl; } );
+	CreateButton("D", "COPY", posX + gap * 2, posY + size * 2, size, index, [this]()    { std::cout << "Button d" << std::endl; } );
+	CreateButton("F", "PASTE", posX + gap * 3, posY + size * 2, size, index, [this]()   { std::cout << "Button f" << std::endl; } );
+	CreateButton("Z", "ZOOM+", posX + gap * 0, posY + size * 3, size, index, [this]()   { std::cout << "Button z" << std::endl; } );
+	CreateButton("X", "ZOOM-", posX + gap * 1, posY + size * 3, size, index, [this]()   { std::cout << "Button x" << std::endl; } );
+	CreateButton("C", "RESIZE+", posX + gap * 2, posY + size * 3, size, index, [this]() { std::cout << "Button c" << std::endl; } );
+	CreateButton("V", "RESIZE-", posX + gap * 3, posY + size * 3, size, index, [this]() { std::cout << "Button v" << std::endl; } );
 	
 	for (auto go : gameObjects)
 	{
@@ -568,26 +574,29 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 
 BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& text, float posX, float posY, float size, int texIndex, std::function<void()> onClickAction)
 {
-	//SpriteGo* newIcon = (SpriteGo*)AddGo(new SpriteGo(iconId, iconName));
-	//newIcon->sortLayer = 111;
-
 	BaseUI* newButton = (BaseUI*)AddGo(new BaseUI(name, UiType::Box));
 	newButton->sortLayer = 115;
 	newButton->SetPosition(posX, posY);
-	newButton->SetColor(sf::Color::Color(64, 64, 64, 128));
-	newButton->SetStrokeColor(sf::Color::Color(255, 255, 255, 255));
-	newButton->SetSizeAdd(size + 16.0f, size);
+	newButton->SetColor(sf::Color(32, 32, 64, 255));
+	newButton->SetSizeAdd(size + 56.0f, size - 16.0f);
+	//newButton->SetStrokeColor(sf::Color(64, 64, 128, 128));
 	newButton->OnEnter = [newButton]()
 	{
-		newButton->SetColor(sf::Color::Color(255, 64, 64, 128));
-		newButton->SetStrokeColor(sf::Color::Color(0, 255, 255, 255));
+		newButton->SetColor(sf::Color::Color(64, 64, 128, 255));
 	};
 	newButton->OnExit = [newButton]()
 	{
-		newButton->SetColor(sf::Color::Color(64, 64, 64, 128));
-		newButton->SetStrokeColor(sf::Color::Color(255, 255, 255, 255));
+		newButton->SetColor(sf::Color::Color(32, 32, 64, 255));
 	};
 	newButton->OnClick = onClickAction;
+
+	TextGo* buttonText = (TextGo*)AddGo(new TextGo("fonts/NanumSquareEB.ttf", name + "T"));
+	buttonText->sortLayer = 116;
+	buttonText->text.setCharacterSize(16);
+	buttonText->text.setPosition(posX + 60.0f, posY + 20.0f);
+	buttonText->text.setFillColor(sf::Color::White);
+	buttonText->text.setString(text);
+	buttonText->SetOrigin(Origins::MC);
 
 	return newButton;
 }
