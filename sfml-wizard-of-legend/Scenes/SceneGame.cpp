@@ -114,6 +114,7 @@ void SceneGame::Update(float dt)
 	//}
 
 	// Test Code
+	/*
 	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
 	cameraDirection.y = INPUT_MGR.GetAxis(Axis::Vertical);
 
@@ -128,6 +129,7 @@ void SceneGame::Update(float dt)
 		camera.setPosition(cameraPosition);
 	}
 	worldView.setCenter(cameraPosition);
+	*/
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
 	{

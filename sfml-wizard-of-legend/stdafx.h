@@ -14,13 +14,9 @@
 #include <random>
 #include <tuple>
 #include <functional>
-<<<<<<< HEAD
 #include <cassert>
-
-=======
 #include <stack>
 #include <iomanip>
->>>>>>> feature/map_editor
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
