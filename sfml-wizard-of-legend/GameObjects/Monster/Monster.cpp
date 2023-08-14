@@ -139,7 +139,7 @@ void Monster::Idle()
     SetRectBox();
 }
 
-void Monster::Attack()
+void Monster::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
     //attackTimer += dt;
@@ -243,7 +243,7 @@ void Monster::HandleBehavior(float dt)
             if (!isAttacking)
                 SetLook(playerPos);
             if (distance <= stat.attackRange)
-                Attack();
+                Attack(dt);
             else if (!isAttacking)
                 Move(dt);
         }

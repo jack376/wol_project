@@ -1,0 +1,6 @@
+ID,FPS,LOOPTYPE,,
+ArcherBowRelease,2,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Archer2.png,446,104,19,29
+graphics/Texture2D/Archer2.png,446,154,19,29

@@ -96,7 +96,7 @@ void Lancer::Draw(sf::RenderWindow& window)
         attackEffect.Draw(window);
 }
 
-void Lancer::Attack()
+void Lancer::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
     if (attackTimer >= stat.attackRate)

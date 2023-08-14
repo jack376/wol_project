@@ -38,6 +38,7 @@ enum class MonsterId
 	Ghoul,
 	GhoulLarge,
 	Lancer,
+	Archer,
 };
 
 class SceneGame;
@@ -82,7 +83,7 @@ public:
 	void HandleState(float dt);
 
 	void Idle();
-	virtual void Attack();
+	virtual void Attack(float dt);
 	void Move(float dt);
 	void Die();
 	void KnockBack();

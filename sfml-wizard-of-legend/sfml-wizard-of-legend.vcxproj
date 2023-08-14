@@ -157,6 +157,7 @@
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="BoxCollider2D.cpp" />
+    <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="GameObjects\DestructibleGo.cpp" />
     <ClCompile Include="Framework\Command.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="BoxCollider2D.h" />
+    <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="Framework\Command.h" />

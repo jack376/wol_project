@@ -9,6 +9,7 @@
 #include "SpriteGo.h"
 #include "Monster.h"
 #include "Lancer.h"
+#include "Archer.h"
 #include "Player.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
@@ -54,10 +55,11 @@ void SceneGame::Init()
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
 
-	Monster* go = CreatMonster(MonsterId::Lancer);
-	monster = CreatMonster(MonsterId::Lancer);
+
+	Monster* go = CreatMonster(MonsterId::Archer);
+	monster = go;
 	monster->SetPlayer(player);
-	player->SetMonster(monster);
+	player->SetMonster(go);
 
 	for (auto go : gameObjects)
 	{
@@ -198,6 +200,9 @@ Monster* SceneGame::CreatMonster(MonsterId id)
 		break;
 	case MonsterId::Lancer:
 		monster = dynamic_cast<Monster*>(AddGo(new Lancer(id)));
+		break;
+	case MonsterId::Archer:
+		monster = dynamic_cast<Monster*>(AddGo(new Archer(id)));
 		break;
 	}
 	return monster;
