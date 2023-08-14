@@ -17,7 +17,6 @@ protected:
 	float ameTimer = 0.f;
 	float arrowSpeed = 1000.f;
 	bool isAme = false;
-	bool isFire = false;
 public:
 	Archer(MonsterId id, const std::string& textureId = "", const std::string& n = "Archer");
 	virtual ~Archer() override;

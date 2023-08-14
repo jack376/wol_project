@@ -174,6 +174,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
     <ClCompile Include="GameObjects\UIButton.cpp" />
     <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
     <ClCompile Include="Global\Utils.cpp" />
@@ -218,6 +220,8 @@
     <ClInclude Include="Framework\ObjectPool.h" />
     <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
+    <ClInclude Include="GameObjects\Raycaster\Beam.h" />
+    <ClInclude Include="GameObjects\Raycaster\Line.h" />
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
     <ClInclude Include="GameObjects\Monster\Monster.h" />

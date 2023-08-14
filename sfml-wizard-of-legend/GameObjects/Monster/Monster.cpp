@@ -27,7 +27,7 @@ void Monster::Init()
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Hurt.csv"));
 
-    rect.setSize({ 100, 150 });
+    //rect.setSize({ 100, 150 });
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineThickness(1.f);
     rect.setOutlineColor(sf::Color::Green);

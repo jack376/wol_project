@@ -36,7 +36,6 @@ void Archer::Reset()
 {
 	Monster::Reset();
 
-	arrow.Reset();
 	bowAni.SetTarget(&bow);
 	attackArmAni.SetTarget(&attackArm);
 	pullArmAni.SetTarget(&pullArm);
@@ -47,13 +46,15 @@ void Archer::Reset()
     bow.setOrigin(-_BowLocalPos);
 	Utils::SetOrigin(attackArm, Origins::ML);
 	Utils::SetOrigin(pullArm, Origins::ML);
+
+	arrow.Reset();
 	arrow.SetOrigin(Origins::BC);
+	arrow.SetActive(false);
 }
 
 void Archer::Update(float dt)
 {
 	Monster::Update(dt);
-
 	if (currentState == MonsterState::Attacking)
 	{
 		attackArmAni.Update(dt);
@@ -106,7 +107,6 @@ void Archer::Draw(sf::RenderWindow& window)
 
 void Archer::Attack(float dt)
 {
-	std::cout << "arrow active: " << arrow.GetActive() << std::endl;
     SetState(MonsterState::Attacking);
     if (attackTimer >= stat.attackRate)
     {
@@ -127,7 +127,6 @@ void Archer::Attack(float dt)
         isAttacked = false;
         isAttacking = true;
 		isAme = true;
-		isFire = false;
     }
 	if (isAme)
 		ameTimer += dt;
@@ -138,16 +137,5 @@ void Archer::Attack(float dt)
 		arrow.Fire(bow.getPosition(), look, arrowSpeed);
 		ameTimer = 0;
 		isAme = false;
-		isFire = true;
 	}
-
-    if (!isAttacked && player->IsAlive())
-    {
-        //OBB적용 필요
-        if (attackEffect.sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
-        {
-            player->SetHp(-stat.damage);
-            isAttacked = true;
-        }
-    }
 }
