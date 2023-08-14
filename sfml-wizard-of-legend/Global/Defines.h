@@ -2,8 +2,15 @@
 
 #define _USE_MATH_DEFINES
 
-
-
+enum class SkillEvents
+{
+	None = -1,
+	Left,
+	Right,
+	Space,
+	Q,
+	Count,
+};
 
 enum class ElementTypes
 {
@@ -63,28 +70,6 @@ enum class ObjectType
 	Count,
 };
 
-enum class PatternObjectType
-{
-	None = -1,
-	Platform,
-	Obstacle,
-	ItemSpeedUp,
-	ItemBigHealPack,
-	ItemHealPack,
-	ItemMagnet,
-	ItemBig,
-	//ItemBonus,
-	ItemCoin,
-	Coin,
-	BigCoin,
-	GoldCoin,
-	BigGoldCoin,
-	Diamond,
-	DiamondBox,
-	LuckyBox,
-	Count,
-
-};
 
 enum class UiType
 {
@@ -93,3 +78,4 @@ enum class UiType
 };
 
 #include "AnimationClip.h"
+using RectVertexArray = std::array<sf::Vector2f, 4>;

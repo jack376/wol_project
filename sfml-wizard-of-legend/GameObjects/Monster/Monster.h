@@ -1,6 +1,8 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
+#include "BoxCollider2D.h"
+#include "SpriteEffect.h";
 
 class Player;
 
@@ -38,6 +40,7 @@ enum class MonsterId
 	Lancer,
 };
 
+class SceneGame;
 
 class Monster :
     public SpriteGo
@@ -45,19 +48,22 @@ class Monster :
 protected:
 	MonsterId monsterId;
 	MonsterState currentState = MonsterState::Idle;
-	AnimationController animation;
-
 	MonsterStat stat;
+	AnimationController animation;
+	SpriteEffect attackEffect;
+
 	int hp = 0;
 	float attackTimer = 0.f;
 	float knockBackTime = 0.15f;
 	float knockBackTimer = 0.f;
 	bool isAttacked = false;
+	bool isAttacking = false;
 
 	Player* player = nullptr;
 
 	sf::Vector2f look; //바라보는 방향
 	sf::Vector2f direction; //이동하는 방향
+
 
 	sf::CircleShape searchRange;
 	sf::CircleShape attackRange;
@@ -69,15 +75,14 @@ public:
 	virtual void Init() override;
 	virtual void Release() override;
 	virtual void Reset() override;
-
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
     void SetState(MonsterState newState);
-	void HandleState();
+	void HandleState(float dt);
 
 	void Idle();
-	void Attack(float dt);
+	virtual void Attack();
 	void Move(float dt);
 	void Die();
 	void KnockBack();
@@ -86,10 +91,6 @@ public:
 	void SetPlayer(Player* player) { this->player = player; }
 	void OnAttacked(float damage);
 	void HandleBehavior(float dt);
+
+	void SetRectBox();
 };
-
-
-//생성
-//배치(스폰)
-//탐색(플레이어)
-//이동 및 공격

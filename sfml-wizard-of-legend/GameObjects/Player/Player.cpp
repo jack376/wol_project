@@ -20,10 +20,11 @@ void Player::Init()
 	SetOrigin(Origins::MC);
 
 	// Reset인지 Init()인지 생각
-	destPos.push_back({ dashDistance , -dashDistance });
-	destPos.push_back({ -dashDistance , -dashDistance });
-	destPos.push_back({ dashDistance , dashDistance });
-	destPos.push_back({ -dashDistance , dashDistance });
+	sf::Vector2f normalize = Utils::Normalize({ 1, 1 });
+	destPos.push_back({ dashDistance * normalize.x , -dashDistance * normalize.y });
+	destPos.push_back({ -dashDistance * normalize.x, -dashDistance * normalize.y });
+	destPos.push_back({ dashDistance * normalize.x , dashDistance * normalize.y });
+	destPos.push_back({ -dashDistance * normalize.x, dashDistance * normalize.y });
 	destPos.push_back({ 0 , -dashDistance });
 	destPos.push_back({ dashDistance , 0 });
 	destPos.push_back({ 0 , dashDistance });
@@ -50,6 +51,8 @@ void Player::Init()
 	attackPosCol.setOutlineThickness(1.f);
 	attackPosCol.setOutlineColor(sf::Color::Red);
 	attackPosCol.setFillColor(sf::Color::Transparent);
+
+	InsertAnimId();
 }
 
 void Player::Release()
@@ -86,6 +89,12 @@ void Player::Reset()
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackForeLeft.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackForeRight.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackForeUp.csv"));
+
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitDown.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitUp.csv"));
+
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Die/Die.csv"));
 
 	anim.SetTarget(&sprite);
 	anim.Play("IdleDown");
@@ -127,6 +136,17 @@ void Player::Update(float dt)
 
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
 
+	// 무적 상태 분리
+	if (isInvincible)
+	{
+
+	}
+
+	// 맞으면 무적상태와 맞는 상태 표시
+	if (isHit)
+	{
+		ChangeState(States::Hit);
+	}
 
 	// 입력에 따른 방향 설정
 	CalDir();
@@ -183,8 +203,8 @@ void Player::Update(float dt)
 		AttackUpdate(dt);
 		break;
 
-	case States::KnockBack:
-		KnockBackUpdate(dt);
+	case States::Hit:
+		HitUpdate(dt);
 		break;
 
 	case States::Dead:
@@ -204,37 +224,16 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::IdleUpdate(float dt)
 {
+	anim.Play(idleId[(int)currentDir]);
 	switch (currentDir)
 	{
-	case Dir::UpRight:
-		anim.Play("IdleRight");
-		break;
 	case Dir::UpLeft:
-		SetFlipX(true);
-		anim.Play("IdleRight");
-		break;
-	case Dir::DownRight:
-		anim.Play("IdleRight");
-		break;
 	case Dir::DownLeft:
-		SetFlipX(true);
-		anim.Play("IdleRight");
-		break;
-	case Dir::Up:
-		anim.Play("IdleUp");
-		break;
-	case Dir::Right:
-		anim.Play("IdleRight");
-		break;
-	case Dir::Down:
-		anim.Play("IdleDown");
-		break;
 	case Dir::Left:
 		SetFlipX(true);
-		anim.Play("IdleRight");
 		break;
-	}
-
+	}	
+	
 	if (dir.x != 0 || dir.y != 0)
 	{
 		ChangeState(States::Run);
@@ -243,26 +242,22 @@ void Player::IdleUpdate(float dt)
 
 void Player::RunUpdate(float dt)
 {
-	if (dir.y > 0 && !isRun)
+	if (!isRun)
 	{
-		anim.Play("RunDown");
-	}
+		anim.Play(runId[(int)currentDir]);
 
-	if (dir.y < 0 && !isRun)
-	{
-		anim.Play("RunUp");
-	}
+		switch (currentDir)
+		{
+		case Dir::UpLeft:
+		case Dir::DownLeft:
+		case Dir::Left:
+			SetFlipX(true);
+			break;
+		default:
+			SetFlipX(false);
 
-	if (dir.x > 0 && !isRun)
-	{
-		anim.Play("RunRight");
-		SetFlipX(false);
-	}
+		}
 
-	if (dir.x < 0 && !isRun)
-	{
-		anim.Play("RunRight");
-		SetFlipX(true);
 	}
 
 	sf::Vector2f movePos = sprite.getPosition();
@@ -291,40 +286,13 @@ void Player::DashUpdate(float dt)
 {
 	if (!isDash)
 	{
+		anim.Play(dashId[(int)currentDir]);
+
 		switch (currentDir)
 		{
-		case Dir::UpRight:
-			anim.Play("DashUp");
 
-			break;
-		case Dir::UpLeft:
-			anim.Play("DashUp");
-
-			break;
-		case Dir::DownRight:
-			anim.Play("DashDown");
-
-			break;
-		case Dir::DownLeft:
-			anim.Play("DashDown");
-
-			break;
-		case Dir::Up:
-			anim.Play("DashUp");
-
-			break;
-		case Dir::Right:
-			anim.Play("DashRight");
-
-			break;
-		case Dir::Down:
-			anim.Play("DashDown");
-
-			break;
 		case Dir::Left:
 			SetFlipX(true);
-			anim.Play("DashRight");
-
 			break;
 		}
 
@@ -359,41 +327,12 @@ void Player::SlideUpdate(float dt)
 {
 	if (!isSlide)
 	{
+		anim.Play(slideId[(int)slideDir]);
+
 		switch (slideDir)
 		{
-		case Dir::UpRight:
-			anim.Play("SlideUp");
-
-			break;
-		case Dir::UpLeft:
-			anim.Play("SlideUp");
-
-			break;
-		case Dir::DownRight:
-			anim.Play("SlideDown");
-
-			break;
-		case Dir::DownLeft:
-			anim.Play("SlideDown");
-
-			break;
-		case Dir::Up:
-			anim.Play("SlideUp");
-
-			break;
-		case Dir::Right:
-			anim.Play("SlideRight");
-
-
-			break;
-		case Dir::Down:
-			anim.Play("SlideDown");
-
-			break;
 		case Dir::Left:
 			SetFlipX(true);
-			anim.Play("SlideRight");
-
 			break;
 		}
 	}
@@ -419,30 +358,21 @@ void Player::AttackUpdate(float dt)
 	else
 		attackName = "Back";
 
-	//std::cout << attackCount << std::endl;
-	std::cout << attackName << std::endl;
-
 	if(!isAttack)
 	{
+		std::string resultId = attackId[(int)attackDir];
+		resultId.insert(attackNameInsertPos, attackName);
+		anim.Play(resultId);
+
+		currentDir = (Dir)((int)attackDir + 4);
+
 		switch (attackDir)
 		{
-		case AttackDir::Up:
-			anim.Play("Attack" + attackName + "Up");
-
-			break;
 		case AttackDir::Right:
 			SetFlipX(false);
-			anim.Play("Attack" + attackName + "Right");
-
-			break;
-		case AttackDir::Down:
-			anim.Play("Attack" + attackName + "Down");
-
 			break;
 		case AttackDir::Left:
 			SetFlipX(true);
-			anim.Play("Attack" + attackName + "Right");
-
 			break;
 		}
 
@@ -465,11 +395,6 @@ void Player::AttackUpdate(float dt)
 	}
 
 	isAttack = true;
-	if (isAttack)
-	{
-		//attackRangeCol.setPosition(attackPosCol.getPosition());
-
-	}
 	if (anim.IsAnimEndFrame())
 	{
 		isRun = false;
@@ -478,8 +403,9 @@ void Player::AttackUpdate(float dt)
 	}
 }
 
-void Player::KnockBackUpdate(float dt)
+void Player::HitUpdate(float dt)
 {
+	//anim.Play(hitId[(int)currentDir]);
 
 }
 
@@ -553,6 +479,44 @@ void Player::CalLookAngle()
 	}
 }
 
+void Player::CalHitLookAngle()
+{
+	hitLookAngle = Utils::Angle(hitLook);
+
+	if (hitLookAngle < 0)
+	{
+		hitLookAngle += 180 * 2;
+	}
+
+	hitLookAngle += 180;
+
+	if (hitLookAngle >= 360)
+	{
+		//hitLookAngle -= 360;
+		hitLookAngle = (float)((int)hitLookAngle % 360);
+	}
+
+	// 각도에 따른 공격 방향 설정
+	if ((hitLookAngle < 45 && hitLookAngle >= 0) ||
+		(hitLookAngle < 360 && hitLookAngle >= 315))
+	{
+		attackDir = AttackDir::Right;
+	}
+	if (hitLookAngle < 135 && hitLookAngle >= 45)
+	{
+		attackDir = AttackDir::Down;
+	}
+	if (hitLookAngle < 225 && hitLookAngle >= 135)
+	{
+		attackDir = AttackDir::Left;
+	}
+	if (hitLookAngle < 315 && hitLookAngle >= 225)
+	{
+		attackDir = AttackDir::Up;
+	}
+
+}
+
 void Player::SetAttackPos()
 {
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
@@ -584,6 +548,8 @@ void Player::SetDirIconDir()
 
 void Player::SetHp(int value)
 {
+	isHit = true;
+	//isInvincible = true;
 	if (hp <= 0)
 	{
 		// Dead 상태
@@ -595,4 +561,55 @@ void Player::SetHp(int value)
 void Player::ChangeState(States state)
 {
 	currentState = state;
+}
+
+void Player::InsertAnimId()
+{
+	idleId.push_back("IdleRight");
+	idleId.push_back("IdleRight");
+	idleId.push_back("IdleRight");
+	idleId.push_back("IdleRight");
+	idleId.push_back("IdleUp");
+	idleId.push_back("IdleRight");
+	idleId.push_back("IdleDown");
+	idleId.push_back("IdleRight");
+
+
+	runId.push_back("RunRight");
+	runId.push_back("RunRight");
+	runId.push_back("RunRight");
+	runId.push_back("RunRight");
+	runId.push_back("RunUp");
+	runId.push_back("RunRight");
+	runId.push_back("RunDown");
+	runId.push_back("RunRight");
+
+	dashId.push_back("DashUp");
+	dashId.push_back("DashUp");
+	dashId.push_back("DashDown");
+	dashId.push_back("DashDown");
+	dashId.push_back("DashUp");
+	dashId.push_back("DashRight");
+	dashId.push_back("DashDown");
+	dashId.push_back("DashRight");
+
+	slideId.push_back("SlideUp");
+	slideId.push_back("SlideUp");
+	slideId.push_back("SlideDown");
+	slideId.push_back("SlideDown");
+	slideId.push_back("SlideUp");
+	slideId.push_back("SlideRight");
+	slideId.push_back("SlideDown");
+	slideId.push_back("SlideRight");
+
+	// 중간에 attackName Insert하기
+	attackId.push_back("AttackUp");
+	attackId.push_back("AttackRight");
+	attackId.push_back("AttackDown");
+	attackId.push_back("AttackRight");
+
+	hitId.push_back("HitUp");
+	hitId.push_back("HitRight");
+	hitId.push_back("HitDown");
+	hitId.push_back("HitRight");
 }

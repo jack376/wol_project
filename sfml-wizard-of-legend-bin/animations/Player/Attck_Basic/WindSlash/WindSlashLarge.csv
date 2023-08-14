@@ -1,9 +1,10 @@
 ID,FPS,LOOPTYPE,,
-WindSlashLarge,6,0,,
+WindSlashLarge,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
-graphics/Player/Attck_Basic/WindSlash/WindSlash.png,352,209,35,44
-graphics/Player/Attck_Basic/WindSlash/WindSlash.png,385,209,35,44
-graphics/Player/Attck_Basic/WindSlash/WindSlash.png,418,209,35,44
-graphics/Player/Attck_Basic/WindSlash/WindSlash.png,449,209,35,44
-graphics/Player/Attck_Basic/WindSlash/WindSlash.png,480,209,35,44
+graphics/Player/Attck_Basic/WindSlash/WindSlash.png,352,209,31,44
+graphics/Player/Attck_Basic/WindSlash/WindSlash.png,385,209,31,44
+graphics/Player/Attck_Basic/WindSlash/WindSlash.png,418,209,31,44
+graphics/Player/Attck_Basic/WindSlash/WindSlash.png,448,233,31,44
+graphics/Player/Attck_Basic/WindSlash/WindSlash.png,480,209,31,44
+graphics/Player/Attck_Basic/WindSlash/WindSlash.png,320,209,31,44

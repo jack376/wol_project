@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-WindSlashMed,6,0,,
+WindSlashMed,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/Player/Attck_Basic/WindSlash/WindSlash.png,353,260,30,39

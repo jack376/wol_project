@@ -6,12 +6,11 @@
 #include "SceneGame.h"
 #include "SceneMgr.h"
 #include "Player.h"
-
-#include "InputMgr.h"   //Test
+#include "SpriteEffect.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
-{
+{   
 }
 
 Monster::~Monster()
@@ -27,6 +26,11 @@ void Monster::Init()
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Death.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Hurt.csv"));
+
+    rect.setSize({ 100, 150 });
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setOutlineThickness(1.f);
+    rect.setOutlineColor(sf::Color::Green);
 }
 
 void Monster::Release()
@@ -41,11 +45,11 @@ void Monster::Reset()
     animation.SetTarget(&sprite);
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
-    
 
     SetPosition({ -500, 0 });
     SetOrigin(Origins::MC);
     SetFlipX(false);
+    SetRectBox();
     sortLayer = 10;
 
     hp = stat.maxHp;
@@ -63,6 +67,9 @@ void Monster::Reset()
         attackRange.setOutlineColor(sf::Color::Red);
         searchRange.setFillColor(sf::Color::Transparent);
         attackRange.setFillColor(sf::Color::Transparent);
+        rect.setFillColor(sf::Color::Transparent);
+        rect.setOutlineColor(sf::Color::Blue);
+        rect.setOutlineThickness(1.f);
     }  
 }
 
@@ -71,21 +78,18 @@ void Monster::Update(float dt)
     animation.Update(dt);
 
     HandleBehavior(dt);
-    HandleState();
+    HandleState(dt);
  
     //Debug Mode
     searchRange.setPosition(position);
     attackRange.setPosition(position);
-    //Test
-    if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-    {
-        OnAttacked(2);
-    }
+    rect.setPosition(position);
 }
 
 void Monster::Draw(sf::RenderWindow& window)
 {
     SpriteGo::Draw(window);
+
     //Debug Mode
     window.draw(searchRange);
     window.draw(attackRange);
@@ -96,27 +100,33 @@ void Monster::SetState(MonsterState newState)
 	currentState = newState;
 }
 
-void Monster::HandleState()
+void Monster::HandleState(float dt)
 {
     switch (currentState) {
     case MonsterState::Idle:
         //std::cout << "Monster is idle.\n";
+        isAttacking = false;
         break;
 
     case MonsterState::Moving:
         //std::cout << "Monster is moving.\n";
+        isAttacking = false;
         break;
 
     case MonsterState::Attacking:
         //std::cout << "Monster is attacking.\n";
+        attackTimer += dt;
+        isAttacking = attackTimer >= stat.attackRate ? false : true;
         break;
 
     case MonsterState::Dead:
         //std::cout << "Monster is dead.\n";
+        isAttacking = false;
         break;
 
     case MonsterState::KnockBack:
         //std::cout << "Monster is KnockBack.\n";
+        isAttacking = false;
         break;
     }
 }
@@ -126,25 +136,29 @@ void Monster::Idle()
     SetState(MonsterState::Idle);
     animation.Play(stat.name + "Idle");
     SetOrigin(origin);
+    SetRectBox();
 }
 
-void Monster::Attack(float dt)
+void Monster::Attack()
 {
     SetState(MonsterState::Attacking);
-    attackTimer += dt;
-    if(attackTimer > stat.attackRate)
+    //attackTimer += dt;
+    if (attackTimer >= stat.attackRate)
     {
         animation.Play(stat.name + "Attack");
         SetOrigin(origin);
+        SetRectBox();
         attackTimer = 0.f;
         isAttacked = false;
     }
-    if (!isAttacked && player->IsAlive() &&
-        sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+    if (!isAttacked && player->IsAlive())
     {
-        attackTimer = 0.f;
-        player->SetHp(-stat.damage);
-        isAttacked = true;
+        if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+        {
+            attackTimer = 0.f;
+            player->SetHp(-stat.damage);
+            isAttacked = true;
+        }
     }
 }
 
@@ -155,6 +169,7 @@ void Monster::Move(float dt)
     {
         animation.Play(stat.name + "Run");
         SetOrigin(origin);
+        SetRectBox();
     }
     SetPosition(position + look * stat.speed * dt);
 }
@@ -166,6 +181,7 @@ void Monster::Die()
     {
         animation.Play(stat.name + "Death");
         SetOrigin(origin);
+        SetRectBox();
     }
     else if (animation.IsAnimEndFrame())
         SetActive(false);
@@ -176,6 +192,7 @@ void Monster::KnockBack()
     SetState(MonsterState::KnockBack);
     animation.Play(stat.name + "Hurt");
     SetOrigin(origin);
+    SetRectBox();
 }
 
 void Monster::SetLook(sf::Vector2f playerPos)
@@ -223,13 +240,21 @@ void Monster::HandleBehavior(float dt)
         }
         else if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
         {
-            SetLook(playerPos);
+            if (!isAttacking)
+                SetLook(playerPos);
             if (distance <= stat.attackRange)
-                Attack(dt);
-            else
+                Attack();
+            else if (!isAttacking)
                 Move(dt);
         }
         else
            Idle();            
     }
+}
+
+void Monster::SetRectBox()
+{
+    sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+    rect.setSize({ spriteBounds.width, spriteBounds.height });
+    Utils::SetOrigin(rect, Origins::MC);
 }

@@ -8,12 +8,14 @@
 #include "TextGo.h"
 #include "SpriteGo.h"
 #include "Monster.h"
+#include "Lancer.h"
 #include "Player.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
 #include "TileInfoTable.h"
 #include "rapidcsv.h"
 #include "Tile.h"
+#include "BoxCollider2D.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -28,11 +30,12 @@ void SceneGame::Init()
 	int cols = 24;
 	float tileSize = 64.0f;
 
+
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
 	player->sprite.setScale(4, 4);
 	player->SetOrigin(Origins::MC);
-	player->sortLayer = 20;
+	player->sortLayer = 5;
 	player->SetScene(this);
 
 	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
@@ -51,12 +54,17 @@ void SceneGame::Init()
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
 
-	Monster* go = (Monster*)AddGo(new Monster(MonsterId::Ghoul));
-
-	player->SetMonster(go);
+	Monster* go = CreatMonster(MonsterId::Lancer);
+	monster = CreatMonster(MonsterId::Lancer);
+	monster->SetPlayer(player);
+	player->SetMonster(monster);
 
 	for (auto go : gameObjects)
 	{
+		if (go->GetName() == "a")
+		{
+			std::cout << "";
+		}
 		go->Init();
 	}
 }
@@ -90,6 +98,20 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
+	debugTimer += dt;
+
+	isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
+	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
+
+	//if (debugTimer > debugDuration && !isCol)
+	//{
+	//	debugTimer = 0.f;
+	//	std::cout << "OBB is Failed" << std::endl;
+	//}
+	//if (isCol)
+	//{
+	//	std::cout << "OBB is Succesd" << std::endl;
+	//}
 
 	// Test Code
 	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
@@ -158,5 +180,23 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetOrigin(Origins::MC);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
-	std::cout << "SYSTEM : Load Success" << std::endl;
+	//std::cout << "SYSTEM : Load Success" << std::endl;
+}
+
+Monster* SceneGame::CreatMonster(MonsterId id)
+{
+	Monster* monster = nullptr;
+	switch (id)
+	{
+	case MonsterId::Ghoul:
+		monster = dynamic_cast<Monster*>(AddGo(new Monster(id)));
+		break;
+	case MonsterId::GhoulLarge:
+		monster = dynamic_cast<Monster*>(AddGo(new Monster(id)));
+		break;
+	case MonsterId::Lancer:
+		monster = dynamic_cast<Monster*>(AddGo(new Lancer(id)));
+		break;
+	}
+	return monster;
 }

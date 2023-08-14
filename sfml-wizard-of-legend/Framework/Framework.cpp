@@ -40,13 +40,21 @@ void Framework::Run()
 {
     Init(screenWidth, screenHeight, title);
     clock.restart();
+    sf::Vector2i prevPos = { 0, 0 };
 
     while (window.isOpen())
     {
         sf::Time deltaTime = clock.restart();
         float dt = deltaTime.asSeconds();
+        gamePlayTime += deltaTime;
 
         INPUT_MGR.Update(dt);
+
+        prevPos = window.getPosition();
+        if (prevPos != window.getPosition())
+        {
+            dt = 0;
+        }
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -84,4 +92,9 @@ sf::Vector2f Framework::GetWindowSize()
 sf::RenderWindow& Framework::GetWindow()
 {
     return window;
+}
+
+float Framework::GetGamePlayTime()
+{
+    return gamePlayTime.asSeconds();
 }
