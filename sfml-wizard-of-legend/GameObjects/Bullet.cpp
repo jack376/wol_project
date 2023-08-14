@@ -19,7 +19,6 @@ void Bullet::Init()
 void Bullet::Release()
 {
 	SpriteGo::Release();
-
 }
 
 void Bullet::Reset()

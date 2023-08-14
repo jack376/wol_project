@@ -15,7 +15,7 @@ protected:
 	Bullet arrow;
 	float ameRate = 1.f;
 	float ameTimer = 0.f;
-	float arrowSpeed = 500.f;
+	float arrowSpeed = 1000.f;
 	bool isAme = false;
 	bool isFire = false;
 public:

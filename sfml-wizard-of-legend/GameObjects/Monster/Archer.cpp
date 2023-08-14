@@ -106,6 +106,7 @@ void Archer::Draw(sf::RenderWindow& window)
 
 void Archer::Attack(float dt)
 {
+	std::cout << "arrow active: " << arrow.GetActive() << std::endl;
     SetState(MonsterState::Attacking);
     if (attackTimer >= stat.attackRate)
     {
