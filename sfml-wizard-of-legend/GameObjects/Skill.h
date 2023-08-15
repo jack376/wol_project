@@ -1,28 +1,23 @@
 #pragma once
 #include "SpriteGo.h"
 
-class ElementalSpell;
-
-class Skill : public SpriteGo
+struct SpellInfo
 {
-protected:
-	// UI아이콘 텍스쳐 필요?
-	// 실제 스킬 애니메이션 클립 어디서 관리할지
-	SkillEvents currentEventType = SkillEvents::None;
-	SkillTypes currentSkillType = SkillTypes::None;
-	ElementTypes currentElementType = ElementTypes::None;
-	SpriteGo* skillIcon;
 
 	std::string skillIconId;
-	
+	std::string playerAction;
+
 	int damage;
 	int comboDamage;
 	int maxSkillCharge;
-	
+	int shotCount;
+
 	float speed;
 	float range;
+	float explosionRange;
 	float delayDuration;
 	float damageDelay;
+	float coolTime;
 
 	float rotateSpeed;
 
@@ -36,6 +31,28 @@ protected:
 
 
 	sf::Vector2f dir;
+
+	sf::Vector2f startPos;
+	sf::Vector2f destPos;
+
+};
+
+class ElementalSpell;
+
+class Skill : public SpriteGo
+{
+protected:
+	// UI아이콘 텍스쳐 필요?
+	// 실제 스킬 애니메이션 클립 어디서 관리할지
+	SkillEvents currentEventType = SkillEvents::None;
+	SkillTypes currentSkillType = SkillTypes::None;
+	ElementTypes currentElementType = ElementTypes::None;
+
+	sf::Keyboard::Key currentKey = sf::Keyboard::Unknown;
+
+	SpriteGo* skillIcon;
+
+	SpellInfo skillInfo;
 	
 	// 실제 스킬
 	ElementalSpell* elementSpell;
@@ -51,5 +68,6 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
+	void SetSpellInfo();
 };
 

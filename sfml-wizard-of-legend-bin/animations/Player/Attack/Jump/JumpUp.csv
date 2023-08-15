@@ -1,0 +1,9 @@
+ID,FPS,LOOPTYPE,,
+JumpUp,22,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,336,781,22,24
+graphics/Player/NewWizard.png,446,743,18,33
+graphics/Player/NewWizard.png,469,739,23,37
+graphics/Player/NewWizard.png,422,780,23,33
+graphics/Player/NewWizard.png,370,780,27,25

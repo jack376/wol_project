@@ -19,6 +19,16 @@ enum class SkillTypes
 	Range,
 };
 
+enum class PlayerActions
+{
+	None = -1,
+	Hand,
+	Kick,
+	Jump,
+	Slam,
+	Focus,
+};
+
 enum class ElementTypes
 {
 	None = -1,

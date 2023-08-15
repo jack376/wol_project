@@ -1,0 +1,15 @@
+ID,FPS,LOOPTYPE,,
+KickDown,22,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,496,56,19,29
+graphics/Player/NewWizard.png,544,55,19,28
+graphics/Player/NewWizard.png,591,61,24,30
+graphics/Player/NewWizard.png,639,53,26,38
+graphics/Player/NewWizard.png,684,51,20,40
+graphics/Player/NewWizard.png,733,56,20,35
+graphics/Player/NewWizard.png,783,59,21,32
+graphics/Player/NewWizard.png,831,61,20,30
+graphics/Player/NewWizard.png,879,61,17,30
+graphics/Player/NewWizard.png,931,57,15,29
+graphics/Player/NewWizard.png,976,53,18,32

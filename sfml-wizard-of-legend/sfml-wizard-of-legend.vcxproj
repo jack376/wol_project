@@ -156,7 +156,7 @@
   <ItemGroup>
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
-    <ClCompile Include="BoxCollider2D.cpp" />
+    <ClCompile Include="GameObjects\BoxCollider2D.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
     <ClCompile Include="GameObjects\BaseUI.cpp" />
@@ -192,7 +192,7 @@
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="GameObjects\Tile.cpp" />
     <ClCompile Include="Framework\SkillMgr.cpp" />
-    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="GameObjects\Skill.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -218,7 +218,7 @@
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Framework\SkillMgr.h" />
-    <ClInclude Include="Skill.h" />
+    <ClInclude Include="GameObjects\Skill.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />

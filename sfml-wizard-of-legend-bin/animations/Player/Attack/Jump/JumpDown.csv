@@ -1,0 +1,8 @@
+ID,FPS,LOOPTYPE,,
+JumpDown,11,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,303,781,23,22
+graphics/Player/NewWizard.png,305,743,18,33
+graphics/Player/NewWizard.png,328,740,23,36
+graphics/Player/NewWizard.png,550,703,23,32
