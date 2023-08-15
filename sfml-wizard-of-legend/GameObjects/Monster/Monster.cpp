@@ -49,7 +49,7 @@ void Monster::Reset()
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
 
-    SetPosition({ -500, 0 });
+    SetPosition({ 500, 0 });
     SetOrigin(Origins::MC);
     SetFlipX(false);
     SetRectBox();
@@ -259,9 +259,33 @@ void Monster::HandleBehavior(float dt)
 void Monster::CalculatorCurrentTile()
 {
     int rowIndex = position.x / _TileSize;
-    int columIndex = position.y / _TileSize;
+    int columnIndex = position.y / _TileSize;
 
-    currentTile = (*tiles)[rowIndex][columIndex];
+    currentTile = (*wouldTiles)[rowIndex][columnIndex];
+}
+
+//객체를 중심으로 임의 범위 내의 타일을 반환
+std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
+{
+    //32x16
+    int searchRowRange = row;
+    int searchColRange = col;
+
+    sf::Vector2i index = currentTile->GetIndex();
+    std::vector<Tile*> tiles;
+
+    int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x;
+    int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y;
+
+    for (int i = topRowIndex; i < index.x + searchRowRange; i++)
+    {
+        for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
+        {
+            tiles.push_back((*this->wouldTiles)[i][j]);
+        }
+    }
+
+    return tiles;
 }
 
 void Monster::SetRectBox()

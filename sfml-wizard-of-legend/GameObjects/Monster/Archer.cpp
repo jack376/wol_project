@@ -87,8 +87,8 @@ void Archer::Update(float dt)
 			bow.setPosition(attackArm.getPosition());
 			arrow.SetPosition(bow.getPosition());
 			bulletLine.move(position.x, position.y);
-
-			bulletLine.checkCollision(*tiles, player);
+			
+			bulletLine.checkCollision(CalculatorRangeTiles(16, 8), player);
 		}
 
 		if (arrow.GetActive())

@@ -16,22 +16,19 @@ void Beam::draw(sf::RenderWindow &window) const
     m_line.draw(window);
 }
 
-void Beam::checkCollision(const std::vector<std::vector<Tile*>>& tiles, Player* player)
+void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
 {
     std::vector<sf::Vector2f> collisionPoints;
     std::vector<Tile*> wallTiles;
     std::vector<Wall> walls;
 
     //Wall 타일만 추출
-    for (auto& tileArray : tiles)
+    for (auto& tile : tiles)
     {
-        for (auto& tile : tileArray)
-        {
-            if (tile->GetType() != Tile::TileType::Wall)
-                continue;
-            else
-                wallTiles.push_back(tile);
-        }
+        if (tile->GetType() != Tile::TileType::Wall)
+            continue;
+        else
+            wallTiles.push_back(tile);
     }
 
 
@@ -80,7 +77,6 @@ void Beam::checkCollision(const std::vector<std::vector<Tile*>>& tiles, Player* 
     }
 
 
-
     for (auto wall : walls )
     {
         float x3, y3, x4, y4, numerator1, numerator2, denominator;
@@ -121,7 +117,7 @@ void Beam::checkCollision(const std::vector<std::vector<Tile*>>& tiles, Player* 
         //}
     }
 
-    float distance = m_line.GetLength();
+    float distance = 1000;
     for (auto& point : collisionPoints)
     {
         float newDistance = Utils::Distance({ (float)m_line.getX1(), (float)m_line.getY1() }, (sf::Vector2f)point);
@@ -129,8 +125,7 @@ void Beam::checkCollision(const std::vector<std::vector<Tile*>>& tiles, Player* 
         {
             distance = newDistance;
             m_line.setEndPoint(point.x, point.y);
-        }
-       
+        } 
     }
 }
 

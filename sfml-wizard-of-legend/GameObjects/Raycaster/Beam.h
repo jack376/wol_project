@@ -23,5 +23,5 @@ public:
     void draw(sf::RenderWindow &window) const;
     void move(int x, int y);
     void Rotation(float angle);
-    void checkCollision(const std::vector<std::vector<Tile*>>& tiles, Player* player);
+    void checkCollision(const std::vector<Tile*> tiles, Player* player);
 };
