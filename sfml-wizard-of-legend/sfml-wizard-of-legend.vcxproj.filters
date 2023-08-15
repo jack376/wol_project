@@ -35,6 +35,7 @@
     <ClCompile Include="GameObjects\BoxCollider2D.cpp" />
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
+    <ClCompile Include="SceneSkillEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="BoxCollider2D.h" />
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
+    <ClInclude Include="SceneSkillEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

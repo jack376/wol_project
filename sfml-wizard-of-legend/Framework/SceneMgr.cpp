@@ -5,6 +5,7 @@
 #include "SceneEditor.h"
 #include "DataTableMgr.h"
 #include "StringTable.h"
+#include "SceneSkillEditor.h"
 
 void SceneMgr::Init()
 {
@@ -16,6 +17,7 @@ void SceneMgr::Init()
 	scenes.push_back(new SceneTitle());
 	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneEditor());
+	scenes.push_back(new SceneSkillEditor());
 
 	for (auto scene : scenes)
 	{

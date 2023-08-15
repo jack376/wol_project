@@ -79,7 +79,7 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 
-	void SetSpell(SpellInfo skillInfo);
+	//void SetSpell(SpellInfo skillInfo);
 
 	void SetScene(SceneGame* scene) { this->scene = scene; }
 	void SetPlayer(Player* player) { this->player = player; }

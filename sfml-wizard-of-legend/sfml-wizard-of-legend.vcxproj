@@ -194,6 +194,7 @@
     <ClCompile Include="Framework\SkillMgr.cpp" />
     <ClCompile Include="GameObjects\Skill.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
+    <ClCompile Include="SceneSkillEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="GameObjects\Platforms\Obstacle.h" />
     <ClInclude Include="GameObjects\Cookies\Pancake.h" />
     <ClInclude Include="Scenes\PatternEditor.h" />
+    <ClInclude Include="SceneSkillEditor.h" />
     <ClInclude Include="UI\InGame\Pause.h" />
     <ClInclude Include="GameObjects\Cookies\Pirate.h" />
     <ClInclude Include="GameObjects\Platforms\Platform.h" />

@@ -76,6 +76,7 @@ enum class SceneId
 	Title,
 	Game,
 	Editor,
+	SkillEditor,
 	Count,
 };
 

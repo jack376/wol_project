@@ -12,6 +12,7 @@ protected:
 	SkillMgr() = default;
 	virtual ~SkillMgr() override = default;
 
+	// 스킬 에디터에서 로드시 InputSkill을 이용해서 저장
 	std::list<Skill*> skillList;
 
 public:
