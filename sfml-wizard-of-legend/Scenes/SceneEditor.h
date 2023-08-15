@@ -4,16 +4,20 @@
 #include "TileCommand.h"
 #include "CommandInvoker.h"
 
+
 class TextGo;
 class SpriteGo;
+class DestructibleGo;
+class Particle;
 class BaseUI;
 class Tile;
 
 class SceneEditor : public Scene
 {
 protected:
-	int rows = 24;
-	int cols = 24;
+	int rows = 0;
+	int cols = 0;
+	float tileSize = 16.0f;
 
 	sf::Vector2f windowSize;
 	float fhdWidth = 1920.0f;
@@ -28,7 +32,6 @@ protected:
 
 	std::vector<std::vector<Tile*>> tilesWorld;
 	std::vector<std::vector<Tile*>> tilesPreview;
-	float tileSize = 16.0f;
 
 	std::vector<Tile*> allTiles;
 	std::vector<Tile*> selectedTiles;
