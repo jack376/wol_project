@@ -87,13 +87,15 @@ void Archer::Update(float dt)
 			bow.setPosition(attackArm.getPosition());
 			arrow.SetPosition(bow.getPosition());
 			bulletLine.move(position.x, position.y);
-			
+
 			bulletLine.checkCollision(CalculatorRangeTiles(16, 8), player);
 		}
 
 		if (arrow.GetActive())
 			arrow.Update(dt);
 	}
+	else
+		isAme = false;
 }
 
 void Archer::Draw(sf::RenderWindow& window)
@@ -115,26 +117,30 @@ void Archer::Draw(sf::RenderWindow& window)
 void Archer::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
-    if (attackTimer >= stat.attackRate)
-    {
-        animation.Play("ArcherAttack");
-        attackArmAni.Play("ArcherAttackArm");
-        pullArmAni.Play("ArcherAttackPullArm");
-        bowAni.Play("ArcherBowPull");
+	attackTimer += dt;
+	if (attackTimer >= stat.attackRate)
+	{
+		animation.Play("ArcherAttack");
+		attackArmAni.Play("ArcherAttackArm");
+		pullArmAni.Play("ArcherAttackPullArm");
+		bowAni.Play("ArcherBowPull");
 
-        SetOrigin(origin);
-        SetRectBox();
+		SetOrigin(origin);
+		SetRectBox();
 
 		Utils::SetOrigin(attackArm, Origins::ML);
 		Utils::SetOrigin(pullArm, Origins::ML);
 		bow.setOrigin(-_BowLocalPos);
 		arrow.SetActive(true);
 
-        attackTimer = 0.f;
-        isAttacked = false;
-        isAttacking = true;
+		attackTimer = 0.f;
+		isAttacked = false;
+		isAttacking = true;
 		isAme = true;
-    }
+	}
+	if (!isAttacking)
+		animation.Play("ArcherIdle");
+
 	if (isAme)
 		ameTimer += dt;
 	if (ameTimer >= ameRate)
@@ -144,5 +150,6 @@ void Archer::Attack(float dt)
 		arrow.Fire(bow.getPosition(), look, arrowSpeed);
 		ameTimer = 0;
 		isAme = false;
+		isAttacking = false;
 	}
 }

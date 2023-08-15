@@ -60,6 +60,7 @@ protected:
 	float knockBackTimer = 0.f;
 	bool isAttacked = false;
 	bool isAttacking = false;
+	bool isAwake = false;
 
 	Player* player = nullptr;
 	Tile* currentTile = nullptr;

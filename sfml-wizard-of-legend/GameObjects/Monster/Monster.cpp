@@ -109,28 +109,23 @@ void Monster::HandleState(float dt)
     switch (currentState) {
     case MonsterState::Idle:
         //std::cout << "Monster is idle.\n";
-        isAttacking = false;
         break;
 
     case MonsterState::Moving:
         //std::cout << "Monster is moving.\n";
-        isAttacking = false;
         break;
 
     case MonsterState::Attacking:
         //std::cout << "Monster is attacking.\n";
-        attackTimer += dt;
-        isAttacking = attackTimer >= stat.attackRate ? false : true;
+        isAttacking = attackTimer < stat.attackRate;
         break;
 
     case MonsterState::Dead:
         //std::cout << "Monster is dead.\n";
-        isAttacking = false;
         break;
 
     case MonsterState::KnockBack:
         //std::cout << "Monster is KnockBack.\n";
-        isAttacking = false;
         break;
     }
 }
@@ -146,7 +141,7 @@ void Monster::Idle()
 void Monster::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
-    //attackTimer += dt;
+    attackTimer += dt;
     if (attackTimer >= stat.attackRate)
     {
         animation.Play(stat.name + "Attack");
@@ -242,11 +237,12 @@ void Monster::HandleBehavior(float dt)
             }
             return;
         }
-        else if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
+        else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
         {
+            isAwake = true;
             if (!isAttacking)
                 SetLook(playerPos);
-            if (distance <= stat.attackRange)
+            if (distance <= stat.attackRange || isAttacking)
                 Attack(dt);
             else if (!isAttacking)
                 Move(dt);
@@ -258,8 +254,8 @@ void Monster::HandleBehavior(float dt)
 
 void Monster::CalculatorCurrentTile()
 {
-    int rowIndex = position.x / _TileSize;
-    int columnIndex = position.y / _TileSize;
+    int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
+    int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
 
     currentTile = (*wouldTiles)[rowIndex][columnIndex];
 }

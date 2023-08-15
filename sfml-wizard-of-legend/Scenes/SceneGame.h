@@ -50,6 +50,6 @@ public:
 	Player* GetPlayer() { return player; }
 	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
 	void LoadFromCSV(const std::string& path);
-	Monster* CreatMonster(MonsterId id);
+	Monster* CreateMonster(MonsterId id);
 };
 
