@@ -17,6 +17,8 @@
 #include "rapidcsv.h"
 #include "Tile.h"
 #include "BoxCollider2D.h"
+#include "DestructibleGo.h"
+#include "Particle.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -27,11 +29,6 @@ void SceneGame::Init()
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
 
-	int rows = 24;
-	int cols = 24;
-	float tileSize = 64.0f;
-
-
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(0, 0);
 	player->sprite.setScale(4, 4);
@@ -39,15 +36,6 @@ void SceneGame::Init()
 	player->sortLayer = 5;
 	player->SetScene(this);
 
-	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			Tile* tile = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
-			tilesWorld[i][j] = tile;
-		}
-	}
 	LoadFromCSV("tables/TileInfoTable.csv");
 
 	tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
@@ -60,6 +48,17 @@ void SceneGame::Init()
 	monster = go;
 	monster->SetPlayer(player);
 	player->SetMonster(go);
+
+	// TEST Particle
+	CreateParticle(1000);
+
+	// TEST DestructibleObject
+	DestructibleGo* deco = (DestructibleGo*)AddGo(new DestructibleGo("graphics/editor/FireTileSet.png", "Deco"));
+	deco->sortLayer = 2;
+	deco->SetPosition(64.0f, 64.0f);
+	deco->SetScale(4.0f, 4.0f);
+	deco->SetTextureRect(sf::IntRect(304, 0, 32, 80));
+	deco->SetParticlePool(&particlePool);
 
 	for (auto go : gameObjects)
 	{
@@ -90,6 +89,8 @@ void SceneGame::Enter()
 	uiView.setCenter(size * 0.5f);
 
 	Scene::Enter();
+
+	ClearObjectPool(particlePool);
 }
 
 void SceneGame::Exit()
@@ -137,6 +138,27 @@ void SceneGame::Update(float dt)
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
 	}
+
+	// TEST Particle
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
+	{
+		for (int i = 0; i < 50; i++)
+		{
+			DestructibleGo* deco = (DestructibleGo*)FindGo("Deco");
+			deco->SetParticle({ 0.0f, 0.0f });
+		}
+	}
+	//std::cout << "particle test : " << particlePool.GetUseList().size() << std::endl;
+}
+
+template<typename T>
+inline void SceneGame::ClearObjectPool(ObjectPool<T>& pool)
+{
+	for (auto obj : pool.GetUseList())
+	{
+		RemoveGo(obj);
+	}
+	pool.Clear();
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -156,6 +178,21 @@ Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int
 void SceneGame::LoadFromCSV(const std::string& path)
 {
 	rapidcsv::Document doc(path);
+
+	int maxTileIndexX = 0;
+	int maxTileIndexY = 0;
+
+	for (size_t i = 0; i < doc.GetRowCount(); i++)
+	{
+		int tileIndexX = doc.GetCell<int>("tileIndexX", i);
+		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
+
+		if (tileIndexX > maxTileIndexX) maxTileIndexX = tileIndexX;
+		if (tileIndexY > maxTileIndexY) maxTileIndexY = tileIndexY;
+	}
+	rows = maxTileIndexX + 1;
+	cols = maxTileIndexY + 1;
+	CreateTile2dVector(rows, cols);
 
 	for (size_t i = 0; i < doc.GetRowCount(); i++)
 	{
@@ -206,4 +243,36 @@ Monster* SceneGame::CreatMonster(MonsterId id)
 		break;
 	}
 	return monster;
+}
+
+void SceneGame::CreateTile2dVector(int rows, int cols)
+{
+	tilesWorld.resize(rows, std::vector<Tile*>(cols, nullptr));
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			Tile* tile = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
+			tilesWorld[i][j] = tile;
+		}
+	}
+}
+
+void SceneGame::CreateParticle(int count)
+{
+	particlePool.OnCreate = [this](Particle* particle)
+	{
+		int rand = 16 * Utils::RandomRange(0, 8);
+
+		particle->SetName("Particle");
+		particle->SetDuration(1.0f);
+		particle->SetTexture("graphics/game/Fire.png");
+		particle->SetTextureRect(sf::IntRect(rand, 0, 16, 16));
+		particle->sortLayer = 25;
+		particle->sortOrder = 0;
+		particle->SetPool(&particlePool);
+		particle->Reset();
+		particle->SetActive(false);
+	};
+	particlePool.Init(count);
 }

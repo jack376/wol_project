@@ -5,10 +5,12 @@
 #include "ResourceMgr.h"
 #include "GameObject.h"
 #include "SceneEditor.h"
-#include "SpriteGo.h"
 #include "TextGo.h"
+#include "SpriteGo.h"
+#include "DestructibleGo.h"
 #include "BaseUI.h"
 #include "Tile.h"
+#include "Particle.h"
 #include "rapidcsv.h"
 
 SceneEditor::SceneEditor() : Scene(SceneId::Editor)
@@ -22,8 +24,8 @@ void SceneEditor::Init()
 	windowSize = FRAMEWORK.GetWindowSize();
 	resolutionScaleFactor = windowSize.x / fhdWidth;
 
-	// Default Tile Size
-	CreateTile2dVector(rows, cols);
+	// Load CSV
+	LoadFromCSV("tables/TileInfoTable.csv");
 
 	// Texture Atlas
 	SpriteGo* atlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "AtlasPreview"));
@@ -44,7 +46,6 @@ void SceneEditor::Init()
 		}
 		tileTextureAtlas.push_back(colTiles);
 	}
-
 	tilesPreview.resize(tilesPerRow, std::vector<Tile*>(tilesPerRow, nullptr));
 	for (int i = 0; i < tilesPerRow; i++)
 	{
@@ -54,9 +55,6 @@ void SceneEditor::Init()
 			tilesPreview[i][j] = tile;
 		}
 	}
-
-	// Load CSV
-	LoadFromCSV("tables/TileInfoTable.csv");
 
 	// UI backgorund
 	BaseUI* uiBackground = (BaseUI*)AddGo(new BaseUI("UiBackGround", UiType::Box));
@@ -72,22 +70,22 @@ void SceneEditor::Init()
 	float gap   = size + size;
 	int   index = 0;
 
-	CreateButton("1", "NONE", posX + gap * 0, posY + size * 0, size, index, [this]()    { std::cout << "Button q" << std::endl; } );
-	CreateButton("2", "GROUND", posX + gap * 1, posY + size * 0, size, index, [this]()  { std::cout << "Button w" << std::endl; } );
-	CreateButton("3", "WALL", posX + gap * 2, posY + size * 0, size, index, [this]()    { std::cout << "Button e" << std::endl; } );
-	CreateButton("4", "CLIFF", posX + gap * 3, posY + size * 0, size, index, [this]()   { std::cout << "Button r" << std::endl; } );
-	CreateButton("Q", "SAVE", posX + gap * 0, posY + size * 1, size, index, [this]()    { std::cout << "Button q" << std::endl; } );
-	CreateButton("W", "LOAD", posX + gap * 1, posY + size * 1, size, index, [this]()    { std::cout << "Button w" << std::endl; } );
-	CreateButton("E", "OVERLAY", posX + gap * 2, posY + size * 1, size, index, [this]() { std::cout << "Button e" << std::endl; } );
-	CreateButton("R", "GRID", posX + gap * 3, posY + size * 1, size, index, [this]()    { std::cout << "Button r" << std::endl; } );
-	CreateButton("A", "DRAW", posX + gap * 0, posY + size * 2, size, index, [this]()    { std::cout << "Button a" << std::endl; } );
-	CreateButton("S", "LAYER", posX + gap * 1, posY + size * 2, size, index, [this]()   { std::cout << "Button s" << std::endl; } );
-	CreateButton("D", "COPY", posX + gap * 2, posY + size * 2, size, index, [this]()    { std::cout << "Button d" << std::endl; } );
-	CreateButton("F", "PASTE", posX + gap * 3, posY + size * 2, size, index, [this]()   { std::cout << "Button f" << std::endl; } );
-	CreateButton("Z", "ZOOM+", posX + gap * 0, posY + size * 3, size, index, [this]()   { std::cout << "Button z" << std::endl; } );
-	CreateButton("X", "ZOOM-", posX + gap * 1, posY + size * 3, size, index, [this]()   { std::cout << "Button x" << std::endl; } );
-	CreateButton("C", "RESIZE+", posX + gap * 2, posY + size * 3, size, index, [this]() { std::cout << "Button c" << std::endl; } );
-	CreateButton("V", "RESIZE-", posX + gap * 3, posY + size * 3, size, index, [this]() { std::cout << "Button v" << std::endl; } );
+	CreateButton("1", "NONE", posX + gap * 0, posY + size * 0, size, index, [this]()   { std::cout << "Button q" << std::endl; } );
+	CreateButton("2", "GROUND", posX + gap * 1, posY + size * 0, size, index, [this]() { std::cout << "Button w" << std::endl; } );
+	CreateButton("3", "WALL", posX + gap * 2, posY + size * 0, size, index, [this]()   { std::cout << "Button e" << std::endl; } );
+	CreateButton("4", "CLIFF", posX + gap * 3, posY + size * 0, size, index, [this]()  { std::cout << "Button r" << std::endl; } );
+	CreateButton("Q", "SAVE", posX + gap * 0, posY + size * 1, size, index, [this]()   { std::cout << "Button q" << std::endl; } );
+	CreateButton("W", "LOAD", posX + gap * 1, posY + size * 1, size, index, [this]()   { std::cout << "Button w" << std::endl; } );
+	CreateButton("E", "TYPE", posX + gap * 2, posY + size * 1, size, index, [this]()   { std::cout << "Button e" << std::endl; } );
+	CreateButton("R", "GRID", posX + gap * 3, posY + size * 1, size, index, [this]()   { std::cout << "Button r" << std::endl; } );
+	CreateButton("A", "DRAW", posX + gap * 0, posY + size * 2, size, index, [this]()   { std::cout << "Button a" << std::endl; } );
+	CreateButton("S", "LAYER", posX + gap * 1, posY + size * 2, size, index, [this]()  { std::cout << "Button s" << std::endl; } );
+	CreateButton("D", "COPY", posX + gap * 2, posY + size * 2, size, index, [this]()   { std::cout << "Button d" << std::endl; } );
+	CreateButton("F", "PASTE", posX + gap * 3, posY + size * 2, size, index, [this]()  { std::cout << "Button f" << std::endl; } );
+	CreateButton("Z", "ZOOM+", posX + gap * 0, posY + size * 3, size, index, [this]()  { std::cout << "Button z" << std::endl; } );
+	CreateButton("X", "ZOOM-", posX + gap * 1, posY + size * 3, size, index, [this]()  { std::cout << "Button x" << std::endl; } );
+	CreateButton("C", "SIZE+", posX + gap * 2, posY + size * 3, size, index, [this]()  { std::cout << "Button c" << std::endl; } );
+	CreateButton("V", "SIZE-", posX + gap * 3, posY + size * 3, size, index, [this]()  { std::cout << "Button v" << std::endl; } );
 	
 	for (auto go : gameObjects)
 	{
@@ -173,8 +171,8 @@ void SceneEditor::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R)) { isTileLeyer = false; std::cout << "Current Layer : Bottom" << std::endl; }
 
 	// Resize
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O)) { ResizeWorld(24, 24); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(48, 48); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O)) { ResizeWorld(16, 16); std::cout << "Resize World Tile : 16 * 16" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(32, 32); std::cout << "Resize World Tile : 32 * 32" << std::endl; }
 
 	// SetTileType
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(Tile::TileType::Ground); }
@@ -384,6 +382,9 @@ sf::Vector2i SceneEditor::GetCurrentTileIntIndex()
 		xIndex = std::max(0, std::min(xIndex, rows - 1));
 		yIndex = std::max(0, std::min(yIndex, cols - 1));
 	}
+
+	std::cout << "index : (" << xIndex << ", " << yIndex << ")" << std::endl;
+
 	return sf::Vector2i(xIndex, yIndex);
 }
 
@@ -542,9 +543,24 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 {
 	rapidcsv::Document doc(path);
 
+	int maxTileIndexX = 0;
+	int maxTileIndexY = 0;
+
 	for (size_t i = 0; i < doc.GetRowCount(); i++)
 	{
-		std::string tileName   = doc.GetCell<std::string>("tileName", i);
+		int tileIndexX = doc.GetCell<int>("tileIndexX", i);
+		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
+
+		if (tileIndexX > maxTileIndexX) maxTileIndexX = tileIndexX;
+		if (tileIndexY > maxTileIndexY) maxTileIndexY = tileIndexY;
+	}
+	rows = maxTileIndexX + 1;
+	cols = maxTileIndexY + 1;
+	CreateTile2dVector(rows, cols);
+
+	for (size_t i = 0; i < doc.GetRowCount(); i++)
+	{
+		std::string tileName = doc.GetCell<std::string>("tileName", i);
 
 		int tileIndexX = doc.GetCell<int>("tileIndexX", i);
 		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
