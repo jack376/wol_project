@@ -5,6 +5,7 @@
 #include "SpriteEffect.h";
 
 class Player;
+class Tile;
 
 enum class MonsterState 
 {
@@ -61,10 +62,12 @@ protected:
 	bool isAttacking = false;
 
 	Player* player = nullptr;
+	Tile* currentTile = nullptr;
 
 	sf::Vector2f look; //바라보는 방향
 	sf::Vector2f direction; //이동하는 방향
 
+	std::vector<std::vector<Tile*>>* tiles = nullptr;
 
 	sf::CircleShape searchRange;
 	sf::CircleShape attackRange;
@@ -90,8 +93,11 @@ public:
 	
 	void SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
+	void SetRectBox();
+	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->tiles = tiles; }
+
 	void OnAttacked(float damage);
 	void HandleBehavior(float dt);
 
-	void SetRectBox();
+	void CalculatorCurrentTile();
 };

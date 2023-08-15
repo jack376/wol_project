@@ -41,6 +41,8 @@
     <ClCompile Include="Framework\CommandInvoker.cpp" />
     <ClCompile Include="GameObjects\DestructibleGo.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -168,6 +170,9 @@
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
+    <ClInclude Include="UI\InGame\GameOver.h" />
+    <ClInclude Include="GameObjects\Raycaster\Line.h" />
+    <ClInclude Include="GameObjects\Raycaster\Beam.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

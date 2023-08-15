@@ -59,6 +59,7 @@ void SceneGame::Init()
 	Monster* go = CreatMonster(MonsterId::Archer);
 	monster = go;
 	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
 	player->SetMonster(go);
 
 	for (auto go : gameObjects)

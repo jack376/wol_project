@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 #include "Bullet.h"
+#include "Beam.h"
 
 class Archer :
     public Monster
@@ -13,6 +14,8 @@ protected:
 	AnimationController attackArmAni;
 	AnimationController pullArmAni;
 	Bullet arrow;
+	Beam bulletLine;
+
 	float ameRate = 1.f;
 	float ameTimer = 0.f;
 	float arrowSpeed = 1000.f;

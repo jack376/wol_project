@@ -3,13 +3,14 @@
 #include "ResourceMgr.h"
 #include "Player.h"
 
+
 #define _AttackArmLocalPos sf::Vector2f(44, 44)
 #define _PullArmLocalPos sf::Vector2f(0, 42)
 #define _BowLocalPos sf::Vector2f(-6, -14)
 
 
 Archer::Archer(MonsterId id, const std::string& textureId, const std::string& n)
-	: Monster(id, textureId, n)
+	: Monster(id, textureId, n), bulletLine()
 {
 }
 
@@ -69,6 +70,7 @@ void Archer::Update(float dt)
 			pullArm.setRotation(angle);
 			bow.setRotation(angle);
 			arrow.sprite.setRotation(angle + 90);
+			bulletLine.Rotation(angle);
 
 			sf::Vector2f pos = { sprite.getGlobalBounds().left, sprite.getGlobalBounds().top };
 			if (look.x < 0)
@@ -84,6 +86,9 @@ void Archer::Update(float dt)
 			}
 			bow.setPosition(attackArm.getPosition());
 			arrow.SetPosition(bow.getPosition());
+			bulletLine.move(position.x, position.y);
+
+			bulletLine.checkCollision(*tiles, player);
 		}
 
 		if (arrow.GetActive())
@@ -103,6 +108,8 @@ void Archer::Draw(sf::RenderWindow& window)
 	}
 	if (arrow.GetActive())
 		arrow.Draw(window);
+	if (isAme)
+		bulletLine.draw(window);
 }
 
 void Archer::Attack(float dt)

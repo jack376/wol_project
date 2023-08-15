@@ -3,10 +3,13 @@
 #include "MonsterTable.h"
 #include "DataTableMgr.h"
 #include "ResourceMgr.h"
-#include "SceneGame.h"
 #include "SceneMgr.h"
+#include "SceneGame.h"
 #include "Player.h"
+#include "Tile.h"
 #include "SpriteEffect.h"
+
+#define _TileSize 64
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -79,6 +82,7 @@ void Monster::Update(float dt)
 
     HandleBehavior(dt);
     HandleState(dt);
+    CalculatorCurrentTile();
  
     //Debug Mode
     searchRange.setPosition(position);
@@ -250,6 +254,14 @@ void Monster::HandleBehavior(float dt)
         else
            Idle();            
     }
+}
+
+void Monster::CalculatorCurrentTile()
+{
+    int rowIndex = position.x / _TileSize;
+    int columIndex = position.y / _TileSize;
+
+    currentTile = (*tiles)[rowIndex][columIndex];
 }
 
 void Monster::SetRectBox()

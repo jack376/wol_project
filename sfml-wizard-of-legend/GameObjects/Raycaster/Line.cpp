@@ -1,6 +1,6 @@
-#include <math.h>
-#include <iostream>
+#include "stdafx.h"
 #include "Line.h"
+#include "Utils.h"
 
 #define PI 3.14159265
 #define RAD 3.14159265 / 180.0
@@ -13,7 +13,7 @@ Line::Line(int x1, int y1, int x2, int y2, int thickness)
 {
     m_angle = atan(float(m_y2 - m_y1) / float(m_x2 - m_x1)) * 180 / PI;
     init();
-    m_rect.setFillColor(sf::Color(255, 255, 255, 250));
+    m_rect.setFillColor(sf::Color::Red);
 }
 
 Line::Line(int x1, int y1, float angle, int thickness)
@@ -21,7 +21,7 @@ Line::Line(int x1, int y1, float angle, int thickness)
 {
     init();
     calculateEndPoints();
-    m_rect.setFillColor(sf::Color(255, 255, 255, 50));
+    m_rect.setFillColor(sf::Color::Red);
 }
 
 void Line::setLength(float len)
@@ -34,6 +34,11 @@ void Line::setEndPoint(int x, int y)
     m_x2 = x;
     m_y2 = y;
     m_rect.setSize(sf::Vector2f(sqrt(pow(float(m_x2 - m_x1), 2) + pow(float(m_y2 - m_y1), 2)), m_thickness));
+}
+
+float Line::GetLength()
+{
+    return Utils::Distance({ m_x1, m_y1 }, { m_x2, m_y2 });
 }
 
 void Line::calculateEndPoints()
@@ -68,6 +73,12 @@ void Line::move(int x, int y)
     calculateEndPoints();
     //std::cout << m_x2 << " " << m_y2 << std::endl;
     m_rect.setPosition(sf::Vector2f(m_x1, m_y1));
+}
+
+void Line::Rotation(float angle)
+{
+    m_angle = angle;
+    m_rect.setRotation(m_angle);
 }
 
 void Line::init()
