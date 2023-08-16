@@ -59,7 +59,7 @@ protected:
 	float knockBackTime = 0.15f;
 	float knockBackTimer = 0.f;
 	bool isAttacked = false;
-	bool isAttacking = false;
+	bool isShooting = false;
 	bool isAwake = false;
 
 	Player* player = nullptr;
@@ -84,7 +84,7 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
     void SetState(MonsterState newState);
-	void HandleState(float dt);
+	virtual void HandleState(float dt);
 
 	void Idle();
 	virtual void Attack(float dt);
@@ -98,7 +98,7 @@ public:
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
 
 	void OnAttacked(float damage);
-	void HandleBehavior(float dt);
+	virtual void HandleBehavior(float dt);
 
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);

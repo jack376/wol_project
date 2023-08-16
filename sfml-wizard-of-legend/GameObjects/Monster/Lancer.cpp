@@ -127,7 +127,7 @@ void Lancer::Attack(float dt)
         attackEffect.SetActive(true);
         attackTimer = 0.f; 
         isAttacked = false;
-        isAttacking = true;
+        isShooting = true;
         isEffect = false;
     }
     if (!isAttacked && player->IsAlive())

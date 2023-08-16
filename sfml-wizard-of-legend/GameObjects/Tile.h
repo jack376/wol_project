@@ -100,5 +100,7 @@ public:
     sf::IntRect GetTextureRectBottom() const;
 
     sf::Vector2f GetMousePosBasedOnState() const;
+
+    const sf::FloatRect GetTileGlobalBounds() { return shape.getGlobalBounds(); }
 };
 
