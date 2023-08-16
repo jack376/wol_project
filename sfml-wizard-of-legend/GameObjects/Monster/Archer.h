@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 #include "Bullet.h"
+#include "Beam.h"
 
 class Archer :
     public Monster
@@ -13,11 +14,12 @@ protected:
 	AnimationController attackArmAni;
 	AnimationController pullArmAni;
 	Bullet arrow;
+	Beam bulletLine;
+
 	float ameRate = 1.f;
 	float ameTimer = 0.f;
 	float arrowSpeed = 1000.f;
 	bool isAme = false;
-	bool isFire = false;
 public:
 	Archer(MonsterId id, const std::string& textureId = "", const std::string& n = "Archer");
 	virtual ~Archer() override;

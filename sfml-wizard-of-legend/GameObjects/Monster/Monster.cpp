@@ -3,10 +3,13 @@
 #include "MonsterTable.h"
 #include "DataTableMgr.h"
 #include "ResourceMgr.h"
-#include "SceneGame.h"
 #include "SceneMgr.h"
+#include "SceneGame.h"
 #include "Player.h"
+#include "Tile.h"
 #include "SpriteEffect.h"
+
+#define _TileSize 64
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -27,7 +30,7 @@ void Monster::Init()
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Hurt.csv"));
 
-    rect.setSize({ 100, 150 });
+    //rect.setSize({ 100, 150 });
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineThickness(1.f);
     rect.setOutlineColor(sf::Color::Green);
@@ -46,7 +49,7 @@ void Monster::Reset()
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
 
-    SetPosition({ -500, 0 });
+    SetPosition({ 500, 0 });
     SetOrigin(Origins::MC);
     SetFlipX(false);
     SetRectBox();
@@ -79,6 +82,7 @@ void Monster::Update(float dt)
 
     HandleBehavior(dt);
     HandleState(dt);
+    CalculatorCurrentTile();
  
     //Debug Mode
     searchRange.setPosition(position);
@@ -105,28 +109,23 @@ void Monster::HandleState(float dt)
     switch (currentState) {
     case MonsterState::Idle:
         //std::cout << "Monster is idle.\n";
-        isAttacking = false;
         break;
 
     case MonsterState::Moving:
         //std::cout << "Monster is moving.\n";
-        isAttacking = false;
         break;
 
     case MonsterState::Attacking:
         //std::cout << "Monster is attacking.\n";
-        attackTimer += dt;
-        isAttacking = attackTimer >= stat.attackRate ? false : true;
+        isAttacking = attackTimer < stat.attackRate;
         break;
 
     case MonsterState::Dead:
         //std::cout << "Monster is dead.\n";
-        isAttacking = false;
         break;
 
     case MonsterState::KnockBack:
         //std::cout << "Monster is KnockBack.\n";
-        isAttacking = false;
         break;
     }
 }
@@ -142,7 +141,7 @@ void Monster::Idle()
 void Monster::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
-    //attackTimer += dt;
+    attackTimer += dt;
     if (attackTimer >= stat.attackRate)
     {
         animation.Play(stat.name + "Attack");
@@ -238,11 +237,12 @@ void Monster::HandleBehavior(float dt)
             }
             return;
         }
-        else if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
+        else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
         {
+            isAwake = true;
             if (!isAttacking)
                 SetLook(playerPos);
-            if (distance <= stat.attackRange)
+            if (distance <= stat.attackRange || isAttacking)
                 Attack(dt);
             else if (!isAttacking)
                 Move(dt);
@@ -250,6 +250,38 @@ void Monster::HandleBehavior(float dt)
         else
            Idle();            
     }
+}
+
+void Monster::CalculatorCurrentTile()
+{
+    int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
+    int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
+
+    currentTile = (*wouldTiles)[rowIndex][columnIndex];
+}
+
+//객체를 중심으로 임의 범위 내의 타일을 반환
+std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
+{
+    //32x16
+    int searchRowRange = row;
+    int searchColRange = col;
+
+    sf::Vector2i index = currentTile->GetIndex();
+    std::vector<Tile*> tiles;
+
+    int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x;
+    int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y;
+
+    for (int i = topRowIndex; i < index.x + searchRowRange; i++)
+    {
+        for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
+        {
+            tiles.push_back((*this->wouldTiles)[i][j]);
+        }
+    }
+
+    return tiles;
 }
 
 void Monster::SetRectBox()

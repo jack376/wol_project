@@ -42,6 +42,8 @@
     <ClCompile Include="GameObjects\DestructibleGo.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="GameObjects\Particle.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
     <ClCompile Include="SceneSkillEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +173,9 @@
     <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\Particle.h" />
+    <ClInclude Include="UI\InGame\GameOver.h" />
+    <ClInclude Include="GameObjects\Raycaster\Line.h" />
+    <ClInclude Include="GameObjects\Raycaster\Beam.h" />
     <ClInclude Include="SceneSkillEditor.h" />
   </ItemGroup>
   <ItemGroup>

@@ -60,5 +60,6 @@ public:
 	void CreateTile2dVector(int rows, int cols);
 	void CreateParticle(int count);
 	Monster* CreatMonster(MonsterId id);
+	Monster* CreateMonster(MonsterId id);
 };
 
