@@ -30,7 +30,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	virtual void HandleBehavior(float dt) override;
+	//virtual void HandleBehavior(float dt) override;
 	virtual void Attack(float dt) override;
 };
 

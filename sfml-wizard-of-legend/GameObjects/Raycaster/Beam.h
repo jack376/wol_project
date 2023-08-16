@@ -3,6 +3,7 @@
 
 class Tile;
 class Player;
+class Monster;
 
 struct Wall
 {

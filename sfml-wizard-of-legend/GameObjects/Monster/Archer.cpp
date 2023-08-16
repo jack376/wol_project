@@ -114,45 +114,45 @@ void Archer::Draw(sf::RenderWindow& window)
 }
 
 
-void Archer::HandleBehavior(float dt)
-{
-	if (player == nullptr)
-		return;
-	else
-	{
-		sf::Vector2f playerPos = player->GetPosition();
-		float distance = Utils::Distance(playerPos, position);
-
-		if (hp <= 0)
-		{
-			Die();
-			return;
-		}
-		if (currentState == MonsterState::KnockBack)
-		{
-			SetPosition(position + -look * 500.f * dt);  //공격 당한 반대 방향으로 이동 (공격의 주체가 플레이어가 아니라 발사체라면 발사체의 위치를 넘겨 받아 수정)
-			knockBackTimer += dt;
-			if (knockBackTimer > knockBackTime)
-			{
-				knockBackTimer = 0;
-				SetState(MonsterState::Idle);
-			}
-			return;
-		}
-		else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
-		{
-			isAwake = true;
-			if (!isShooting)
-				SetLook(playerPos);
-			if (distance <= stat.attackRange || isAiming && isShooting)
-				Attack(dt);
-			else if (!isAiming)
-				Move(dt);
-		}
-		else
-			Idle();
-	}
-}
+//void Archer::HandleBehavior(float dt)
+//{
+//	if (player == nullptr)
+//		return;
+//	else
+//	{
+//		sf::Vector2f playerPos = player->GetPosition();
+//		float distance = Utils::Distance(playerPos, position);
+//
+//		if (hp <= 0)
+//		{
+//			Die();
+//			return;
+//		}
+//		if (currentState == MonsterState::KnockBack)
+//		{
+//			SetPosition(position + -look * 500.f * dt);  //공격 당한 반대 방향으로 이동 (공격의 주체가 플레이어가 아니라 발사체라면 발사체의 위치를 넘겨 받아 수정)
+//			knockBackTimer += dt;
+//			if (knockBackTimer > knockBackTime)
+//			{
+//				knockBackTimer = 0;
+//				SetState(MonsterState::Idle);
+//			}
+//			return;
+//		}
+//		else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
+//		{
+//			isAwake = true;
+//			if (!isShooting)
+//				SetLook(playerPos);
+//			if (distance <= stat.attackRange || isAiming && isShooting)
+//				Attack(dt);
+//			else if (!isAiming)
+//				Move(dt);
+//		}
+//		else
+//			Idle();
+//	}
+//}
 
 void Archer::Attack(float dt)
 {

@@ -90,7 +90,7 @@ public:
 	virtual void Attack(float dt);
 	void Move(float dt);
 	void Die();
-	void KnockBack();
+	void KnockBack(float dt);
 	
 	void SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
@@ -98,7 +98,6 @@ public:
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
 
 	void OnAttacked(float damage);
-	virtual void HandleBehavior(float dt);
 
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
