@@ -24,4 +24,7 @@ public:
     void move(int x, int y);
     void Rotation(float angle);
     void checkCollision(const std::vector<Tile*> tiles, Player* player);
+    void checkCollision(Monster* monster);
+
+
 };

@@ -49,7 +49,7 @@ void Monster::Reset()
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
 
-    SetPosition({ 500, 0 });
+    SetPosition({ 500, 500 });
     SetOrigin(Origins::MC);
     SetFlipX(false);
     SetRectBox();
@@ -79,6 +79,7 @@ void Monster::Reset()
 void Monster::Update(float dt)
 {
     animation.Update(dt);
+    attackTimer += dt;
 
     HandleBehavior(dt);
     HandleState(dt);
@@ -117,7 +118,7 @@ void Monster::HandleState(float dt)
 
     case MonsterState::Attacking:
         //std::cout << "Monster is attacking.\n";
-        isAttacking = attackTimer < stat.attackRate;
+        isShooting = attackTimer < stat.attackRate;
         break;
 
     case MonsterState::Dead:
@@ -141,7 +142,6 @@ void Monster::Idle()
 void Monster::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
-    attackTimer += dt;
     if (attackTimer >= stat.attackRate)
     {
         animation.Play(stat.name + "Attack");
@@ -159,6 +159,8 @@ void Monster::Attack(float dt)
             isAttacked = true;
         }
     }
+
+
 }
 
 void Monster::Move(float dt)
@@ -240,11 +242,11 @@ void Monster::HandleBehavior(float dt)
         else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
         {
             isAwake = true;
-            if (!isAttacking)
+            if (!isShooting)
                 SetLook(playerPos);
-            if (distance <= stat.attackRange || isAttacking)
+            if (distance <= stat.attackRange || isShooting)
                 Attack(dt);
-            else if (!isAttacking)
+            else if (!isShooting)
                 Move(dt);
         }
         else
@@ -272,15 +274,16 @@ std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 
     int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x;
     int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y;
+    int bottomRowIndex = index.x + searchRowRange >= wouldTiles->size() ? wouldTiles->size() - 1 : index.x + searchRowRange;
+    int rightColumnIndex = index.y + searchColRange >= wouldTiles[0].size() ? wouldTiles[0].size() - 1 : index.y + searchColRange;
 
-    for (int i = topRowIndex; i < index.x + searchRowRange; i++)
+    for (int i = topRowIndex; i < bottomRowIndex; i++)
     {
-        for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
+        for (int j = leftColumnIndex; j < rightColumnIndex; j++)
         {
             tiles.push_back((*this->wouldTiles)[i][j]);
         }
     }
-
     return tiles;
 }
 

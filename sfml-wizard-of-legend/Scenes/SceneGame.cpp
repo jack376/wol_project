@@ -30,7 +30,7 @@ void SceneGame::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 
 	player = (Player*)AddGo(new Player());
-	player->SetPosition(0, 0);
+	player->SetPosition(700, 700);
 	player->sprite.setScale(4, 4);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 5;
@@ -48,6 +48,7 @@ void SceneGame::Init()
 	monster = go;
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
+
 	player->SetMonster(go);
 	tempWindSlash->SetMonster(monster);
 
@@ -103,6 +104,7 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
+	worldView.setCenter(player->GetPosition());
 	debugTimer += dt;
 	worldView.setCenter(player->GetPosition());
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
@@ -203,7 +205,7 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetTexture(textureId);
 		tile->SetTextureRectTop(topTextureRect, textureId);
 		tile->SetTextureRectBottom(bottomTextureRect, textureId);
-		tile->SetOrigin(Origins::MC);
+		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
 	//std::cout << "SYSTEM : Load Success" << std::endl;

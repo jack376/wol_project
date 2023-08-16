@@ -19,7 +19,7 @@ protected:
 	float ameRate = 1.f;
 	float ameTimer = 0.f;
 	float arrowSpeed = 1000.f;
-	bool isAme = false;
+	bool isAiming = false;
 public:
 	Archer(MonsterId id, const std::string& textureId = "", const std::string& n = "Archer");
 	virtual ~Archer() override;
@@ -30,6 +30,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	virtual void Attack(float dt);
+	virtual void HandleBehavior(float dt) override;
+	virtual void Attack(float dt) override;
 };
 
