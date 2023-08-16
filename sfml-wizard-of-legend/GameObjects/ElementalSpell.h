@@ -2,12 +2,14 @@
 #include "SpriteGo.h"
 #include "AnimationController.h"
 #include "BoxCollider2D.h"
+#include "Beam.h"
 
 class SpriteGo;
 class SceneGame;
 class Player;
 class Monster;
 class BoxCollider2D;
+class Tile;
 
 class ElementalSpell : public SpriteGo
 {
@@ -16,6 +18,8 @@ protected:
 	SceneGame* scene;
 	Player* player;
 	Monster* monster;
+	Beam raycaster;
+
 
 	AnimationController anim;
 	
@@ -67,6 +71,9 @@ protected:
 	// 애니메이션 각도
 	float angle = 0.f;
 
+	Tile* currentTile = nullptr;
+	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
+
 public:
 	ElementalSpell(const std::string& textureId = "", const std::string& n = "");
 	virtual ~ElementalSpell() override;
@@ -86,5 +93,10 @@ public:
 	void SetMonster(Monster* monster) { this->monster = monster; }
 
 	sf::RectangleShape& GetCollider() const { return collider->rect; }
+
+	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
+	void CalculatorCurrentTile();
+	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
+
 };
 

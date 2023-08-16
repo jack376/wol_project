@@ -9,8 +9,6 @@
 #include "Tile.h"
 #include "SpriteEffect.h"
 
-#define _TileSize 64
-
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
 {   
@@ -49,7 +47,8 @@ void Monster::Reset()
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
 
-    SetPosition({ 500, 0 });
+
+    SetPosition({ 1500, 1024 });
     SetOrigin(Origins::MC);
     SetFlipX(false);
     SetRectBox();

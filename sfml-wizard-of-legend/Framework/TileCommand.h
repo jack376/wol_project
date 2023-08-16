@@ -9,7 +9,7 @@ public:
     struct TileState
     {
         std::string textureId;
-        Tile::TileType type;
+        TileType type;
         sf::Vector2i index;
         sf::IntRect topRect;
         sf::IntRect bottomRect;

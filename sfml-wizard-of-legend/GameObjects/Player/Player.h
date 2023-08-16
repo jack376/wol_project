@@ -40,6 +40,7 @@ enum class States
 	Slide,
 	Attack,
 	Hit,
+	Fall,
 	Die,
 };
 
@@ -47,11 +48,13 @@ enum class States
 
 class SceneGame;
 class Monster;
+class Tile;
 
 class Player : public SpriteGo
 {
 private:
 	AnimationController anim;
+
 	States currentState = States::Idle;
 	Dir currentDir = Dir::Down;
 	Dir slideDir = Dir::Down;
@@ -100,10 +103,18 @@ private:
 	std::vector<sf::Vector2f> destPos;
 	sf::Vector2f dashStart;
 	sf::Vector2f dashDest;
+
+	sf::Vector2f fallStart;
+	sf::Vector2f fallDest;
+
 	sf::Vector2f attackPos;
+
+	sf::Vector2f prevPos;
 
 	// 플레이어 색
 	sf::Color playerColor;
+
+	float originAngle = 0.f;
 
 	float playerLookAngle = 0.f;
 	float hitLookAngle = 0.f;
@@ -116,8 +127,16 @@ private:
 	float speed = 400.f;
 	float dashDistance = 400.f;
 
-	float dashDuration = 0.3f;
 	float dashTimer = 0.f;
+	float dashDuration = 0.3f;
+
+	float fallTimer = 0.f;
+	float fallDuration = 0.4f;
+
+	float fallHitTimer = 0.f;
+	float fallHitDuration = 1.0f;
+
+
 
 	// 슬라이딩 도중 방향전환 방지용
 	float slideDuration = 0.3f;
@@ -142,6 +161,11 @@ private:
 	bool isHitAnim = false;
 	bool isInvincible = false;
 	bool isDieAnim = false;
+	bool isFalling = false;
+	bool isFallHit = false;
+
+	bool isMove = false;
+	bool isDashing = false;
 
 
 	std::vector<std::string> idleId;
@@ -150,9 +174,13 @@ private:
 	std::vector<std::string> slideId;
 	std::vector<std::string> attackId;
 	std::vector<std::string> hitId;
+	std::vector<std::string> fallId;
 	//std::vector<std::string> daedId;
 
 	std::string attackName;
+
+	Tile* currentTile = nullptr;
+	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
 
 public:
 	Player(const std::string& textureId = "", const std::string& n = "");
@@ -171,6 +199,7 @@ public:
 	void SlideUpdate(float dt);
 	void AttackUpdate(float dt);
 	void HitUpdate(float dt);
+	void FallUpdate(float dt);
 	void DieUpdate(float dt);
 
 	void CalDir();
@@ -203,4 +232,9 @@ public:
 
 	// 애니메이션 이름 등록
 	void InsertAnimId();
+
+	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
+	void CalculatorCurrentTile();
+	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
+
 };

@@ -3,6 +3,7 @@
 
 class Tile;
 class Player;
+class Monster;
 
 struct Wall
 {
@@ -24,4 +25,5 @@ public:
     void move(int x, int y);
     void Rotation(float angle);
     void checkCollision(const std::vector<Tile*> tiles, Player* player);
+    void checkCollision(const Monster& monster);
 };

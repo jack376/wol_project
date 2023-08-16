@@ -2,6 +2,7 @@
 #include "Beam.h"
 #include "Tile.h"
 #include "Player.h"
+#include "Monster.h"
 
 #define SX 1280
 #define SY 720
@@ -25,7 +26,7 @@ void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
     //Wall 타일만 추출
     for (auto& tile : tiles)
     {
-        if (tile->GetType() != Tile::TileType::Wall)
+        if (tile->GetType() != TileType::Wall)
             continue;
         else
             wallTiles.push_back(tile);
@@ -127,6 +128,11 @@ void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
             m_line.setEndPoint(point.x, point.y);
         } 
     }
+}
+
+void Beam::checkCollision(const Monster& monster)
+{
+
 }
 
 void Beam::move(int x, int y)

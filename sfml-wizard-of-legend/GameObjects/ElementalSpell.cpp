@@ -7,6 +7,7 @@
 #include "InputMgr.h"
 #include "Framework.h"
 #include "BoxCollider2D.h"
+#include "Tile.h"
 
 ElementalSpell::ElementalSpell(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -134,6 +135,7 @@ void ElementalSpell::Update(float dt)
 	anim.Update(dt);
 	SetOrigin(Origins::MC);
 	Collider->SetOrigin(Origins::MC);
+	CalculatorCurrentTile();
 }
 
 void ElementalSpell::Draw(sf::RenderWindow& window)
@@ -145,4 +147,34 @@ void ElementalSpell::Draw(sf::RenderWindow& window)
 	}
 	else
 		Collider->SetActive(false);
+}
+
+void ElementalSpell::CalculatorCurrentTile()
+{
+	int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
+	int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
+
+	currentTile = (*wouldTiles)[rowIndex][columnIndex];
+}
+
+std::vector<Tile*> ElementalSpell::CalculatorRangeTiles(int row, int col)
+{
+	//32x16
+	int searchRowRange = row;
+	int searchColRange = col;
+
+	sf::Vector2i index = currentTile->GetIndex();
+	std::vector<Tile*> tiles;
+
+	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > wouldTiles->size() * _TileSize ? wouldTiles->size() * _TileSize : index.x;
+	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > wouldTiles[0].size() * _TileSize ? wouldTiles[0].size() * _TileSize : index.y;
+	for (int i = topRowIndex; i < index.x + searchRowRange; i++)
+	{
+		for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
+		{
+			tiles.push_back((*this->wouldTiles)[i][j]);
+		}
+	}
+
+	return tiles;
 }
