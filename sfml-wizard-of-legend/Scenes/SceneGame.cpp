@@ -44,9 +44,10 @@ void SceneGame::Init()
 	tempWindSlash->sortLayer = 21;
 
 
-	Monster* go = CreatMonster(MonsterId::Archer);
+	Monster* go = CreateMonster(MonsterId::Archer);
 	monster = go;
 	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
 	player->SetMonster(go);
 
 	// TEST Particle
@@ -224,7 +225,7 @@ void SceneGame::LoadFromCSV(const std::string& path)
 	//std::cout << "SYSTEM : Load Success" << std::endl;
 }
 
-Monster* SceneGame::CreatMonster(MonsterId id)
+Monster* SceneGame::CreateMonster(MonsterId id)
 {
 	Monster* monster = nullptr;
 	switch (id)

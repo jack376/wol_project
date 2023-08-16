@@ -36,11 +36,11 @@ void Bullet::Reset()
 void Bullet::Update(float dt)
 {
 	SpriteGo::Update(dt);
-
 	range -= speed * dt; // 이동량 빼기
 	if (range <= 0.f) //사거리까지 이동하면 총알 삭제
 	{
 		SetActive(false);
+		range = 1000.f;
 		return;
 	}
 
@@ -68,6 +68,7 @@ void Bullet::Fire(const sf::Vector2f pos, const sf::Vector2f direction, float sp
 	sprite.setRotation(Utils::Angle(direction) + 90);
 	SetPosition(pos);
 
+	range = 1000.f;
 	this->direction = direction;
 	this->speed = speed;
 }
