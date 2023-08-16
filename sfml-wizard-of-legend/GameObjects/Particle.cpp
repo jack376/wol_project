@@ -8,12 +8,11 @@
 
 void Particle::Reset()
 {
+	// Texture Load
 	sf::Texture* tex = RESOURCE_MGR.GetTexture(textureId);
-	if (tex != nullptr)
-	{
-		sprite.setTexture(*tex);
-	}
+	if (tex != nullptr) { sprite.setTexture(*tex); }
 
+	// Reset Member Variable
 	flowTime = 0.0f;
 	velocity = 0.0f;
 	duration = 0.75f;
@@ -27,8 +26,7 @@ void Particle::Reset()
 	rotation   = randomVal;
 	duration  *= randomVal;
 
-	float halfSize = 8.0f;
-	SetOrigin(halfSize, halfSize);
+	SetOrigin(origin);
 	SetRotation(rotation * 360.0f);
 	SetPosition(0.0f, 0.0f);
 }
@@ -36,7 +34,7 @@ void Particle::Reset()
 void Particle::Update(float dt)
 {		
 	flowTime += dt;
-	speed -= deceleration * dt;
+	speed -= slowdown * dt;
 	velocity += gravity * flowTime;
 
 	position += direction * speed * dt;
@@ -83,7 +81,7 @@ void Particle::SetOrigin(Origins origin)
 
 	if (!tex)
 	{
-		std::cerr << "SetOrigin ERROR: Texture not set for sprite" << std::endl;
+		std::cerr << "Particle SetOrigin Error" << std::endl;
 		return;
 	}
 	sf::Vector2f originPos(sprite.getTexture()->getSize());

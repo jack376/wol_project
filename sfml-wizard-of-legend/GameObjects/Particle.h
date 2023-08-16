@@ -8,14 +8,15 @@ protected:
 	std::string textureId;
 	sf::Sprite sprite;
 	sf::RectangleShape shape;
-
 	sf::Vector2f direction;
-	float duration = 0.75f;
+
 	float flowTime = 0.0f;
-	float speed = 750.0f;
-	float deceleration = 50.0f;
-	float gravity = 15.0f;
 	float velocity = 0.0f;
+	float duration = 0.75f;
+	float speed    = 750.0f;
+
+	float slowdown = 50.0f;
+	float gravity  = 15.0f;
 	float rotation = 1.0f;
 
 	ObjectPool<Particle>* pool = nullptr;
@@ -37,7 +38,6 @@ public:
 	void SetOrigin(Origins origin);
 	void SetOrigin(float x, float y);
 	void SetRotation(float angle);
-
 	void SetTexture(const std::string& id);
 	void SetTextureRect(const sf::IntRect& rect);
 

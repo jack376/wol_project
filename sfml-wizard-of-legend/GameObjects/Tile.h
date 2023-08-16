@@ -13,6 +13,9 @@ public:
         Wall,
         MonsterSpawn,
         EventTrigger,
+        StartPath,
+        RandomPath,
+
     };
     enum class TileState
     {
@@ -67,8 +70,10 @@ public:
     void SetOrigin(float x, float y);
     void SetShapeColor(sf::Color color);
     void SetStrokeColor(sf::Color color = sf::Color::Transparent);
-    void SetPosition(float x, float y);
     void SetScale(float scale = 1.0f);
+
+    void SetPosition(float x, float y);
+    sf::Vector2f GetPosition() const;
 
     void SetTileSize(int tileSize);
     int GetTileSize() const;

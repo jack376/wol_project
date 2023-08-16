@@ -148,6 +148,13 @@ void Tile::SetStrokeColor(sf::Color color)
     shape.setOutlineColor(sf::Color(color));
 }
 
+void Tile::SetScale(float scale)
+{
+    spriteTop.setScale(scale, scale);
+    spriteBottom.setScale(scale, scale);
+    shape.setScale(scale, scale);
+}
+
 void Tile::SetPosition(float x, float y)
 {
     spriteTop.setPosition(x, y);
@@ -155,11 +162,9 @@ void Tile::SetPosition(float x, float y)
     shape.setPosition(x, y);
 }
 
-void Tile::SetScale(float scale)
+sf::Vector2f Tile::GetPosition() const
 {
-    spriteTop.setScale(scale, scale);
-    spriteBottom.setScale(scale, scale);
-    shape.setScale(scale, scale);
+    return shape.getPosition();
 }
 
 void Tile::SetTileSize(int tileSize)

@@ -7,7 +7,7 @@
 #include "SceneEditor.h"
 #include "TextGo.h"
 #include "SpriteGo.h"
-#include "DestructibleGo.h"
+#include "BreakableObj.h"
 #include "BaseUI.h"
 #include "Tile.h"
 #include "Particle.h"
@@ -172,7 +172,7 @@ void SceneEditor::Update(float dt)
 
 	// Resize
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O)) { ResizeWorld(16, 16); std::cout << "Resize World Tile : 16 * 16" << std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(32, 32); std::cout << "Resize World Tile : 32 * 32" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(128, 128); std::cout << "Resize World Tile : 32 * 32" << std::endl; }
 
 	// SetTileType
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(Tile::TileType::Ground); }
@@ -180,6 +180,8 @@ void SceneEditor::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(Tile::TileType::Wall); }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(Tile::TileType::MonsterSpawn); }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(Tile::TileType::EventTrigger); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num6)) { SetSelectedTilesType(Tile::TileType::StartPath); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num7)) { SetSelectedTilesType(Tile::TileType::RandomPath); }
 
 	// Deselect
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }

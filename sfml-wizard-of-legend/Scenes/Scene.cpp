@@ -85,8 +85,12 @@ void Scene::SortGos()
 	gameObjects.sort([](GameObject* lhs, GameObject* rhs) {
 		if (lhs->sortLayer != rhs->sortLayer)
 			return lhs->sortLayer < rhs->sortLayer;
-		return lhs->sortOrder < rhs->sortOrder;
-		});
+
+		if (lhs->sortOrder != rhs->sortOrder)
+			return lhs->sortOrder < rhs->sortOrder;
+
+		return lhs->GetPosition().y < rhs->GetPosition().y;
+	});
 }
 
 sf::Vector2f Scene::ScreenToWorldPos(sf::Vector2f screenPos)

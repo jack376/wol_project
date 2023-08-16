@@ -7,7 +7,7 @@
 
 class TextGo;
 class SpriteGo;
-class DestructibleGo;
+class BreakableObj;
 class Particle;
 class BaseUI;
 class Tile;

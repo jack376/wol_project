@@ -2,21 +2,28 @@
 #include "GameObject.h"
 #include "ObjectPool.h"
 
+class Player;
 class Particle;
-class DestructibleGo : public GameObject
+class BreakableObj : public GameObject
 {
 protected:
 	std::string textureId;
 	sf::Sprite sprite;
 	sf::RectangleShape shape;
+	sf::FloatRect collider;
 
 	int durability = 1;
-	ObjectPool<Particle>* particlePool;
+	float hitTimer = 0.0f;
+	float hitCooldown = 1.0f;
+
+	Player* player = nullptr;
+
+	ObjectPool<Particle>* particlePool = nullptr;
 
 public:
-	DestructibleGo(const std::string& textureId = "", const std::string& n = "")
+	BreakableObj(const std::string& textureId = "", const std::string& n = "")
 		: GameObject(n), textureId(textureId) {}
-	virtual ~DestructibleGo() override {}
+	virtual ~BreakableObj() override {}
 
 	virtual void Init() override {}
 	virtual void Release() override {}
@@ -37,8 +44,13 @@ public:
 	void SetTexture(const std::string& id);
 	void SetTextureRect(const sf::IntRect& rect);
 
-	void OnHitDestructibleGo(int hit);
-	void SetParticle(sf::Vector2f position);
+	void SetParticle(sf::Vector2f position, int count);
 	void SetParticlePool(ObjectPool<Particle>* pool);
+
+	void OnHitBreakableObj(const std::string& name, int damage = 1);
+
+	void SetPlayer(Player* player) { this->player = player; }
+	void SetDurability(int durability) { this->durability = durability; }
+	int GetDurability() const { return durability; }
 };
 

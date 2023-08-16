@@ -1,4 +1,5 @@
 #pragma once
+#include "Tile.h"
 #include "Scene.h"
 #include "ObjectPool.h"
 
@@ -9,7 +10,7 @@ class Tile;
 
 class Player;
 class ElementalSpell;
-class DestructibleGo;
+class BreakableObj;
 class Particle;
 
 class SceneGame : public Scene
@@ -23,12 +24,9 @@ protected:
 	int cols = 0;
 	float tileSize = 64.0f;
 
-	sf::Sprite camera;
-	sf::Vector2f cameraDirection;
-	sf::Vector2f cameraPosition;
-	float cameraSpeed = 400.0f;
-
 	ObjectPool<Particle> particlePool;
+
+	int count = 0;
 
 public:
 	SceneGame();
@@ -47,9 +45,19 @@ public:
 	void ClearObjectPool(ObjectPool<T>& pool);
 
 	Player* GetPlayer() { return player; }
+
 	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
 	void LoadFromCSV(const std::string& path);
 	void CreateTile2dVector(int rows, int cols);
 	void CreateParticle(int count);
+
+	void SpawnBreakableObj(const std::string& id, int count);
+	void DestroyBreakableObj(BreakableObj* obj);
+
+	std::vector<sf::Vector2i> CreateRandomPath(Tile::TileType startType, Tile::TileType traversableType, int pathLength);
+	void TestRandomPath();
+	
+	std::vector<std::vector<sf::Vector2i>> CreateMultipleRandomPaths(Tile::TileType startType, Tile::TileType traversableType, int mainPathLength, int branchCount = 2, int branchLength = 10);
+	void TestMultipleRandomPaths();
 };
 
