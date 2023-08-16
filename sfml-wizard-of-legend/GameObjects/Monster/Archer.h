@@ -3,6 +3,13 @@
 #include "Bullet.h"
 #include "Beam.h"
 
+enum class ArcherAttackState
+{
+	Aim,
+	Shoot,
+	Cool,
+};
+
 class Archer :
     public Monster
 {
@@ -15,6 +22,7 @@ protected:
 	AnimationController pullArmAni;
 	Bullet arrow;
 	Beam bulletLine;
+	ArcherAttackState currentAttackState;
 
 	float ameRate = 1.f;
 	float ameTimer = 0.f;
@@ -30,7 +38,14 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	//virtual void HandleBehavior(float dt) override;
+	void HandleAttackState(float dt);
+
 	virtual void Attack(float dt) override;
+	virtual void Move(float dt) override;
+
+	void Aim(float dt);
+	void Shoot(float dt);
+	void Cool(float dt);
+	
 };
 

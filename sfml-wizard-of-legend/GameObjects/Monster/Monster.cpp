@@ -221,7 +221,7 @@ void Monster::Move(float dt)
         SetState(MonsterState::Dead);
         return;
     }
-    else if (distance > stat.searchRange)
+    else if (distance > stat.searchRange && !isAwake)
     {
         SetState(MonsterState::Idle);
         return;
