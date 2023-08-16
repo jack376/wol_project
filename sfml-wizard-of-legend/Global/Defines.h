@@ -12,8 +12,26 @@ enum class SkillEvents
 	Count,
 };
 
+enum class SkillTypes
+{
+	None = -1,
+	Melee,
+	Range,
+};
+
+enum class PlayerActions
+{
+	None = -1,
+	Hand,
+	Kick,
+	Jump,
+	Slam,
+	Focus,
+};
+
 enum class ElementTypes
 {
+	None = -1,
 	Fire,
 	Water,
 	Thunder,
@@ -58,6 +76,7 @@ enum class SceneId
 	Title,
 	Game,
 	Editor,
+	SkillEditor,
 	Count,
 };
 

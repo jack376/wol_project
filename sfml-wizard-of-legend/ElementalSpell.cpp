@@ -19,15 +19,6 @@ ElementalSpell::~ElementalSpell()
 
 void ElementalSpell::Init()
 {
-	collider = (SpriteGo*)scene->AddGo(new SpriteGo());
-	collider->SetOrigin(Origins::MC);
-	collider->rect.setOutlineThickness(1.f);
-	collider->rect.setOutlineColor(sf::Color::Blue);
-	collider->rect.setFillColor(sf::Color::Transparent);
-	collider->rect.setSize({ 100, 80 });
-	collider->SetPosition(0, 0);
-	collider->SetActive(false);
-
 	Collider = (BoxCollider2D*)scene->AddGo(new BoxCollider2D());
 }
 
@@ -46,9 +37,6 @@ void ElementalSpell::Reset()
 
 	sprite.setScale(2, 2);
 	anim.SetTarget(&sprite);
-
-	Collider->SetSprite(sprite);
-	Collider->SetActive(false);
 }
 
 void ElementalSpell::Update(float dt)
@@ -119,16 +107,8 @@ void ElementalSpell::Update(float dt)
 	}
 
 
-
-	// 점을 기준으로 충돌	new를 안하고 했을때
-	//isCol = obbManager.ObbCol(collider->rect, monster->rect);
-	
-
-
-	//isCol = collider->rect.getGlobalBounds().contains(player->GetMonster()->GetPosition());
-
-	// 면을 기준으로 충돌
-	//isCol = collider->rect.getGlobalBounds().intersects(player->GetMonster()->sprite.getGlobalBounds());
+	// 이걸로 실행
+	isCol = Collider->ObbCol(monster->rect);
 
 	// 공격이 닿은 타이밍
 	if (player->IsAttack() && isCol && !isAttack)	// 한번이 아닌 실시간으로 실행됨

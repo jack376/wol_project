@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "Singleton.h"
 
 enum class Axis
@@ -34,6 +35,9 @@ protected:
 
 	std::map<Axis, AxisInfo> axisInfoMap;
 
+	std::string currentInput;
+	bool isConnectedText = false;
+	bool isEnterPressed = false;
 public:
 	void Update(float dt);
 	void UpdateEvent(const sf::Event& ev);

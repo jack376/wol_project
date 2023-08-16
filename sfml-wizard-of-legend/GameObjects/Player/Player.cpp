@@ -41,7 +41,6 @@ void Player::Init()
 
 
 	// 콜라이더
-
 	rect.setSize({65, 120});
 	rect.setOutlineThickness(1.f);
 	rect.setOutlineColor(sf::Color::Green);
@@ -53,6 +52,10 @@ void Player::Init()
 	attackPosCol.setFillColor(sf::Color::Transparent);
 
 	InsertAnimId();
+	playerColor = sprite.getColor();
+
+	//sf::Image grayImage = sprite.getTexture()->copyToImage();
+	//sf::Vector2u imageSize = grayImage.getSize();
 }
 
 void Player::Release()
@@ -81,14 +84,29 @@ void Player::Reset()
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Slide/SlideRight.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Slide/SlideUp.csv"));
 
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackBackDown.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackBackLeft.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackBackRight.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackBackUp.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackForeDown.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackForeLeft.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackForeRight.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/AttackForeUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Hand/AttackBackDown.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Hand/AttackBackLeft.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Hand/AttackBackRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Hand/AttackBackUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Hand/AttackForeDown.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Hand/AttackForeLeft.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Hand/AttackForeRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Hand/AttackForeUp.csv"));
+
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Kick/KickUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Kick/KickRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Kick/KickDown.csv"));	
+	
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Jump/JumpUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Jump/JumpRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Jump/JumpDown.csv"));
+
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Slam/SlamUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Slam/SlamDown.csv"));
+
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Focus/FocusUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Focus/FocusRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Focus/FocusDown.csv"));
 
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitDown.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitRight.csv"));
@@ -102,6 +120,28 @@ void Player::Reset()
 	// 플레이어 리셋
 	hp = maxHp;
 	attackCount = 0;
+
+	// 팔레트 적용시키기
+	//palette.setTexture(*RESOURCE_MGR.GetTexture("graphics/Player/WizardPalette.png"));
+	//palette.setTextureRect(sf::IntRect{0, 62, 54, 2});
+	////palette.setScale(16, 16);
+
+	//sf::Image grayImage = sprite.getTexture()->copyToImage();
+	//sf::Image paletteImage = palette.getTexture()->copyToImage();
+	//paletteTexture.loadFromImage(grayImage);
+
+	//sprite = Utils::SetPixelColor(grayImage, paletteImage);
+
+	// 얽히고 섥혀서 문제 발생 여지 있음..
+	// &로 넘기긴 하는데 적용이 되는건지 확인 필요
+	//Utils::SetShader(currentShader, sprite, paletteTexture);
+
+	//sf::Texture* tex = RESOURCE_MGR.GetTexture(frame.textureId);
+
+	////여기서 target의 texture와 Rect를 정함!
+	//target->setTexture(*tex);
+	//target->setTextureRect(frame.texCoord);
+
 }
 
 void Player::Update(float dt)
@@ -111,6 +151,7 @@ void Player::Update(float dt)
 	SetDirIconPos();
 	SetDirIconDir();
 	
+	// 디버그 위치
 
 
 	// 콜라이더 플레이어 동기화
@@ -136,6 +177,12 @@ void Player::Update(float dt)
 
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
 
+
+	if (!isAlive)
+	{
+		ChangeState(States::Die);
+	}
+
 	// 무적 상태 분리
 	if (isInvincible)
 	{
@@ -145,6 +192,7 @@ void Player::Update(float dt)
 	// 맞으면 무적상태와 맞는 상태 표시
 	if (isHit)
 	{
+		CalHitLookAngle();
 		ChangeState(States::Hit);
 	}
 
@@ -207,8 +255,8 @@ void Player::Update(float dt)
 		HitUpdate(dt);
 		break;
 
-	case States::Dead:
-		DeadUpdate(dt);
+	case States::Die:
+		DieUpdate(dt);
 		break;
 	}
 
@@ -219,11 +267,14 @@ void Player::Update(float dt)
 void Player::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
+	window.draw(palette);
 	window.draw(attackPosCol);
+	//window.draw(sprite, &currentShader);
 }
 
 void Player::IdleUpdate(float dt)
 {
+	sprite.setColor(playerColor);
 	anim.Play(idleId[(int)currentDir]);
 	switch (currentDir)
 	{
@@ -300,6 +351,7 @@ void Player::DashUpdate(float dt)
 		slideDir = currentDir;	// Dir,  슬라이딩 도중 방향전환 방지용
 		dashDest = destPos[(int)currentDir] + GetPosition();
 		dashStart = GetPosition();
+
 
 	}
 	isDash = true;
@@ -405,12 +457,72 @@ void Player::AttackUpdate(float dt)
 
 void Player::HitUpdate(float dt)
 {
-	//anim.Play(hitId[(int)currentDir]);
+
+	currentDir = (Dir)((int)hitDir + 4);
+
+	// 몬스터의 공격과 동기화가 되지 않음
+	if (!isHitAnim)
+	{
+		anim.Play(hitId[(int)hitDir]);
+		sprite.setColor(sf::Color::Red);
+		isHitAnim = true;
+	}
+
+	//애니메이션이 너무 한 프레임에 처리되어서 시간초를 둠
+	if (isHitAnim)
+	{
+		hitTimer += dt;
+	}
+
+	if (hitTimer > hitDuration)
+	{
+		hitTimer = 0.f;
+		isHitAnim = false;
+	}
+
+	// 맞을때 떄린 방향이기에
+	// 때릴때 피하고 다른 방향에서 맞아도 그게 적용
+	switch (hitDir)
+	{
+	case HitDir::Up:
+
+		std::cout << "Hit Up" << std::endl;
+		break;
+	case HitDir::Right:
+		std::cout << "Hit Right" << std::endl;
+
+		break;
+	case HitDir::Down:
+		std::cout << "Hit Down" << std::endl;
+
+		break;
+	case HitDir::Left:
+		SetFlipX(true);
+		std::cout << "Hit Left" << std::endl;
+		break;
+	}
+
+	if (anim.IsAnimEndFrame() && !isHitAnim)
+	{
+		sprite.setColor(playerColor);
+		isHit = false;
+		isHitAnim = false;
+		isRun = false;
+		isAttack = false;
+		ChangeState(States::Idle);
+	}
 
 }
 
-void Player::DeadUpdate(float dt)
+void Player::DieUpdate(float dt)
 {
+	// 죽을떄 시간 흐름 느리게 하기 생각
+	// 빨개졌다가 다시 하얘짐
+	if (!isDieAnim)
+	{
+		anim.Play("Die");
+		isDieAnim = true;
+	}
 }
 
 void Player::CalDir()
@@ -490,29 +602,31 @@ void Player::CalHitLookAngle()
 
 	hitLookAngle += 180;
 
+	// 때린 방향 반대로 전환
 	if (hitLookAngle >= 360)
 	{
 		//hitLookAngle -= 360;
 		hitLookAngle = (float)((int)hitLookAngle % 360);
 	}
 
+
 	// 각도에 따른 공격 방향 설정
 	if ((hitLookAngle < 45 && hitLookAngle >= 0) ||
 		(hitLookAngle < 360 && hitLookAngle >= 315))
 	{
-		attackDir = AttackDir::Right;
+		hitDir = HitDir::Right;
 	}
 	if (hitLookAngle < 135 && hitLookAngle >= 45)
 	{
-		attackDir = AttackDir::Down;
+		hitDir = HitDir::Down;
 	}
 	if (hitLookAngle < 225 && hitLookAngle >= 135)
 	{
-		attackDir = AttackDir::Left;
+		hitDir = HitDir::Left;
 	}
 	if (hitLookAngle < 315 && hitLookAngle >= 225)
 	{
-		attackDir = AttackDir::Up;
+		hitDir = HitDir::Up;
 	}
 
 }

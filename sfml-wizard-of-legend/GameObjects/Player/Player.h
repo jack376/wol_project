@@ -40,7 +40,7 @@ enum class States
 	Slide,
 	Attack,
 	Hit,
-	Dead,
+	Die,
 };
 
 
@@ -65,8 +65,11 @@ private:
 
 	sf::CircleShape attackPosCol;	// 스킬 생성 지점 가시화
 
-	BoxCollider2D obb;
+	//BoxCollider2D obb;
 
+	sf::Shader currentShader;
+	sf::Sprite palette;
+	sf::Texture paletteTexture;
 
 	// 스킬 클래스
 	//4개는 고정이란 뜻
@@ -99,6 +102,9 @@ private:
 	sf::Vector2f dashDest;
 	sf::Vector2f attackPos;
 
+	// 플레이어 색
+	sf::Color playerColor;
+
 	float playerLookAngle = 0.f;
 	float hitLookAngle = 0.f;
 
@@ -120,6 +126,10 @@ private:
 	float dashCoolTimer = 0.f;
 	float dashCoolDuration = 0.3f;
 
+	float hitTimer = 0.f;
+	float hitDuration = 0.3;
+
+
 
 	// 상태변수
 	bool isAlive = true;
@@ -129,7 +139,9 @@ private:
 	bool isDashCool = false;
 	bool isAttack = false;
 	bool isHit = false;
+	bool isHitAnim = false;
 	bool isInvincible = false;
+	bool isDieAnim = false;
 
 
 	std::vector<std::string> idleId;
@@ -159,7 +171,7 @@ public:
 	void SlideUpdate(float dt);
 	void AttackUpdate(float dt);
 	void HitUpdate(float dt);
-	void DeadUpdate(float dt);
+	void DieUpdate(float dt);
 
 	void CalDir();
 	void CalLookAngle();

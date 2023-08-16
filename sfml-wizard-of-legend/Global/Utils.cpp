@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Utils.h"
+#include <SFML/Graphics.hpp>
 
 std::random_device Utils::rd;
 std::mt19937 Utils::gen(Utils::rd());
@@ -131,6 +132,54 @@ float Utils::Angle(const sf::Vector2f& start, const sf::Vector2f& end)
 float Utils::Angle(const sf::Vector2f& dir)
 {
 	return (float)(atan2(dir.y, dir.x) * (180.f / M_PI));
+}
+
+void Utils::SetShader(sf::Shader& shader, sf::Sprite& sprite, sf::Texture& palette)
+{
+	shader.setUniform("texture", sprite.getTexture());
+	shader.setUniform("paletteTexture", palette);
+
+	if (!shader.loadFromFile("ex_fragment_shader.frag", sf::Shader::Fragment)) 
+	{
+		std::cout << "Shader Load Failed!" << std::endl;
+	}
+
+	//"    vec4 grayColor = texture2D(texture, gl_TexCoord[0].xy);\n"
+	//"    float grayValue = grayColor.r / 255.0;\n"
+	//"    float paletteSize = float(textureSize(paletteTexture).x);\n"
+	//"    vec2 paletteCoord = vec2(grayValue * paletteSize, float(textureSize(paletteTexture).y));\n"
+	//"    vec4 paletteColor = texture2D(paletteTexture, paletteCoord);\n"
+	//"    gl_FragColor = vec4(paletteColor, paletteColor, paletteColor, 1.0);\n"
+}
+
+sf::Sprite& Utils::SetPixelColor(sf::Image& grayImage, sf::Image& paletteImage)
+{
+
+	sf::Color paletteLine[28]; // Assuming you have a palette of 256 colors
+	for (int i = 0; i < 28; ++i) {
+		paletteLine[i] = paletteImage.getPixel(i * 2, 0);
+		paletteLine[i].a = 255;
+	}
+
+	sf::Vector2u imageSize = grayImage.getSize();
+	for (unsigned int x = 0; x < imageSize.x; ++x) 
+	{
+		for (unsigned int y = 0; y < imageSize.y; ++y) 
+		{
+			sf::Color pixelColor = grayImage.getPixel(x, y);
+			int grayValue = pixelColor.r; // Assuming grayscale is stored in the red channel
+			grayValue /= 28;
+			sf::Color newColor = paletteLine[grayValue];
+			grayImage.setPixel(x, y, newColor);
+		}
+	}
+
+	sf::Texture resultTexture;
+	resultTexture.loadFromImage(grayImage);
+
+	// Display the result
+	sf::Sprite resultSprite(resultTexture);
+	return resultSprite;
 }
 
 float Utils::DotProduct(const sf::Vector2f& a, const sf::Vector2f& b)

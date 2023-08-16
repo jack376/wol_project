@@ -29,10 +29,10 @@
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="GameObjects\Tile.cpp" />
     <ClCompile Include="Framework\SkillMgr.cpp" />
-    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="GameObjects\Skill.cpp" />
     <ClCompile Include="ElementalSpell.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
-    <ClCompile Include="BoxCollider2D.cpp" />
+    <ClCompile Include="GameObjects\BoxCollider2D.cpp" />
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
@@ -42,6 +42,7 @@
     <ClCompile Include="GameObjects\DestructibleGo.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="GameObjects\Particle.cpp" />
+    <ClCompile Include="SceneSkillEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -85,7 +86,7 @@
     <ClInclude Include="UI\InGame\UIButton.h" />
     <ClInclude Include="UI\InGame\UIHp.h" />
     <ClInclude Include="Framework\SkillMgr.h" />
-    <ClInclude Include="Skill.h" />
+    <ClInclude Include="GameObjects\Skill.h" />
     <ClInclude Include="ElementalSpell.h" />
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
@@ -170,6 +171,7 @@
     <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\Particle.h" />
+    <ClInclude Include="SceneSkillEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

@@ -80,6 +80,28 @@ void InputMgr::UpdateEvent(const sf::Event& ev)
 		upList.push_back(code);
 		break;
 	}
+	case sf::Event::TextEntered:
+	{
+		if (!isEnterPressed) 
+		{ // 엔터 키를 누르기 전까지만 텍스트 편집
+			if (ev.text.unicode == '\r')
+			{ // 엔터 키 확인
+				isEnterPressed = true;
+			}
+			else if (ev.text.unicode < 128) 
+			{
+				if (ev.text.unicode == '\b' && !currentInput.empty()) 
+				{
+					currentInput.pop_back();
+				}
+				else 
+				{
+					currentInput += static_cast<char>(ev.text.unicode);
+				}
+			}
+			//inputText.setString(currentInput);
+		}	
+	}
 	}
 
 	mousePos = (sf::Vector2f)sf::Mouse::getPosition(FRAMEWORK.GetWindow());

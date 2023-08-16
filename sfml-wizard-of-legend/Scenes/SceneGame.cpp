@@ -48,6 +48,7 @@ void SceneGame::Init()
 	monster = go;
 	monster->SetPlayer(player);
 	player->SetMonster(go);
+	tempWindSlash->SetMonster(monster);
 
 	// TEST Particle
 	CreateParticle(1000);
@@ -102,8 +103,8 @@ void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
 	debugTimer += dt;
-
-	isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
+	worldView.setCenter(player->GetPosition());
+	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 
 	//if (debugTimer > debugDuration && !isCol)
@@ -116,23 +117,6 @@ void SceneGame::Update(float dt)
 	//	std::cout << "OBB is Succesd" << std::endl;
 	//}
 
-	// Test Code
-	/*
-	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
-	cameraDirection.y = INPUT_MGR.GetAxis(Axis::Vertical);
-
-	float magnitude = Utils::Magnitude(cameraDirection);
-	if (magnitude > 0.0f)
-	{
-		if (magnitude > 1.f)
-		{
-			cameraDirection /= magnitude;
-		}
-		cameraPosition += cameraDirection * cameraSpeed * dt;
-		camera.setPosition(cameraPosition);
-	}
-	worldView.setCenter(cameraPosition);
-	*/
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
 	{

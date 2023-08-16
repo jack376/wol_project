@@ -36,11 +36,6 @@ protected:
 	float debugTimer = 0.f;
 	float debugDuration = 1.f;
 
-	sf::Sprite camera;
-	sf::Vector2f cameraDirection;
-	sf::Vector2f cameraPosition;
-	float cameraSpeed = 400.0f;
-
 	ObjectPool<Particle> particlePool;
 
 public:

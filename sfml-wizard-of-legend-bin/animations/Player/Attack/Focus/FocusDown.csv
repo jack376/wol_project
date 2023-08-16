@@ -1,0 +1,13 @@
+ID,FPS,LOOPTYPE,,
+FocusDown,22,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,16,154,16,29
+graphics/Player/NewWizard.png,63,155,17,26
+graphics/Player/NewWizard.png,106,148,28,38
+graphics/Player/NewWizard.png,156,147,24,36
+graphics/Player/NewWizard.png,203,149,26,34
+graphics/Player/NewWizard.png,250,155,26,28
+graphics/Player/NewWizard.png,299,157,25,26
+graphics/Player/NewWizard.png,348,155,23,28
+graphics/Player/NewWizard.png,399,153,18,28

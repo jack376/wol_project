@@ -77,10 +77,10 @@ void BoxCollider2D::SetColSize()
 	//std::cout << "Y : " << size.y << std::endl;}
 }
 
-bool BoxCollider2D::ObbCol(const sf::RectangleShape& col1, const sf::RectangleShape& col2)
+bool BoxCollider2D::ObbCol(const sf::RectangleShape& other)
 {
-	RectVertexArray vertices1 = Utils::GetVertices(col1);
-	RectVertexArray vertices2 = Utils::GetVertices(col2);
+	RectVertexArray vertices1 = Utils::GetVertices(obbCol);
+	RectVertexArray vertices2 = Utils::GetVertices(other);
 	std::array<sf::Vector2f, 4> axes = Utils::GetPerpendicularAxes(vertices1, vertices2);
 
 	for (const auto& axis : axes)

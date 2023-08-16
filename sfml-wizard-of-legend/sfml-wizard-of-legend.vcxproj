@@ -156,7 +156,7 @@
   <ItemGroup>
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
-    <ClCompile Include="BoxCollider2D.cpp" />
+    <ClCompile Include="GameObjects\BoxCollider2D.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="GameObjects\DestructibleGo.cpp" />
@@ -197,8 +197,9 @@
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="GameObjects\Tile.cpp" />
     <ClCompile Include="Framework\SkillMgr.cpp" />
-    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="GameObjects\Skill.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
+    <ClCompile Include="SceneSkillEditor.cpp" />
     <ClCompile Include="Framework\TileCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -229,7 +230,7 @@
     <ClInclude Include="GameObjects\Particle.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Framework\SkillMgr.h" />
-    <ClInclude Include="Skill.h" />
+    <ClInclude Include="GameObjects\Skill.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="GameObjects\Platforms\Obstacle.h" />
     <ClInclude Include="GameObjects\Cookies\Pancake.h" />
     <ClInclude Include="Scenes\PatternEditor.h" />
+    <ClInclude Include="SceneSkillEditor.h" />
     <ClInclude Include="UI\InGame\Pause.h" />
     <ClInclude Include="GameObjects\Cookies\Pirate.h" />
     <ClInclude Include="GameObjects\Platforms\Platform.h" />

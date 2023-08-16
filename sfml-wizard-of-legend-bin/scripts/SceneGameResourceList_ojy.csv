@@ -1,12 +1,12 @@
 "RESOURCE_TYPES (0: 텍스쳐, 1: 폰트, 2: 사운드 클립, 3: 애니메이션 클립, 4: 애니메이션 스프라이트 클립)",RESOURCE_PATH
-3,animations/Player/Attack/AttackBackDown.csv
-3,animations/Player/Attack/AttackBackLeft.csv
-3,animations/Player/Attack/AttackBackRight.csv
-3,animations/Player/Attack/AttackBackUp.csv
-3,animations/Player/Attack/AttackForeDown.csv
-3,animations/Player/Attack/AttackForeLeft.csv
-3,animations/Player/Attack/AttackForeRight.csv
-3,animations/Player/Attack/AttackForeUp.csv
+3,animations/Player/Attack/Hand/AttackBackDown.csv
+3,animations/Player/Attack/Hand/AttackBackLeft.csv
+3,animations/Player/Attack/Hand/AttackBackRight.csv
+3,animations/Player/Attack/Hand/AttackBackUp.csv
+3,animations/Player/Attack/Hand/AttackForeDown.csv
+3,animations/Player/Attack/Hand/AttackForeLeft.csv
+3,animations/Player/Attack/Hand/AttackForeRight.csv
+3,animations/Player/Attack/Hand/AttackForeUp.csv
 3,animations/Player/Dash/DashDown.csv
 3,animations/Player/Dash/DashRight.csv
 3,animations/Player/Dash/DashUp.csv
@@ -31,3 +31,15 @@
 3,animations/Player/Hit/HitDown.csv
 3,animations/Player/Hit/HitRight.csv
 3,animations/Player/Hit/HitUp.csv
+0,graphics/Player/WizardPalette.png
+3,animations/Player/Attack/Kick/KickUp.csv
+3,animations/Player/Attack/Kick/KickRight.csv
+3,animations/Player/Attack/Kick/KickDown.csv
+3,animations/Player/Attack/Jump/JumpUp.csv
+3,animations/Player/Attack/Jump/JumpRight.csv
+3,animations/Player/Attack/Jump/JumpDown.csv
+3,animations/Player/Attack/Slam/SlamUp.csv
+3,animations/Player/Attack/Slam/SlamDown.csv
+3,animations/Player/Attack/Focus/FocusUp.csv
+3,animations/Player/Attack/Focus/FocusRight.csv
+3,animations/Player/Attack/Focus/FocusDown.csv
