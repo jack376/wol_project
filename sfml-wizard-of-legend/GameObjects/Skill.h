@@ -49,6 +49,7 @@ protected:
 	ElementTypes currentElementType = ElementTypes::None;
 
 	sf::Keyboard::Key currentKey = sf::Keyboard::Unknown;
+	sf::Mouse::Button currentButton = sf::Mouse::None;
 
 	SpriteGo* skillIcon;
 

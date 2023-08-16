@@ -50,6 +50,7 @@ public:
     ////////////////////////////////////////////////////////////
     enum Button
     {
+        None = -1,
         Left,       ///< The left mouse button
         Right,      ///< The right mouse button
         Middle,     ///< The middle (wheel) mouse button

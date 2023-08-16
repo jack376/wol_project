@@ -6,6 +6,8 @@ class SpriteGo;
 class UIButton;
 class SkillMgr;
 class Player;
+class Skill;
+class ElementalSpell;
 
 
 class SceneSkillEditor : public Scene
@@ -33,6 +35,8 @@ protected:
 
 	Player* player;
 
+	// csv, 
+	Skill* skill;
 
 public:
 	SceneSkillEditor();
