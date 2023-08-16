@@ -7,6 +7,7 @@
 #include "InputMgr.h"
 #include "Framework.h"
 #include "BoxCollider2D.h"
+#include "Tile.h"
 
 ElementalSpell::ElementalSpell(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -42,11 +43,13 @@ void ElementalSpell::Reset()
 void ElementalSpell::Update(float dt)
 {
 	SpriteGo::Update(dt);
-
 	Collider->SetSprite(sprite);
 	Collider->SetColSize();
 
 	angle = player->GetPlayerLookAngle() + 90;
+	raycaster.move(position.x, position.y);
+	raycaster.checkCollision(monster);
+
 	// 부자연스러움이 있음 고쳐야함
 	// 설치 느낌으로 되는 감이 있는데 나쁘진 않음
 	// 
@@ -67,6 +70,7 @@ void ElementalSpell::Update(float dt)
 		Collider->SetPosition(player->GetAttackPos());
 		SetPosition(player->GetAttackPos());
 		sprite.setRotation(angle);
+		raycaster.Rotation(player->GetPlayerLookAngle());
 		Collider->GetObbCol().setRotation(angle);
 		comboQueue.push(FRAMEWORK.GetGamePlayTime());
 	}
@@ -113,6 +117,8 @@ void ElementalSpell::Update(float dt)
 	// 공격이 닿은 타이밍
 	if (player->IsAttack() && isCol && !isAttack)	// 한번이 아닌 실시간으로 실행됨
 	{
+		// 레이캐스트의 닿은 포지션 구해주기
+		raycaster.GetEndPos();
 		player->GetMonster()->OnAttacked(1);
 		isAttack = true;
 	}
@@ -134,6 +140,7 @@ void ElementalSpell::Update(float dt)
 	anim.Update(dt);
 	SetOrigin(Origins::MC);
 	Collider->SetOrigin(Origins::MC);
+	CalculatorCurrentTile();
 }
 
 void ElementalSpell::Draw(sf::RenderWindow& window)
@@ -141,8 +148,40 @@ void ElementalSpell::Draw(sf::RenderWindow& window)
 	SpriteGo::Draw(window);
 	if (isSpawn)
 	{
+		raycaster.draw(window);
 		Collider->SetActive(true);
 	}
 	else
 		Collider->SetActive(false);
+
+}
+
+void ElementalSpell::CalculatorCurrentTile()
+{
+	int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
+	int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
+
+	currentTile = (*wouldTiles)[rowIndex][columnIndex];
+}
+
+std::vector<Tile*> ElementalSpell::CalculatorRangeTiles(int row, int col)
+{
+	//32x16
+	int searchRowRange = row;
+	int searchColRange = col;
+
+	sf::Vector2i index = currentTile->GetIndex();
+	std::vector<Tile*> tiles;
+
+	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > wouldTiles->size() * _TileSize ? wouldTiles->size() * _TileSize : index.x;
+	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > wouldTiles[0].size() * _TileSize ? wouldTiles[0].size() * _TileSize : index.y;
+	for (int i = topRowIndex; i < index.x + searchRowRange; i++)
+	{
+		for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
+		{
+			tiles.push_back((*this->wouldTiles)[i][j]);
+		}
+	}
+
+	return tiles;
 }

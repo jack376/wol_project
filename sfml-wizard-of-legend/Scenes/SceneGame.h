@@ -14,6 +14,7 @@ class ElementalSpell;
 class DestructibleGo;
 class Particle;
 class Monster;
+class SpriteEffect;
 enum class MonsterId;
 
 class SceneGame : public Scene
@@ -27,8 +28,6 @@ protected:
 	int cols = 0;
 	float tileSize = 64.0f;
 
-	BoxCollider2D colliderManager;
-
 	Monster* monster;
 
 	bool isCol = false;
@@ -37,6 +36,7 @@ protected:
 	float debugDuration = 1.f;
 
 	ObjectPool<Particle> particlePool;
+	ObjectPool<SpriteEffect> hitEffects;
 
 public:
 	SceneGame();
@@ -59,7 +59,6 @@ public:
 	void LoadFromCSV(const std::string& path);
 	void CreateTile2dVector(int rows, int cols);
 	void CreateParticle(int count);
-	Monster* CreatMonster(MonsterId id);
 	Monster* CreateMonster(MonsterId id);
 };
 

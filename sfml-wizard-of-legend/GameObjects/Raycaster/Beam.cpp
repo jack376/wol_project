@@ -26,7 +26,7 @@ void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
     //Wall 타일만 추출
     for (auto& tile : tiles)
     {
-        if (tile->GetType() != Tile::TileType::Wall)
+        if (tile->GetType() != TileType::Wall)
             continue;
         else
             wallTiles.push_back(tile);

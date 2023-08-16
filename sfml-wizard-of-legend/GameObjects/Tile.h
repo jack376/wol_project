@@ -5,15 +5,6 @@ class BaseUI;
 class Tile : public GameObject
 {
 public:
-    enum class TileType
-    {
-        None,
-        Ground,
-        Cliff,
-        Wall,
-        MonsterSpawn,
-        EventTrigger,
-    };
     enum class TileState
     {
         Blank,

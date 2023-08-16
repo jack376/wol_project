@@ -12,7 +12,7 @@ protected:
 	sf::Sprite pullArm;
 	AnimationController bowAni;
 	AnimationController attackArmAni;
-	AnimationController pullArmAni;
+	AnimationController pullArmAni;	
 	Bullet arrow;
 	Beam bulletLine;
 

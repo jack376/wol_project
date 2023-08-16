@@ -43,3 +43,12 @@
 3,animations/Player/Attack/Focus/FocusUp.csv
 3,animations/Player/Attack/Focus/FocusRight.csv
 3,animations/Player/Attack/Focus/FocusDown.csv
+3,animations/Player/Fall/FallUp.csv
+3,animations/Player/Fall/FallRight.csv
+3,animations/Player/Fall/FallDown.csv
+3,animations/Player/Effects/AttackEffect.csv
+3,animations/Player/Effects/HitEffect.csv
+0,graphics/Player/HitSparks.png
+0,graphics/Player/Default-Particle.png
+0,graphics/Player/ExitPortal.png
+0,graphics/Player/Soft.png

@@ -80,6 +80,16 @@ enum class SceneId
 	Count,
 };
 
+enum class TileType
+{
+	None,
+	Ground,
+	Cliff,
+	Wall,
+	MonsterSpawn,
+	EventTrigger,
+};
+
 enum class ObjectType
 {
 	None = -1,
@@ -97,4 +107,5 @@ enum class UiType
 };
 
 #include "AnimationClip.h"
+#define _TileSize 64
 using RectVertexArray = std::array<sf::Vector2f, 4>;

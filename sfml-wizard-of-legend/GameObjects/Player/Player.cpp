@@ -4,6 +4,7 @@
 #include "InputMgr.h"
 #include "SceneGame.h"
 #include "SceneMgr.h"
+#include "Tile.h"
 
 Player::Player(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -39,6 +40,13 @@ void Player::Init()
 	dirIcon->sortLayer = 20;
 	dirIcon->sortOrder = -1;
 
+	portal = (SpriteGo*)scene->AddGo(new SpriteGo("graphics/Player/ExitPortal.png"));
+	portal->sprite.setScale(4, 4);
+	portal->SetOrigin(Origins::ML);
+	portal->sortLayer = 20;
+	portal->sortLayer = 0;
+	portal->SetActive(false);
+
 
 	// 콜라이더
 	rect.setSize({65, 120});
@@ -53,7 +61,7 @@ void Player::Init()
 
 	InsertAnimId();
 	playerColor = sprite.getColor();
-
+	CalculatorCurrentTile();
 	//sf::Image grayImage = sprite.getTexture()->copyToImage();
 	//sf::Vector2u imageSize = grayImage.getSize();
 }
@@ -112,6 +120,13 @@ void Player::Reset()
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitRight.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitUp.csv"));
 
+
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Fall/FallUp.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Fall/FallRight.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Fall/FallDown.csv"));
+
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/HitEffect.csv"));
+
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Die/Die.csv"));
 
 	anim.SetTarget(&sprite);
@@ -120,6 +135,8 @@ void Player::Reset()
 	// 플레이어 리셋
 	hp = maxHp;
 	attackCount = 0;
+	portal->SetActive(false);
+
 
 	// 팔레트 적용시키기
 	//palette.setTexture(*RESOURCE_MGR.GetTexture("graphics/Player/WizardPalette.png"));
@@ -147,6 +164,8 @@ void Player::Reset()
 void Player::Update(float dt)
 {
 	SpriteGo::Update(dt);
+
+
 	// 방향아이콘 움직임 플레이어와 동기화
 	SetDirIconPos();
 	SetDirIconDir();
@@ -176,6 +195,17 @@ void Player::Update(float dt)
 	SetAttackPos();
 
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
+	// 입력에 따른 방향 설정
+	CalDir();
+	prevPos = GetPosition();
+
+	isMove = dir.x != 0 || dir.y != 0;
+	isDashing = dashDir.x != 0 || dashDir.y != 0;
+	
+	if (currentTile->GetType() == TileType::Ground && isMove)
+	{
+
+	}
 
 
 	if (!isAlive)
@@ -196,10 +226,8 @@ void Player::Update(float dt)
 		ChangeState(States::Hit);
 	}
 
-	// 입력에 따른 방향 설정
-	CalDir();
 
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide)
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Left;
@@ -216,7 +244,7 @@ void Player::Update(float dt)
 		dashCoolTimer = 0.f;
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack)
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack && !isFalling)
 	{
 		ChangeState(States::Dash);
 	}
@@ -234,34 +262,40 @@ void Player::Update(float dt)
 	case States::Idle:
 		IdleUpdate(dt);
 		break;
-
+	
 	case States::Run:
 		RunUpdate(dt);
 		break;
-
+	
 	case States::Dash:
 		DashUpdate(dt);
-		break;	
+		break;
 	
 	case States::Slide:
 		SlideUpdate(dt);
 		break;
-
+	
 	case States::Attack:
 		AttackUpdate(dt);
 		break;
-
+	
 	case States::Hit:
 		HitUpdate(dt);
 		break;
 
+	case States::Fall:
+		FallUpdate(dt);
+		break;
+	
 	case States::Die:
 		DieUpdate(dt);
 		break;
 	}
-
+	
 	anim.Update(dt);
 	SetOrigin(origin);
+	CalculatorCurrentTile();
+	PortalAnimations(dt);
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -283,8 +317,8 @@ void Player::IdleUpdate(float dt)
 	case Dir::Left:
 		SetFlipX(true);
 		break;
-	}	
-	
+	}
+
 	if (dir.x != 0 || dir.y != 0)
 	{
 		ChangeState(States::Run);
@@ -315,11 +349,21 @@ void Player::RunUpdate(float dt)
 	movePos += dir * speed * dt;
 
 	SetPosition(movePos);
+
+	CalculatorCurrentTile();
+
+	// 타일 충돌 방지
+	if ((currentTile->GetType() == TileType::Cliff ||
+		currentTile->GetType() == TileType::Wall) && isMove)
+	{
+		SetPosition(prevPos);
+	}
+
 	isRun = true;
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::W) ||
-		INPUT_MGR.GetKeyDown(sf::Keyboard::A) || 
-		INPUT_MGR.GetKeyDown(sf::Keyboard::S) || 
+		INPUT_MGR.GetKeyDown(sf::Keyboard::A) ||
+		INPUT_MGR.GetKeyDown(sf::Keyboard::S) ||
 		INPUT_MGR.GetKeyDown(sf::Keyboard::D))
 	{
 		isRun = false;
@@ -351,8 +395,6 @@ void Player::DashUpdate(float dt)
 		slideDir = currentDir;	// Dir,  슬라이딩 도중 방향전환 방지용
 		dashDest = destPos[(int)currentDir] + GetPosition();
 		dashStart = GetPosition();
-
-
 	}
 	isDash = true;
 
@@ -361,8 +403,23 @@ void Player::DashUpdate(float dt)
 		dashTimer += dt;
 	}
 
+
 	float t = Utils::Clamp(dashTimer / dashDuration, 0.f, 1.f);
 	SetPosition(Utils::Lerp(dashStart, dashDest, t));
+	CalculatorCurrentTile();
+
+	// 타일 충돌 방지
+	if(currentTile->GetType() == TileType::Wall)
+	{
+		SetPosition(prevPos);
+		ChangeState(States::Slide);
+	}
+
+
+	//if (currentTile->GetType() == TileType::Cliff)
+	//{
+	//	SetPosition(prevPos);
+	//}
 
 	if (t >= 1.0f)
 	{
@@ -371,7 +428,15 @@ void Player::DashUpdate(float dt)
 		isRun = false;
 		isSlide = false;
 		isDashCool = true;
-		ChangeState(States::Slide);
+		if (currentTile->GetType() == TileType::Cliff)
+		{
+			std::cout << "Cliff" << std::endl;
+			ChangeState(States::Fall);
+		}
+		else
+		{
+			ChangeState(States::Slide);
+		}
 	}
 }
 
@@ -509,6 +574,68 @@ void Player::HitUpdate(float dt)
 		isHitAnim = false;
 		isRun = false;
 		isAttack = false;
+		ChangeState(States::Idle);
+	}
+}
+
+void Player::FallUpdate(float dt)
+{
+	if (!isFalling)
+	{
+		anim.Play(fallId[(int)slideDir]);
+		isFalling = true;
+		std::cout << "IsFall" << std::endl;
+
+		switch (slideDir)
+		{
+		case Dir::Left:
+			SetFlipX(true);
+			break;
+		}
+
+		fallStart = GetPosition();
+		fallDest = GetPosition() + sf::Vector2f(0, 200.f);
+	}
+
+	if (isFalling)
+	{
+		fallTimer += dt;
+	}
+
+	float t = Utils::Clamp(fallTimer / fallDuration, 0.f, 1.f);
+	SetPosition(Utils::Lerp(fallStart, fallDest, t));
+
+	// 다 떨어지면
+	if (t >= 1.0f && !isFallHit)
+	{
+		isFallHit = true;
+		std::cout << t << std::endl;
+		originAngle = sprite.getRotation();
+		float randomAngle = Utils::RandomRange(0.f, 360.f);
+		anim.Play("HitEffect");
+		sprite.setColor(sf::Color::Red);
+		sprite.setRotation(randomAngle);
+	}
+
+	if (isFallHit)
+	{
+		fallHitTimer += dt;
+	}
+
+	// 맞는 애니메이션 실행 끝나면
+	if (fallHitTimer > fallHitDuration)
+	{
+		// 제자리 돌아가기
+		sprite.setRotation(originAngle);
+		isFallHit = false;
+		isFalling = false;
+		fallTimer = 0.f;
+		fallHitTimer = 0.f;
+		SetPosition(dashStart);
+		portal->SetActive(true);
+		portal->SetPosition(GetPosition().x, GetPosition().y);
+		portal->SetOrigin(Origins::MC);
+		isPortalBigAnim = true;
 		ChangeState(States::Idle);
 	}
 
@@ -726,4 +853,91 @@ void Player::InsertAnimId()
 	hitId.push_back("HitRight");
 	hitId.push_back("HitDown");
 	hitId.push_back("HitRight");
+
+	fallId.push_back("FallUp");
+	fallId.push_back("FallUp");
+	fallId.push_back("FallDown");
+	fallId.push_back("FallDown");
+	fallId.push_back("FallUp");
+	fallId.push_back("FallRight");
+	fallId.push_back("FallDown");
+	fallId.push_back("FallRight");
+}
+
+void Player::CalculatorCurrentTile()
+{
+	int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
+	int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
+
+ 	currentTile = (*wouldTiles)[rowIndex][columnIndex];
+}
+
+std::vector<Tile*> Player::CalculatorRangeTiles(int row, int col)
+{
+	//32x16
+	int searchRowRange = row;
+	int searchColRange = col;
+
+	sf::Vector2i index = currentTile->GetIndex();
+	std::vector<Tile*> tiles;
+
+	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > wouldTiles->size() * _TileSize ? wouldTiles->size() * _TileSize : index.x;
+	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > wouldTiles[0].size() * _TileSize ? wouldTiles[0].size() * _TileSize : index.y;
+	for (int i = topRowIndex; i < index.x + searchRowRange; i++)
+	{
+		for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
+		{
+			tiles.push_back((*this->wouldTiles)[i][j]);
+		}
+	}
+
+	return tiles;
+}
+
+void Player::PortalAnimations(float dt)
+{
+	if (isPortalBigAnim)
+		portalTimer += dt;
+
+	if (isPortalAnimTerm)
+		portalTermTimer += dt;
+
+
+	if (isPortalSmallAnim)
+		portalTimer -= dt;
+
+
+	float t = Utils::Clamp(portalTimer / portalDuration, 0.f, 1.f);
+
+	if (t >= 1.0f && isPortalBigAnim)
+	{
+		isPortalBigAnim = false;
+		isPortalAnimTerm = true;
+	}
+
+
+	if (portalTermTimer > portalDuration)
+	{
+		isPortalAnimTerm = false;
+		isPortalSmallAnim = true;
+	}
+
+	if (t <= 0.f && isPortalSmallAnim)
+	{
+		portalTimer = 0.f;
+		portalTermTimer = 0.f;
+		isPortalSmallAnim = false;
+	}
+
+
+	if (isPortalBigAnim)
+	{
+		portal->sprite.setScale(Utils::Lerp(1.f, 4.f, t), Utils::Lerp(2.f, 4.f, t));
+	}
+
+	if (isPortalSmallAnim)
+	{
+		portal->sprite.setScale(Utils::Lerp(0.f, 4.f, t), Utils::Lerp(0.f, 4.f, t));
+	}
+	portal->SetOrigin(Origins::MC);
 }

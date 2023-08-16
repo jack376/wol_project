@@ -175,11 +175,11 @@ void SceneEditor::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(32, 32); std::cout << "Resize World Tile : 32 * 32" << std::endl; }
 
 	// SetTileType
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(Tile::TileType::Ground); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(Tile::TileType::Cliff); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(Tile::TileType::Wall); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(Tile::TileType::MonsterSpawn); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(Tile::TileType::EventTrigger); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(TileType::Ground); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(TileType::Cliff); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(TileType::Wall); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(TileType::MonsterSpawn); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(TileType::EventTrigger); }
 
 	// Deselect
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }
@@ -296,7 +296,7 @@ void SceneEditor::SetSelectedTilesState(Tile::TileState state)
 	selectedTiles.clear();
 }
 
-void SceneEditor::SetSelectedTilesType(Tile::TileType type)
+void SceneEditor::SetSelectedTilesType(TileType type)
 {
 	for (Tile* tile : selectedTiles)
 	{
@@ -394,7 +394,7 @@ Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float 
 	tilePreview->sortLayer = sort;
 	tilePreview->SetPosition(posX + blankPos, posY + blankPos);
 	tilePreview->SetState(Tile::TileState::UI);
-	tilePreview->SetType(Tile::TileType::None);
+	tilePreview->SetType(TileType::None);
 	tilePreview->SetStateColor(Tile::TileState::UI);
 	tilePreview->SetStrokeColor(sf::Color(64, 64, 64, 96));
 	tilePreview->OnEnter = [tilePreview]()
@@ -576,7 +576,7 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 
 		Tile* tile = (Tile*)FindGo(tileName);
 		tile->SetIndex(tileIndexX, tileIndexY);
-		tile->SetType(static_cast<Tile::TileType>(tileType));
+		tile->SetType(static_cast<TileType>(tileType));
 		tile->SetTileSize(tileSize);
 		tile->SetLayer(tileLayer);
 		tile->SetTexture(textureId);

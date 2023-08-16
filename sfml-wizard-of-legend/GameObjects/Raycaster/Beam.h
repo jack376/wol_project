@@ -3,6 +3,7 @@
 
 class Tile;
 class Player;
+class Monster;
 
 struct Wall
 {
@@ -25,6 +26,6 @@ public:
     void Rotation(float angle);
     void checkCollision(const std::vector<Tile*> tiles, Player* player);
     void checkCollision(Monster* monster);
-
+    sf::Vector2f GetEndPos() { return  m_line.getEndPoint(); }
 
 };

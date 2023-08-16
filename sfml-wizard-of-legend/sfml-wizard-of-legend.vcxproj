@@ -162,7 +162,7 @@
     <ClCompile Include="GameObjects\DestructibleGo.cpp" />
     <ClCompile Include="Framework\Command.cpp" />
     <ClCompile Include="Framework\CommandInvoker.cpp" />
-    <ClCompile Include="ElementalSpell.cpp" />
+    <ClCompile Include="GameObjects\ElementalSpell.cpp" />
     <ClCompile Include="GameObjects\BaseUI.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\StringTable.cpp" />
@@ -215,7 +215,7 @@
     <ClInclude Include="Framework\Command.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="DataTables\StringTable.h" />
-    <ClInclude Include="ElementalSpell.h" />
+    <ClInclude Include="GameObjects\ElementalSpell.h" />
     <ClInclude Include="GameObjects\BaseUI.h" />
     <ClInclude Include="DataTables\DataTable.h" />
     <ClInclude Include="Framework\DataTableMgr.h" />

@@ -49,6 +49,9 @@ void SceneGame::Init()
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
 
+	player->SetTiles(&tilesWorld);
+	tempWindSlash->SetTiles(&tilesWorld);
+
 	player->SetMonster(go);
 	tempWindSlash->SetMonster(monster);
 
@@ -94,6 +97,7 @@ void SceneGame::Enter()
 	Scene::Enter();
 
 	ClearObjectPool(particlePool);
+
 }
 
 void SceneGame::Exit()
@@ -198,7 +202,7 @@ void SceneGame::LoadFromCSV(const std::string& path)
 
 		Tile* tile = (Tile*)FindGo(tileName);
 		tile->SetIndex(tileIndexX, tileIndexY);
-		tile->SetType(static_cast<Tile::TileType>(tileType));
+		tile->SetType(static_cast<TileType>(tileType));
 		tile->SetTileSize(tileSize);
 		tile->SetScale(tileScale);
 		tile->SetLayer(tileLayer);
