@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <array>
 #include <vector>
 #include <list>
 #include <queue>
@@ -13,6 +14,7 @@
 #include <random>
 #include <tuple>
 #include <functional>
+#include <cassert>
 #include <stack>
 #include <iomanip>
 

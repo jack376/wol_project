@@ -1,0 +1,15 @@
+ID,FPS,LOOPTYPE,,
+SlamUp,22,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,497,200,14,30
+graphics/Player/NewWizard.png,543,204,22,27
+graphics/Player/NewWizard.png,588,204,24,27
+graphics/Player/NewWizard.png,639,201,26,31
+graphics/Player/NewWizard.png,684,195,20,37
+graphics/Player/NewWizard.png,725,196,26,36
+graphics/Player/NewWizard.png,776,200,23,32
+graphics/Player/NewWizard.png,826,208,21,24
+graphics/Player/NewWizard.png,879,208,16,24
+graphics/Player/NewWizard.png,927,209,17,23
+graphics/Player/NewWizard.png,976,205,15,27

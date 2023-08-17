@@ -12,6 +12,7 @@ protected:
 
 	sf::RenderWindow window;
 	sf::Clock clock;
+	sf::Time gamePlayTime = sf::Time::Zero;
 
 	int screenWidth = 1920;
 	int screenHeight = 900;
@@ -28,6 +29,8 @@ public:
 
 	sf::Vector2f GetWindowSize();
 	sf::RenderWindow& GetWindow();
+
+	float GetGamePlayTime();
 };
 
 #define FRAMEWORK (Framework::Instance())

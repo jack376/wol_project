@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+FallUp,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,145,988,17,30

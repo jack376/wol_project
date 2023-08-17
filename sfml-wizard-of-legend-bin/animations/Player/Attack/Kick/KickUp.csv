@@ -1,0 +1,12 @@
+ID,FPS,LOOPTYPE,,
+KickUp,22,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/NewWizard.png,493,8,18,32
+graphics/Player/NewWizard.png,544,4,20,35
+graphics/Player/NewWizard.png,585,9,25,30
+graphics/Player/NewWizard.png,634,9,24,30
+graphics/Player/NewWizard.png,687,9,19,30
+graphics/Player/NewWizard.png,738,9,16,30
+graphics/Player/NewWizard.png,784,11,17,28
+graphics/Player/NewWizard.png,830,11,19,28

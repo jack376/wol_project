@@ -1,0 +1,12 @@
+ID,FPS,LOOPTYPE,,
+HitEffect,15,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/HitSparks.png,0,64,64,64
+graphics/Player/HitSparks.png,64,64,64,64
+graphics/Player/HitSparks.png,128,64,64,64
+graphics/Player/HitSparks.png,192,64,64,64
+graphics/Player/HitSparks.png,256,64,64,64
+graphics/Player/HitSparks.png,320,64,64,64
+graphics/Player/HitSparks.png,384,64,64,64
+graphics/Player/HitSparks.png,448,64,64,64

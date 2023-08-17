@@ -217,7 +217,7 @@ void Tile::SetTypeColor(TileType type)
     shape.setFillColor(typeColor[type]);
 }
 
-Tile::TileType Tile::GetType() const
+TileType Tile::GetType() const
 {
     return type;
 }

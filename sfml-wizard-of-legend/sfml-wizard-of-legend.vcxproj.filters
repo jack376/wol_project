@@ -17,7 +17,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="GameObjects\Player\Player.cpp" />
-    <ClCompile Include="GameObjects\Monster.cpp" />
+    <ClCompile Include="GameObjects\Monster\Monster.cpp" />
     <ClCompile Include="DataTables\MonsterTable.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -29,14 +29,22 @@
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="GameObjects\Tile.cpp" />
     <ClCompile Include="Framework\SkillMgr.cpp" />
-    <ClCompile Include="Skill.cpp" />
-    <ClCompile Include="ElementalSpell.cpp" />
+    <ClCompile Include="GameObjects\Skill.cpp" />
+    <ClCompile Include="GameObjects\ElementalSpell.cpp" />
+    <ClCompile Include="DataTables\TileInfoTable.cpp" />
+    <ClCompile Include="GameObjects\BoxCollider2D.cpp" />
+    <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
+    <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
     <ClCompile Include="Framework\Command.cpp" />
     <ClCompile Include="Framework\TileCommand.cpp" />
     <ClCompile Include="Framework\CommandInvoker.cpp" />
     <ClCompile Include="GameObjects\BreakableObj.cpp" />
+    <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="GameObjects\Particle.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
+    <ClCompile Include="SceneSkillEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -44,44 +52,30 @@
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="GameObjects\BaseUI.h" />
-    <ClInclude Include="GameObjects\Background.h" />
-    <ClInclude Include="GameObjects\Items\Coin.h" />
-    <ClInclude Include="GameObjects\Cookies\Cookie.h" />
     <ClInclude Include="DataTables\DataTable.h" />
-    <ClInclude Include="GameObjects\Effects\EffectSpeedUp.h" />
     <ClInclude Include="Framework\DataTableMgr.h" />
     <ClInclude Include="Framework\ObjectPool.h" />
     <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
-    <ClInclude Include="GameObjects\Monster.h" />
+    <ClInclude Include="GameObjects\Monster\Monster.h" />
     <ClInclude Include="DataTables\MonsterTable.h" />
     <ClInclude Include="GameObjects\Player\Player.h" />
     <ClInclude Include="GameObjects\Tile.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
-    <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Framework\InputMgr.h" />
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Global\Utils.h" />
-    <ClInclude Include="GameObjects\Items\Item.h" />
-    <ClInclude Include="GameObjects\Items\ItemBig.h" />
-    <ClInclude Include="GameObjects\Items\ItemBigHealPack.h" />
-    <ClInclude Include="GameObjects\Items\ItemSpeedUp.h" />
-    <ClInclude Include="UI\Lobby\Lobby.h" />
-    <ClInclude Include="UI\Lobby\LobbyCookie.h" />
     <ClInclude Include="GameObjects\Map.h" />
-    <ClInclude Include="GameObjects\Cookies\Moonlighter.h" />
     <ClInclude Include="GameObjects\Platforms\Obstacle.h" />
     <ClInclude Include="GameObjects\Cookies\Pancake.h" />
-    <ClInclude Include="UI\PatternEditor\PatternObject.h" />
     <ClInclude Include="Scenes\PatternEditor.h" />
     <ClInclude Include="UI\InGame\Pause.h" />
     <ClInclude Include="GameObjects\Cookies\Pirate.h" />
     <ClInclude Include="GameObjects\Platforms\Platform.h" />
-    <ClInclude Include="Scenes\SceneLobby.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
     <ClInclude Include="Framework\SceneMgr.h" />
@@ -89,14 +83,13 @@
     <ClInclude Include="GameObjects\SpriteGo.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
-    <ClInclude Include="UI\Lobby\StorageBox.h" />
     <ClInclude Include="GameObjects\TextGo.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />
     <ClInclude Include="UI\InGame\UIButton.h" />
     <ClInclude Include="UI\InGame\UIHp.h" />
     <ClInclude Include="Framework\SkillMgr.h" />
-    <ClInclude Include="Skill.h" />
-    <ClInclude Include="ElementalSpell.h" />
+    <ClInclude Include="GameObjects\Skill.h" />
+    <ClInclude Include="GameObjects\ElementalSpell.h" />
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -170,11 +163,21 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClInclude Include="DataTables\TileInfoTable.h" />
+    <ClInclude Include="BoxCollider2D.h" />
+    <ClInclude Include="GameObjects\Monster\Lancer.h" />
+    <ClInclude Include="GameObjects\Monster\Archer.h" />
+    <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\Command.h" />
     <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="GameObjects\BreakableObj.h" />
+    <ClInclude Include="GameObjects\DestructibleGo.h" />
+    <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\Particle.h" />
+    <ClInclude Include="UI\InGame\GameOver.h" />
+    <ClInclude Include="GameObjects\Raycaster\Line.h" />
+    <ClInclude Include="GameObjects\Raycaster\Beam.h" />
+    <ClInclude Include="SceneSkillEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -246,40 +249,16 @@
     <ClInclude Include="UI\InGame\UIButton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Cookies\Cookie.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\Cookies\Pancake.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Items\Item.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Map.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Background.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\Platforms\Platform.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Items\ItemSpeedUp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Effects\EffectSpeedUp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Items\Coin.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="UI\InGame\UIHp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Items\ItemBigHealPack.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Items\ItemBig.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\TextGo.h">
@@ -294,31 +273,10 @@
     <ClInclude Include="UI\InGame\Pause.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\SceneLobby.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Lobby\Lobby.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Lobby\LobbyCookie.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjects\Cookies\Pirate.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Cookies\Moonlighter.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Lobby\StorageBox.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\PatternEditor.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\PatternEditor\PatternObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\InGame\GameOver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\UIButton.h">

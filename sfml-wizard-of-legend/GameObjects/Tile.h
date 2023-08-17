@@ -5,15 +5,6 @@ class BaseUI;
 class Tile : public GameObject
 {
 public:
-    enum class TileType
-    {
-        None,
-        Ground,
-        Cliff,
-        Wall,
-        MonsterSpawn,
-        EventTrigger,
-    };
     enum class TileState
     {
         Blank,
@@ -102,5 +93,7 @@ public:
     sf::IntRect GetTextureRectBottom() const;
 
     sf::Vector2f GetMousePosBasedOnState() const;
+
+    const sf::FloatRect GetTileGlobalBounds() { return shape.getGlobalBounds(); }
 };
 

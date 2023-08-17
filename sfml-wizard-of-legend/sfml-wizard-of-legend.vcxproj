@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./Scenes;./GameObjects;./GameObjects/Player;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./GameObjects/Raycaster;./Scenes;./GameObjects;./GameObjects/Player;./GameObjects/Monster;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalBMIDirectories>./;./GameObjects;./Framework;./3rd;./DataTables;./Global;./Animation;./Scenes;%(AdditionalBMIDirectories)</AdditionalBMIDirectories>
     </ClCompile>
@@ -141,7 +141,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./Scenes;./GameObjects;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./GameObjects/Raycaster;./Scenes;./GameObjects;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
@@ -157,9 +157,12 @@
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="GameObjects\BreakableObj.cpp" />
+    <ClCompile Include="GameObjects\BoxCollider2D.cpp" />
+    <ClCompile Include="GameObjects\Bullet.cpp" />
+    <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="Framework\Command.cpp" />
     <ClCompile Include="Framework\CommandInvoker.cpp" />
-    <ClCompile Include="ElementalSpell.cpp" />
+    <ClCompile Include="GameObjects\ElementalSpell.cpp" />
     <ClCompile Include="GameObjects\BaseUI.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\StringTable.cpp" />
@@ -171,16 +174,19 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
+    <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
     <ClCompile Include="GameObjects\UIButton.cpp" />
     <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
     <ClCompile Include="Global\Utils.cpp" />
+    <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="GameObjects\Player\Player.cpp" />
-    <ClCompile Include="GameObjects\Monster.cpp" />
+    <ClCompile Include="GameObjects\Monster\Monster.cpp" />
     <ClCompile Include="DataTables\MonsterTable.cpp" />
     <ClCompile Include="GameObjects\Particle.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
@@ -193,8 +199,9 @@
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="GameObjects\Tile.cpp" />
     <ClCompile Include="Framework\SkillMgr.cpp" />
-    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="GameObjects\Skill.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
+    <ClCompile Include="SceneSkillEditor.cpp" />
     <ClCompile Include="Framework\TileCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -202,30 +209,33 @@
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="GameObjects\BreakableObj.h" />
+    <ClInclude Include="BoxCollider2D.h" />
+    <ClInclude Include="GameObjects\Bullet.h" />
+    <ClInclude Include="GameObjects\Monster\Archer.h" />
+    <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="Framework\Command.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="DataTables\StringTable.h" />
-    <ClInclude Include="ElementalSpell.h" />
+    <ClInclude Include="GameObjects\ElementalSpell.h" />
     <ClInclude Include="GameObjects\BaseUI.h" />
-    <ClInclude Include="GameObjects\Background.h" />
-    <ClInclude Include="GameObjects\Items\Coin.h" />
-    <ClInclude Include="GameObjects\Cookies\Cookie.h" />
     <ClInclude Include="DataTables\DataTable.h" />
-    <ClInclude Include="GameObjects\Effects\EffectSpeedUp.h" />
     <ClInclude Include="Framework\DataTableMgr.h" />
     <ClInclude Include="Framework\ObjectPool.h" />
     <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
+    <ClInclude Include="GameObjects\Raycaster\Beam.h" />
+    <ClInclude Include="GameObjects\Raycaster\Line.h" />
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
-    <ClInclude Include="GameObjects\Monster.h" />
+    <ClInclude Include="GameObjects\Monster\Monster.h" />
     <ClInclude Include="DataTables\MonsterTable.h" />
     <ClInclude Include="GameObjects\Player\Player.h" />
     <ClInclude Include="GameObjects\Tile.h" />
+    <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Particle.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Framework\SkillMgr.h" />
-    <ClInclude Include="Skill.h" />
+    <ClInclude Include="GameObjects\Skill.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
@@ -234,22 +244,14 @@
     <ClInclude Include="Framework\InputMgr.h" />
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Global\Utils.h" />
-    <ClInclude Include="GameObjects\Items\Item.h" />
-    <ClInclude Include="GameObjects\Items\ItemBig.h" />
-    <ClInclude Include="GameObjects\Items\ItemBigHealPack.h" />
-    <ClInclude Include="GameObjects\Items\ItemSpeedUp.h" />
-    <ClInclude Include="UI\Lobby\Lobby.h" />
-    <ClInclude Include="UI\Lobby\LobbyCookie.h" />
     <ClInclude Include="GameObjects\Map.h" />
-    <ClInclude Include="GameObjects\Cookies\Moonlighter.h" />
     <ClInclude Include="GameObjects\Platforms\Obstacle.h" />
     <ClInclude Include="GameObjects\Cookies\Pancake.h" />
-    <ClInclude Include="UI\PatternEditor\PatternObject.h" />
     <ClInclude Include="Scenes\PatternEditor.h" />
+    <ClInclude Include="SceneSkillEditor.h" />
     <ClInclude Include="UI\InGame\Pause.h" />
     <ClInclude Include="GameObjects\Cookies\Pirate.h" />
     <ClInclude Include="GameObjects\Platforms\Platform.h" />
-    <ClInclude Include="Scenes\SceneLobby.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
     <ClInclude Include="Framework\SceneMgr.h" />
@@ -257,7 +259,6 @@
     <ClInclude Include="GameObjects\SpriteGo.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Global\Variables.h" />
-    <ClInclude Include="UI\Lobby\StorageBox.h" />
     <ClInclude Include="GameObjects\TextGo.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />
     <ClInclude Include="UI\InGame\UIButton.h" />

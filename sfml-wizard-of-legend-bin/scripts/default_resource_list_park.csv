@@ -19,3 +19,17 @@
 3,animations/Lancer_Hurt.csv
 3,animations/Lancer_AttackUp.csv
 3,animations/Lancer_AttackDown.csv
+3,animations/Lancer_AttackEffect.csv
+3,animations/Lancer_Spear.csv
+3,animations/Lancer_SpearUpDown.csv
+0,graphics/Texture2D/Archer2.png
+3,animations/Archer_AttackArm.csv
+3,animations/Archer_AttackPullArm.csv
+3,animations/Archer_BowPull.csv
+3,animations/Archer_BowRelease.csv
+3,animations/Archer_Death.csv
+3,animations/Archer_Hurt.csv
+3,animations/Archer_Idle.csv
+3,animations/Archer_Run.csv
+3,animations/Archer_Attack.csv
+0,graphics/Texture2D/Arrow2.png

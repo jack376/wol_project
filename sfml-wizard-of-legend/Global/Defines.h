@@ -2,11 +2,36 @@
 
 #define _USE_MATH_DEFINES
 
+enum class SkillEvents
+{
+	None = -1,
+	Left,
+	Right,
+	Space,
+	Q,
+	Count,
+};
 
+enum class SkillTypes
+{
+	None = -1,
+	Melee,
+	Range,
+};
 
+enum class PlayerActions
+{
+	None = -1,
+	Hand,
+	Kick,
+	Jump,
+	Slam,
+	Focus,
+};
 
 enum class ElementTypes
 {
+	None = -1,
 	Fire,
 	Water,
 	Thunder,
@@ -51,7 +76,18 @@ enum class SceneId
 	Title,
 	Game,
 	Editor,
+	SkillEditor,
 	Count,
+};
+
+enum class TileType
+{
+	None,
+	Ground,
+	Cliff,
+	Wall,
+	MonsterSpawn,
+	EventTrigger,
 };
 
 enum class ObjectType
@@ -63,28 +99,6 @@ enum class ObjectType
 	Count,
 };
 
-enum class PatternObjectType
-{
-	None = -1,
-	Platform,
-	Obstacle,
-	ItemSpeedUp,
-	ItemBigHealPack,
-	ItemHealPack,
-	ItemMagnet,
-	ItemBig,
-	//ItemBonus,
-	ItemCoin,
-	Coin,
-	BigCoin,
-	GoldCoin,
-	BigGoldCoin,
-	Diamond,
-	DiamondBox,
-	LuckyBox,
-	Count,
-
-};
 
 enum class UiType
 {
@@ -93,3 +107,5 @@ enum class UiType
 };
 
 #include "AnimationClip.h"
+#define _TileSize 64
+using RectVertexArray = std::array<sf::Vector2f, 4>;

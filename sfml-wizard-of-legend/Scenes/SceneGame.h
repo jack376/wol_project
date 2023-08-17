@@ -2,6 +2,7 @@
 #include "Tile.h"
 #include "Scene.h"
 #include "ObjectPool.h"
+#include "BoxCollider2D.h"
 
 class UIButton;
 class TextGo;
@@ -9,9 +10,13 @@ class SpriteGo;
 class Tile;
 
 class Player;
+class Monster;
 class ElementalSpell;
 class BreakableObj;
 class Particle;
+class Monster;
+class SpriteEffect;
+enum class MonsterId;
 
 class SceneGame : public Scene
 {
@@ -24,8 +29,16 @@ protected:
 	int cols = 0;
 	float tileSize = 64.0f;
 
+	Monster* monster;
+
+	bool isCol = false;
+
+	float debugTimer = 0.f;
+	float debugDuration = 1.f;
 	ObjectPool<Particle> particlePool;
 
+	ObjectPool<Particle> particlePool;
+	ObjectPool<SpriteEffect> hitEffects;
 	int count = 0;
 
 public:
@@ -50,6 +63,7 @@ public:
 	void LoadFromCSV(const std::string& path);
 	void CreateTile2dVector(int rows, int cols);
 	void CreateParticle(int count);
+	Monster* CreateMonster(MonsterId id);
 
 	void SpawnBreakableObj(const std::string& id, int count);
 	void DestroyBreakableObj(BreakableObj* obj);

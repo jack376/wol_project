@@ -8,11 +8,16 @@
 #include "TextGo.h"
 #include "SpriteGo.h"
 #include "Monster.h"
+#include "Lancer.h"
+#include "Archer.h"
 #include "Player.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
 #include "TileInfoTable.h"
 #include "rapidcsv.h"
+#include "Tile.h"
+#include "BoxCollider2D.h"
+#include "DestructibleGo.h"
 #include "BreakableObj.h"
 #include "Particle.h"
 
@@ -26,10 +31,10 @@ void SceneGame::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 
 	player = (Player*)AddGo(new Player());
-	player->SetPosition(0, 0);
+	player->SetPosition(700, 700);
 	player->sprite.setScale(4, 4);
 	player->SetOrigin(Origins::MC);
-	player->sortLayer = 20;
+	player->sortLayer = 5;
 	player->SetScene(this);
 
 	LoadFromCSV("tables/TileInfoTable.csv");
@@ -39,9 +44,17 @@ void SceneGame::Init()
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
 
-	Monster* go = (Monster*)AddGo(new Monster(MonsterId::Ghoul));
+
+	Monster* go = CreateMonster(MonsterId::Archer);
+	monster = go;
+	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
+
+	player->SetTiles(&tilesWorld);
+	tempWindSlash->SetTiles(&tilesWorld);
 
 	player->SetMonster(go);
+	tempWindSlash->SetMonster(monster);
 
 	// Create Particle
 	CreateParticle(1000);
@@ -50,6 +63,10 @@ void SceneGame::Init()
 
 	for (auto go : gameObjects)
 	{
+		if (go->GetName() == "a")
+		{
+			std::cout << "";
+		}
 		go->Init();
 	}
 }
@@ -75,6 +92,7 @@ void SceneGame::Enter()
 	Scene::Enter();
 
 	ClearObjectPool(particlePool);
+
 }
 
 void SceneGame::Exit()
@@ -84,8 +102,23 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
+	Scene::Update(dt);	
+	worldView.setCenter(player->GetPosition());
+	debugTimer += dt;
+	worldView.setCenter(player->GetPosition());
+	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
+	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 	Scene::Update(dt);
 
+	//if (debugTimer > debugDuration && !isCol)
+	//{
+	//	debugTimer = 0.f;
+	//	std::cout << "OBB is Failed" << std::endl;
+	//}
+	//if (isCol)
+	//{
+	//	std::cout << "OBB is Succesd" << std::endl;
+	//}
 	worldView.setCenter(player->GetPosition());
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
@@ -176,7 +209,7 @@ void SceneGame::LoadFromCSV(const std::string& path)
 
 		Tile* tile = (Tile*)FindGo(tileName);
 		tile->SetIndex(tileIndexX, tileIndexY);
-		tile->SetType(static_cast<Tile::TileType>(tileType));
+		tile->SetType(static_cast<TileType>(tileType));
 		tile->SetTileSize(tileSize);
 		tile->SetScale(tileScale);
 		tile->SetLayer(tileLayer);
@@ -186,6 +219,28 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
+	//std::cout << "SYSTEM : Load Success" << std::endl;
+}
+
+Monster* SceneGame::CreateMonster(MonsterId id)
+{
+	Monster* monster = nullptr;
+	switch (id)
+	{
+	case MonsterId::Ghoul:
+		monster = dynamic_cast<Monster*>(AddGo(new Monster(id)));
+		break;
+	case MonsterId::GhoulLarge:
+		monster = dynamic_cast<Monster*>(AddGo(new Monster(id)));
+		break;
+	case MonsterId::Lancer:
+		monster = dynamic_cast<Monster*>(AddGo(new Lancer(id)));
+		break;
+	case MonsterId::Archer:
+		monster = dynamic_cast<Monster*>(AddGo(new Archer(id)));
+		break;
+	}
+	return monster;
 	std::cout << "SYSTEM : Ingame Tile Load Success" << std::endl;
 }
 

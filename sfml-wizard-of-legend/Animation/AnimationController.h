@@ -34,7 +34,9 @@ public:
 	void Stop();
 
 	void SetFrame(const AnimationFrame& frame);
+	void SetFramePos(int index, sf::Vector2f pos);
 	sf::FloatRect GetCurrentRect();
 
 	const std::string& GetCurrentClipId() { return currentClip->id; }
+	float GetAccumTime() { return accumTime; }
 };

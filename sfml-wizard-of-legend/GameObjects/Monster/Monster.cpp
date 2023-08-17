@@ -3,15 +3,15 @@
 #include "MonsterTable.h"
 #include "DataTableMgr.h"
 #include "ResourceMgr.h"
-#include "SceneGame.h"
 #include "SceneMgr.h"
+#include "SceneGame.h"
 #include "Player.h"
-
-#include "InputMgr.h"   //Test
+#include "Tile.h"
+#include "SpriteEffect.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
-{
+{   
 }
 
 Monster::~Monster()
@@ -27,6 +27,11 @@ void Monster::Init()
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Death.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Hurt.csv"));
+
+    //rect.setSize({ 100, 150 });
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setOutlineThickness(1.f);
+    rect.setOutlineColor(sf::Color::Green);
 }
 
 void Monster::Release()
@@ -41,11 +46,11 @@ void Monster::Reset()
     animation.SetTarget(&sprite);
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
-    
 
-    SetPosition({ -500, 0 });
+    SetPosition({ 500, 500 });
     SetOrigin(Origins::MC);
     SetFlipX(false);
+    SetRectBox();
     sortLayer = 10;
 
     hp = stat.maxHp;
@@ -63,29 +68,31 @@ void Monster::Reset()
         attackRange.setOutlineColor(sf::Color::Red);
         searchRange.setFillColor(sf::Color::Transparent);
         attackRange.setFillColor(sf::Color::Transparent);
+        rect.setFillColor(sf::Color::Transparent);
+        rect.setOutlineColor(sf::Color::Blue);
+        rect.setOutlineThickness(1.f);
     }  
 }
 
 void Monster::Update(float dt)
 {
     animation.Update(dt);
+    attackTimer += dt;
 
     HandleBehavior(dt);
-    HandleState();
+    HandleState(dt);
+    CalculatorCurrentTile();
  
     //Debug Mode
     searchRange.setPosition(position);
     attackRange.setPosition(position);
-    //Test
-    if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-    {
-        OnAttacked(2);
-    }
+    rect.setPosition(position);
 }
 
 void Monster::Draw(sf::RenderWindow& window)
 {
     SpriteGo::Draw(window);
+
     //Debug Mode
     window.draw(searchRange);
     window.draw(attackRange);
@@ -96,7 +103,7 @@ void Monster::SetState(MonsterState newState)
 	currentState = newState;
 }
 
-void Monster::HandleState()
+void Monster::HandleState(float dt)
 {
     switch (currentState) {
     case MonsterState::Idle:
@@ -109,6 +116,7 @@ void Monster::HandleState()
 
     case MonsterState::Attacking:
         //std::cout << "Monster is attacking.\n";
+        isShooting = attackTimer < stat.attackRate;
         break;
 
     case MonsterState::Dead:
@@ -126,26 +134,31 @@ void Monster::Idle()
     SetState(MonsterState::Idle);
     animation.Play(stat.name + "Idle");
     SetOrigin(origin);
+    SetRectBox();
 }
 
 void Monster::Attack(float dt)
 {
     SetState(MonsterState::Attacking);
-    attackTimer += dt;
-    if(attackTimer > stat.attackRate)
+    if (attackTimer >= stat.attackRate)
     {
         animation.Play(stat.name + "Attack");
         SetOrigin(origin);
+        SetRectBox();
         attackTimer = 0.f;
         isAttacked = false;
     }
-    if (!isAttacked && player->IsAlive() &&
-        sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+    if (!isAttacked && player->IsAlive())
     {
-        attackTimer = 0.f;
-        player->SetHp(-stat.damage);
-        isAttacked = true;
+        if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+        {
+            attackTimer = 0.f;
+            player->SetHp(-stat.damage);
+            isAttacked = true;
+        }
     }
+
+
 }
 
 void Monster::Move(float dt)
@@ -155,6 +168,7 @@ void Monster::Move(float dt)
     {
         animation.Play(stat.name + "Run");
         SetOrigin(origin);
+        SetRectBox();
     }
     SetPosition(position + look * stat.speed * dt);
 }
@@ -166,6 +180,7 @@ void Monster::Die()
     {
         animation.Play(stat.name + "Death");
         SetOrigin(origin);
+        SetRectBox();
     }
     else if (animation.IsAnimEndFrame())
         SetActive(false);
@@ -176,6 +191,7 @@ void Monster::KnockBack()
     SetState(MonsterState::KnockBack);
     animation.Play(stat.name + "Hurt");
     SetOrigin(origin);
+    SetRectBox();
 }
 
 void Monster::SetLook(sf::Vector2f playerPos)
@@ -221,15 +237,57 @@ void Monster::HandleBehavior(float dt)
             }
             return;
         }
-        else if (distance <= stat.searchRange)  //공격범위 ~ 탐색 범위
+        else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
         {
-            SetLook(playerPos);
-            if (distance <= stat.attackRange)
+            isAwake = true;
+            if (!isShooting)
+                SetLook(playerPos);
+            if (distance <= stat.attackRange || isShooting)
                 Attack(dt);
-            else
+            else if (!isShooting)
                 Move(dt);
         }
         else
            Idle();            
     }
+}
+
+void Monster::CalculatorCurrentTile()
+{
+    int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
+    int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
+
+    currentTile = (*wouldTiles)[rowIndex][columnIndex];
+}
+
+//객체를 중심으로 임의 범위 내의 타일을 반환
+std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
+{
+    //32x16
+    int searchRowRange = row;
+    int searchColRange = col;
+
+    sf::Vector2i index = currentTile->GetIndex();
+    std::vector<Tile*> tiles;
+
+    int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x;
+    int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y;
+    int bottomRowIndex = index.x + searchRowRange >= wouldTiles->size() ? wouldTiles->size() - 1 : index.x + searchRowRange;
+    int rightColumnIndex = index.y + searchColRange >= wouldTiles[0].size() ? wouldTiles[0].size() - 1 : index.y + searchColRange;
+
+    for (int i = topRowIndex; i < bottomRowIndex; i++)
+    {
+        for (int j = leftColumnIndex; j < rightColumnIndex; j++)
+        {
+            tiles.push_back((*this->wouldTiles)[i][j]);
+        }
+    }
+    return tiles;
+}
+
+void Monster::SetRectBox()
+{
+    sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+    rect.setSize({ spriteBounds.width, spriteBounds.height });
+    Utils::SetOrigin(rect, Origins::MC);
 }

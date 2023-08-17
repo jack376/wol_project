@@ -87,7 +87,7 @@ public:
 	std::vector<Tile*> GetAllTiles();
 	std::vector<Tile*> GetSelectedTiles();
 	void SetSelectedTilesState(Tile::TileState state = Tile::TileState::Blank);
-	void SetSelectedTilesType(Tile::TileType type);
+	void SetSelectedTilesType(TileType type);
 	void SetSelectedTilesDraw();
 	void SetSelectedTilesArea();
 	sf::Vector2i GetCurrentTileIntIndex();

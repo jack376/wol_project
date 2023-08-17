@@ -1,0 +1,11 @@
+ID,FPS,LOOPTYPE,,
+ArcherDeath,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Archer2.png,61,104,32,38
+graphics/Texture2D/Archer2.png,108,104,32,38
+graphics/Texture2D/Archer2.png,158,104,32,38
+graphics/Texture2D/Archer2.png,207,104,32,38
+graphics/Texture2D/Archer2.png,255,104,32,38
+graphics/Texture2D/Archer2.png,303,104,32,38
+graphics/Texture2D/Archer2.png,351,104,32,38
