@@ -151,7 +151,8 @@ void Monster::Idle()
         isAwake = true;
         if (distance <= stat.attackRange)
         {
-            SetState(MonsterState::Attacking);
+            if (attackTimer >= stat.attackRate)
+                SetState(MonsterState::Attacking);      
             return;
         }  
         else
@@ -228,7 +229,8 @@ void Monster::Move(float dt)
     }
     else if (distance <= stat.attackRange)
     {
-        SetState(MonsterState::Attacking);
+        if (attackTimer >= stat.attackRate)
+            SetState(MonsterState::Attacking);
         return;
     }
 }

@@ -24,8 +24,8 @@ protected:
 	Beam bulletLine;
 	ArcherAttackState currentAttackState;
 
-	float ameRate = 1.f;
-	float ameTimer = 0.f;
+	float aimRate = 1.f;
+	float aimTimer = 0.f;
 	float arrowSpeed = 1000.f;
 	bool isAiming = false;
 public:
@@ -41,11 +41,9 @@ public:
 	void HandleAttackState(float dt);
 
 	virtual void Attack(float dt) override;
-	virtual void Move(float dt) override;
 
 	void Aim(float dt);
 	void Shoot(float dt);
-	void Cool(float dt);
 	
 };
 

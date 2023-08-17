@@ -56,6 +56,8 @@ void Archer::Reset()
 void Archer::Update(float dt)
 {
 	Monster::Update(dt);
+	if (arrow.GetActive())
+		arrow.Update(dt);
 }
 
 void Archer::Draw(sf::RenderWindow& window)
@@ -70,8 +72,24 @@ void Archer::Draw(sf::RenderWindow& window)
 	}
 	if (arrow.GetActive())
 		arrow.Draw(window);
-	if (isAiming)
+	if (currentAttackState == ArcherAttackState::Aim)
 		bulletLine.draw(window);
+}
+
+void Archer::HandleAttackState(float dt)
+{
+	switch (currentAttackState)
+	{
+	case ArcherAttackState::Aim:
+		Aim(dt);
+		break;
+	case ArcherAttackState::Shoot:
+		Shoot(dt);
+		break;
+	default:
+		std::cout << "HandleAttackState default" << std::endl;
+		break;
+	}
 }
 
 void Archer::Attack(float dt)
@@ -80,37 +98,45 @@ void Archer::Attack(float dt)
 	pullArmAni.Update(dt);
 	bowAni.Update(dt);
 
-	float angle = Utils::Angle(look);
-
-	attackArm.setRotation(angle);
-	pullArm.setRotation(angle);
-	bow.setRotation(angle);
-	arrow.sprite.setRotation(angle + 90);
-	bulletLine.Rotation(angle);
-
-	sf::Vector2f pos = { sprite.getGlobalBounds().left, sprite.getGlobalBounds().top };
-	if (look.x < 0)
-	{
-		pos.x += sprite.getGlobalBounds().width;
-		attackArm.setPosition(pos.x + -_AttackArmLocalPos.x, pos.y + _AttackArmLocalPos.y);
-		pullArm.setPosition(pos.x + -_PullArmLocalPos.x, pos.y + _PullArmLocalPos.y);
-	}
-	else
-	{
-		attackArm.setPosition(pos + _AttackArmLocalPos);
-		pullArm.setPosition(pos + _PullArmLocalPos);
-	}
-	bow.setPosition(attackArm.getPosition());
-	arrow.SetPosition(bow.getPosition());
-	bulletLine.move(position.x, position.y);
-
-	bulletLine.checkCollision(CalculatorRangeTiles(16, 16), player);
-	if (arrow.GetActive())
-		arrow.Update(dt);
-	else
-		isAiming = false;
-
 	if (attackTimer >= stat.attackRate)
+	{
+		currentAttackState = ArcherAttackState::Aim;
+		attackTimer = 0.f;
+	}
+
+	{
+		sf::Vector2f pos = { sprite.getGlobalBounds().left, sprite.getGlobalBounds().top };
+		if (look.x < 0)
+		{
+			pos.x += sprite.getGlobalBounds().width;
+			attackArm.setPosition(pos.x + -_AttackArmLocalPos.x, pos.y + _AttackArmLocalPos.y);
+			pullArm.setPosition(pos.x + -_PullArmLocalPos.x, pos.y + _PullArmLocalPos.y);
+		}
+		else
+		{
+			attackArm.setPosition(pos + _AttackArmLocalPos);
+			pullArm.setPosition(pos + _PullArmLocalPos);
+		}
+		bow.setPosition(attackArm.getPosition());
+		arrow.SetPosition(bow.getPosition());
+		bulletLine.move(position.x, position.y);
+	}
+	
+	HandleAttackState(dt);
+
+	sf::Vector2f playerPos = player->GetPosition();
+	float distance = Utils::Distance(playerPos, position);
+
+	if (hp <= 0)
+	{
+		SetState(MonsterState::Dead);
+		return;
+	}
+}
+
+void Archer::Aim(float dt)
+{
+	if (animation.GetCurrentClipId() != "ArcherAttack")
 	{
 		animation.Play("ArcherAttack");
 		attackArmAni.Play("ArcherAttackArm");
@@ -125,51 +151,42 @@ void Archer::Attack(float dt)
 		bow.setOrigin(-_BowLocalPos);
 
 		arrow.SetActive(true);
-
-		attackTimer = 0.f;
-		isAttacked = false;
-		isAiming = true;
-		isAfterShoot = false;
 	}
+	sf::Vector2f playerPos = player->GetPosition();
+	SetLook(playerPos);
 
-	if (isAiming)
-		ameTimer += dt;
+	float angle = Utils::Angle(look);
+	attackArm.setRotation(angle);
+	pullArm.setRotation(angle);
+	bow.setRotation(angle);
+	arrow.sprite.setRotation(angle + 90);
+	bulletLine.Rotation(angle);
 
-	if (ameTimer >= ameRate)
+	bulletLine.checkCollision(CalculatorRangeTiles(16, 16), player);
+
+	aimTimer += dt;
+
+	if (aimTimer > aimRate)
+	{
+		currentAttackState = ArcherAttackState::Shoot;
+		aimTimer = 0;
+	}
+}
+
+void Archer::Shoot(float dt)
+{
+	if (bowAni.GetCurrentClipId() != "ArcherBowRelease")
 	{
 		bowAni.Play("ArcherBowRelease");
 		bow.setOrigin(-_BowLocalPos);
 		arrow.Fire(bow.getPosition(), look, arrowSpeed);
-		ameTimer = 0;
 		isAiming = false;
 		isAfterShoot = true;
 	}
-
-	if (!isAttacked && player->IsAlive())
+	
+	if (bowAni.IsAnimEndFrame())
 	{
-		if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
-		{
-			attackTimer = 0.f;
-			player->SetHp(-stat.damage);
-			isAttacked = true;
-		}
-	}
-
-	sf::Vector2f playerPos = player->GetPosition();
-	float distance = Utils::Distance(playerPos, position);
-
-	SetLook(playerPos);
-
-	if (hp <= 0)
-	{
-		SetState(MonsterState::Dead);
-		return;
-	}
-	else if (distance > stat.attackRange && !isAiming && isAfterShoot)
-	{
-		SetState(MonsterState::Moving);
-		return;
-	}
-	else if(bowAni.GetCurrentClipId() == "ArcherBowRelease" && animation.IsAnimEndFrame())
-		SetState(MonsterState::Idle());
+		currentAttackState = ArcherAttackState::Cool;
+		SetState(MonsterState::Idle);
+	}	
 }
