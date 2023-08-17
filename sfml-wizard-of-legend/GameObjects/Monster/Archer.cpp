@@ -26,6 +26,7 @@ void Archer::Init()
 	attackArmAni.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Archer_AttackArm.csv"));
 	pullArmAni.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Archer_AttackPullArm.csv"));
 	arrow.textureId = "graphics/Texture2D/Arrow2.png";
+	arrow.Init();
 }
 
 void Archer::Release()
@@ -51,6 +52,7 @@ void Archer::Reset()
 	arrow.Reset();
 	arrow.SetOrigin(Origins::BC);
 	arrow.SetActive(false);
+	arrow.SetPlayer(player);
 }
 
 void Archer::Update(float dt)
@@ -179,9 +181,7 @@ void Archer::Shoot(float dt)
 	{
 		bowAni.Play("ArcherBowRelease");
 		bow.setOrigin(-_BowLocalPos);
-		arrow.Fire(bow.getPosition(), look, arrowSpeed);
-		isAiming = false;
-		isAfterShoot = true;
+		arrow.Fire(bow.getPosition(), look, arrowSpeed, stat.damage);
 	}
 
 	if (bowAni.IsAnimEndFrame())

@@ -139,7 +139,7 @@ void Monster::Idle()
     sf::Vector2f playerPos = player->GetPosition();
     float distance = Utils::Distance(playerPos, position);
 
-    if (hp <= 0)
+    if (hp <= 0 || !player->IsAlive())
     {
         SetState(MonsterState::Dead);
         return;
@@ -183,7 +183,7 @@ void Monster::Attack(float dt)
 
     SetLook(playerPos);
 
-    if (hp <= 0)
+    if (hp <= 0 || !player->IsAlive())
     {
         SetState(MonsterState::Dead);
         return;
@@ -215,7 +215,7 @@ void Monster::Move(float dt)
 
     SetLook(playerPos);
 
-    if (hp <= 0)
+    if (hp <= 0 || !player->IsAlive())
     {
         SetState(MonsterState::Dead);
         return;

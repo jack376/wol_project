@@ -26,8 +26,7 @@ protected:
 
 	float aimRate = 1.f;
 	float aimTimer = 0.f;
-	float arrowSpeed = 500.f;
-	bool isAiming = false;
+	float arrowSpeed = 1000.f;
 public:
 	Archer(MonsterId id, const std::string& textureId = "", const std::string& n = "Archer");
 	virtual ~Archer() override;

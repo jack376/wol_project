@@ -1,5 +1,6 @@
 #pragma once
 #include "SpriteGo.h"
+#include "BoxCollider2D.h"
 
 class Player;
 
@@ -9,10 +10,11 @@ class Bullet :
 protected:
 	sf::Vector2f direction;
 	float speed = 0.f;
-	float range = 5000.f;
 	int damage = 0;
+	bool isAttacked = false;
 
 	Player* player = nullptr;
+	BoxCollider2D collider;
 
 public:
 	Bullet(const std::string& textureId = "", const std::string& n = "");
@@ -31,6 +33,6 @@ public:
 	int GetDamage() { return damage; }
 	float GetSpeed() { return speed; }
 
-	void Fire(const sf::Vector2f pos, const sf::Vector2f direction, float speed);
+	void Fire(const sf::Vector2f pos, const sf::Vector2f direction, float speed, int damage);
 };
 

@@ -59,7 +59,6 @@ protected:
 	float knockBackTime = 0.15f;
 	float knockBackTimer = 0.f;
 	bool isAttacked = false;
-	bool isAfterShoot = false;
 	bool isAwake = false;
 
 	Player* player = nullptr;
