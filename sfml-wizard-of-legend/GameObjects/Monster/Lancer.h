@@ -2,16 +2,24 @@
 #include "Monster.h"
 #include "CustomEffect.h"
 #include "AnimationController.h"
+#include "Beam.h"
+#include "BoxCollider2D.h"
 
 class Lancer :
     public Monster
 {
 protected:
 	sf::Sprite spear;
+	sf::Vector2f attackDir;
 	AnimationController spearAni;
+	AttackState currentAttackState;
+	Beam raycaster;
+	BoxCollider2D collider;
 
-	float chargeRate = 0.5f; 
-	float chargeTimer = 0.f;
+	float aimRate = 1.f;
+	float aimTimer = 0.f;
+	float shootRate = 1.f;
+	float shootTimer = 0.f;
 	bool isEffect = false;
 
 public:

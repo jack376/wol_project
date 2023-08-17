@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+LancerAttackAim,1,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/LancerSource.png,59,9,36,33

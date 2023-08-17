@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+LancerSpearUpDownAttack,1,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/LancerSource.png,5,454,5,37

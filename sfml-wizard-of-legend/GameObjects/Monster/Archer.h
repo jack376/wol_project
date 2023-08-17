@@ -3,12 +3,7 @@
 #include "Bullet.h"
 #include "Beam.h"
 
-enum class ArcherAttackState
-{
-	Aim,
-	Shoot,
-	Cool,
-};
+
 
 class Archer :
     public Monster
@@ -22,7 +17,7 @@ protected:
 	AnimationController pullArmAni;	
 	Bullet arrow;
 	Beam bulletLine;
-	ArcherAttackState currentAttackState;
+	AttackState currentAttackState;
 
 	float aimRate = 1.f;
 	float aimTimer = 0.f;

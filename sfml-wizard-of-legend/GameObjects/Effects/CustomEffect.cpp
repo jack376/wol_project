@@ -25,7 +25,7 @@ void CustomEffect::Reset()
 	//Debug Mode
 	rect.setFillColor(sf::Color::Transparent);
 	rect.setOutlineColor(sf::Color::Yellow);
-	rect.setOutlineThickness(1.f);
+	rect.setOutlineThickness(0.f);
 }
 
 void CustomEffect::Update(float dt)
@@ -33,7 +33,7 @@ void CustomEffect::Update(float dt)
 	if (animation.IsPlaying())
 	{
 		animation.Update(dt);
-		SetOrigin(Origins::BC);
+		SetOrigin(Origins::MC);
 	}
 
 	//Debug Mode
@@ -43,7 +43,6 @@ void CustomEffect::Update(float dt)
 void CustomEffect::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
-	window.draw(rect);
 }
 
 void CustomEffect::SetAnim(const std::string& path)

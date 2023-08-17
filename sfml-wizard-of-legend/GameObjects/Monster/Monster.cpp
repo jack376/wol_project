@@ -40,13 +40,16 @@ void Monster::Release()
 
 void Monster::Reset()
 {
+    SpriteGo::Reset();
+    attackEffect.Reset();
+
     SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
     player = scene->GetPlayer();
 
     SetState(MonsterState::Idle);
 
-    animation.SetTarget(&sprite);
     sprite.setScale({ 4.f, 4.f });
+    animation.SetTarget(&sprite);
     animation.Play(stat.name + "Idle");
 
     SetPosition({ 500, 500 });

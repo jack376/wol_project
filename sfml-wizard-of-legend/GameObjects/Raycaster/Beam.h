@@ -27,5 +27,4 @@ public:
     void checkCollision(const std::vector<Tile*> tiles, Player* player);
     void checkCollision(Monster* monster);
     sf::Vector2f GetEndPos() { return  m_line.getEndPoint(); }
-
 };

@@ -32,6 +32,7 @@ void Archer::Init()
 void Archer::Release()
 {
 	Monster::Release();
+
 }
 
 void Archer::Reset()
@@ -74,7 +75,7 @@ void Archer::Draw(sf::RenderWindow& window)
 	}
 	if (arrow.GetActive())
 		arrow.Draw(window);
-	if (currentAttackState == ArcherAttackState::Aim)
+	if (currentAttackState == AttackState::Aim)
 		bulletLine.draw(window);
 }
 
@@ -82,10 +83,10 @@ void Archer::HandleAttackState(float dt)
 {
 	switch (currentAttackState)
 	{
-	case ArcherAttackState::Aim:
+	case AttackState::Aim:
 		Aim(dt);
 		break;
-	case ArcherAttackState::Shoot:
+	case AttackState::Shoot:
 		Shoot(dt);
 		break;
 	default:
@@ -102,7 +103,7 @@ void Archer::Attack(float dt)
 
 	if (attackTimer >= stat.attackRate)
 	{
-		currentAttackState = ArcherAttackState::Aim;
+		currentAttackState = AttackState::Aim;
 		attackTimer = 0.f;
 	}
 
@@ -170,7 +171,7 @@ void Archer::Aim(float dt)
 
 	if (aimTimer > aimRate)
 	{
-		currentAttackState = ArcherAttackState::Shoot;
+		currentAttackState = AttackState::Shoot;
 		aimTimer = 0;
 	}
 }
@@ -186,7 +187,7 @@ void Archer::Shoot(float dt)
 
 	if (bowAni.IsAnimEndFrame())
 	{
-		currentAttackState = ArcherAttackState::Cool;
+		currentAttackState = AttackState::Cool;
 		SetState(MonsterState::Idle);
 	}
 

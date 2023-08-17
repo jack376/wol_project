@@ -16,6 +16,13 @@ enum class MonsterState
 	KnockBack,
 };
 
+enum class AttackState
+{
+	Aim,
+	Shoot,
+	Cool,
+};
+
 enum class AttactType
 {
 	Melee,
@@ -52,7 +59,9 @@ protected:
 	MonsterState currentState = MonsterState::Idle;
 	MonsterStat stat;
 	AnimationController animation;
+
 	CustomEffect attackEffect;
+	//ObjectPool<SpriteEffect> hitEffects;
 
 	int hp = 0;
 	float attackTimer = 0.f;
