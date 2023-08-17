@@ -30,17 +30,18 @@ void Bullet::Reset()
 	SetPosition(0.f, 0.f);
 	speed = 0.f;
 	direction = { 0.f, 0.f };
-	range = 2000.f;
+	range = 5000.f;
 }
 
 void Bullet::Update(float dt)
 {
 	SpriteGo::Update(dt);
-	range -= speed * dt; // 이동량 빼기
-	if (range <= 0.f) //사거리까지 이동하면 총알 삭제
+	if (dt < 1.f)
+		range -= speed * dt;
+	if (range <= 0.f)
 	{
 		SetActive(false);
-		range = 1000.f;
+		range = 5000.f;
 		return;
 	}
 

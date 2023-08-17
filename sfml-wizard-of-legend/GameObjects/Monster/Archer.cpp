@@ -183,10 +183,11 @@ void Archer::Shoot(float dt)
 		isAiming = false;
 		isAfterShoot = true;
 	}
-	
+
 	if (bowAni.IsAnimEndFrame())
 	{
 		currentAttackState = ArcherAttackState::Cool;
 		SetState(MonsterState::Idle);
-	}	
+	}
+
 }

@@ -17,7 +17,6 @@
 #include "rapidcsv.h"
 #include "Tile.h"
 #include "BoxCollider2D.h"
-#include "DestructibleGo.h"
 #include "BreakableObj.h"
 #include "Particle.h"
 
@@ -284,7 +283,7 @@ void SceneGame::SpawnBreakableObj(const std::string& id, int count)
 	{
 		for (size_t col = 0; col < tilesWorld[row].size(); col++)
 		{
-			if (tilesWorld[row][col]->GetType() == Tile::TileType::EventTrigger)
+			if (tilesWorld[row][col]->GetType() == TileType::EventTrigger)
 			{
 				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
 			}

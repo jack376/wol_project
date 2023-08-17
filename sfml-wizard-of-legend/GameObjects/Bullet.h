@@ -9,7 +9,7 @@ class Bullet :
 protected:
 	sf::Vector2f direction;
 	float speed = 0.f;
-	float range = 1000.f;
+	float range = 5000.f;
 	int damage = 0;
 
 	Player* player = nullptr;
