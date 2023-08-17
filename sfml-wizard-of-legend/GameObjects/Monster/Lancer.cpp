@@ -2,7 +2,7 @@
 #include "Lancer.h"
 #include "ResourceMgr.h"
 #include "Player.h"
-//#include "AnimationController.h"
+
 
 Lancer::Lancer(MonsterId id, const std::string& textureId, const std::string& n)
 	: Monster(id, textureId, n)
@@ -20,9 +20,8 @@ void Lancer::Init()
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackUp.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackDown.csv"));
     
-    spear.AddClip("animations/Lancer_Spear.csv");
-    CustomEffect* ptr = &spear;
-    spear.PlaySup = [this, ptr]() {
+    spear.spearAni("animations/Lancer_Spear.csv");
+    spear.spearAni = [this, ptr]() {
         if (animation.GetCurrentClipId() == "LancerAttack")
         {
             spear.SetOrigin(Origins::BC);

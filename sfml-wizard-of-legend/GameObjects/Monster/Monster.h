@@ -2,7 +2,7 @@
 #include "SpriteGo.h"
 #include "AnimationController.h"
 #include "BoxCollider2D.h"
-#include "SpriteEffect.h";
+#include "CustomEffect.h";
 
 class Player;
 class Tile;

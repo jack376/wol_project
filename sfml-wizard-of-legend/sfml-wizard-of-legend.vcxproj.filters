@@ -33,7 +33,6 @@
     <ClCompile Include="GameObjects\ElementalSpell.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
     <ClCompile Include="GameObjects\BoxCollider2D.cpp" />
-    <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
     <ClCompile Include="DataTables\TileInfoTable.cpp" />
     <ClCompile Include="Framework\Command.cpp" />
@@ -132,9 +131,6 @@
     <ClCompile Include="Framework\DataTableMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjects\VertexArrayGo.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -164,7 +160,6 @@
     </ClCompile>
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="BoxCollider2D.h" />
-    <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\Command.h" />
@@ -232,9 +227,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Framework\ObjectPool.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\Effects\SpriteEffect.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\VertexArrayGo.h">

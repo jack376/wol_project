@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 #include "CustomEffect.h"
+#include "AnimationController.h"
 
 class Lancer :
     public Monster

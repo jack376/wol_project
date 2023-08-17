@@ -7,7 +7,7 @@
 #include "SceneGame.h"
 #include "Player.h"
 #include "Tile.h"
-#include "SpriteEffect.h"
+#include "CustomEffect.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
