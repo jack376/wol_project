@@ -171,17 +171,20 @@ void SceneEditor::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R)) { isTileLeyer = false; std::cout << "Current Layer : Bottom" << std::endl; }
 
 	// Resize
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O)) { ResizeWorld(16, 16); std::cout << "Resize World Tile : 16 * 16" << std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(128, 128); std::cout << "Resize World Tile : 32 * 32" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::U)) { ResizeWorld(16, 16); std::cout << "Resize World Tile : 16 * 16 (256)" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::I)) { ResizeWorld(32, 32); std::cout << "Resize World Tile : 32 * 32 (1,024)" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O)) { ResizeWorld(64, 64); std::cout << "Resize World Tile : 64 * 64 (4,096)"<< std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(96, 96); std::cout << "Resize World Tile : 96 * 96 (9,216)" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::J)) { ResizeWorld(128, 128); std::cout << "Resize World Tile : 128 * 128 (16,384)" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::K)) { ResizeWorld(192, 192); std::cout << "Resize World Tile : 192 * 192 (36,864)" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::L)) { ResizeWorld(256, 256); std::cout << "Resize World Tile : 256 * 256 (65,536)" << std::endl; }
 
 	// SetTileType
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(Tile::TileType::Ground); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(Tile::TileType::Cliff); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(Tile::TileType::Wall); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(Tile::TileType::MonsterSpawn); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(Tile::TileType::None); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(Tile::TileType::Ground); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(Tile::TileType::Cliff); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(Tile::TileType::Wall); }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(Tile::TileType::EventTrigger); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num6)) { SetSelectedTilesType(Tile::TileType::StartPath); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num7)) { SetSelectedTilesType(Tile::TileType::RandomPath); }
 
 	// Deselect
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }
@@ -194,7 +197,7 @@ void SceneEditor::Draw(sf::RenderWindow& window)
 
 Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, int sort)
 {
-	Tile* tile = (Tile*)AddGo(new Tile(name));
+	Tile* tile = (Tile*)AddWithoutCheckGo(new Tile(name));
 	tile->sortLayer = sort;
 	tile->SetPosition(posX, posY);
 	tile->SetState();
@@ -587,7 +590,7 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
-	std::cout << "SYSTEM : Load Success" << std::endl;
+	std::cout << "SYSTEM : Editor Tile Load Success" << std::endl;
 }
 
 BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& text, float posX, float posY, float size, int texIndex, std::function<void()> onClickAction)

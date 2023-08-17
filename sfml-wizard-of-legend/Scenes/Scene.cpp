@@ -66,6 +66,12 @@ GameObject* Scene::AddGo(GameObject* go)
 	return go;
 }
 
+GameObject* Scene::AddWithoutCheckGo(GameObject* go)
+{
+	gameObjects.push_back(go);
+	return go;
+}
+
 GameObject* Scene::AddNPGo(GameObject* go)
 {
 	if (!ExistNP(go))

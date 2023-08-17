@@ -46,6 +46,7 @@ public:
 	bool Exist(GameObject* go);
 	bool ExistNP(GameObject* go);
 	GameObject* AddGo(GameObject* go);
+	GameObject* AddWithoutCheckGo(GameObject* go);
 	GameObject* AddNPGo(GameObject* go);
 	void RemoveGo(GameObject* go);
 	void SortGos();

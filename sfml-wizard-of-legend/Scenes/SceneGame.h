@@ -53,11 +53,5 @@ public:
 
 	void SpawnBreakableObj(const std::string& id, int count);
 	void DestroyBreakableObj(BreakableObj* obj);
-
-	std::vector<sf::Vector2i> CreateRandomPath(Tile::TileType startType, Tile::TileType traversableType, int pathLength);
-	void TestRandomPath();
-	
-	std::vector<std::vector<sf::Vector2i>> CreateMultipleRandomPaths(Tile::TileType startType, Tile::TileType traversableType, int mainPathLength, int branchCount = 2, int branchLength = 10);
-	void TestMultipleRandomPaths();
 };
 

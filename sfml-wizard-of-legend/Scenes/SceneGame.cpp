@@ -48,8 +48,6 @@ void SceneGame::Init()
 
 	SpawnBreakableObj("graphics/editor/FireTileSet.png", 15);
 
-	TestMultipleRandomPaths();
-
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -135,7 +133,7 @@ void SceneGame::Draw(sf::RenderWindow& window)
 
 Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)
 {
-	Tile* tile = (Tile*)AddGo(new Tile(name));
+	Tile* tile = (Tile*)AddWithoutCheckGo(new Tile(name));
 	tile->sortLayer = sort;
 	tile->SetPosition(posX, posY);
 
@@ -188,7 +186,7 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
-	std::cout << "SYSTEM : Load Success" << std::endl;
+	std::cout << "SYSTEM : Ingame Tile Load Success" << std::endl;
 }
 
 void SceneGame::CreateTile2dVector(int rows, int cols)
@@ -266,110 +264,5 @@ void SceneGame::SpawnBreakableObj(const std::string& id, int count)
 void SceneGame::DestroyBreakableObj(BreakableObj* obj)
 {
 	RemoveGo(obj);
-	count++;
-}
-
-std::vector<sf::Vector2i> SceneGame::CreateRandomPath(Tile::TileType startType, Tile::TileType traversableType, int pathLength)
-{
-	std::vector<sf::Vector2i> path;
-	std::vector<sf::Vector2i> possibleStarts;
-
-	for (int y = 0; y < tilesWorld.size(); y++) 
-	{
-		for (int x = 0; x < tilesWorld[y].size(); x++) 
-		{
-			if (tilesWorld[y][x]->GetType() == startType) 
-			{
-				possibleStarts.push_back(sf::Vector2i(x, y));
-			}
-		}
-	}
-
-	if (possibleStarts.empty())
-	{
-		return path;
-	}
-
-	sf::Vector2i currentPoint = possibleStarts[Utils::RandomRange(0, possibleStarts.size() - 1)];
-	path.push_back(currentPoint);
-
-	for (int i = 0; i < pathLength - 1; i++) 
-	{
-		std::vector<sf::Vector2i> possibleMoves = 
-		{
-			{  0,  1  }, // Up
-			{  1,  0  }, // Right
-			{  0, -1  }, // Down
-			{ -1,  0  }  // Left
-		};
-
-		possibleMoves.erase(std::remove_if(possibleMoves.begin(), possibleMoves.end(),[&](const sf::Vector2i& move) 
-			{ 
-				sf::Vector2i nextPoint = currentPoint + move;
-				return 
-					nextPoint.x < 0 || 
-					nextPoint.x >= tilesWorld[0].size() || 
-					nextPoint.y < 0 || 
-					nextPoint.y >= tilesWorld.size() || 
-					tilesWorld[nextPoint.y][nextPoint.x]->GetType() != traversableType;
-			}
-		), possibleMoves.end());
-
-		if (!possibleMoves.empty()) 
-		{
-			sf::Vector2i chosenMove = possibleMoves[Utils::RandomRange(0, possibleMoves.size() - 1)];
-			currentPoint += chosenMove;
-			path.push_back(currentPoint);
-		}
-		else 
-		{
-			break;
-		}
-	}
-	return path;
-}
-
-void SceneGame::TestRandomPath()
-{
-	std::vector<sf::Vector2i> path = CreateRandomPath(Tile::TileType::Ground, Tile::TileType::Ground, 256);
-
-	for (const auto& point : path) 
-	{
-		tilesWorld[point.y][point.x]->SetType(Tile::TileType::EventTrigger);
-	}
-}
-
-std::vector<std::vector<sf::Vector2i>> SceneGame::CreateMultipleRandomPaths(Tile::TileType startType, Tile::TileType traversableType, int mainPathLength, int branchCount, int branchLength)
-{
-	std::vector<std::vector<sf::Vector2i>> allPaths;
-
-	std::vector<sf::Vector2i> mainPath = CreateRandomPath(startType, traversableType, mainPathLength);
-	allPaths.push_back(mainPath);
-
-	int branchingPointIndex = Utils::RandomRange(1, mainPathLength - 2);
-	sf::Vector2i branchingPoint = mainPath[branchingPointIndex];
-
-	for (int i = 0; i < branchCount; i++)
-	{
-		tilesWorld[branchingPoint.y][branchingPoint.x]->SetType(startType);
-		std::vector<sf::Vector2i> branchPath = CreateRandomPath(startType, traversableType, branchLength);
-		allPaths.push_back(branchPath);
-
-		tilesWorld[branchingPoint.y][branchingPoint.x]->SetType(traversableType);
-	}
-
-	return allPaths;
-}
-
-void SceneGame::TestMultipleRandomPaths()
-{
-	auto allPaths = CreateMultipleRandomPaths(Tile::TileType::Ground, Tile::TileType::Ground, 64, 3, 20);
-
-	for (const auto& path : allPaths)
-	{
-		for (const auto& point : path)
-		{
-			tilesWorld[point.y][point.x]->SetType(Tile::TileType::EventTrigger);
-		}
-	}
+	count++; // юс╫ц
 }

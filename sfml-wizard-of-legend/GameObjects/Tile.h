@@ -13,9 +13,6 @@ public:
         Wall,
         MonsterSpawn,
         EventTrigger,
-        StartPath,
-        RandomPath,
-
     };
     enum class TileState
     {
