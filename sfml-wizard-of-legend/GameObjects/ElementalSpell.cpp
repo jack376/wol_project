@@ -191,7 +191,8 @@ void ElementalSpell::RangeUpdate(float dt)
 		Collider->GetObbCol().setRotation(angle);
 		anim.Play("FireBall");
 		dir = player->GetLook();
-
+		curveAngle = angle;
+		time = 0.f;
 	}
 
 
@@ -199,7 +200,7 @@ void ElementalSpell::RangeUpdate(float dt)
 	isCol = Collider->ObbCol(monster->rect);
 
 	// 공격이 닿은 타이밍
-	if (player->IsAttack() && isCol && !isAttack)	// 한번이 아닌 실시간으로 실행됨
+	if (isCol && !isAttack)	// 한번이 아닌 실시간으로 실행됨
 	{
 		// 레이캐스트의 닿은 포지션 구해주기
 		raycaster.GetEndPos();
@@ -222,22 +223,36 @@ void ElementalSpell::RangeUpdate(float dt)
 		Collider->SetActive(false);
 	}
 	
+	
+	// 곡선 직선 표현
+	switch (currentRangeType)
+	{
+	case RangeTypes::Straight:
+		StraightUpdate(dt);
+		break;
+
+	case RangeTypes::Curve:
+		CurveUpdate(dt);
+		break;
+	}
 
 
-	sf::Vector2f movePos = GetPosition();
-	movePos.x += speed * dt;
-	movePos.y = GetPosition().y + amplitude * std::sin(2 * M_PI * frequency * (movePos.x / speed));
+}
 
-
+void ElementalSpell::CurveUpdate(float dt)
+{
+	time += dt;
+	sf::Vector2f movePos = GetPosition() + CalAxisSin(time, curveSpeed, frequency, amplitude, dir, curveAngle);
 	SetPosition(movePos);
-
-
 	Collider->SetPosition(GetPosition());
+}
 
-	//sf::Vector2f movePos = GetPosition();
-	//movePos += dir * speed * dt;
-	//SetPosition(movePos);
-	//Collider->SetPosition(GetPosition());
+void ElementalSpell::StraightUpdate(float dt)
+{
+	sf::Vector2f movePos = GetPosition();
+	movePos += dir * speed * dt;
+	SetPosition(movePos);
+	Collider->SetPosition(GetPosition());
 }
 
 sf::Vector2f ElementalSpell::CalAxisSin(float time, float speed, float frequency, float amplitude, const sf::Vector2f& axis, float angleInDegrees)

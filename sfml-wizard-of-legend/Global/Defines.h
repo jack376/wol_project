@@ -17,6 +17,14 @@ enum class SkillTypes
 	None = -1,
 	Melee,
 	Range,
+	Petrol,
+};
+
+enum class RangeTypes
+{
+	None,
+	Straight,
+	Curve,
 };
 
 enum class PlayerActions

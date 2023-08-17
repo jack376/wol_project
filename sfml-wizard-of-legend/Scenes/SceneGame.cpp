@@ -49,6 +49,7 @@ void SceneGame::Init()
 	tempFireBall->SetPlayer(player);
 	tempFireBall->sortLayer = 21;
 	tempFireBall->SetSkillType(SkillTypes::Range);
+	tempFireBall->SetRangeType(RangeTypes::Straight);
 
 
 	Monster* go = CreateMonster(MonsterId::Archer);
@@ -117,7 +118,6 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
-	worldView.setCenter(player->GetPosition());
 	debugTimer += dt;
 	worldView.setCenter(player->GetPosition());
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());

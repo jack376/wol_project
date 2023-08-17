@@ -16,6 +16,10 @@ struct SpellInfo
 	float explosionRange;
 	float damageDelay;
 
+	float frquency;
+	float amplitude;
+
+
 	float rotateSpeed;
 
 	// 관통여부
@@ -23,17 +27,7 @@ struct SpellInfo
 	bool isPenetrating = false;
 	bool canMoveDuringSkill = false;
 
-
-	// 곡선 표현
-
-
-	sf::Vector2f dir;
-
-
-	// 왕복하는 스킬
-	sf::Vector2f startPos;
-	sf::Vector2f destPos;
-
+	float petrolDistance;
 };
 
 class ElementalSpell;
@@ -52,8 +46,11 @@ protected:
 
 	SpriteGo* skillIcon;
 
+	// 최대 발사개수
 	int shotCount;
 	float coolTime;
+
+	float spreadAngle;
 
 	SpellInfo skillInfo;
 	
@@ -72,5 +69,6 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	void SetSpellInfo();
+	void InsertAnimId();
 };
 
