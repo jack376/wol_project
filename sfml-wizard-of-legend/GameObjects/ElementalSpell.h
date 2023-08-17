@@ -25,6 +25,11 @@ protected:
 	
 	BoxCollider2D* Collider;
 	SpriteGo* collider;
+	SkillTypes currentSkillType = SkillTypes::None;
+	SkillEvents currentEvent = SkillEvents::None;
+
+	sf::Keyboard::Key currentKey = sf::Keyboard::Unknown;
+	sf::Mouse::Button currentButton = sf::Mouse::None;
 
 	std::queue <float> comboQueue;
 
@@ -37,9 +42,6 @@ protected:
 	// 위치 벡터 sf::Vector2f
 	sf::Vector2f spawnPos;
 
-
-
-	float speed;
 
 
 	// 상태 변수
@@ -65,11 +67,28 @@ protected:
 	float comboTimer = 0.f;
 	float comboDuration = 0.6f;
 
+	float speed = 100.f;
+
+
 	// 콤보 횟수
 	int attackCount = 0;
 
 	// 애니메이션 각도
 	float angle = 0.f;
+
+	// 대각선 sin곡선
+	float amplitude = 30.f;
+	float frequency = 2.0f;
+
+	// 임시
+	const float speed = 1.0f;      // 총알 속도
+	const float frequency = 0.1f;  // 주기
+	const float amplitude = 100.0f; // 진폭
+
+	//sf::Vector2f axis(400.0f, 300.0f); // 축 위치
+	float angle = 45.0f; // 축 각도 (도)
+	
+	float time = 0.0f; // dt가 누적되는 시간
 
 	Tile* currentTile = nullptr;
 	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
@@ -85,16 +104,21 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
+	void MeleeUpdate(float dt);
+	void RangeUpdate(float dt);
 
 	//void SetSpell(SpellInfo skillInfo);
 
 	void SetScene(SceneGame* scene) { this->scene = scene; }
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetMonster(Monster* monster) { this->monster = monster; }
+	void SetSkillType(SkillTypes type) { currentSkillType = type; }
 
 	sf::RectangleShape& GetCollider() const { return collider->rect; }
 
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
+
+	sf::Vector2f  CalAxisSin(float time, float speed, float frequency, float amplitude, const sf::Vector2f& axis, float angleInDegrees);
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
 

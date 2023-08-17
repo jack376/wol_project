@@ -120,11 +120,6 @@ void Player::Reset()
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitRight.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Hit/HitUp.csv"));
 
-
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Fall/FallUp.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Fall/FallRight.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Fall/FallDown.csv"));
-
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/HitEffect.csv"));
 
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Die/Die.csv"));
@@ -231,6 +226,13 @@ void Player::Update(float dt)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Left;
+		ChangeState(States::Attack);
+	}
+
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide && !isFalling)
+	{
+		attackCount++;
+		sEvent = SkillEvents::Right;
 		ChangeState(States::Attack);
 	}
 	
@@ -854,14 +856,14 @@ void Player::InsertAnimId()
 	hitId.push_back("HitDown");
 	hitId.push_back("HitRight");
 
-	fallId.push_back("FallUp");
-	fallId.push_back("FallUp");
-	fallId.push_back("FallDown");
-	fallId.push_back("FallDown");
-	fallId.push_back("FallUp");
-	fallId.push_back("FallRight");
-	fallId.push_back("FallDown");
-	fallId.push_back("FallRight");
+	fallId.push_back("HitUp");
+	fallId.push_back("HitUp");
+	fallId.push_back("HitDown");
+	fallId.push_back("HitDown");
+	fallId.push_back("HitUp");
+	fallId.push_back("HitRight");
+	fallId.push_back("HitDown");
+	fallId.push_back("HitRight");
 }
 
 void Player::CalculatorCurrentTile()

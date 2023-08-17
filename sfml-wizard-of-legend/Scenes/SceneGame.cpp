@@ -42,6 +42,13 @@ void SceneGame::Init()
 	tempWindSlash->SetScene(this);
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
+	tempWindSlash->SetSkillType(SkillTypes::Melee);
+
+	tempFireBall = (ElementalSpell*)AddGo(new ElementalSpell());
+	tempFireBall->SetScene(this);
+	tempFireBall->SetPlayer(player);
+	tempFireBall->sortLayer = 21;
+	tempFireBall->SetSkillType(SkillTypes::Range);
 
 
 	Monster* go = CreateMonster(MonsterId::Archer);
@@ -51,9 +58,11 @@ void SceneGame::Init()
 
 	player->SetTiles(&tilesWorld);
 	tempWindSlash->SetTiles(&tilesWorld);
+	tempFireBall->SetTiles(&tilesWorld);
 
 	player->SetMonster(go);
 	tempWindSlash->SetMonster(monster);
+	tempFireBall->SetMonster(monster);
 
 	// TEST Particle
 	CreateParticle(1000);

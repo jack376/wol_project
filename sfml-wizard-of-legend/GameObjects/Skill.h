@@ -10,14 +10,11 @@ struct SpellInfo
 	int damage;
 	int comboDamage;
 	int maxSkillCharge;
-	int shotCount;
 
 	float speed;
 	float range;
 	float explosionRange;
-	float delayDuration;
 	float damageDelay;
-	float coolTime;
 
 	float rotateSpeed;
 
@@ -32,6 +29,8 @@ struct SpellInfo
 
 	sf::Vector2f dir;
 
+
+	// 왕복하는 스킬
 	sf::Vector2f startPos;
 	sf::Vector2f destPos;
 
@@ -52,6 +51,9 @@ protected:
 	sf::Mouse::Button currentButton = sf::Mouse::None;
 
 	SpriteGo* skillIcon;
+
+	int shotCount;
+	float coolTime;
 
 	SpellInfo skillInfo;
 	

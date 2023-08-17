@@ -27,6 +27,8 @@ enum class PlayerActions
 	Jump,
 	Slam,
 	Focus,
+	JumpKick,
+	JumpSlam,
 };
 
 enum class ElementTypes

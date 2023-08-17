@@ -22,6 +22,7 @@ class SceneGame : public Scene
 protected:
 	Player* player;
 	ElementalSpell* tempWindSlash;
+	ElementalSpell* tempFireBall;
 	std::vector<std::vector<Tile*>> tilesWorld;
 
 	int rows = 0;
@@ -36,7 +37,6 @@ protected:
 	float debugDuration = 1.f;
 
 	ObjectPool<Particle> particlePool;
-	ObjectPool<SpriteEffect> hitEffects;
 
 public:
 	SceneGame();

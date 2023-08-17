@@ -2,6 +2,8 @@
 #include "SpriteGo.h"
 #include "AnimationController.h"
 #include "BoxCollider2D.h"
+#include "ObjectPool.h"
+
 enum class Dir
 {
 	UpRight,
@@ -232,6 +234,10 @@ public:
 	// 스킬 생성 지점
 	sf::Vector2f GetAttackPos() { return attackPos; }
 	float GetPlayerLookAngle() { return playerLookAngle; }
+	// 스킬 원거리 방향
+	sf::Vector2f& GetLook() { return look; }
+	// 스킬 이벤트
+	SkillEvents GetSkillEvent() { return sEvent; }
 
 	bool IsAlive() { return isAlive; }
 	bool IsAttack() { return isAttack; }

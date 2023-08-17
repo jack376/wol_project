@@ -44,7 +44,7 @@
     <ClCompile Include="GameObjects\Particle.cpp" />
     <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
     <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
-    <ClCompile Include="SceneSkillEditor.cpp" />
+    <ClCompile Include="Scenes\SceneSkillEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -163,7 +163,7 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClInclude Include="DataTables\TileInfoTable.h" />
-    <ClInclude Include="BoxCollider2D.h" />
+    <ClInclude Include="GameObjects\BoxCollider2D.h" />
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
@@ -176,7 +176,7 @@
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="GameObjects\Raycaster\Line.h" />
     <ClInclude Include="GameObjects\Raycaster\Beam.h" />
-    <ClInclude Include="SceneSkillEditor.h" />
+    <ClInclude Include="Scenes\SceneSkillEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
