@@ -10,7 +10,7 @@ enum class EffectTypes
 	Attack,
 };
 
-class SpriteEffect : public SpriteGo
+class CustomEffect : public SpriteGo
 {
 protected:
 	float duration = 0.f;
@@ -25,8 +25,8 @@ protected:
 public:
 	sf::Vector2f dir = { 0, 0 };
 
-	SpriteEffect(const std::string& textureId = "", const std::string& n = "");
-	virtual ~SpriteEffect() override { };
+	CustomEffect(const std::string& textureId = "", const std::string& n = "");
+	virtual ~CustomEffect() override { };
 
 	void SetDuration(float duration) { this->duration = duration; }
 

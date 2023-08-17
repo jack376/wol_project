@@ -52,7 +52,7 @@ protected:
 	MonsterState currentState = MonsterState::Idle;
 	MonsterStat stat;
 	AnimationController animation;
-	SpriteEffect attackEffect;
+	CustomEffect attackEffect;
 
 	int hp = 0;
 	float attackTimer = 0.f;

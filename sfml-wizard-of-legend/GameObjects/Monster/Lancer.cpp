@@ -19,8 +19,9 @@ void Lancer::Init()
 
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackUp.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_AttackDown.csv"));
+    
     spear.AddClip("animations/Lancer_Spear.csv");
-    SpriteEffect* ptr = &spear;
+    CustomEffect* ptr = &spear;
     spear.PlaySup = [this, ptr]() {
         if (animation.GetCurrentClipId() == "LancerAttack")
         {
@@ -40,6 +41,7 @@ void Lancer::Init()
         }
         spear.SetPosition(spear.sprite.getPosition());
     };
+    
     attackEffect.AddClip("animations/Lancer_AttackEffect.csv");
     ptr = &attackEffect;
     attackEffect.PlaySup = [this, ptr]() {
@@ -56,6 +58,7 @@ void Lancer::Release()
 void Lancer::Reset()
 {
     Monster::Reset();
+
     spear.Reset();
     attackEffect.Reset();
 }
@@ -94,6 +97,10 @@ void Lancer::Draw(sf::RenderWindow& window)
     Monster::Draw(window);
     if (attackEffect.GetActive())
         attackEffect.Draw(window);
+}
+
+void Lancer::HandleAttackState(float dt)
+{
 }
 
 void Lancer::Attack(float dt)
@@ -139,4 +146,12 @@ void Lancer::Attack(float dt)
             isAttacked = true;
         }
     }
+}
+
+void Lancer::Aim(float dt)
+{
+}
+
+void Lancer::Shoot(float dt)
+{
 }

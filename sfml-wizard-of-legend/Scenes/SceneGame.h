@@ -15,7 +15,7 @@ class ElementalSpell;
 class BreakableObj;
 class Particle;
 class Monster;
-class SpriteEffect;
+class CustomEffect;
 enum class MonsterId;
 
 class SceneGame : public Scene
@@ -36,7 +36,7 @@ protected:
 	float debugTimer = 0.f;
 	float debugDuration = 1.f;
 	ObjectPool<Particle> particlePool;
-	ObjectPool<SpriteEffect> hitEffects;
+	ObjectPool<CustomEffect> hitEffects;
 	int count = 0;
 
 public:

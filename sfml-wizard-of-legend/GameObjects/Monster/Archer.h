@@ -40,7 +40,6 @@ public:
 	void HandleAttackState(float dt);
 
 	virtual void Attack(float dt) override;
-
 	void Aim(float dt);
 	void Shoot(float dt);
 };

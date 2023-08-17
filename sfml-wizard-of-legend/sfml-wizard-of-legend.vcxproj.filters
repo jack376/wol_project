@@ -10,7 +10,7 @@
     <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Framework\InputMgr.cpp" />
     <ClCompile Include="GameObjects\GameObject.cpp" />
-    <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
+    <ClCompile Include="GameObjects\Effects\CustomEffect.cpp" />
     <ClCompile Include="GameObjects\UIButton.cpp" />
     <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
     <ClCompile Include="Global\Utils.cpp" />
@@ -56,7 +56,7 @@
     <ClInclude Include="Framework\DataTableMgr.h" />
     <ClInclude Include="Framework\ObjectPool.h" />
     <ClInclude Include="GameObjects\GameObject.h" />
-    <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
+    <ClInclude Include="GameObjects\Effects\CustomEffect.h" />
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
     <ClInclude Include="GameObjects\Monster\Monster.h" />
