@@ -43,6 +43,8 @@ void Monster::Reset()
     SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
     player = scene->GetPlayer();
 
+    SetState(MonsterState::Idle);
+
     animation.SetTarget(&sprite);
     sprite.setScale({ 4.f, 4.f });
     animation.Play(stat.name + "Idle");
@@ -51,8 +53,8 @@ void Monster::Reset()
     SetOrigin(Origins::MC);
     SetFlipX(false);
     SetRectBox();
+   
     sortLayer = 10;
-
     hp = stat.maxHp;
     attackTimer = stat.attackRate;
 
@@ -79,7 +81,6 @@ void Monster::Update(float dt)
     animation.Update(dt);
     attackTimer += dt;
 
-    HandleBehavior(dt);
     HandleState(dt);
     CalculatorCurrentTile();
  
@@ -107,39 +108,58 @@ void Monster::HandleState(float dt)
 {
     switch (currentState) {
     case MonsterState::Idle:
-        //std::cout << "Monster is idle.\n";
+        Idle();
         break;
 
     case MonsterState::Moving:
-        //std::cout << "Monster is moving.\n";
+        Move(dt);
         break;
 
     case MonsterState::Attacking:
         //std::cout << "Monster is attacking.\n";
-        isShooting = attackTimer < stat.attackRate;
+        Attack(dt);
         break;
 
     case MonsterState::Dead:
-        //std::cout << "Monster is dead.\n";
+        Die();
         break;
 
     case MonsterState::KnockBack:
-        //std::cout << "Monster is KnockBack.\n";
+        KnockBack(dt);
         break;
     }
 }
 
 void Monster::Idle()
 {
-    SetState(MonsterState::Idle);
     animation.Play(stat.name + "Idle");
     SetOrigin(origin);
     SetRectBox();
+
+    sf::Vector2f playerPos = player->GetPosition();
+    float distance = Utils::Distance(playerPos, position);
+
+    if (hp <= 0)
+    {
+        SetState(MonsterState::Dead);
+        return;
+    }
+    else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
+    {
+        isAwake = true;
+        if (distance <= stat.attackRange)
+        {
+            if (attackTimer >= stat.attackRate)
+                SetState(MonsterState::Attacking);      
+            return;
+        }  
+        else
+            SetState(MonsterState::Moving);
+    }
 }
 
 void Monster::Attack(float dt)
 {
-    SetState(MonsterState::Attacking);
     if (attackTimer >= stat.attackRate)
     {
         animation.Play(stat.name + "Attack");
@@ -158,12 +178,30 @@ void Monster::Attack(float dt)
         }
     }
 
+    sf::Vector2f playerPos = player->GetPosition();
+    float distance = Utils::Distance(playerPos, position);
 
+    SetLook(playerPos);
+
+    if (hp <= 0)
+    {
+        SetState(MonsterState::Dead);
+        return;
+    }
+    else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
+    {
+        if (distance > stat.attackRange)
+        {
+            SetState(MonsterState::Moving);
+            return;
+        }      
+    }
+    else if (animation.IsAnimEndFrame())
+        SetState(MonsterState::Idle());
 }
 
 void Monster::Move(float dt)
 {
-    SetState(MonsterState::Moving);
     if (animation.GetCurrentClipId() != stat.name + "Run")
     {
         animation.Play(stat.name + "Run");
@@ -171,11 +209,32 @@ void Monster::Move(float dt)
         SetRectBox();
     }
     SetPosition(position + look * stat.speed * dt);
+
+    sf::Vector2f playerPos = player->GetPosition();
+    float distance = Utils::Distance(playerPos, position);
+
+    SetLook(playerPos);
+
+    if (hp <= 0)
+    {
+        SetState(MonsterState::Dead);
+        return;
+    }
+    else if (distance > stat.searchRange && !isAwake)
+    {
+        SetState(MonsterState::Idle);
+        return;
+    }
+    else if (distance <= stat.attackRange)
+    {
+        if (attackTimer >= stat.attackRate)
+            SetState(MonsterState::Attacking);
+        return;
+    }
 }
 
 void Monster::Die()
 {
-    SetState(MonsterState::Dead);
     if (animation.GetCurrentClipId() != stat.name + "Death")
     {
         animation.Play(stat.name + "Death");
@@ -186,12 +245,46 @@ void Monster::Die()
         SetActive(false);
 }
 
-void Monster::KnockBack()
+void Monster::KnockBack(float dt)
 {
-    SetState(MonsterState::KnockBack);
-    animation.Play(stat.name + "Hurt");
-    SetOrigin(origin);
-    SetRectBox();
+    if (animation.GetCurrentClipId() != stat.name + "Hurt")
+    {
+        animation.Play(stat.name + "Hurt");
+        SetOrigin(origin);
+        SetRectBox();
+    }
+
+    //공격 당한 반대 방향으로 이동 (공격의 주체가 플레이어가 아니라 발사체라면 발사체의 위치를 넘겨 받아 수정)
+    SetPosition(position + -look * 500.f * dt);  
+    knockBackTimer += dt;
+    if (knockBackTimer > knockBackTime)
+    {
+        knockBackTimer = 0;
+
+        sf::Vector2f playerPos = player->GetPosition();
+        float distance = Utils::Distance(playerPos, position);
+
+        if (hp <= 0)
+        {
+            SetState(MonsterState::Dead);
+            return;
+        }
+        else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
+        {
+            if (distance <= stat.attackRange)
+            {
+                SetState(MonsterState::Attacking);
+                return;
+            }
+            else
+            {
+                SetState(MonsterState::Moving);
+                return;
+            }
+        }
+        else
+            SetState(MonsterState::Idle);
+    }
 }
 
 void Monster::SetLook(sf::Vector2f playerPos)
@@ -207,48 +300,8 @@ void Monster::OnAttacked(float damage)  //플레이어에서 몬스터를 공격할 때 호출
 {
     if (currentState != MonsterState::Dead)
     {
-        KnockBack();
+        SetState(MonsterState::KnockBack);
         hp -= damage;
-    }
-}
-
-void Monster::HandleBehavior(float dt)
-{
-    if (player == nullptr)
-        return;
-    else
-    {
-        sf::Vector2f playerPos = player->GetPosition();
-        float distance = Utils::Distance(playerPos, position);
-
-        if (hp <= 0)
-        {
-            Die();
-            return;
-        }
-        if (currentState == MonsterState::KnockBack)
-        {
-            SetPosition(position + -look * 500.f * dt);  //공격 당한 반대 방향으로 이동 (공격의 주체가 플레이어가 아니라 발사체라면 발사체의 위치를 넘겨 받아 수정)
-            knockBackTimer += dt;
-            if (knockBackTimer > knockBackTime)
-            {
-                knockBackTimer = 0;
-                Idle();
-            }
-            return;
-        }
-        else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
-        {
-            isAwake = true;
-            if (!isShooting)
-                SetLook(playerPos);
-            if (distance <= stat.attackRange || isShooting)
-                Attack(dt);
-            else if (!isShooting)
-                Move(dt);
-        }
-        else
-           Idle();            
     }
 }
 
@@ -263,7 +316,6 @@ void Monster::CalculatorCurrentTile()
 //객체를 중심으로 임의 범위 내의 타일을 반환
 std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 {
-    //32x16
     int searchRowRange = row;
     int searchColRange = col;
 
