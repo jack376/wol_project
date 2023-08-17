@@ -17,7 +17,6 @@
 #include "rapidcsv.h"
 #include "Tile.h"
 #include "BoxCollider2D.h"
-#include "DestructibleGo.h"
 #include "BreakableObj.h"
 #include "Particle.h"
 
@@ -43,7 +42,6 @@ void SceneGame::Init()
 	tempWindSlash->SetScene(this);
 	tempWindSlash->SetPlayer(player);
 	tempWindSlash->sortLayer = 21;
-
 
 	Monster* go = CreateMonster(MonsterId::Archer);
 	monster = go;
@@ -279,12 +277,12 @@ void SceneGame::CreateParticle(int count)
 void SceneGame::SpawnBreakableObj(const std::string& id, int count)
 {
 	std::vector<sf::Vector2f> objectSpawnArea;
-
+	
 	for (size_t row = 0; row < tilesWorld.size(); row++)
 	{
 		for (size_t col = 0; col < tilesWorld[row].size(); col++)
 		{
-			if (tilesWorld[row][col]->GetType() == Tile::TileType::EventTrigger)
+			if (tilesWorld[row][col]->GetType() == TileType::EventTrigger)
 			{
 				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
 			}

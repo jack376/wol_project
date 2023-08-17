@@ -180,11 +180,11 @@ void SceneEditor::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::L)) { ResizeWorld(256, 256); std::cout << "Resize World Tile : 256 * 256 (65,536)" << std::endl; }
 
 	// SetTileType
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(Tile::TileType::None); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(Tile::TileType::Ground); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(Tile::TileType::Cliff); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(Tile::TileType::Wall); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(Tile::TileType::EventTrigger); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(TileType::None); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(TileType::Ground); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(TileType::Cliff); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(TileType::Wall); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(TileType::EventTrigger); }
 
 	// Deselect
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }
