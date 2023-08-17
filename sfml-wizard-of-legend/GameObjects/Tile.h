@@ -46,7 +46,9 @@ public:
     Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::None);
     virtual ~Tile();
 
-    virtual void Init();
+    virtual void Init() {}
+    virtual void Release() {}
+
     virtual void Reset();
     virtual void Update(float dt);
     virtual void Draw(sf::RenderWindow& window);

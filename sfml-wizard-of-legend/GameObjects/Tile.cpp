@@ -15,10 +15,6 @@ Tile::~Tile()
     Release();
 }
 
-void Tile::Init()
-{
-}
-
 void Tile::Reset()
 {
     shape.setFillColor(sf::Color::Transparent);

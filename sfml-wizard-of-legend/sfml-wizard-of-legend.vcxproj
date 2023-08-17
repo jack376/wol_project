@@ -189,6 +189,7 @@
     <ClCompile Include="GameObjects\Monster\Monster.cpp" />
     <ClCompile Include="DataTables\MonsterTable.cpp" />
     <ClCompile Include="GameObjects\Particle.cpp" />
+    <ClCompile Include="RoomBSP.cpp" />
     <ClCompile Include="Scenes\SceneEditor.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="GameObjects\Tile.h" />
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Particle.h" />
+    <ClInclude Include="RoomBSP.h" />
     <ClInclude Include="Scenes\SceneEditor.h" />
     <ClInclude Include="Framework\SkillMgr.h" />
     <ClInclude Include="GameObjects\Skill.h" />
