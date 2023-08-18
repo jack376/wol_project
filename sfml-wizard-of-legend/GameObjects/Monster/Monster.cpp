@@ -299,13 +299,15 @@ void Monster::KnockBack(float dt)
     }
 }
 
-void Monster::SetLook(sf::Vector2f playerPos)
+const sf::Vector2f Monster::SetLook(sf::Vector2f playerPos)
 {
     look = direction = Utils::Normalize(playerPos - position);
     if (look.x < 0)
         SetFlipX(true);
     else
         SetFlipX(false);
+
+    return look;
 }
 
 void Monster::OnAttacked(float damage)  //플레이어에서 몬스터를 공격할 때 호출
@@ -322,7 +324,7 @@ void Monster::CalculatorCurrentTile()
     int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
     int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
 
-    currentTile = (*wouldTiles)[rowIndex][columnIndex];
+    currentTile = (*worldTiles)[rowIndex][columnIndex];
 }
 
 //객체를 중심으로 임의 범위 내의 타일을 반환
@@ -336,14 +338,14 @@ std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 
     int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x;
     int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y;
-    int bottomRowIndex = index.x + searchRowRange >= wouldTiles->size() ? wouldTiles->size() - 1 : index.x + searchRowRange;
-    int rightColumnIndex = index.y + searchColRange >= wouldTiles[0].size() ? wouldTiles[0].size() - 1 : index.y + searchColRange;
+    int bottomRowIndex = index.x + searchRowRange >= worldTiles->size() ? worldTiles->size() - 1 : index.x + searchRowRange;
+    int rightColumnIndex = index.y + searchColRange >= worldTiles[0].size() ? worldTiles[0].size() - 1 : index.y + searchColRange;
 
     for (int i = topRowIndex; i < bottomRowIndex; i++)
     {
         for (int j = leftColumnIndex; j < rightColumnIndex; j++)
         {
-            tiles.push_back((*this->wouldTiles)[i][j]);
+            tiles.push_back((*this->worldTiles)[i][j]);
         }
     }
     return tiles;

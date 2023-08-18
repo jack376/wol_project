@@ -10,7 +10,7 @@ class Lancer :
 {
 protected:
 	sf::Sprite spear;
-	sf::Vector2f attackDir;
+	
 	AnimationController spearAni;
 	AttackState currentAttackState;
 	Beam raycaster;

@@ -75,9 +75,10 @@ protected:
 
 	sf::Vector2f look; //바라보는 방향
 	sf::Vector2f direction; //이동하는 방향
+	sf::Vector2f attackDir;
 	sf::Vector2f prevPos; 
 
-	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
+	std::vector<std::vector<Tile*>>* worldTiles = nullptr;
 
 	sf::CircleShape searchRange;
 	sf::CircleShape attackRange;
@@ -101,10 +102,10 @@ public:
 	void Die();
 	virtual void KnockBack(float dt);
 	
-	void SetLook(sf::Vector2f playerPos);
+	const sf::Vector2f SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetRectBox();
-	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
+	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }
 
 	void OnAttacked(float damage);
 

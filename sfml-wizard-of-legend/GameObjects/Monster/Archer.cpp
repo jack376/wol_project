@@ -127,9 +127,6 @@ void Archer::Attack(float dt)
 	
 	HandleAttackState(dt);
 
-	sf::Vector2f playerPos = player->GetPosition();
-	float distance = Utils::Distance(playerPos, position);
-
 	if (hp <= 0)
 	{
 		SetState(MonsterState::Dead);

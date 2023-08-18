@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+MageAttackAim,1,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Mage2.png,111,150,21,39

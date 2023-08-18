@@ -1,10 +1,11 @@
 #pragma once
 #include "SpriteGo.h"
 #include "BoxCollider2D.h"
+#include "Beam.h"
 
 class Player;
 
-class Bullet :
+class Projectile :
     public SpriteGo
 {
 protected:
@@ -15,10 +16,11 @@ protected:
 
 	Player* player = nullptr;
 	BoxCollider2D collider;
+	Beam raycaster;	//충돌한 순간 Bullet에서 쏜 레이에 맞은 충돌체의 위치에 이팩트 발생 
 
 public:
-	Bullet(const std::string& textureId = "", const std::string& n = "");
-	virtual ~Bullet() override;
+	Projectile(const std::string& textureId = "", const std::string& n = "");
+	virtual ~Projectile() override;
 
 	virtual void Init() override; 
 	virtual void Release() override;

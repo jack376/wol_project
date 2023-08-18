@@ -24,9 +24,6 @@ protected:
 	Player* player;
 	ElementalSpell* tempWindSlash;
 	std::vector<std::vector<Tile*>> tilesWorld;
-	
-	std::list<Monster*> monsters;
-
 
 	int rows = 0;
 	int cols = 0;
