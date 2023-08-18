@@ -44,7 +44,7 @@ void SceneGame::Init()
 	tempWindSlash->sortLayer = 21;
 
 
-	Monster* go = CreateMonster(MonsterId::Lancer);
+	Monster* go = CreateMonster(MonsterId::Ghoul);
 	monster = go;
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);

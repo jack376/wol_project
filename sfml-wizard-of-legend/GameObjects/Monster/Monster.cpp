@@ -211,13 +211,18 @@ void Monster::Move(float dt)
         SetOrigin(origin);
         SetRectBox();
     }
+    
+    //º®Ãæµ¹
+    sf::Vector2f prev = position;
     SetPosition(position + look * stat.speed * dt);
+    CalculatorCurrentTile();
+    if (currentTile->GetType() == TileType::Wall)
+        SetPosition(prev);
 
     sf::Vector2f playerPos = player->GetPosition();
-    float distance = Utils::Distance(playerPos, position);
-
     SetLook(playerPos);
 
+    float distance = Utils::Distance(playerPos, position);
     if (hp <= 0 || !player->IsAlive())
     {
         SetState(MonsterState::Dead);
