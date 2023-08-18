@@ -66,6 +66,7 @@ void Lancer::Reset()
     spearAni.SetTarget(&spear);
     spear.setScale({ 4.f, 4.f });
     Utils::SetOrigin(spear, Origins::BC);
+
 }
 
 void Lancer::Update(float dt)
@@ -73,10 +74,10 @@ void Lancer::Update(float dt)
     Monster::Update(dt);     
     attackEffect.Update(dt);
     attackEffect.PlaySup();
-
+ 
     collider.SetSprite(spear);
     collider.SetColSize();
-    //collider.SetPosition(spear.getPosition());
+    collider.ObbSet();
 }
 
 void Lancer::Draw(sf::RenderWindow& window)
@@ -87,9 +88,8 @@ void Lancer::Draw(sf::RenderWindow& window)
     Monster::Draw(window);
     if (attackEffect.GetActive())
         attackEffect.Draw(window);
-
-    collider.Draw(window);
-        
+    if (currentAttackState == AttackState::Shoot)
+        collider.Draw(window);   
 }
 
 void Lancer::HandleAttackState(float dt)
@@ -111,7 +111,6 @@ void Lancer::HandleAttackState(float dt)
 void Lancer::Attack(float dt)
 {
     spearAni.Update(dt);
-
 
     if (attackTimer >= stat.attackRate)
     {
@@ -173,7 +172,6 @@ void Lancer::Aim(float dt)
         currentAttackState = AttackState::Shoot;
         aimTimer = 0;
         collider.SetActive(true);
-        collider.SetOrigin(Origins::BC);
     }
 
 }
@@ -214,13 +212,12 @@ void Lancer::Shoot(float dt)
         }
         SetFlipX(false);
     }
-    collider.SetPosition(spear.getPosition());
-    collider.GetObbCol().setRotation(Utils::Angle(attackDir) + 90);
 
     if (spearAni.GetCurrentClipId() != "LancerSpearAttack")
     {
         spearAni.Play("LancerSpearAttack");
         Utils::SetOrigin(spear, Origins::BC);
+
         attackEffect.SetActive(true);
         attackEffect.Play("LancerAttackEffect", spear.getPosition() + attackDir
             * 30.f, attackDir);

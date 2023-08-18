@@ -25,9 +25,15 @@ public:
 	virtual void SetOrigin(float x, float y) override;
 
 	sf::RectangleShape& GetObbCol() { return obbCol; }
+	
 
 	void SetSprite(sf::Sprite& sprite) { this->sprite1 = sprite; }
 	void SetColSize();
 	bool ObbCol(const sf::RectangleShape& other);
+
+	void SetObbRotation() { obbCol.setRotation(sprite1.getRotation()); }
+	void SetObbOrigins() { obbCol.setOrigin(sprite1.getOrigin()); }
+	void SetObbPosition() { obbCol.setPosition(sprite1.getPosition()); }
+	void ObbSet();
 };
 

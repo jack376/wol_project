@@ -71,8 +71,11 @@ void BoxCollider2D::SetOrigin(float x, float y)
 
 void BoxCollider2D::SetColSize()
 {
-	sf::Vector2f size = { sprite1.getGlobalBounds().width, sprite1.getGlobalBounds().height };
+	//sf::Vector2f size = { sprite1.getGlobalBounds().width, sprite1.getGlobalBounds().height };
+	sf::Vector2f size = { sprite1.getLocalBounds().width, sprite1.getLocalBounds().height };
+
 	obbCol.setSize(size);
+	obbCol.setScale(sprite1.getScale());
 	//std::cout << "X : " << size.x << std::endl;
 	//std::cout << "Y : " << size.y << std::endl;}
 }
@@ -94,4 +97,11 @@ bool BoxCollider2D::ObbCol(const sf::RectangleShape& other)
 		}
 	}
 	return true;
+}
+
+void BoxCollider2D::ObbSet()
+{
+	SetObbRotation();
+	SetObbOrigins();
+	SetObbPosition();
 }
