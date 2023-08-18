@@ -14,9 +14,14 @@ protected:
 	sf::Clock clock;
 	sf::Time gamePlayTime = sf::Time::Zero;
 
-	int screenWidth = 1920;
+	int screenWidth = 1600;
 	int screenHeight = 900;
 	std::string title = "SFML_Wizard_Of_Legend";
+
+	bool circleExists = true;
+	float circleRadius = 200.0f;
+	int circleSegments = 100;
+	char buffer[32] = "";
 
 public:
 	virtual void Init(int width, int height, const std::string& title);

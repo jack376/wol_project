@@ -12,7 +12,6 @@
 #include "Tile.h"
 #include "Particle.h"
 #include "rapidcsv.h"
-#include "RoomBSP.h"
 
 SceneEditor::SceneEditor() : Scene(SceneId::Editor)
 {
@@ -87,11 +86,7 @@ void SceneEditor::Init()
 	CreateButton("X", "ZOOM-", posX + gap * 1, posY + size * 3, size, index, [this]()  { std::cout << "Button x" << std::endl; } );
 	CreateButton("C", "SIZE+", posX + gap * 2, posY + size * 3, size, index, [this]()  { std::cout << "Button c" << std::endl; } );
 	CreateButton("V", "SIZE-", posX + gap * 3, posY + size * 3, size, index, [this]()  { std::cout << "Button v" << std::endl; } );
-
-	RoomBSP* bsp = (RoomBSP*)AddGo(new RoomBSP("Bsp"));
-	bsp->DivideRoom(8, 0, 0, 64, 64);
-	bsp->sortLayer = 20;
-
+	
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -134,6 +129,7 @@ void SceneEditor::Update(float dt)
 
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
+
 
 	// Camera
 	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);

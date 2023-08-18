@@ -13,6 +13,11 @@ Framework::Framework(int w, int h, const std::string& t)
 void Framework::Init(int width, int height, const std::string& title)
 {
 	window.create(sf::VideoMode(width, height), title);
+    
+    ImGui::SFML::Init(window);
+    sf::CircleShape shape(circleRadius, circleSegments);
+    shape.setOrigin(circleRadius, circleRadius);
+    shape.setPosition(200, 200);
 
     DATATABLE_MGR.LoadAll();
     // Resource
@@ -59,6 +64,7 @@ void Framework::Run()
         sf::Event event;
         while (window.pollEvent(event))
         {
+            ImGui::SFML::ProcessEvent(event);
             switch (event.type)
             {
             case sf::Event::Closed:
@@ -75,13 +81,26 @@ void Framework::Run()
         {
             UpdateEvent(dt);
 
+            ImGui::SFML::Update(window, deltaTime);
+
+            // ImGui Run Test Code
+            ImGui::Begin("Window title");
+            ImGui::Text("Window text!");
+            ImGui::Checkbox("Circle", &circleExists);
+            ImGui::SliderFloat("Radius", &circleRadius, 100.0f, 300.0f);
+            ImGui::SliderInt("Sides", &circleSegments, 3, 150);
+            ImGui::InputText("TextBox", buffer, IM_ARRAYSIZE(buffer));
+            ImGui::End();
+
             window.clear();
             Draw();
-            window.display();
+            ImGui::SFML::Render(window);
+            window.display(); 
         }
     }
 
     Release();
+    ImGui::SFML::Shutdown();
 }
 
 sf::Vector2f Framework::GetWindowSize()

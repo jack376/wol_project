@@ -3,7 +3,7 @@
 #include "Tile.h"
 #include "TileCommand.h"
 #include "CommandInvoker.h"
-#include "RoomBSP.h"
+
 
 class TextGo;
 class SpriteGo;
@@ -11,7 +11,6 @@ class BreakableObj;
 class Particle;
 class BaseUI;
 class Tile;
-class RoomBSP;
 
 class SceneEditor : public Scene
 {

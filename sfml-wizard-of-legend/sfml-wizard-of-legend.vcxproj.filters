@@ -45,7 +45,11 @@
     <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
     <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
     <ClCompile Include="SceneSkillEditor.cpp" />
-    <ClCompile Include="RoomBSP.cpp" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui\imgui-SFML.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -179,7 +183,15 @@
     <ClInclude Include="GameObjects\Raycaster\Line.h" />
     <ClInclude Include="GameObjects\Raycaster\Beam.h" />
     <ClInclude Include="SceneSkillEditor.h" />
-    <ClInclude Include="RoomBSP.h" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imconfig-SFML.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\imgui-SFML.h" />
+    <ClInclude Include="imgui\imgui-SFML_export.h" />
+    <ClInclude Include="imgui\imstb_rectpack.h" />
+    <ClInclude Include="imgui\imstb_textedit.h" />
+    <ClInclude Include="imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
