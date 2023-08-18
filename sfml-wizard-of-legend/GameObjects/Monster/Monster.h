@@ -75,6 +75,7 @@ protected:
 
 	sf::Vector2f look; //바라보는 방향
 	sf::Vector2f direction; //이동하는 방향
+	sf::Vector2f prevPos; 
 
 	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
 

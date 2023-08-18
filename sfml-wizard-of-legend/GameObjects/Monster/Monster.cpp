@@ -85,8 +85,7 @@ void Monster::Update(float dt)
     attackTimer += dt;
 
     HandleState(dt);
-    CalculatorCurrentTile();
- 
+
     //Debug Mode
     searchRange.setPosition(position);
     attackRange.setPosition(position);
@@ -212,12 +211,12 @@ void Monster::Move(float dt)
         SetRectBox();
     }
     
-    //벽충돌
-    sf::Vector2f prev = position;
+    prevPos = position;
     SetPosition(position + look * stat.speed * dt);
     CalculatorCurrentTile();
-    if (currentTile->GetType() == TileType::Wall)
-        SetPosition(prev);
+    if (currentTile->GetType() == TileType::Wall
+        || currentTile->GetType() == TileType::Cliff)
+        SetPosition(prevPos);
 
     sf::Vector2f playerPos = player->GetPosition();
     SetLook(playerPos);
@@ -263,7 +262,12 @@ void Monster::KnockBack(float dt)
     }
 
     //공격 당한 반대 방향으로 이동 (공격의 주체가 플레이어가 아니라 발사체라면 발사체의 위치를 넘겨 받아 수정)
-    SetPosition(position + -look * 500.f * dt);  
+    prevPos = position;
+    SetPosition(position + -look * 500.f * dt);
+    CalculatorCurrentTile();
+    if (currentTile->GetType() == TileType::Wall)
+        SetPosition(prevPos);
+    
     knockBackTimer += dt;
     if (knockBackTimer > knockBackTime)
     {
@@ -272,7 +276,7 @@ void Monster::KnockBack(float dt)
         sf::Vector2f playerPos = player->GetPosition();
         float distance = Utils::Distance(playerPos, position);
 
-        if (hp <= 0)
+        if (hp <= 0 || currentTile->GetType() == TileType::Cliff)
         {
             SetState(MonsterState::Dead);
             return;
@@ -344,6 +348,7 @@ std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
     }
     return tiles;
 }
+
 
 void Monster::SetRectBox()
 {

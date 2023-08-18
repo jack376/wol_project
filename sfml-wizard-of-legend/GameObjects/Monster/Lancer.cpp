@@ -178,7 +178,6 @@ void Lancer::Aim(float dt)
 
 void Lancer::Shoot(float dt)
 {
-
     if (abs(attackDir.x) >= abs(attackDir.y))
     {
         if (animation.GetCurrentClipId() != "LancerAttackShoot")
