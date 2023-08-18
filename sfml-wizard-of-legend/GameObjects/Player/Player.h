@@ -3,6 +3,7 @@
 #include "AnimationController.h"
 #include "BoxCollider2D.h"
 #include "ObjectPool.h"
+#include "ElementalSpell.h"
 
 enum class Dir
 {
@@ -64,8 +65,11 @@ private:
 	HitDir hitDir = HitDir::None;
 	SkillEvents sEvent = SkillEvents::None;
 
+	ObjectPool<ElementalSpell> spellPool;
+
 	SceneGame* scene;
 	Monster* monster;
+	std::list<Monster*> monsters;
 	SpriteGo* dirIcon;
 	SpriteGo* portal;
 
@@ -220,6 +224,7 @@ public:
 
 	void SetScene(SceneGame* scene) { this->scene = scene; }
 	void SetMonster(Monster* monster) { this->monster = monster; }	// 하드 코딩용
+	void SetMonsterList(std::list<Monster*>& monsters) { this->monsters = monsters; }
 	void SetAttackPos();
 	void SetDirIconPos();
 	void SetDirIconDir();

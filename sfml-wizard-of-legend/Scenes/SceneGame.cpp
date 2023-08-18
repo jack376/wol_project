@@ -19,6 +19,8 @@
 #include "BoxCollider2D.h"
 #include "DestructibleGo.h"
 #include "Particle.h"
+#include "Skill.h"
+#include "SkillMgr.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -38,32 +40,77 @@ void SceneGame::Init()
 
 	LoadFromCSV("tables/TileInfoTable.csv");
 
-	tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
-	tempWindSlash->SetScene(this);
-	tempWindSlash->SetPlayer(player);
-	tempWindSlash->sortLayer = 21;
-	tempWindSlash->SetSkillType(SkillTypes::Melee);
+	//tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
+	//tempWindSlash->SetScene(this);
+	//tempWindSlash->SetPlayer(player);
+	//tempWindSlash->sortLayer = 21;
+	//tempWindSlash->SetSkillType(SkillTypes::Melee);
 
-	tempFireBall = (ElementalSpell*)AddGo(new ElementalSpell());
-	tempFireBall->SetScene(this);
-	tempFireBall->SetPlayer(player);
-	tempFireBall->sortLayer = 21;
-	tempFireBall->SetSkillType(SkillTypes::Range);
-	tempFireBall->SetRangeType(RangeTypes::Straight);
+	//tempFireBall = (ElementalSpell*)AddGo(new ElementalSpell());
+	//tempFireBall->SetScene(this);
+	//tempFireBall->SetPlayer(player);
+	//tempFireBall->sortLayer = 21;
+	//tempFireBall->SetSkillType(SkillTypes::Range);
+	//tempFireBall->SetRangeType(RangeTypes::Curve);
+
+	Skill* fireBall = (Skill*)AddGo(new Skill());
+	fireBall->SetSkillEvent(SkillEvents::Left);
+
+	fireBall->SetElementType(ElementTypes::Fire);
+	fireBall->SetSkillType(SkillTypes::Range);
+	fireBall->SetRangeType(RangeTypes::Straight);
+
+	Skill* fireBall2 = (Skill*)AddGo(new Skill());
+	fireBall2->SetSkillEvent(SkillEvents::Space);  
+	fireBall2->SetElementType(ElementTypes::Fire);
+	fireBall2->SetSkillType(SkillTypes::Range);
+	fireBall2->SetRangeType(RangeTypes::Straight);
+
+	Skill* fireBall3 = (Skill*)AddGo(new Skill());
+	fireBall3->SetSkillEvent(SkillEvents::Q);  
+	fireBall3->SetElementType(ElementTypes::Fire);
+	fireBall3->SetSkillType(SkillTypes::Range);
+	fireBall3->SetRangeType(RangeTypes::Straight);
+
+	Skill* windSlash = (Skill*)AddGo(new Skill());
+	windSlash->SetSkillEvent(SkillEvents::Q);
+	windSlash->SetElementType(ElementTypes::Fire);
+	windSlash->SetSkillType(SkillTypes::Range);
+	windSlash->SetRangeType(RangeTypes::Straight);
+
+	SKILL_MGR.InputSkill(windSlash);
+	SKILL_MGR.InputSkill(fireBall);
+	SKILL_MGR.InputSkill(fireBall2);
+	SKILL_MGR.InputSkill(fireBall3);
+
+	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
 
 
-	Monster* go = CreateMonster(MonsterId::Archer);
-	monster = go;
-	monster->SetPlayer(player);
-	monster->SetTiles(&tilesWorld);
+	Monster* go1 = CreateMonster(MonsterId::Archer);
+	go1->SetPlayer(player);
+	go1->SetTiles(&tilesWorld);
+	monsters.push_back(go1);
+
+	Monster* go2 = CreateMonster(MonsterId::Ghoul);
+	go2->SetPlayer(player);
+	go2->SetTiles(&tilesWorld);
+	monsters.push_back(go2);
+
+	Monster* go3 = CreateMonster(MonsterId::GhoulLarge);
+	go3->SetPlayer(player);
+	go3->SetTiles(&tilesWorld);
+	monsters.push_back(go3);
+
+
 
 	player->SetTiles(&tilesWorld);
-	tempWindSlash->SetTiles(&tilesWorld);
-	tempFireBall->SetTiles(&tilesWorld);
+	player->SetMonsterList(monsters);
 
-	player->SetMonster(go);
-	tempWindSlash->SetMonster(monster);
-	tempFireBall->SetMonster(monster);
+	//tempWindSlash->SetTiles(&tilesWorld);
+	//tempFireBall->SetTiles(&tilesWorld);
+
+	//tempWindSlash->SetMonsterList(monsters);
+	//tempFireBall->SetMonsterList(monsters);
 
 	// TEST Particle
 	CreateParticle(1000);

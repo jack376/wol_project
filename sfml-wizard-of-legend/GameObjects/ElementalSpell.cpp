@@ -6,8 +6,8 @@
 #include "ResourceMgr.h"
 #include "InputMgr.h"
 #include "Framework.h"
-#include "BoxCollider2D.h"
 #include "Tile.h"
+#include "SceneMgr.h"
 
 ElementalSpell::ElementalSpell(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -20,7 +20,7 @@ ElementalSpell::~ElementalSpell()
 
 void ElementalSpell::Init()
 {
-	Collider = (BoxCollider2D*)scene->AddGo(new BoxCollider2D());
+	Collider.Init();
 }
 
 void ElementalSpell::Release()
@@ -46,27 +46,33 @@ void ElementalSpell::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
-	Collider->SetSprite(sprite);
-	Collider->SetColSize();
+	Collider.SetSprite(sprite);
+	Collider.SetColSize();
+
 
 	raycaster.move(position.x, position.y);
-	raycaster.checkCollision(monster);
+	for (auto monster : monsters)
+	{
+		if(monster->GetActive())
+			raycaster.checkCollision(monster);
+	}
 
 	// 이걸 플레이어에서 받는게 아니라 스킬에서 받는다.
-	currentEvent = player->GetSkillEvent();
-	switch(currentEvent)
-	{
-	case SkillEvents::Left:
-		currentSkillType = SkillTypes::Melee;
-		break;
-	case SkillEvents::Right:
-		currentSkillType = SkillTypes::Range;
-		break;
-	case SkillEvents::Q:
-		break;
-	case SkillEvents::Space:
-		break;
-	}
+	//currentEvent = player->GetSkillEvent();
+	//switch(currentEvent)
+	//{
+	//case SkillEvents::Left:
+	//	currentSkillType = SkillTypes::Melee;
+
+	//	break;
+	//case SkillEvents::Right:
+	//	currentSkillType = SkillTypes::Range;
+	//	break;
+	//case SkillEvents::Q:
+	//	break;
+	//case SkillEvents::Space:
+	//	break;
+	//}
 
 
 	switch (currentSkillType)
@@ -86,13 +92,15 @@ void ElementalSpell::Update(float dt)
 
 	anim.Update(dt);
 	SetOrigin(Origins::MC);
-	Collider->SetOrigin(Origins::MC);
+	Collider.SetOrigin(Origins::MC);
 	//CalculatorCurrentTile();
 }
 
 void ElementalSpell::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
+	if(Collider.GetActive())
+		Collider.Draw(window);
 	raycaster.draw(window);
 }
 
@@ -102,15 +110,15 @@ void ElementalSpell::MeleeUpdate(float dt)
 	// player->IsAttack() 가 진짜 공격 타이밍 
 
 	// 공격 스윙
-	if (player->IsAttack() && !isSpawn)
+	if (!isSpawn)
 	{
 		isSpawn = true;
-		Collider->SetActive(true);
-		Collider->SetPosition(player->GetAttackPos());
+		Collider.SetActive(true);
+		Collider.SetPosition(player->GetAttackPos());
 		SetPosition(player->GetAttackPos());
 		sprite.setRotation(angle);
 		raycaster.Rotation(player->GetPlayerLookAngle());
-		Collider->GetObbCol().setRotation(angle);
+		Collider.GetObbCol().setRotation(angle);
 		comboQueue.push(FRAMEWORK.GetGamePlayTime());
 	}
 
@@ -151,16 +159,24 @@ void ElementalSpell::MeleeUpdate(float dt)
 
 
 	// 이걸로 실행
-	isCol = Collider->ObbCol(monster->rect);
-
-	// 공격이 닿은 타이밍
-	if (player->IsAttack() && isCol && !isAttack)	// 한번이 아닌 실시간으로 실행됨
+	for (auto monster : monsters)
 	{
-		// 레이캐스트의 닿은 포지션 구해주기
-		raycaster.GetEndPos();
-		player->GetMonster()->OnAttacked(1);
-		isAttack = true;
+		isCol = Collider.ObbCol(monster->rect) && monster->GetActive();
+
+		auto it = std::find(colMonsters.begin(), colMonsters.end(), monster);
+
+		// 공격이 닿은 타이밍
+		if (isCol && it == colMonsters.end())	// 한번이 아닌 실시간으로 실행됨
+		{
+			// 레이캐스트의 닿은 포지션 구해주기
+			attackTimer = 0.f;
+			raycaster.GetEndPos();
+			monster->OnAttacked(1);
+			colMonsters.push_back(monster);
+		}
 	}
+
+
 
 	// 중복 공격 방지용
 	if (isSpawn)
@@ -171,9 +187,21 @@ void ElementalSpell::MeleeUpdate(float dt)
 	if (attackTimer > attackDuration)
 	{
 		attackTimer = 0.f;
-		isAttack = false;
-		isSpawn = false;
-		Collider->SetActive(false);
+
+		//isSpawn = false;
+		Collider.SetActive(false);
+	}
+
+	// 사정거리 밖이면 isSpawn false로
+
+
+
+	// isSpawn 이 false가 되면 사라진다
+	if (!isSpawn)
+	{
+		colMonsters.clear();
+		scene->RemoveGo(this);
+		pool.Return(this);
 	}
 }
 
@@ -181,14 +209,14 @@ void ElementalSpell::RangeUpdate(float dt)
 {
 
 	// 공격 스윙
-	if (player->IsAttack() && !isSpawn)
+	if (!isSpawn)
 	{
 		isSpawn = true;
-		Collider->SetActive(true);
+		Collider.SetActive(true);
 		SetPosition(player->GetAttackPos());
 		sprite.setRotation(angle);
 		raycaster.Rotation(player->GetPlayerLookAngle());
-		Collider->GetObbCol().setRotation(angle);
+		Collider.GetObbCol().setRotation(angle);
 		anim.Play("FireBall");
 		dir = player->GetLook();
 		curveAngle = angle;
@@ -197,20 +225,25 @@ void ElementalSpell::RangeUpdate(float dt)
 
 
 	// 이걸로 실행
-	isCol = Collider->ObbCol(monster->rect);
-
-	// 공격이 닿은 타이밍
-	if (isCol && !isAttack)	// 한번이 아닌 실시간으로 실행됨
+	for (auto monster : monsters)
 	{
-		// 레이캐스트의 닿은 포지션 구해주기
-		raycaster.GetEndPos();
-		player->GetMonster()->OnAttacked(1);
-		isAttack = true;
+		isCol = Collider.ObbCol(monster->rect);
+		auto it = std::find(colMonsters.begin(), colMonsters.end(), monster);
 
+		// 공격이 닿은 타이밍
+		if (isCol && it == colMonsters.end())	// 한번이 아닌 실시간으로 실행됨
+		{
+			// 레이캐스트의 닿은 포지션 구해주기
+			raycaster.GetEndPos();
+			monster->OnAttacked(1);
+			monster->SetIsHit(true);
+			colMonsters.push_back(monster);
+		}
 	}
 
+
 	// 중복 공격 방지용
-	if (isAttack)
+	if (isSpawn)
 	{
 		attackTimer += dt;
 	}
@@ -218,11 +251,20 @@ void ElementalSpell::RangeUpdate(float dt)
 	if (attackTimer > attackDuration)
 	{
 		attackTimer = 0.f;
-		isAttack = false;
-		isSpawn = false;
-		Collider->SetActive(false);
+		//isSpawn = false;
+		Collider.SetActive(false);
 	}
-	
+	// 사정거리 밖이면 isSpawn false로
+
+
+
+// isSpawn 이 false가 되면 사라진다
+	if (!isSpawn)
+	{
+		pool.Return(this);
+		colMonsters.clear();
+		scene->RemoveGo(this);
+	}
 	
 	// 곡선 직선 표현
 	switch (currentRangeType)
@@ -244,7 +286,7 @@ void ElementalSpell::CurveUpdate(float dt)
 	time += dt;
 	sf::Vector2f movePos = GetPosition() + CalAxisSin(time, curveSpeed, frequency, amplitude, dir, curveAngle);
 	SetPosition(movePos);
-	Collider->SetPosition(GetPosition());
+	Collider.SetPosition(GetPosition());
 }
 
 void ElementalSpell::StraightUpdate(float dt)
@@ -252,7 +294,12 @@ void ElementalSpell::StraightUpdate(float dt)
 	sf::Vector2f movePos = GetPosition();
 	movePos += dir * speed * dt;
 	SetPosition(movePos);
-	Collider->SetPosition(GetPosition());
+	Collider.SetPosition(GetPosition());
+}
+
+sf::RectangleShape& ElementalSpell::GetCollider()
+{
+	return Collider.GetObbCol();
 }
 
 sf::Vector2f ElementalSpell::CalAxisSin(float time, float speed, float frequency, float amplitude, const sf::Vector2f& axis, float angleInDegrees)

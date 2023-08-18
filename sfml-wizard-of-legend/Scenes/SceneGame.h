@@ -30,6 +30,7 @@ protected:
 	float tileSize = 64.0f;
 
 	Monster* monster;
+	std::list<Monster*> monsters;
 
 	bool isCol = false;
 

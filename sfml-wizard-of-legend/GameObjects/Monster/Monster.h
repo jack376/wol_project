@@ -61,6 +61,7 @@ protected:
 	bool isAttacked = false;
 	bool isShooting = false;
 	bool isAwake = false;
+	bool isHit = false;
 
 	Player* player = nullptr;
 	Tile* currentTile = nullptr;
@@ -95,7 +96,10 @@ public:
 	void SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetRectBox();
+	void SetIsHit(bool isHit) { this->isHit = isHit; }
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
+
+	bool GetIsHit() { return isHit; }
 
 	void OnAttacked(float damage);
 	virtual void HandleBehavior(float dt);

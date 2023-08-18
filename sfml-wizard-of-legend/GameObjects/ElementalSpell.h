@@ -3,12 +3,12 @@
 #include "AnimationController.h"
 #include "BoxCollider2D.h"
 #include "Beam.h"
+#include "ObjectPool.h"
 
 class SpriteGo;
 class SceneGame;
 class Player;
 class Monster;
-class BoxCollider2D;
 class Tile;
 
 class ElementalSpell : public SpriteGo
@@ -18,13 +18,18 @@ protected:
 	SceneGame* scene;
 	Player* player;
 	Monster* monster;
+	std::list<Monster*> monsters;
+	std::list<Monster*> colMonsters;
 	Beam raycaster;
 
+	ObjectPool<ElementalSpell> pool;
 
 	AnimationController anim;
 	
-	BoxCollider2D* Collider;
-	SpriteGo* collider;
+	BoxCollider2D Collider;
+
+
+	ElementTypes currentElementType = ElementTypes::None;
 	SkillTypes currentSkillType = SkillTypes::None;
 	RangeTypes currentRangeType = RangeTypes::None;
 	SkillEvents currentEvent = SkillEvents::None;
@@ -60,7 +65,7 @@ protected:
 	
 	// 중복 공격 방지
 	float attackTimer = 0.f;
-	float attackDuration = 0.5f;
+	float attackDuration = 2.0f;
 
 	// 콤보 타이머 설정
 	float prevComboTime = -100.f;
@@ -114,11 +119,14 @@ public:
 	void SetScene(SceneGame* scene) { this->scene = scene; }
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetMonster(Monster* monster) { this->monster = monster; }
+	void SetMonsterList(std::list<Monster*>& monsters) { this->monsters = monsters; }
+	void SetPool(ObjectPool<ElementalSpell>& pool) { this->pool = pool; }
+	
+	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }
 	void SetRangeType(RangeTypes type) { currentRangeType = type; }
 
-
-	sf::RectangleShape& GetCollider() const { return collider->rect; }
+	sf::RectangleShape& GetCollider();
 
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
 

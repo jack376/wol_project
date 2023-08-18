@@ -4,6 +4,8 @@
 #include "InputMgr.h"
 #include "SceneGame.h"
 #include "SceneMgr.h"
+#include "SkillMgr.h"
+#include "Skill.h"
 #include "Tile.h"
 
 Player::Player(const std::string& textureId, const std::string& n)
@@ -62,6 +64,13 @@ void Player::Init()
 	InsertAnimId();
 	playerColor = sprite.getColor();
 	CalculatorCurrentTile();
+
+	spellPool.OnCreate = [this](ElementalSpell* spell)
+	{
+		spell->SetMonsterList(monsters);
+		spell->SetPool(spellPool);
+	};
+
 	//sf::Image grayImage = sprite.getTexture()->copyToImage();
 	//sf::Vector2u imageSize = grayImage.getSize();
 }
@@ -131,6 +140,9 @@ void Player::Reset()
 	hp = maxHp;
 	attackCount = 0;
 	portal->SetActive(false);
+
+
+	spellPool.Init();
 
 
 	// 팔레트 적용시키기
@@ -226,16 +238,48 @@ void Player::Update(float dt)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Left;
+
+		ElementalSpell* elemental = spellPool.Get();
+		elemental->SetScene(scene);
+		elemental->SetPlayer(this);
+		elemental->sortLayer = 21;
+		elemental->SetSkillType(SkillTypes::Melee);
+		elemental->SetTiles(wouldTiles);
+		elemental->SetMonsterList(monsters);
+		scene->AddGo(elemental);
+
+		SKILL_MGR.UseSkill(sEvent);
+
 		ChangeState(States::Attack);
+
 	}
 
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide && !isFalling)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Right;
+
+		SKILL_MGR.UseSkill(sEvent);
+		ElementalSpell* elemental = spellPool.Get();
+		elemental->SetScene(scene);
+		elemental->SetPlayer(this);
+		elemental->sortLayer = 21;
+		elemental->SetSkillType(SkillTypes::Range);
+		elemental->SetRangeType(RangeTypes::Curve);
+		elemental->SetTiles(wouldTiles);
+		elemental->SetMonsterList(monsters);
+		scene->AddGo(elemental);
+
 		ChangeState(States::Attack);
 	}
 	
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide && !isFalling)
+	{
+		sEvent = SkillEvents::Q;
+		SKILL_MGR.UseSkill(sEvent);
+	}
+
 	// 대쉬 쿨타임 계산
 	if(isDashCool)
 		dashCoolTimer += dt;
@@ -248,8 +292,12 @@ void Player::Update(float dt)
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack && !isFalling)
 	{
+		sEvent = SkillEvents::Space;
 		ChangeState(States::Dash);
+		SKILL_MGR.UseSkill(sEvent);
 	}
+
+
 
 	float magnitude = Utils::Magnitude(dir);
 
@@ -349,9 +397,7 @@ void Player::RunUpdate(float dt)
 
 	sf::Vector2f movePos = sprite.getPosition();
 	movePos += dir * speed * dt;
-
 	SetPosition(movePos);
-
 	CalculatorCurrentTile();
 
 	// 타일 충돌 방지
@@ -514,6 +560,7 @@ void Player::AttackUpdate(float dt)
 	}
 
 	isAttack = true;
+
 	if (anim.IsAnimEndFrame())
 	{
 		isRun = false;
