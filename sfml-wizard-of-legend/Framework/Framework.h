@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
 
+class SceneEditor;
 class Framework : public Singleton<Framework>
 {
 	friend Singleton<Framework>;
@@ -17,11 +18,6 @@ protected:
 	int screenWidth = 1600;
 	int screenHeight = 900;
 	std::string title = "SFML_Wizard_Of_Legend";
-
-	bool circleExists = true;
-	float circleRadius = 200.0f;
-	int circleSegments = 100;
-	char buffer[32] = "";
 
 public:
 	virtual void Init(int width, int height, const std::string& title);

@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "DataTableMgr.h"
 #include "ResourceMgr.h"
+#include "SceneEditor.h"
+
 Framework::Framework(int w, int h, const std::string& t)
     : screenWidth(w), screenHeight(h), title(t)
 {
@@ -12,12 +14,9 @@ Framework::Framework(int w, int h, const std::string& t)
 
 void Framework::Init(int width, int height, const std::string& title)
 {
-	window.create(sf::VideoMode(width, height), title);
-    
+    window.create(sf::VideoMode(width, height), title);
+
     ImGui::SFML::Init(window);
-    sf::CircleShape shape(circleRadius, circleSegments);
-    shape.setOrigin(circleRadius, circleRadius);
-    shape.setPosition(200, 200);
 
     DATATABLE_MGR.LoadAll();
     // Resource
@@ -81,24 +80,27 @@ void Framework::Run()
         {
             UpdateEvent(dt);
 
+            // ImGUI
             ImGui::SFML::Update(window, deltaTime);
+            SceneId currentSceneId = SCENE_MGR.GetCurrSceneId();
+            switch (currentSceneId)
+            {
+            case SceneId::Game:
 
-            // ImGui Run Test Code
-            ImGui::Begin("Window title");
-            ImGui::Text("Window text!");
-            ImGui::Checkbox("Circle", &circleExists);
-            ImGui::SliderFloat("Radius", &circleRadius, 100.0f, 300.0f);
-            ImGui::SliderInt("Sides", &circleSegments, 3, 150);
-            ImGui::InputText("TextBox", buffer, IM_ARRAYSIZE(buffer));
-            ImGui::End();
+                break;
+            case SceneId::Editor:
+                Scene* scene = SCENE_MGR.GetCurrScene();
+                SceneEditor* sceneEditor = dynamic_cast<SceneEditor*>(scene);
+                sceneEditor->DrawEditorUI();
+                break;
+            }
 
             window.clear();
             Draw();
             ImGui::SFML::Render(window);
-            window.display(); 
+            window.display();
         }
     }
-
     Release();
     ImGui::SFML::Shutdown();
 }

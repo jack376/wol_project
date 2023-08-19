@@ -58,7 +58,7 @@ void SceneEditor::Init()
 
 	// UI backgorund
 	BaseUI* uiBackground = (BaseUI*)AddGo(new BaseUI("UiBackGround", UiType::Box));
-	uiBackground->sortLayer = 100;
+	uiBackground->sortLayer = 101;
 	uiBackground->SetSizeAdd(atlasTextureSize + blankPos * 2.0f, windowSize.y);
 	uiBackground->SetColor(sf::Color(16, 16, 16, 255));
 	uiBackground->SetStrokeColor(sf::Color(32, 32, 64, 255));
@@ -70,6 +70,7 @@ void SceneEditor::Init()
 	float gap   = size + size;
 	int   index = 0;
 
+	/*
 	CreateButton("1", "NONE", posX + gap * 0, posY + size * 0, size, index, [this]()   { std::cout << "Button q" << std::endl; } );
 	CreateButton("2", "GROUND", posX + gap * 1, posY + size * 0, size, index, [this]() { std::cout << "Button w" << std::endl; } );
 	CreateButton("3", "WALL", posX + gap * 2, posY + size * 0, size, index, [this]()   { std::cout << "Button e" << std::endl; } );
@@ -86,7 +87,8 @@ void SceneEditor::Init()
 	CreateButton("X", "ZOOM-", posX + gap * 1, posY + size * 3, size, index, [this]()  { std::cout << "Button x" << std::endl; } );
 	CreateButton("C", "SIZE+", posX + gap * 2, posY + size * 3, size, index, [this]()  { std::cout << "Button c" << std::endl; } );
 	CreateButton("V", "SIZE-", posX + gap * 3, posY + size * 3, size, index, [this]()  { std::cout << "Button v" << std::endl; } );
-	
+	*/
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -129,7 +131,6 @@ void SceneEditor::Update(float dt)
 
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
-
 
 	// Camera
 	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
@@ -749,4 +750,99 @@ void SceneEditor::ResizeWorld(int newRows, int newCols)
 			}
 		}
 	}
+}
+
+void SceneEditor::DrawEditorUI()
+{
+	// UI Window Position, Size
+	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f));
+	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
+
+	ImGui::Begin("HiddenWindow", nullptr,
+		ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoResize |
+		ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoScrollbar |
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoBackground
+	);
+
+	// Overlay Select Button
+	std::vector<std::string> labels = {"GROUND", "CLIFF", "WALL", "SPAWN", "EVENT", "NONE"};
+	std::vector<int> colors = { 2, 0, 1, 4, 5, 6 };
+	for (int i = 0; i < 6; i++)
+	{
+		if (i > 0)
+		{
+			ImGui::SameLine();
+		}
+		ImGui::PushID(i);
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.6f, 0.5f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.7f, 0.65f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.8f, 0.8f));
+		ImGui::Button(labels[i].c_str());
+		ImGui::PopStyleColor(3);
+		ImGui::PopID();
+	}
+
+	// Grid View On,Off
+	static bool check = true;
+	ImGui::Checkbox("GRID VIEW", &check);
+
+	// Save, Load
+	ImGui::Button("SAVE");
+	ImGui::SameLine();
+	ImGui::Button("LOAD");
+	ImGui::SameLine();
+
+	static char str1[96] = "";
+	ImGui::InputTextWithHint("DIRECTORY", "enter text here", str1, IM_ARRAYSIZE(str1));
+
+
+
+	/*
+
+	if (ImGui::Button("My Direct Button"))
+	{
+		std::cout << "button push" << std::endl;
+	}
+
+	ImGui::Text("Tooltips:");
+
+	ImGui::SameLine();
+	ImGui::Button("Basic");
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::SetTooltip("I am a tooltip");
+	}
+	ImGui::SameLine();
+
+	ImGui::Text("Hold to repeat:");
+	ImGui::SameLine();
+
+	static int counter = 0;
+	float spacing = ImGui::GetStyle().ItemInnerSpacing.x;
+
+	ImGui::PushButtonRepeat(true);
+	if (ImGui::ArrowButton("##left", ImGuiDir_Left))
+	{
+		counter--;
+	}
+	ImGui::SameLine(0.0f, spacing);
+	if (ImGui::ArrowButton("##right", ImGuiDir_Right))
+	{
+		counter++;
+	}
+	ImGui::PopButtonRepeat();
+	ImGui::SameLine();
+	ImGui::Text("%d", counter);
+
+	static int i0 = 123;
+	ImGui::InputInt("input int", &i0);
+
+	*/
+
+
+	ImGui::AlignTextToFramePadding();
+	ImGui::End();
 }

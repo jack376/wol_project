@@ -4,7 +4,6 @@
 #include "TileCommand.h"
 #include "CommandInvoker.h"
 
-
 class TextGo;
 class SpriteGo;
 class BreakableObj;
@@ -108,4 +107,5 @@ public:
 	void PasteSelectedTiles();
 
 	void ResizeWorld(int newRows, int newCols);
+	void DrawEditorUI();
 };
