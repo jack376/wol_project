@@ -16,12 +16,16 @@ void Framework::Init(int width, int height, const std::string& title)
 {
     window.create(sf::VideoMode(width, height), title);
 
-    ImGui::SFML::Init(window);
-
     DATATABLE_MGR.LoadAll();
     // Resource
     RESOURCE_MGR.Init();
     SCENE_MGR.Init();
+
+    ImGui::SFML::Init(window, false);
+    ImGuiIO& IO = ImGui::GetIO();
+    IO.Fonts->AddFontFromFileTTF("fonts/NanumSquareEB.ttf", 13);
+    IO.Fonts->AddFontDefault();
+    ImGui::SFML::UpdateFontTexture();
 }
 
 void Framework::Release()

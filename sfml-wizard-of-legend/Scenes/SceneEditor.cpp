@@ -63,32 +63,6 @@ void SceneEditor::Init()
 	uiBackground->SetColor(sf::Color(16, 16, 16, 255));
 	uiBackground->SetStrokeColor(sf::Color(32, 32, 64, 255));
 
-	// UIButton
-	float size  = 64.0f;
-	float posX  = blankPos + blankPos * 0.125f;
-	float posY  = atlasTextureSize + blankPos * 2.5;
-	float gap   = size + size;
-	int   index = 0;
-
-	/*
-	CreateButton("1", "NONE", posX + gap * 0, posY + size * 0, size, index, [this]()   { std::cout << "Button q" << std::endl; } );
-	CreateButton("2", "GROUND", posX + gap * 1, posY + size * 0, size, index, [this]() { std::cout << "Button w" << std::endl; } );
-	CreateButton("3", "WALL", posX + gap * 2, posY + size * 0, size, index, [this]()   { std::cout << "Button e" << std::endl; } );
-	CreateButton("4", "CLIFF", posX + gap * 3, posY + size * 0, size, index, [this]()  { std::cout << "Button r" << std::endl; } );
-	CreateButton("Q", "SAVE", posX + gap * 0, posY + size * 1, size, index, [this]()   { std::cout << "Button q" << std::endl; } );
-	CreateButton("W", "LOAD", posX + gap * 1, posY + size * 1, size, index, [this]()   { std::cout << "Button w" << std::endl; } );
-	CreateButton("E", "TYPE", posX + gap * 2, posY + size * 1, size, index, [this]()   { std::cout << "Button e" << std::endl; } );
-	CreateButton("R", "GRID", posX + gap * 3, posY + size * 1, size, index, [this]()   { std::cout << "Button r" << std::endl; } );
-	CreateButton("A", "DRAW", posX + gap * 0, posY + size * 2, size, index, [this]()   { std::cout << "Button a" << std::endl; } );
-	CreateButton("S", "LAYER", posX + gap * 1, posY + size * 2, size, index, [this]()  { std::cout << "Button s" << std::endl; } );
-	CreateButton("D", "COPY", posX + gap * 2, posY + size * 2, size, index, [this]()   { std::cout << "Button d" << std::endl; } );
-	CreateButton("F", "PASTE", posX + gap * 3, posY + size * 2, size, index, [this]()  { std::cout << "Button f" << std::endl; } );
-	CreateButton("Z", "ZOOM+", posX + gap * 0, posY + size * 3, size, index, [this]()  { std::cout << "Button z" << std::endl; } );
-	CreateButton("X", "ZOOM-", posX + gap * 1, posY + size * 3, size, index, [this]()  { std::cout << "Button x" << std::endl; } );
-	CreateButton("C", "SIZE+", posX + gap * 2, posY + size * 3, size, index, [this]()  { std::cout << "Button c" << std::endl; } );
-	CreateButton("V", "SIZE-", posX + gap * 3, posY + size * 3, size, index, [this]()  { std::cout << "Button v" << std::endl; } );
-	*/
-
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -754,21 +728,64 @@ void SceneEditor::ResizeWorld(int newRows, int newCols)
 
 void SceneEditor::DrawEditorUI()
 {
-	// UI Window Position, Size
-	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f));
-	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
+	/*
+	ImGui::Begin("StyleEditor");
+	ImGui::ShowStyleEditor();
+	ImGui::End();
+	*/
 
-	ImGui::Begin("HiddenWindow", nullptr,
-		ImGuiWindowFlags_NoTitleBar |
-		ImGuiWindowFlags_NoResize |
-		ImGuiWindowFlags_NoMove |
-		ImGuiWindowFlags_NoScrollbar |
-		ImGuiWindowFlags_NoCollapse |
-		ImGuiWindowFlags_NoBackground
-	);
+	// UI Style
+	ImGui::StyleColorsClassic();
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.WindowRounding   = 4.0f;
+	style.WindowBorderSize = 0.0f;
+	style.FrameRounding    = 4.0f;
+	style.FramePadding.x   = 8.0f;
+	style.FramePadding.y   = 4.0f;
 
-	// Overlay Select Button
-	std::vector<std::string> labels = {"GROUND", "CLIFF", "WALL", "SPAWN", "EVENT", "NONE"};
+	// UI Window 1
+	bool showWindow = false;
+	ImGui::SetNextWindowPos(ImVec2(windowSize.x - 250.0f - blankPos, blankPos));
+	ImGui::SetNextWindowSize(ImVec2(250.0f, windowSize.y * 0.75f));
+	ImGui::Begin("KEY SHOTCUTS GUIDE", &showWindow, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+	ImGui::LabelText("MOUSE L", "SELECT");
+	ImGui::LabelText("MOUSE R", "DESELECT");
+	ImGui::LabelText("W,A,S,D", "MOVE");
+	ImGui::LabelText("Q", "DRAW");
+	ImGui::LabelText("E", "TOP LAYER");
+	ImGui::LabelText("R", "BOTTOM LAYER");
+	ImGui::LabelText("T", "GRID VIEW");
+	ImGui::LabelText("Y", "TILE OVERLAY");
+	ImGui::LabelText("Z", "ZOOM IN");
+	ImGui::LabelText("X", "ZOOM OUT");
+	ImGui::LabelText("1", "GROUND");
+	ImGui::LabelText("2", "CLIFF");
+	ImGui::LabelText("3", "WALL");
+	ImGui::LabelText("4", "SPAWN");
+	ImGui::LabelText("5", "EVENT");
+	ImGui::LabelText("6", "NONE");
+	ImGui::LabelText("Ctrl + Z", "UNDO");
+	ImGui::LabelText("Ctrl + X", "REDO");
+	ImGui::LabelText("Ctrl + C", "COPY");
+	ImGui::LabelText("Ctrl + V", "PASTE");
+	ImGui::LabelText("Ctrl + S", "SAVE");
+	ImGui::End();
+
+	// UI Window 2
+	ImGui::SetNextWindowPos(ImVec2(atlasTextureSize + blankPos * 3.0f, 24.0f));
+	ImGui::SetNextWindowSize(ImVec2(700.0f, 48.0f));
+	ImGui::Begin("Window2", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
+
+	// Grid Line View On,Off
+	static bool gridCheck = true;
+	ImGui::Checkbox("GRID VIEW", &gridCheck);
+	ImGui::SameLine();
+
+	// Tile Overlay Select Button & View On,Off
+	static bool overlayCheck = false;
+	ImGui::Checkbox("TILE OVERLAY", &overlayCheck);
+	ImGui::SameLine();
+	std::vector<std::string> labels = { "GROUND (1)", "CLIFF (2)", "WALL (3)", "SPAWN (4)", "EVENT (5)", "NONE (6)" };
 	std::vector<int> colors = { 2, 0, 1, 4, 5, 6 };
 	for (int i = 0; i < 6; i++)
 	{
@@ -784,64 +801,33 @@ void SceneEditor::DrawEditorUI()
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}
+	ImGui::AlignTextToFramePadding();
+	ImGui::End();
 
-	// Grid View On,Off
-	static bool check = true;
-	ImGui::Checkbox("GRID VIEW", &check);
+	// UI Window 3
+	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f));
+	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
+	ImGui::Begin("Window3", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground );
 
 	// Save, Load
-	ImGui::Button("SAVE");
-	ImGui::SameLine();
-	ImGui::Button("LOAD");
-	ImGui::SameLine();
-
-	static char str1[96] = "";
-	ImGui::InputTextWithHint("DIRECTORY", "enter text here", str1, IM_ARRAYSIZE(str1));
-
-
-
-	/*
-
-	if (ImGui::Button("My Direct Button"))
+	static char maxPathLength[128] = "";
+	if (ImGui::Button("SAVE"))
 	{
-		std::cout << "button push" << std::endl;
-	}
-
-	ImGui::Text("Tooltips:");
-
-	ImGui::SameLine();
-	ImGui::Button("Basic");
-	if (ImGui::IsItemHovered())
-	{
-		ImGui::SetTooltip("I am a tooltip");
+		printf("Save Path: %s\n", maxPathLength);
 	}
 	ImGui::SameLine();
-
-	ImGui::Text("Hold to repeat:");
-	ImGui::SameLine();
-
-	static int counter = 0;
-	float spacing = ImGui::GetStyle().ItemInnerSpacing.x;
-
-	ImGui::PushButtonRepeat(true);
-	if (ImGui::ArrowButton("##left", ImGuiDir_Left))
+	if (ImGui::Button("LOAD"))
 	{
-		counter--;
+		printf("Load Path: %s\n", maxPathLength);
 	}
-	ImGui::SameLine(0.0f, spacing);
-	if (ImGui::ArrowButton("##right", ImGuiDir_Right))
-	{
-		counter++;
-	}
-	ImGui::PopButtonRepeat();
 	ImGui::SameLine();
-	ImGui::Text("%d", counter);
+	ImGui::SetNextItemWidth(384.0f);
+	ImGui::InputTextWithHint("##input", "DIRECTORY", maxPathLength, IM_ARRAYSIZE(maxPathLength));
 
-	static int i0 = 123;
-	ImGui::InputInt("input int", &i0);
-
-	*/
-
+	// Map Size Modify
+	ImGui::SetNextItemWidth(64.0f);
+	static int mapSize[2] = { 32, 32 };
+	ImGui::InputInt2("MAP SIZE", mapSize);
 
 	ImGui::AlignTextToFramePadding();
 	ImGui::End();

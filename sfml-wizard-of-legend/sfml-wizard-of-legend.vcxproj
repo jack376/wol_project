@@ -124,6 +124,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\imgui\;./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./GameObjects/Raycaster;./Scenes;./GameObjects;./GameObjects/Player;./GameObjects/Monster;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalBMIDirectories>./;./GameObjects;./Framework;./3rd;./DataTables;./Global;./Animation;./Scenes;%(AdditionalBMIDirectories)</AdditionalBMIDirectories>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -183,6 +184,7 @@
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="imgui\imgui-SFML.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
