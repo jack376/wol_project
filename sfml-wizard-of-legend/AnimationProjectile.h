@@ -19,5 +19,6 @@ public:
 
     void AddClip(const std::string path);
     void Play(const std::string name);
+    void PlayQueue(const std::string name);
 };
 

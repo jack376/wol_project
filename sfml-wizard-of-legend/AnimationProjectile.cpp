@@ -23,6 +23,7 @@ void AnimationProjectile::Release()
 void AnimationProjectile::Reset()
 {
 	Projectile::Reset();	
+	animation.SetTarget(&sprite);
 }
 
 void AnimationProjectile::Update(float dt)
@@ -44,4 +45,9 @@ void AnimationProjectile::AddClip(const std::string path)
 void AnimationProjectile::Play(const std::string name)
 {
 	animation.Play(name);
+}
+
+void AnimationProjectile::PlayQueue(const std::string name)
+{
+	animation.PlayQueue(name);
 }

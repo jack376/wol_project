@@ -10,6 +10,7 @@
 #include "Monster.h"
 #include "Lancer.h"
 #include "Archer.h"
+#include "Mage.h"
 #include "Player.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
@@ -44,7 +45,7 @@ void SceneGame::Init()
 	tempWindSlash->sortLayer = 21;
 
 
-	Monster* go = CreateMonster(MonsterId::Ghoul);
+	Monster* go = CreateMonster(MonsterId::Mage);
 	monster = go;
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
@@ -237,6 +238,9 @@ Monster* SceneGame::CreateMonster(MonsterId id)
 		break;
 	case MonsterId::Archer:
 		monster = dynamic_cast<Monster*>(AddGo(new Archer(id)));
+		break;
+	case MonsterId::Mage:
+		monster = dynamic_cast<Monster*>(AddGo(new Mage(id)));
 		break;
 	}
 	return monster;

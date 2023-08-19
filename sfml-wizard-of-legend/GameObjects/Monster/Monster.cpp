@@ -84,6 +84,7 @@ void Monster::Update(float dt)
     animation.Update(dt);
     attackTimer += dt;
 
+    CalculatorCurrentTile();
     HandleState(dt);
 
     //Debug Mode
@@ -276,23 +277,21 @@ void Monster::KnockBack(float dt)
         sf::Vector2f playerPos = player->GetPosition();
         float distance = Utils::Distance(playerPos, position);
 
+
         if (hp <= 0 || currentTile->GetType() == TileType::Cliff)
         {
             SetState(MonsterState::Dead);
             return;
         }
-        else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
+        else if (distance <= stat.searchRange || isAwake)
         {
-            if (distance <= stat.attackRange)
-            {
-                SetState(MonsterState::Attacking);
-                return;
-            }
-            else
-            {
-                SetState(MonsterState::Moving);
-                return;
-            }
+            SetState(MonsterState::Moving);
+            return;
+        }
+        else if (distance <= stat.attackRange && attackTimer >= stat.attackRate)
+        {
+            SetState(MonsterState::Attacking);
+            return;
         }
         else
             SetState(MonsterState::Idle);

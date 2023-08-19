@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Mage.h"
 #include "ResourceMgr.h"
+#include "DataTableMgr.h"
+#include "MonsterTable.h"
 #include "Player.h"
 
 Mage::Mage(MonsterId id, const std::string& textureId, const std::string& n)
@@ -14,14 +16,21 @@ Mage::~Mage()
 
 void Mage::Init()
 {
-	Monster::Init();
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animation/Mage_AttackAim.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animation/Mage_AttackShoot.csv"));
+	stat = DATATABLE_MGR.Get<MonsterTable>(DataTable::Ids::Monster)->Get((int)monsterId);
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Run.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Death.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Hurt.csv"));
+
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Mage_AttackAim.csv"));
+	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Mage_AttackShoot.csv"));
 	for (auto& fireball : fireballs)
 	{
 		fireball.AddClip("animations/Mage_FireballCreate.csv");
 		fireball.AddClip("animations/Mage_FireballActive.csv");
 		fireball.Init();
+		fireball.SetTiles(worldTiles);
 	}
 }
 
@@ -105,43 +114,83 @@ void Mage::Aim(float dt)
 		animation.Play("MageAttackAim");
 		SetOrigin(origin);
 		SetRectBox();
-
+		
 		sf::Vector2f playerPos = player->GetPosition();
 		attackDir = SetLook(playerPos);
 
-		for (auto& fireball : fireballs)
-		{
-			fireball.SetActive(true);
+		std::vector<sf::Vector2f> fireballPoss = CalculateProjectilePositions(playerPos, position, 150, 5, 120);
 
+		for (int i = 0; i < 5; i++)
+		{
+			fireballs[i].Reset();
+			fireballs[i].SetActive(true);
+			fireballs[i].SetPosition(fireballPoss[i]);
+			fireballs[i].SetRotation(Utils::Angle(fireballPoss[i] - position) - 90);
+			fireballs[i].Play("MageFireballCreate");
+			fireballs[i].PlayQueue("MageFireballActive");
 		}
+	}
+
+	aimTimer += dt;
+
+	if (aimTimer > aimRate)
+	{
+		currentAttackState = AttackState::Shoot;
+		aimTimer = 0;
 	}
 }
 
 void Mage::Shoot(float dt)
 {
+	if (animation.GetCurrentClipId() != "MageAttackShoot")
+	{
+		animation.Play("MageAttackShoot");
+		for (auto& fireball : fireballs)
+		{	
+			fireball.Fire(Utils::Normalize(fireball.GetPosition() - position), 500, 20);
+		}
+	}
+
+	stiffenTimer += dt;
+
+	if (stiffenTimer > stiffenRate)
+	{
+		SetState(MonsterState::Idle);
+		currentAttackState = AttackState::Cool;
+		stiffenTimer = 0;
+	}	
 }
 
-std::vector<sf::Vector2f> CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count) {
+void Mage::KnockBack(float dt)
+{
+	Monster::KnockBack(dt);
+	if (currentAttackState == AttackState::Aim)
+	{
+		for (auto& fireball : fireballs)
+		{
+			fireball.Reset();
+			fireball.SetActive(false);
+		}
+	}
+}
+
+std::vector<sf::Vector2f> Mage::CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count, float angleRange) {
 	std::vector<sf::Vector2f> positions;
 
-	// 플레이어 방향을 계산
 	sf::Vector2f direction = playerPosition - monsterPosition;
 	direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
 	// 중심 투사체 위치 계산 (플레이어 방향)
-	sf::Vector2f centerPosition = monsterPosition + direction * radius;
+	float centerAngle = Utils::Angle(direction);
+	// 투사체 위치 계산
+	float angleIncrement = angleRange / count;
+	float startAngle = centerAngle - angleRange / 2.0f;
 
-	// 나머지 투사체 위치 계산
-	float angleIncrement = 2 * 3.14159265358979323846 / (count - 1); // 중심 포함하므로 count-1
-	for (int i = 0; i < count - 1; ++i) {
-		float angle = i * angleIncrement;
-		float x = monsterPosition.x + radius * std::cos(angle);
-		float y = monsterPosition.y + radius * std::sin(angle);
-		positions.emplace_back(x, y);
+	for (int i = 0; i < count; ++i) {
+		float adjustedAngle = startAngle + i * angleIncrement;
+		sf::Vector2f offset = radius * Utils::Direction(adjustedAngle);
+		sf::Vector2f projectilePosition = monsterPosition + offset;
+		positions.emplace_back(projectilePosition);
 	}
-
-	// 중심 투사체 위치를 맨 앞에 추가
-	positions.insert(positions.begin(), centerPosition);
-
 	return positions;
 }

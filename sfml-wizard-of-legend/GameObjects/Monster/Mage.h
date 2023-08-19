@@ -10,8 +10,10 @@ protected:
     std::array<AnimationProjectile, 5> fireballs;
     AttackState currentAttackState;
 
-    float aimRate = 1.f;
+    float aimRate = 3.f;
     float aimTimer = 0.f;
+	float stiffenRate = 2.f;
+	float stiffenTimer = 0.f;
     float fireballSpeed = 1000.f;
 	float fireballCreateRadius = 50.f;
 public:
@@ -29,7 +31,8 @@ public:
 	virtual void Attack(float dt) override;
 	void Aim(float dt);
 	void Shoot(float dt);
+	virtual void KnockBack(float dt) override;
 
-	std::vector<sf::Vector2f> CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count);
+	std::vector<sf::Vector2f> CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count, float angleRange);
 };
 

@@ -47,6 +47,7 @@ enum class MonsterId
 	GhoulLarge,
 	Lancer,
 	Archer,
+	Mage,
 };
 
 class SceneGame;
