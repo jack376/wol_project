@@ -14,8 +14,8 @@ class Tile;
 class SceneEditor : public Scene
 {
 protected:
-	int rows = 0;
-	int cols = 0;
+	int rows = 32;
+	int cols = 32;
 	float tileSize = 16.0f;
 
 	sf::Vector2f windowSize;
@@ -36,7 +36,6 @@ protected:
 	std::vector<Tile*> selectedTiles;
 	sf::Vector2i startTileIndex;
 	sf::Vector2i endTileIndex;
-	bool isUiButtonActive = false;
 	bool isWorldMouseSelect = false;
 
 	std::vector<Tile*> allPreview;
@@ -107,5 +106,8 @@ public:
 	void PasteSelectedTiles();
 
 	void ResizeWorld(int newRows, int newCols);
+
 	void DrawEditorUI();
+	void InputEditorUI();
+	void CemeraEditorUI(float dt);
 };

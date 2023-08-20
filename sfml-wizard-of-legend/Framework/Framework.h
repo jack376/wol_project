@@ -19,6 +19,9 @@ protected:
 	int screenHeight = 900;
 	std::string title = "SFML_Wizard_Of_Legend";
 
+	//sf::Texture texture;
+	//sf::Sprite sprite;
+
 public:
 	virtual void Init(int width, int height, const std::string& title);
 	virtual void Release();

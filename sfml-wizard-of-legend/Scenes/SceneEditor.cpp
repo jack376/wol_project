@@ -25,7 +25,10 @@ void SceneEditor::Init()
 	resolutionScaleFactor = windowSize.x / fhdWidth;
 
 	// Load CSV
-	LoadFromCSV("tables/TileInfoTable.csv");
+	//LoadFromCSV("tables/TileInfoTable.csv");
+
+	// New Tile
+	CreateTile2dVector(rows, cols);
 
 	// Texture Atlas
 	SpriteGo* atlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "AtlasPreview"));
@@ -105,64 +108,6 @@ void SceneEditor::Update(float dt)
 
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f worldMousePos = SCENE_MGR.GetCurrScene()->ScreenToWorldPos(mousePos);
-
-	// Camera
-	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
-	cameraDirection.y = INPUT_MGR.GetAxis(Axis::Vertical);
-
-	float magnitude = Utils::Magnitude(cameraDirection);
-	if (magnitude > 0.0f)
-	{
-		if (magnitude > 1.f)
-		{
-			cameraDirection /= magnitude;
-		}
-		cameraPosition += cameraDirection * cameraSpeed * dt;
-		camera.setPosition(cameraPosition);
-	}
-	worldView.setCenter(cameraPosition);
-
-	// Zoom
-	Scene* scene = SCENE_MGR.GetCurrScene();
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z) && INPUT_MGR.GetKey(sf::Keyboard::LControl) == false) { scene-> Zoom(zoomInFactor);  }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X) && INPUT_MGR.GetKey(sf::Keyboard::LControl) == false) { scene-> Zoom(zoomOutFactor); }
-
-	// Copy, Paste
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { CopySelectedTiles();  }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::V) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { PasteSelectedTiles(); }
-
-	// Save
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::S) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { SaveToCSV("tables/TileInfoTable.csv"); }
-
-	// Undo, Redo
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { commandInvoker.Undo(); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { commandInvoker.Redo(); }
-
-	// Draw
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q)) { SetSelectedTilesDraw(); }
-
-	// SetTileLayer
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E)) { isTileLeyer = true;  std::cout << "Current Layer : Top" << std::endl;    }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R)) { isTileLeyer = false; std::cout << "Current Layer : Bottom" << std::endl; }
-
-	// Resize
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::U)) { ResizeWorld(16, 16); std::cout << "Resize World Tile : 16 * 16 (256)" << std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::I)) { ResizeWorld(32, 32); std::cout << "Resize World Tile : 32 * 32 (1,024)" << std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O)) { ResizeWorld(64, 64); std::cout << "Resize World Tile : 64 * 64 (4,096)"<< std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::P)) { ResizeWorld(96, 96); std::cout << "Resize World Tile : 96 * 96 (9,216)" << std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::J)) { ResizeWorld(128, 128); std::cout << "Resize World Tile : 128 * 128 (16,384)" << std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::K)) { ResizeWorld(192, 192); std::cout << "Resize World Tile : 192 * 192 (36,864)" << std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::L)) { ResizeWorld(256, 256); std::cout << "Resize World Tile : 256 * 256 (65,536)" << std::endl; }
-
-	// SetTileType
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(TileType::None); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(TileType::Ground); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(TileType::Cliff); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(TileType::Wall); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(TileType::EventTrigger); }
-
-	// Deselect
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }
 }
 
 void SceneEditor::Draw(sf::RenderWindow& window)
@@ -180,14 +125,14 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, i
 	tile->SetStrokeColor(sf::Color(64, 64, 64, 96));
 	tile->OnEnter = [tile, this]()
 	{
-		if (!isUiButtonActive && tile->GetState() == Tile::TileState::Blank)
+		if (tile->GetState() == Tile::TileState::Blank)
 		{
 			tile->SetStateColor(Tile::TileState::Select);
 		}
 	};
 	tile->OnExit = [tile, this]()
 	{
-		if (!isUiButtonActive && tile->GetState() == Tile::TileState::Blank)
+		if (tile->GetState() == Tile::TileState::Blank)
 		{
 			tile->SetStateColor(tile->GetState());
 			if (tile->IsTypeView())
@@ -198,7 +143,7 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, i
 	};
 	tile->OnClickDown = [tile, this]()
 	{
-		if (!isUiButtonActive && tile->GetState() == Tile::TileState::Blank)
+		if (tile->GetState() == Tile::TileState::Blank)
 		{
 			startTileIndex = GetCurrentTileIntIndex();
 			isUiMouseSelect = false;
@@ -207,7 +152,7 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, i
 	};
 	tile->OnClickDrag = [tile, this]()
 	{
-		if (!isUiButtonActive && isWorldMouseSelect && tile->GetState() == Tile::TileState::Blank)
+		if (isWorldMouseSelect && tile->GetState() == Tile::TileState::Blank)
 		{
 			endTileIndex = GetCurrentTileIntIndex();
 			SetSelectedTilesArea();
@@ -215,7 +160,7 @@ Tile* SceneEditor::CreateTile(const std::string& name, float posX, float posY, i
 	};
 	tile->OnClickUp = [tile, this]()
 	{
-		if (!isUiButtonActive && isWorldMouseSelect && tile->GetState() == Tile::TileState::Blank)
+		if (isWorldMouseSelect && tile->GetState() == Tile::TileState::Blank)
 		{
 			endTileIndex = GetCurrentTileIntIndex();
 			isUiMouseSelect = true;
@@ -370,7 +315,7 @@ sf::Vector2i SceneEditor::GetCurrentTileIntIndex()
 
 Tile* SceneEditor::CreateTilePreview(const std::string& name, float posX, float posY, int sort)
 {
-	Tile* tilePreview = (Tile*)AddGo(new Tile(name));
+	Tile* tilePreview = (Tile*)AddWithoutCheckGo(new Tile(name));
 	tilePreview->sortLayer = sort;
 	tilePreview->SetPosition(posX + blankPos, posY + blankPos);
 	tilePreview->SetState(Tile::TileState::UI);
@@ -516,7 +461,7 @@ void SceneEditor::SaveToCSV(const std::string& path)
 		}
 	}
 	doc.Save(path);
-	std::cout << "SYSTEM : Save Success" << std::endl;
+	//std::cout << "SYSTEM : Save Success" << std::endl;
 }
 
 void SceneEditor::LoadFromCSV(const std::string& path)
@@ -565,7 +510,7 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
-	std::cout << "SYSTEM : Editor Tile Load Success" << std::endl;
+	//std::cout << "SYSTEM : Editor Tile Load Success" << std::endl;
 }
 
 BaseUI* SceneEditor::CreateButton(const std::string& name, const std::string& text, float posX, float posY, float size, int texIndex, std::function<void()> onClickAction)
@@ -688,13 +633,14 @@ void SceneEditor::ResizeWorld(int newRows, int newCols)
 	std::vector<std::vector<TileCommand::TileState>> tempTileStates;
 	tempTileStates.resize(rows, std::vector<TileCommand::TileState>(cols));
 
-	for (int i = 0; i < rows; i++)
+	for (int i = 0; i < tilesWorld.size(); i++)
 	{
-		for (int j = 0; j < cols; j++)
+		for (int j = 0; j < tilesWorld[i].size(); j++)
 		{
 			if (tilesWorld[i][j])
 			{
 				tempTileStates[i][j] = CaptureTileState(tilesWorld[i][j]);
+				tilesWorld[i][j]->SetActive(false);
 				RemoveGo(tilesWorld[i][j]);
 				tilesWorld[i][j] = nullptr;
 			}
@@ -737,33 +683,40 @@ void SceneEditor::DrawEditorUI()
 	// UI Style
 	ImGui::StyleColorsClassic();
 	ImGuiStyle& style = ImGui::GetStyle();
+	style.WindowPadding.x  = 0.0f;
 	style.WindowRounding   = 4.0f;
 	style.WindowBorderSize = 0.0f;
 	style.FrameRounding    = 4.0f;
 	style.FramePadding.x   = 8.0f;
 	style.FramePadding.y   = 4.0f;
+	style.ItemSpacing.x    = 4.0f;
+	style.ItemSpacing.y    = 6.0f;
 
-	// UI Window 1
+	// UI Window Key Shotcut
 	bool showWindow = false;
-	ImGui::SetNextWindowPos(ImVec2(windowSize.x - 250.0f - blankPos, blankPos));
-	ImGui::SetNextWindowSize(ImVec2(250.0f, windowSize.y * 0.75f));
+	ImGui::SetNextWindowPos(ImVec2(windowSize.x - 256.0f - blankPos, blankPos));
+	ImGui::SetNextWindowSize(ImVec2(256.0f, 576.0f));
 	ImGui::Begin("KEY SHOTCUTS GUIDE", &showWindow, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 	ImGui::LabelText("MOUSE L", "SELECT");
 	ImGui::LabelText("MOUSE R", "DESELECT");
+	ImGui::Separator();
 	ImGui::LabelText("W,A,S,D", "MOVE");
 	ImGui::LabelText("Q", "DRAW");
-	ImGui::LabelText("E", "TOP LAYER");
-	ImGui::LabelText("R", "BOTTOM LAYER");
+	ImGui::LabelText("E", "FRONT LAYER");
+	ImGui::LabelText("R", "REAR LAYER");
+	ImGui::Separator();
 	ImGui::LabelText("T", "GRID VIEW");
 	ImGui::LabelText("Y", "TILE OVERLAY");
 	ImGui::LabelText("Z", "ZOOM IN");
 	ImGui::LabelText("X", "ZOOM OUT");
+	ImGui::Separator();
 	ImGui::LabelText("1", "GROUND");
 	ImGui::LabelText("2", "CLIFF");
 	ImGui::LabelText("3", "WALL");
 	ImGui::LabelText("4", "SPAWN");
 	ImGui::LabelText("5", "EVENT");
 	ImGui::LabelText("6", "NONE");
+	ImGui::Separator();
 	ImGui::LabelText("Ctrl + Z", "UNDO");
 	ImGui::LabelText("Ctrl + X", "REDO");
 	ImGui::LabelText("Ctrl + C", "COPY");
@@ -771,19 +724,25 @@ void SceneEditor::DrawEditorUI()
 	ImGui::LabelText("Ctrl + S", "SAVE");
 	ImGui::End();
 
-	// UI Window 2
+	// UI Window Top
 	ImGui::SetNextWindowPos(ImVec2(atlasTextureSize + blankPos * 3.0f, 24.0f));
 	ImGui::SetNextWindowSize(ImVec2(700.0f, 48.0f));
-	ImGui::Begin("Window2", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
+	ImGui::Begin("Top UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
 
 	// Grid Line View On,Off
 	static bool gridCheck = true;
-	ImGui::Checkbox("GRID VIEW", &gridCheck);
+	if (ImGui::Checkbox("GRID VIEW", &gridCheck))
+	{
+		// 걍 통이미지로 구현하는게 나을듯
+	}
 	ImGui::SameLine();
 
 	// Tile Overlay Select Button & View On,Off
 	static bool overlayCheck = false;
-	ImGui::Checkbox("TILE OVERLAY", &overlayCheck);
+	if (ImGui::Checkbox("TILE OVERLAY", &overlayCheck))
+	{
+		// 고민 중
+	}
 	ImGui::SameLine();
 	std::vector<std::string> labels = { "GROUND (1)", "CLIFF (2)", "WALL (3)", "SPAWN (4)", "EVENT (5)", "NONE (6)" };
 	std::vector<int> colors = { 2, 0, 1, 4, 5, 6 };
@@ -797,38 +756,232 @@ void SceneEditor::DrawEditorUI()
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.6f, 0.5f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.7f, 0.65f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.8f, 0.8f));
-		ImGui::Button(labels[i].c_str());
+		if (ImGui::Button(labels[i].c_str()))
+		{
+			switch (i)
+			{
+			case 0:
+				SetSelectedTilesType(TileType::Ground);
+				break;
+			case 1:
+				SetSelectedTilesType(TileType::Cliff);
+				break;
+			case 2:
+				SetSelectedTilesType(TileType::Wall);
+				break;
+			case 3:
+				SetSelectedTilesType(TileType::MonsterSpawn);
+				break;
+			case 4:
+				SetSelectedTilesType(TileType::EventTrigger);
+				break;
+			case 5:
+				SetSelectedTilesType(TileType::None);
+				break;
+			default:
+				break;
+			}
+		}
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}
 	ImGui::AlignTextToFramePadding();
 	ImGui::End();
 
-	// UI Window 3
+	// UI Window Left
 	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f));
-	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
-	ImGui::Begin("Window3", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground );
+	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize / 2, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
+	ImGui::Begin("LEFT UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground );
 
-	// Save, Load
-	static char maxPathLength[128] = "";
-	if (ImGui::Button("SAVE"))
+	// Save
+	static char maxPathLengthSave[128] = "";
+	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "SAVE CSV");
+	ImGui::SetNextItemWidth(192.0f);
+	ImGui::InputTextWithHint("##input1", u8"파일명 입력 CSV 생략", maxPathLengthSave, IM_ARRAYSIZE(maxPathLengthSave));
+	ImGui::SameLine();
+	if (ImGui::Button("SAVE") || INPUT_MGR.GetKeyDown(sf::Keyboard::S) && INPUT_MGR.GetKey(sf::Keyboard::LControl))
 	{
-		printf("Save Path: %s\n", maxPathLength);
+		std::string str = maxPathLengthSave;
+		auto now = std::chrono::system_clock::now();
+		std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+
+		std::stringstream ss;
+		ss << std::put_time(std::localtime(&now_time), "_%m%d_%H%M%S"); // e.g., "_0820_143059"
+		std::string timestamp = ss.str();
+		std::string filename = "tables/" + str + timestamp + ".csv";
+
+		try
+		{
+			SaveToCSV(filename);
+			std::cout << "Successfully saved CSV file : " << filename << std::endl;
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "ERROR : Error occurred while saving CSV file." << e.what() << std::endl;
+		}
+		catch (...)
+		{
+			std::cout << "ERROR : Exception occurred during the save." << std::endl;
+		}
 	}
+	ImGui::Dummy(ImVec2(0.0f, 8.0f));
+
+	// Map Size Modify
+	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "MAP SIZE MODIFY");
+	const char* mapSizeX[] = { "16", "32", "48", "64", "80", "96", "112", "128" };
+	static int mapSizeIndexX = 0;
+	ImGui::SetNextItemWidth(64.0f);
+	ImGui::Combo("##input4", &mapSizeIndexX, mapSizeX, IM_ARRAYSIZE(mapSizeX));
+	ImGui::SameLine();
+	const char* mapSizeY[] = { "16", "32", "48", "64", "80", "96", "112", "128" };
+	static int mapSizeIndexY = 0;
+	ImGui::SetNextItemWidth(64.0f);
+	ImGui::Combo("##input5", &mapSizeIndexY, mapSizeY, IM_ARRAYSIZE(mapSizeY));
+	ImGui::SameLine();
+	if (ImGui::Button("OK"))
+	{
+		int width, height;
+		sscanf(mapSizeX[mapSizeIndexX], "%d", &width);
+		sscanf(mapSizeY[mapSizeIndexY], "%d", &height);
+		ResizeWorld(width, height);
+	}
+	ImGui::Dummy(ImVec2(0.0f, 8.0f));
+
+	// Edit
+	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "EDIT TOOL");
+	if (ImGui::Button("UNDO")) 
+	{ 
+		commandInvoker.Undo(); 
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("REDO")) 
+	{
+		commandInvoker.Redo(); 
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("COPY")) 
+	{ 
+		CopySelectedTiles(); 
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("PASTE")) 
+	{
+		PasteSelectedTiles(); 
+	}
+	ImGui::AlignTextToFramePadding();
+	ImGui::End();
+
+	// UI Window Right
+	ImGui::SetNextWindowPos(ImVec2(blankPos * 1.25f + atlasTextureSize / 2, atlasTextureSize + blankPos * 2.0f));
+	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize / 2, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
+	ImGui::Begin("RIGHT UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
+
+	// Load
+	static char maxPathLengthLoad[128] = "";
+	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "LOAD CSV");
+	ImGui::SetNextItemWidth(192.0f);
+	ImGui::InputTextWithHint("##input2", u8"파일명 입력 CSV 생략", maxPathLengthLoad, IM_ARRAYSIZE(maxPathLengthLoad));
 	ImGui::SameLine();
 	if (ImGui::Button("LOAD"))
 	{
-		printf("Load Path: %s\n", maxPathLength);
+		std::string str = maxPathLengthLoad;
+		try
+		{
+			LoadFromCSV("tables/" + str + ".csv");
+			std::cout << "CSV file has been loaded successfully." << std::endl;
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "ERROR : Error while loading CSV file." << e.what() << std::endl;
+		}
+		catch (...)
+		{
+			std::cout << "ERROR : Exception encountered while loading." << std::endl;
+		}
+	}
+	ImGui::Dummy(ImVec2(0.0f, 8.0f));
+
+	// View
+	static int layer = 0;
+	Scene* scene = SCENE_MGR.GetCurrScene();
+	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "LAVER TOGGLE");
+	if (ImGui::RadioButton("LAYER TOP", &layer, 0))
+	{
+		isTileLeyer = true;  
+		std::cout << "Current Layer : Top" << std::endl;
 	}
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(384.0f);
-	ImGui::InputTextWithHint("##input", "DIRECTORY", maxPathLength, IM_ARRAYSIZE(maxPathLength));
+	if (ImGui::RadioButton("LAYER BOTTOM", &layer, 1))
+	{
+		isTileLeyer = false; 
+		std::cout << "Current Layer : Bottom" << std::endl;
+	}
+	ImGui::Dummy(ImVec2(0.0f, 8.0f));
 
-	// Map Size Modify
-	ImGui::SetNextItemWidth(64.0f);
-	static int mapSize[2] = { 32, 32 };
-	ImGui::InputInt2("MAP SIZE", mapSize);
-
+	// Zoom
+	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "VIEW OPTION");
+	if (ImGui::Button("ZOOM IN")) 
+	{ 
+		scene-> Zoom(zoomInFactor);  
+	} 
+	ImGui::SameLine();
+	if (ImGui::Button("ZOOM OUT")) 
+	{
+		scene-> Zoom(zoomOutFactor); 
+	}
 	ImGui::AlignTextToFramePadding();
 	ImGui::End();
+}
+
+void SceneEditor::InputEditorUI()
+{
+	// Zoom
+	Scene* scene = SCENE_MGR.GetCurrScene();
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z) && INPUT_MGR.GetKey(sf::Keyboard::LControl) == false) { scene->Zoom(zoomInFactor); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X) && INPUT_MGR.GetKey(sf::Keyboard::LControl) == false) { scene->Zoom(zoomOutFactor); }
+
+	// Copy, Paste
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { CopySelectedTiles(); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::V) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { PasteSelectedTiles(); }
+
+	// Undo, Redo
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { commandInvoker.Undo(); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { commandInvoker.Redo(); }
+
+	// Draw
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q)) { SetSelectedTilesDraw(); }
+
+	// SetTileLayer
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E)) { isTileLeyer = true;  std::cout << "Current Layer : Top" << std::endl; }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R)) { isTileLeyer = false; std::cout << "Current Layer : Bottom" << std::endl; }
+
+	// SetTileType
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(TileType::Ground); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(TileType::Cliff); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(TileType::Wall); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(TileType::MonsterSpawn); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(TileType::EventTrigger); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num6)) { SetSelectedTilesType(TileType::None); }
+
+	// Deselect
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }
+}
+
+void SceneEditor::CemeraEditorUI(float dt)
+{
+	// Camera
+	cameraDirection.x = INPUT_MGR.GetAxis(Axis::Horizontal);
+	cameraDirection.y = INPUT_MGR.GetAxis(Axis::Vertical);
+
+	float magnitude = Utils::Magnitude(cameraDirection);
+	if (magnitude > 0.0f)
+	{
+		if (magnitude > 1.f)
+		{
+			cameraDirection /= magnitude;
+		}
+		cameraPosition += cameraDirection * cameraSpeed * dt;
+		camera.setPosition(cameraPosition);
+	}
+	worldView.setCenter(cameraPosition);
 }

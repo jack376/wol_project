@@ -22,10 +22,14 @@ void Framework::Init(int width, int height, const std::string& title)
     SCENE_MGR.Init();
 
     ImGui::SFML::Init(window, false);
-    ImGuiIO& IO = ImGui::GetIO();
-    IO.Fonts->AddFontFromFileTTF("fonts/NanumSquareEB.ttf", 13);
-    IO.Fonts->AddFontDefault();
+
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF("fonts/NanumSquareEB.ttf", 13, nullptr, io.Fonts->GetGlyphRangesKorean());
+    io.Fonts->AddFontDefault();
     ImGui::SFML::UpdateFontTexture();
+
+    //texture.loadFromFile("graphics/editor/FireTileSet.png");
+    //sprite.setTexture(texture);
 }
 
 void Framework::Release()
@@ -96,6 +100,13 @@ void Framework::Run()
                 Scene* scene = SCENE_MGR.GetCurrScene();
                 SceneEditor* sceneEditor = dynamic_cast<SceneEditor*>(scene);
                 sceneEditor->DrawEditorUI();
+                if (!ImGui::IsAnyItemActive() && !ImGui::IsWindowFocused())
+                {
+                    sceneEditor->InputEditorUI();
+                    sceneEditor->CemeraEditorUI(dt);
+                }
+                //ImGui::Image(texture);
+                //ImGui::Image(sprite);
                 break;
             }
 
