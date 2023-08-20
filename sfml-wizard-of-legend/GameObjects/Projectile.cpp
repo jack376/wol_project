@@ -17,7 +17,6 @@ void Projectile::Init()
 {
 	SpriteGo::Init();
 	collider.Init();
-	SetOrigin(Origins::MC);
 }
 
 void Projectile::Release()
@@ -32,10 +31,12 @@ void Projectile::Reset()
 	collider.Reset();
 
 	SetPosition(0.f, 0.f);
+	SetOrigin(origin);
 	sprite.setRotation(0.f);
 	sprite.setScale({ 4, 4 });
 
 	collider.SetSprite(sprite);
+	collider.SetObbCol();
 
 	isAttacked = false;
 	isFire = false;
@@ -92,28 +93,56 @@ void Projectile::SetRotation(const sf::Vector2f dir)
 {
 	float angle = Utils::Angle(dir);
 	sprite.setRotation(angle);
-	collider.SetObbRotation();
+	collider.GetObbCol().setRotation(angle);
 }
 
 void Projectile::SetRotation(const float angle)
 {
 	sprite.setRotation(angle);
-	collider.SetObbRotation();
+	collider.GetObbCol().setRotation(angle);
+}
+
+void Projectile::SetPosition(const sf::Vector2f& p)
+{
+	SpriteGo::SetPosition(p);
+	collider.SetPosition(p);
+}
+
+void Projectile::SetPosition(float x, float y)
+{
+	SpriteGo::SetPosition(x, y);
+	collider.SetPosition(x, y);
+}
+
+void Projectile::SetOrigin(Origins origin)
+{
+	SpriteGo::SetOrigin(origin);
+	collider.SetOrigin(origin);
+}
+
+void Projectile::SetOrigin(float x, float y)
+{
+	SpriteGo::SetOrigin(x, y);
+	collider.SetOrigin(x, y);
 }
 
 void Projectile::Fire(const sf::Vector2f pos, const sf::Vector2f direction, float speed, int damage)
 {
 	SetActive(true);
-	sprite.setRotation(Utils::Angle(direction) + 90);
+	SetOrigin(origin);
 	SetPosition(pos);
+	SetRotation(Utils::Angle(direction) + 90);
+
 
 	collider.SetActive(true);
-	collider.GetObbCol().setRotation(Utils::Angle(direction) + 90);
-	collider.SetOrigin(origin);
+	//collider.SetPosition(pos);
+	//collider.GetObbCol().setRotation(Utils::Angle(direction) + 90);
+	//collider.SetOrigin(origin);
 
 	this->direction = direction;
 	this->speed = speed;
 	this->damage = damage;
+	isFire = true;
 }
 
 void Projectile::Fire(const sf::Vector2f direction, float speed, int damage)
@@ -121,7 +150,7 @@ void Projectile::Fire(const sf::Vector2f direction, float speed, int damage)
 	SetActive(true);
 	
 	collider.SetActive(true);
-	collider.ObbSet();
+	collider.SetObbCol();
 
 	this->direction = direction;
 	this->speed = speed;

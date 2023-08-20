@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./GameObjects/Raycaster;./Scenes;./GameObjects;./GameObjects/Player;./GameObjects/Monster;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./Raycaster;./Scenes;./GameObjects;./PathFinding;./GameObjects/Player;./GameObjects/Monster;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalBMIDirectories>./;./GameObjects;./Framework;./3rd;./DataTables;./Global;./Animation;./Scenes;%(AdditionalBMIDirectories)</AdditionalBMIDirectories>
     </ClCompile>
@@ -141,7 +141,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./GameObjects/Raycaster;./Scenes;./GameObjects;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./Raycaster;./Scenes;./GameObjects;./PathFinding;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
@@ -154,7 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AnimationProjectile.cpp" />
+    <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="GameObjects\BreakableObj.cpp" />
@@ -176,8 +176,9 @@
     </ClCompile>
     <ClCompile Include="GameObjects\Effects\CustomEffect.cpp" />
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
-    <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
-    <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
+    <ClCompile Include="PathFinding\JPSRayPathFinding.cpp" />
+    <ClCompile Include="Raycaster\Beam.cpp" />
+    <ClCompile Include="Raycaster\Line.cpp" />
     <ClCompile Include="GameObjects\UIButton.cpp" />
     <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
     <ClCompile Include="Global\Utils.cpp" />
@@ -208,7 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
-    <ClInclude Include="AnimationProjectile.h" />
+    <ClInclude Include="GameObjects\AnimationProjectile.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="GameObjects\BreakableObj.h" />
@@ -227,8 +228,9 @@
     <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="GameObjects\Effects\CustomEffect.h" />
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
-    <ClInclude Include="GameObjects\Raycaster\Beam.h" />
-    <ClInclude Include="GameObjects\Raycaster\Line.h" />
+    <ClInclude Include="PathFinding\JPSRayPathFinding.h" />
+    <ClInclude Include="Raycaster\Beam.h" />
+    <ClInclude Include="Raycaster\Line.h" />
     <ClInclude Include="GameObjects\UIButton.h" />
     <ClInclude Include="GameObjects\VertexArrayGo.h" />
     <ClInclude Include="GameObjects\Monster\Monster.h" />

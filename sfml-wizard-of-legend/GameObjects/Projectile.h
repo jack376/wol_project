@@ -35,6 +35,11 @@ public:
 
 	void SetRotation(const sf::Vector2f dir);
 	void SetRotation(const float angle);
+	virtual void SetPosition(const sf::Vector2f& p) override;
+	virtual void SetPosition(float x, float y) override;
+	virtual void SetOrigin(Origins origin) override;
+	virtual void SetOrigin(float x, float y) override;
+
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetDamage(int num) { damage = num; }
 	void SetSpeed(float num) { speed = num; }

@@ -27,6 +27,7 @@ void Archer::Init()
 	pullArmAni.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Archer_AttackPullArm.csv"));
 	arrow.textureId = "graphics/Texture2D/Arrow2.png";
 	arrow.Init();
+	arrow.SetTiles(worldTiles);
 }
 
 void Archer::Release()

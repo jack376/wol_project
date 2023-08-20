@@ -99,7 +99,17 @@ bool BoxCollider2D::ObbCol(const sf::RectangleShape& other)
 	return true;
 }
 
-void BoxCollider2D::ObbSet()
+void BoxCollider2D::SetObbRotation()
+{
+	obbCol.setRotation(sprite1.getRotation());
+}
+
+void BoxCollider2D::SetObbOrigins()
+{
+	obbCol.setOrigin(sprite1.getOrigin());
+}
+
+void BoxCollider2D::SetObbCol()
 {
 	SetObbRotation();
 	SetObbOrigins();
