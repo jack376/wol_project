@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "InputMgr.h"
 #include "Framework.h"
+#include "GameObject.h"
+#include "TextGo.h"
 #include "Utils.h"
 
 InputMgr::InputMgr()
@@ -30,6 +32,7 @@ void InputMgr::Update(float dt)
 {
 	downList.clear();
 	upList.clear();
+	textList.clear();
 
 	for (auto& it : axisInfoMap)
 	{
@@ -82,25 +85,12 @@ void InputMgr::UpdateEvent(const sf::Event& ev)
 	}
 	case sf::Event::TextEntered:
 	{
-		if (!isEnterPressed) 
-		{ // 엔터 키를 누르기 전까지만 텍스트 편집
-			if (ev.text.unicode == '\r')
-			{ // 엔터 키 확인
-				isEnterPressed = true;
-			}
-			else if (ev.text.unicode < 128) 
-			{
-				if (ev.text.unicode == '\b' && !currentInput.empty()) 
-				{
-					currentInput.pop_back();
-				}
-				else 
-				{
-					currentInput += static_cast<char>(ev.text.unicode);
-				}
-			}
-			//inputText.setString(currentInput);
-		}	
+		if (ev.text.unicode < 128)
+		{
+			char ch = static_cast<char>(ev.text.unicode);
+			textList.push_back(ch);
+		}
+		break;
 	}
 	}
 

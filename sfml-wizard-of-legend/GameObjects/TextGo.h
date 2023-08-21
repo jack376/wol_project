@@ -24,6 +24,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	void SetString(const std::string& str);
+	void SetString(const std::string& str) { text.setString(str); }
+	const std::string& GetString() const { return text.getString(); }
 };
 

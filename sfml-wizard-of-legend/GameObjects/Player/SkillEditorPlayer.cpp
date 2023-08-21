@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Player.h"
+#include "SkillEditorPlayer.h"
 #include "ResourceMgr.h"
 #include "InputMgr.h"
 #include "SceneGame.h"
@@ -8,16 +8,16 @@
 #include "Skill.h"
 #include "Tile.h"
 
-Player::Player(const std::string& textureId, const std::string& n)
+SkillEditorPlayer::SkillEditorPlayer(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
 {
 }
 
-Player::~Player()
+SkillEditorPlayer::~SkillEditorPlayer()
 {
 }
 
-void Player::Init()
+void SkillEditorPlayer::Init()
 {
 	SpriteGo::Init();
 	SetOrigin(Origins::MC);
@@ -33,25 +33,11 @@ void Player::Init()
 	destPos.push_back({ 0 , dashDistance });
 	destPos.push_back({ -dashDistance , 0 });
 
-	//SCENE_MGR.GetCurrScene()->ScreenToUiPos(GetPosition());
-	dirIcon = (SpriteGo*)scene->AddGo(new SpriteGo("graphics/Player/UI/PlayerMarker.png"));
-	dirIcon->sprite.setScale(5, 5);
-	dirIcon->sprite.setColor(sf::Color::Color(255, 255, 255, 100));
-	dirIcon->SetPosition(GetPosition());
-	dirIcon->SetOrigin(Origins::MC);
-	dirIcon->sortLayer = 20;
-	dirIcon->sortOrder = -1;
 
-	portal = (SpriteGo*)scene->AddGo(new SpriteGo("graphics/Player/ExitPortal.png"));
-	portal->sprite.setScale(4, 4);
-	portal->SetOrigin(Origins::ML);
-	portal->sortLayer = 20;
-	portal->sortLayer = 0;
-	portal->SetActive(false);
 
 
 	// 콜라이더
-	rect.setSize({65, 120});
+	rect.setSize({ 65, 120 });
 	rect.setOutlineThickness(1.f);
 	rect.setOutlineColor(sf::Color::Green);
 	rect.setFillColor(sf::Color::Transparent);
@@ -63,11 +49,9 @@ void Player::Init()
 
 	InsertAnimId();
 	playerColor = sprite.getColor();
-	CalculatorCurrentTile();
 
-	spellPool.OnCreate = [this](ElementalSpell* spell)
+	spellPool.OnCreate = [this](SkillEditorElementalSpell* spell)
 	{
-		spell->SetMonsterList(monsters);
 		spell->SetPool(spellPool);
 	};
 
@@ -75,14 +59,14 @@ void Player::Init()
 	//sf::Vector2u imageSize = grayImage.getSize();
 }
 
-void Player::Release()
+void SkillEditorPlayer::Release()
 {
 	// 클리어를 해줘야 하는지 결정해야함
 	destPos.clear();
 	SpriteGo::Release();
 }
 
-void Player::Reset()
+void SkillEditorPlayer::Reset()
 {
 	SpriteGo::Reset();
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Run/RunUp.csv"));
@@ -112,8 +96,8 @@ void Player::Reset()
 
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Kick/KickUp.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Kick/KickRight.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Kick/KickDown.csv"));	
-	
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Kick/KickDown.csv"));
+
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Jump/JumpUp.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Jump/JumpRight.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attack/Jump/JumpDown.csv"));
@@ -139,8 +123,13 @@ void Player::Reset()
 	// 플레이어 리셋
 	hp = maxHp;
 	attackCount = 0;
-	portal->SetActive(false);
-
+	dirIcon = (SpriteGo*)SCENE_MGR.GetCurrScene()->AddGo(new SpriteGo("graphics/Player/UI/PlayerMarker.png"));
+	dirIcon->sprite.setScale(5, 5);
+	dirIcon->sprite.setColor(sf::Color::Color(255, 255, 255, 100));
+	dirIcon->SetPosition(GetPosition());
+	dirIcon->SetOrigin(Origins::MC);
+	dirIcon->sortLayer = 20;
+	dirIcon->sortOrder = -1;
 
 	spellPool.Init();
 
@@ -168,7 +157,7 @@ void Player::Reset()
 
 }
 
-void Player::Update(float dt)
+void SkillEditorPlayer::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
@@ -176,7 +165,7 @@ void Player::Update(float dt)
 	// 방향아이콘 움직임 플레이어와 동기화
 	SetDirIconPos();
 	SetDirIconDir();
-	
+
 	// 디버그 위치
 
 
@@ -187,20 +176,6 @@ void Player::Update(float dt)
 	CalLookAngle();
 	SetAttackPos();
 
-
-	// 디버그 타이머
-	//debugTimer += dt;
-	//if (debugTimer > debugDuration)
-	//{
-	//	std::cout << "X : " << look.x << std::endl;
-	//	std::cout << "Y : " << look.y << std::endl;
-	//	std::cout << "Player Look : " << playerLookAngle << std::endl;
-	//	std::cout << "Attack Dir : " << (int)attackDir << std::endl;
-	//	
-	//	debugTimer = 0.f;
-	//}
-
-
 	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
 	// 입력에 따른 방향 설정
 	CalDir();
@@ -208,33 +183,9 @@ void Player::Update(float dt)
 
 	isMove = dir.x != 0 || dir.y != 0;
 	isDashing = dashDir.x != 0 || dashDir.y != 0;
-	
-	if (currentTile->GetType() == TileType::Ground && isMove)
-	{
-
-	}
 
 
-	if (!isAlive)
-	{
-		ChangeState(States::Die);
-	}
-
-	// 무적 상태 분리
-	if (isInvincible)
-	{
-
-	}
-
-	// 맞으면 무적상태와 맞는 상태 표시
-	if (isHit)
-	{
-		CalHitLookAngle();
-		ChangeState(States::Hit);
-	}
-
-
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling)
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Left;
@@ -249,18 +200,18 @@ void Player::Update(float dt)
 
 		//elemental->SetScene(scene);
 
-		SKILL_MGR.UseSkill(sEvent);
+		SKILL_MGR.UseEditorSkill(sEvent);
 
 		ChangeState(States::Attack);
 
 	}
 
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide && !isFalling)
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Right;
 
-		SKILL_MGR.UseSkill(sEvent);
+		SKILL_MGR.UseEditorSkill(sEvent);
 		//ElementalSpell* elemental = spellPool.Get();
 		//elemental->SetScene(scene);
 		//elemental->SetPlayer(this);
@@ -273,16 +224,16 @@ void Player::Update(float dt)
 
 		ChangeState(States::Attack);
 	}
-	
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide && !isFalling)
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide )
 	{
 		sEvent = SkillEvents::Q;
 		SKILL_MGR.UseSkill(sEvent);
 	}
 
 	// 대쉬 쿨타임 계산
-	if(isDashCool)
+	if (isDashCool)
 		dashCoolTimer += dt;
 
 	if (dashCoolTimer > dashCoolDuration && isDashCool)
@@ -291,7 +242,7 @@ void Player::Update(float dt)
 		dashCoolTimer = 0.f;
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack && !isFalling)
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack )
 	{
 		sEvent = SkillEvents::Space;
 		ChangeState(States::Dash);
@@ -313,43 +264,30 @@ void Player::Update(float dt)
 	case States::Idle:
 		IdleUpdate(dt);
 		break;
-	
+
 	case States::Run:
 		RunUpdate(dt);
 		break;
-	
+
 	case States::Dash:
 		DashUpdate(dt);
 		break;
-	
+
 	case States::Slide:
 		SlideUpdate(dt);
 		break;
-	
+
 	case States::Attack:
 		AttackUpdate(dt);
 		break;
-	
-	case States::Hit:
-		HitUpdate(dt);
-		break;
 
-	case States::Fall:
-		FallUpdate(dt);
-		break;
-	
-	case States::Die:
-		DieUpdate(dt);
-		break;
 	}
-	
+
 	anim.Update(dt);
 	SetOrigin(origin);
-	CalculatorCurrentTile();
-	PortalAnimations(dt);
 }
 
-void Player::Draw(sf::RenderWindow& window)
+void SkillEditorPlayer::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
 	window.draw(palette);
@@ -357,7 +295,7 @@ void Player::Draw(sf::RenderWindow& window)
 	//window.draw(sprite, &currentShader);
 }
 
-void Player::IdleUpdate(float dt)
+void SkillEditorPlayer::IdleUpdate(float dt)
 {
 	sprite.setColor(playerColor);
 	anim.Play(idleId[(int)currentDir]);
@@ -376,7 +314,7 @@ void Player::IdleUpdate(float dt)
 	}
 }
 
-void Player::RunUpdate(float dt)
+void SkillEditorPlayer::RunUpdate(float dt)
 {
 	if (!isRun)
 	{
@@ -399,14 +337,7 @@ void Player::RunUpdate(float dt)
 	sf::Vector2f movePos = sprite.getPosition();
 	movePos += dir * speed * dt;
 	SetPosition(movePos);
-	CalculatorCurrentTile();
 
-	// 타일 충돌 방지
-	if ((currentTile->GetType() == TileType::Cliff ||
-		currentTile->GetType() == TileType::Wall) && isMove)
-	{
-		SetPosition(prevPos);
-	}
 
 	isRun = true;
 
@@ -426,7 +357,7 @@ void Player::RunUpdate(float dt)
 	}
 }
 
-void Player::DashUpdate(float dt)
+void SkillEditorPlayer::DashUpdate(float dt)
 {
 	if (!isDash)
 	{
@@ -455,20 +386,7 @@ void Player::DashUpdate(float dt)
 
 	float t = Utils::Clamp(dashTimer / dashDuration, 0.f, 1.f);
 	SetPosition(Utils::Lerp(dashStart, dashDest, t));
-	CalculatorCurrentTile();
 
-	// 타일 충돌 방지
-	if(currentTile->GetType() == TileType::Wall)
-	{
-		SetPosition(prevPos);
-		ChangeState(States::Slide);
-	}
-
-
-	//if (currentTile->GetType() == TileType::Cliff)
-	//{
-	//	SetPosition(prevPos);
-	//}
 
 	if (t >= 1.0f)
 	{
@@ -477,19 +395,11 @@ void Player::DashUpdate(float dt)
 		isRun = false;
 		isSlide = false;
 		isDashCool = true;
-		if (currentTile->GetType() == TileType::Cliff)
-		{
-			std::cout << "Cliff" << std::endl;
-			ChangeState(States::Fall);
-		}
-		else
-		{
-			ChangeState(States::Slide);
-		}
+		ChangeState(States::Slide);
 	}
 }
 
-void Player::SlideUpdate(float dt)
+void SkillEditorPlayer::SlideUpdate(float dt)
 {
 	if (!isSlide)
 	{
@@ -517,14 +427,14 @@ void Player::SlideUpdate(float dt)
 	}
 }
 
-void Player::AttackUpdate(float dt)
+void SkillEditorPlayer::AttackUpdate(float dt)
 {
-	if(attackCount % 2 != 0)
+	if (attackCount % 2 != 0)
 		attackName = "Fore";
 	else
 		attackName = "Back";
 
-	if(!isAttack)
+	if (!isAttack)
 	{
 		std::string resultId = attackId[(int)attackDir];
 		resultId.insert(attackNameInsertPos, attackName);
@@ -570,139 +480,7 @@ void Player::AttackUpdate(float dt)
 	}
 }
 
-void Player::HitUpdate(float dt)
-{
-
-	currentDir = (Dir)((int)hitDir + 4);
-
-	// 몬스터의 공격과 동기화가 되지 않음
-	if (!isHitAnim)
-	{
-		anim.Play(hitId[(int)hitDir]);
-		sprite.setColor(sf::Color::Red);
-		isHitAnim = true;
-	}
-
-	//애니메이션이 너무 한 프레임에 처리되어서 시간초를 둠
-	if (isHitAnim)
-	{
-		hitTimer += dt;
-	}
-
-	if (hitTimer > hitDuration)
-	{
-		hitTimer = 0.f;
-		isHitAnim = false;
-	}
-
-	// 맞을때 떄린 방향이기에
-	// 때릴때 피하고 다른 방향에서 맞아도 그게 적용
-	switch (hitDir)
-	{
-	case HitDir::Up:
-
-		std::cout << "Hit Up" << std::endl;
-		break;
-	case HitDir::Right:
-		std::cout << "Hit Right" << std::endl;
-
-		break;
-	case HitDir::Down:
-		std::cout << "Hit Down" << std::endl;
-
-		break;
-	case HitDir::Left:
-		SetFlipX(true);
-		std::cout << "Hit Left" << std::endl;
-		break;
-	}
-
-	if (anim.IsAnimEndFrame() && !isHitAnim)
-	{
-		sprite.setColor(playerColor);
-		isHit = false;
-		isHitAnim = false;
-		isRun = false;
-		isAttack = false;
-		ChangeState(States::Idle);
-	}
-}
-
-void Player::FallUpdate(float dt)
-{
-	if (!isFalling)
-	{
-		anim.Play(fallId[(int)slideDir]);
-		isFalling = true;
-		std::cout << "IsFall" << std::endl;
-
-		switch (slideDir)
-		{
-		case Dir::Left:
-			SetFlipX(true);
-			break;
-		}
-
-		fallStart = GetPosition();
-		fallDest = GetPosition() + sf::Vector2f(0, 200.f);
-	}
-
-	if (isFalling)
-	{
-		fallTimer += dt;
-	}
-
-	float t = Utils::Clamp(fallTimer / fallDuration, 0.f, 1.f);
-	SetPosition(Utils::Lerp(fallStart, fallDest, t));
-
-	// 다 떨어지면
-	if (t >= 1.0f && !isFallHit)
-	{
-		isFallHit = true;
-		std::cout << t << std::endl;
-		originAngle = sprite.getRotation();
-		float randomAngle = Utils::RandomRange(0.f, 360.f);
-		anim.Play("HitEffect");
-		sprite.setColor(sf::Color::Red);
-		sprite.setRotation(randomAngle);
-	}
-
-	if (isFallHit)
-	{
-		fallHitTimer += dt;
-	}
-
-	// 맞는 애니메이션 실행 끝나면
-	if (fallHitTimer > fallHitDuration)
-	{
-		// 제자리 돌아가기
-		sprite.setRotation(originAngle);
-		isFallHit = false;
-		isFalling = false;
-		fallTimer = 0.f;
-		fallHitTimer = 0.f;
-		SetPosition(dashStart);
-		portal->SetActive(true);
-		portal->SetPosition(GetPosition().x, GetPosition().y);
-		portal->SetOrigin(Origins::MC);
-		isPortalBigAnim = true;
-		ChangeState(States::Idle);
-	}
-
-}
-
-void Player::DieUpdate(float dt)
-{
-	// 죽을떄 시간 흐름 느리게 하기 생각
-	// 빨개졌다가 다시 하얘짐
-	if (!isDieAnim)
-	{
-		anim.Play("Die");
-		isDieAnim = true;
-	}
-}
-
-void Player::CalDir()
+void SkillEditorPlayer::CalDir()
 {
 	if (dir.y < 0 && dir.x > 0)
 	{
@@ -739,7 +517,7 @@ void Player::CalDir()
 
 }
 
-void Player::CalLookAngle()
+void SkillEditorPlayer::CalLookAngle()
 {
 	playerLookAngle = Utils::Angle(look);
 
@@ -768,66 +546,26 @@ void Player::CalLookAngle()
 	}
 }
 
-void Player::CalHitLookAngle()
-{
-	hitLookAngle = Utils::Angle(hitLook);
-
-	if (hitLookAngle < 0)
-	{
-		hitLookAngle += 180 * 2;
-	}
-
-	hitLookAngle += 180;
-
-	// 때린 방향 반대로 전환
-	if (hitLookAngle >= 360)
-	{
-		//hitLookAngle -= 360;
-		hitLookAngle = (float)((int)hitLookAngle % 360);
-	}
-
-
-	// 각도에 따른 공격 방향 설정
-	if ((hitLookAngle < 45 && hitLookAngle >= 0) ||
-		(hitLookAngle < 360 && hitLookAngle >= 315))
-	{
-		hitDir = HitDir::Right;
-	}
-	if (hitLookAngle < 135 && hitLookAngle >= 45)
-	{
-		hitDir = HitDir::Down;
-	}
-	if (hitLookAngle < 225 && hitLookAngle >= 135)
-	{
-		hitDir = HitDir::Left;
-	}
-	if (hitLookAngle < 315 && hitLookAngle >= 225)
-	{
-		hitDir = HitDir::Up;
-	}
-
-}
-
-void Player::SetAttackPos()
+void SkillEditorPlayer::SetAttackPos()
 {
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f playerScreenPos = SCENE_MGR.GetCurrScene()->WorldPosToScreen(GetPosition());
 
 	look = Utils::Normalize(mousePos - playerScreenPos);
 
-	attackPos = { look.x * attackDistance + GetPosition().x , 
+	attackPos = { look.x * attackDistance + GetPosition().x ,
 				look.y * attackDistance + GetPosition().y };
 
 	// 공격 지점 가시화
 	attackPosCol.setPosition(attackPos);
 }
 
-void Player::SetDirIconPos()
+void SkillEditorPlayer::SetDirIconPos()
 {
 	dirIcon->SetPosition(GetPosition().x, GetPosition().y + 80.f);
 }
 
-void Player::SetDirIconDir()
+void SkillEditorPlayer::SetDirIconDir()
 {
 	sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
 	sf::Vector2f iconScreenPos = SCENE_MGR.GetCurrScene()->WorldPosToScreen(dirIcon->GetPosition());
@@ -837,24 +575,12 @@ void Player::SetDirIconDir()
 	dirIcon->sprite.setRotation(angle);
 }
 
-void Player::SetHp(int value)
-{
-	isHit = true;
-	//isInvincible = true;
-	if (hp <= 0)
-	{
-		// Dead 상태
-		isAlive = false;
-	}
-	hp += value;
-}
-
-void Player::ChangeState(States state)
+void SkillEditorPlayer::ChangeState(States state)
 {
 	currentState = state;
 }
 
-void Player::InsertAnimId()
+void SkillEditorPlayer::InsertAnimId()
 {
 	idleId.push_back("IdleRight");
 	idleId.push_back("IdleRight");
@@ -912,82 +638,4 @@ void Player::InsertAnimId()
 	fallId.push_back("HitRight");
 	fallId.push_back("HitDown");
 	fallId.push_back("HitRight");
-}
-
-void Player::CalculatorCurrentTile()
-{
-	int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
-	int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
-
- 	currentTile = (*wouldTiles)[rowIndex][columnIndex];
-}
-
-std::vector<Tile*> Player::CalculatorRangeTiles(int row, int col)
-{
-	//32x16
-	int searchRowRange = row;
-	int searchColRange = col;
-
-	sf::Vector2i index = currentTile->GetIndex();
-	std::vector<Tile*> tiles;
-
-	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > wouldTiles->size() * _TileSize ? wouldTiles->size() * _TileSize : index.x;
-	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > wouldTiles[0].size() * _TileSize ? wouldTiles[0].size() * _TileSize : index.y;
-	for (int i = topRowIndex; i < index.x + searchRowRange; i++)
-	{
-		for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
-		{
-			tiles.push_back((*this->wouldTiles)[i][j]);
-		}
-	}
-
-	return tiles;
-}
-
-void Player::PortalAnimations(float dt)
-{
-	if (isPortalBigAnim)
-		portalTimer += dt;
-
-	if (isPortalAnimTerm)
-		portalTermTimer += dt;
-
-
-	if (isPortalSmallAnim)
-		portalTimer -= dt;
-
-
-	float t = Utils::Clamp(portalTimer / portalDuration, 0.f, 1.f);
-
-	if (t >= 1.0f && isPortalBigAnim)
-	{
-		isPortalBigAnim = false;
-		isPortalAnimTerm = true;
-	}
-
-
-	if (portalTermTimer > portalDuration)
-	{
-		isPortalAnimTerm = false;
-		isPortalSmallAnim = true;
-	}
-
-	if (t <= 0.f && isPortalSmallAnim)
-	{
-		portalTimer = 0.f;
-		portalTermTimer = 0.f;
-		isPortalSmallAnim = false;
-	}
-
-
-	if (isPortalBigAnim)
-	{
-		portal->sprite.setScale(Utils::Lerp(1.f, 4.f, t), Utils::Lerp(2.f, 4.f, t));
-	}
-
-	if (isPortalSmallAnim)
-	{
-		portal->sprite.setScale(Utils::Lerp(0.f, 4.f, t), Utils::Lerp(0.f, 4.f, t));
-	}
-	portal->SetOrigin(Origins::MC);
 }

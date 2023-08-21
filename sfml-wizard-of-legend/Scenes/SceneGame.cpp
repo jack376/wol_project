@@ -54,34 +54,20 @@ void SceneGame::Init()
 	//tempFireBall->SetRangeType(RangeTypes::Curve);
 
 	Skill* fireBall = (Skill*)AddGo(new Skill());
-	fireBall->SetSkillEvent(SkillEvents::Left);
-
+	fireBall->SetSkillEvent(SkillEvents::Right);
 	fireBall->SetElementType(ElementTypes::Fire);
 	fireBall->SetSkillType(SkillTypes::Range);
-	fireBall->SetRangeType(RangeTypes::Straight);
-
-	Skill* fireBall2 = (Skill*)AddGo(new Skill());
-	fireBall2->SetSkillEvent(SkillEvents::Space);  
-	fireBall2->SetElementType(ElementTypes::Fire);
-	fireBall2->SetSkillType(SkillTypes::Range);
-	fireBall2->SetRangeType(RangeTypes::Straight);
-
-	Skill* fireBall3 = (Skill*)AddGo(new Skill());
-	fireBall3->SetSkillEvent(SkillEvents::Q);  
-	fireBall3->SetElementType(ElementTypes::Fire);
-	fireBall3->SetSkillType(SkillTypes::Range);
-	fireBall3->SetRangeType(RangeTypes::Straight);
+	fireBall->SetRangeType(RangeTypes::Curve);
 
 	Skill* windSlash = (Skill*)AddGo(new Skill());
-	windSlash->SetSkillEvent(SkillEvents::Q);
-	windSlash->SetElementType(ElementTypes::Fire);
-	windSlash->SetSkillType(SkillTypes::Range);
+	windSlash->SetSkillEvent(SkillEvents::Left);
+	windSlash->SetElementType(ElementTypes::Wind);
+	windSlash->SetSkillType(SkillTypes::Melee);
 	windSlash->SetRangeType(RangeTypes::Straight);
 
 	SKILL_MGR.InputSkill(windSlash);
 	SKILL_MGR.InputSkill(fireBall);
-	SKILL_MGR.InputSkill(fireBall2);
-	SKILL_MGR.InputSkill(fireBall3);
+
 
 	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
 
@@ -125,12 +111,13 @@ void SceneGame::Init()
 
 	for (auto go : gameObjects)
 	{
-		if (go->GetName() == "a")
-		{
-			std::cout << "";
-		}
 		go->Init();
 	}
+
+	SKILL_MGR.SetTiles(&tilesWorld);
+	SKILL_MGR.SetMonsterList(monsters);
+	SKILL_MGR.SetPlayer(player);
+	SKILL_MGR.Init();
 }
 
 void SceneGame::Release()

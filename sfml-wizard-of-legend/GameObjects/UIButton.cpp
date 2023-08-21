@@ -2,6 +2,7 @@
 #include "UIButton.h"
 #include "InputMgr.h"
 #include "SceneMgr.h"
+#include "TextGo.h"
 
 UIButton::UIButton(const std::string& textureId, const std::string& n)
 	:SpriteGo(textureId, n)
@@ -16,12 +17,11 @@ UIButton::~UIButton()
 void UIButton::Init()
 {
 	SpriteGo::Init();
-	font.loadFromFile("fonts/CookieRun Black.otf");
+	font.loadFromFile("fonts/NanumSquareEB.ttf");
 	text.setFont(font);
-	text.setCharacterSize(40);
+	text.setCharacterSize(20);
 	text.setFillColor(sf::Color::White);
-	text.setOutlineThickness(3);
-	text.setOutlineColor(sf::Color::Black);
+
 }
 
 void UIButton::Release()
@@ -34,6 +34,8 @@ void UIButton::Reset()
 	SpriteGo::Reset();
 
 	isHover = false;
+	isPressed = false;
+	isInput = false;
 }
 
 void UIButton::Update(float dt)
@@ -73,6 +75,11 @@ void UIButton::Update(float dt)
 			if (OnClicking != nullptr)
 				OnClicking();
 	}
+
+	if (isInput)
+	{
+		InputString();
+	}
 }
 
 void UIButton::Draw(sf::RenderWindow& window)
@@ -103,4 +110,31 @@ void UIButton::SetOrigin(float x, float y)
 {
 	SpriteGo::SetOrigin(x, y);
 	text.setOrigin(x, y);
+}
+
+void UIButton::InputString()
+{
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Enter))
+	{
+		Reset();
+
+		return;
+	}
+	else if (!INPUT_MGR.GetTextList().empty())
+	{
+		if (INPUT_MGR.GetTextList().front() == '\b')
+		{
+			std::string s = text.getString();
+			if (s.empty()) return;
+			s.pop_back();
+			text.setString(s);
+			SetOrigin(origin);
+		}
+		else
+		{
+			std::string s = text.getString();
+			text.setString(s + INPUT_MGR.GetTextList().front());
+			SetOrigin(origin);
+		}
+	}
 }

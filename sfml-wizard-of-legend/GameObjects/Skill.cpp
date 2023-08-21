@@ -3,6 +3,8 @@
 #include "SceneMgr.h"
 #include "InputMgr.h"
 #include "ElementalSpell.h"
+#include "SkillEditorElementalSpell.h"
+#include "Monster.h"
 
 Skill::Skill(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -15,13 +17,15 @@ Skill::~Skill()
 
 void Skill::Init()
 {
-	//skillIcon = (SpriteGo*)SCENE_MGR.GetCurrScene()->AddGo(new SpriteGo(skillInfo.skillIconId));
-
-	//if (INPUT_MGR.GetKeyDown(currentKey))
-	//{
-	//	elementSpell = (ElementalSpell*)SCENE_MGR.GetCurrScene()->AddGo(new ElementalSpell());
-
-	//}
+	pool.OnCreate = [this](ElementalSpell* spell)
+	{
+		spell->SetMonsterList(monsters);
+		spell->SetPool(pool);
+	};
+	editorPool.OnCreate = [this](SkillEditorElementalSpell* spell)
+	{
+		spell->SetPool(editorPool);
+	};
 }
 
 void Skill::Release()
@@ -46,16 +50,31 @@ void Skill::Draw(sf::RenderWindow& window)
 
 void Skill::UseSkill()
 {
-	elementSpell = (ElementalSpell*)SCENE_MGR.GetCurrScene()->AddGo(new ElementalSpell());
-	elementSpell->sortLayer = 21;
-	elementSpell->SetElementType(currentElementType);
-	elementSpell->SetSkillType(currentSkillType);
-	elementSpell->SetRangeType(currentRangeType);
+	ElementalSpell* elementalSpell = pool.Get();
 
-	// 실제 사용하는 부분에서 적용
+	elementalSpell = (ElementalSpell*)SCENE_MGR.GetCurrScene()->AddGo(new ElementalSpell());
+	elementalSpell->SetElementType(currentElementType);
+	elementalSpell->SetSkillType(currentSkillType);
+	elementalSpell->SetRangeType(currentRangeType);
+	elementalSpell->SetPlayer(player);
+ 	elementalSpell->sortLayer = 21;
+	elementalSpell->Init();
+	elementalSpell->Reset();
 
-	//elementSpell = spellPool.Get();
-	//elementSpell->SetTiles(wouldTiles);
-	//elementSpell->SetMonsterList(monsters);
-	//elementSpell->SetPlayer(this);
+	elementalSpell->SetMonsterList(monsters);
+	elementalSpell->SetTiles(worldTiles);
+}
+
+void Skill::UseEditorSkill()
+{
+	SkillEditorElementalSpell* elementalSpell = editorPool.Get();
+
+	elementalSpell = (SkillEditorElementalSpell*)SCENE_MGR.GetCurrScene()->AddGo(new SkillEditorElementalSpell());
+	elementalSpell->SetElementType(currentElementType);
+	elementalSpell->SetSkillType(currentSkillType);
+	elementalSpell->SetRangeType(currentRangeType);
+	elementalSpell->SetPlayer(editorPlayer);
+	elementalSpell->sortLayer = 21;
+	elementalSpell->Init();
+	elementalSpell->Reset();
 }

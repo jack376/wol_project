@@ -22,7 +22,7 @@ enum class SkillTypes
 
 enum class RangeTypes
 {
-	None,
+	None = -1,
 	Straight,
 	Curve,
 };

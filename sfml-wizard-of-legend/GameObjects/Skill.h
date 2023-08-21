@@ -1,21 +1,27 @@
 #pragma once
 #include "SpriteGo.h"
 #include "ObjectPool.h"
+#include "Monster.h"
+#include "SkillEditorElementalSpell.h"
 
 struct SpellInfo
 {
 
-	std::string skillIconId;
+	std::string skillName;
 	std::string playerAction;
 
 	int damage;
 	int comboDamage;
+	int comboMaxCount;
 	int maxSkillCharge;
+	int shotCount;
 
 	float speed;
 	float range;
 	float explosionRange;
+	float delayDuration;
 	float damageDelay;
+	float coolTime;
 
 	float frquency;
 	float amplitude;
@@ -34,6 +40,10 @@ struct SpellInfo
 };
 
 class ElementalSpell;
+class SkillEditorElementalSpell;
+class Tile;
+class Player;
+class SkillEditorPlayer;
 
 class Skill : public SpriteGo
 {
@@ -44,6 +54,7 @@ protected:
 	SkillTypes currentSkillType = SkillTypes::None;
 	RangeTypes currentRangeType = RangeTypes::None;
 	SkillEvents currentEventType = SkillEvents::None;
+	PlayerActions currentPlayerActionType = PlayerActions::None;
 
 	sf::Keyboard::Key currentKey = sf::Keyboard::Unknown;
 	sf::Mouse::Button currentButton = sf::Mouse::None;
@@ -56,12 +67,18 @@ protected:
 
 	float spreadAngle;
 
-	SpellInfo skillInfo;
+	SpellInfo spellInfo;
 	
 	// 실제 스킬
-	ElementalSpell* elementSpell;
+	//ElementalSpell* elementSpell;
 	ObjectPool<ElementalSpell> pool;
+	ObjectPool<SkillEditorElementalSpell> editorPool;
 
+	std::list<Monster*> monsters;
+	std::vector<std::vector<Tile*>>* worldTiles = nullptr;
+
+	Player* player;
+	SkillEditorPlayer* editorPlayer;
 
 public:
 	Skill(const std::string& textureId = "", const std::string& n = "");
@@ -79,11 +96,19 @@ public:
 	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }
 	void SetRangeType(RangeTypes type) { currentRangeType = type; }
+	void SetPlayerAction(PlayerActions type) { currentPlayerActionType = type; }
+	
 	void SetPool(ObjectPool<ElementalSpell>& pool) { this->pool = pool; }
+	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }
+	void SetMonsterList(std::list<Monster*>& monsters) { this->monsters = monsters; }
+	void SetPlayer(Player*& player) { this->player = player; }
+
+	void SetEditorPlayer(SkillEditorPlayer*& player) { this->editorPlayer = player; }
 
 	void UseSkill();
+	void UseEditorSkill();
 
-	void SetSpellInfo();
+	void SetSpellInfo(SpellInfo info) { this->spellInfo = info; }
 	void InsertAnimId();
 };
 

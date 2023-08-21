@@ -1,12 +1,33 @@
 #include "stdafx.h"
 #include "SkillMgr.h"
 #include "ElementalSpell.h"
+#include "Monster.h"
+
+void SkillMgr::Init()
+{
+	for (auto skill : skillList)
+	{
+		skill.second->SetTiles(worldTiles);
+		skill.second->SetMonsterList(monsters);
+		skill.second->SetPlayer(player);
+		skill.second->SetEditorPlayer(editorPlayer);
+		skill.second->Init();
+	}
+}
 
 void SkillMgr::UseSkill(SkillEvents sEvent)
 {
 	Skill* useSkill = skillList[sEvent];
 	useSkill->UseSkill();
 }
+
+void SkillMgr::UseEditorSkill(SkillEvents sEvent)
+{
+	Skill* useSkill = skillList[sEvent];
+	useSkill->UseEditorSkill();
+
+}
+
 
 void SkillMgr::UseQSkill()
 {

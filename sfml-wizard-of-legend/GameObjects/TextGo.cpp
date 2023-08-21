@@ -67,14 +67,8 @@ void TextGo::Draw(sf::RenderWindow& window)
 {
 	window.draw(text);
 }
-
-void TextGo::SetString(const std::string& str)
-{
-	//std::wstring unicode = L"";
-	//convert_ansi_to_unicode_string(unicode, getString.c_str(), getString.size());
-	//return unicode.c_str();
-
-	//std::string utf8String = str;
-	//sf::String unicodeString = sf::String::fromUtf8(utf8String.begin(), utf8String.end());
-	//text.setString(unicodeString);
-}
+//
+//void TextGo::SetString(const std::string& str)
+//{
+//
+//}

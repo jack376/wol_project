@@ -61,7 +61,7 @@ GameObject* Scene::AddGo(GameObject* go)
 {
 	if (!Exist(go))
 	{
-		gameObjects.push_back(go);
+ 		gameObjects.push_back(go);
 	}
 	return go;
 }

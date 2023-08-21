@@ -45,6 +45,8 @@
     <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
     <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
     <ClCompile Include="Scenes\SceneSkillEditor.cpp" />
+    <ClCompile Include="GameObjects\Player\SkillEditorPlayer.cpp" />
+    <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -177,6 +179,8 @@
     <ClInclude Include="GameObjects\Raycaster\Line.h" />
     <ClInclude Include="GameObjects\Raycaster\Beam.h" />
     <ClInclude Include="Scenes\SceneSkillEditor.h" />
+    <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
+    <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
