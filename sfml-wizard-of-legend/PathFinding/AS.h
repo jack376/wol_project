@@ -24,7 +24,7 @@ public:
 	};
 
 	char zmap[MAX][MAX];
-	int ROW = 0, COL = 0;
+	int ROW = 32, COL = 32;
 
 	//주어진 현재 셀의 좌표가 목적지 셀의 좌표와 일치하는지 확인하여 결과를 반환
 	bool isDestination(int row, int col, Pair dst);
@@ -41,7 +41,7 @@ public:
 	std::stack<Pair> tracePath(Cell cellDetails[MAX][MAX], Pair dst, std::vector<std::vector<int>>& data);
 
 	//주어진 그리드 맵에서 출발지에서 목적지까지의 최단 경로를 찾는 A* 알고리즘을 구현
-	bool aStarSearch(std::vector<std::vector<int>>& map, Pair src, Pair dst);
+	std::pair<bool, std::stack<Pair>> aStarSearch(std::vector<std::vector<int>>& map, Pair src, Pair dst);
 };
 
 #define _AS (AS::Instance())

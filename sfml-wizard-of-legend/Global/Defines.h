@@ -77,6 +77,7 @@ enum class SceneId
 	Game,
 	Editor,
 	SkillEditor,
+	Pathfinding,
 	Count,
 };
 

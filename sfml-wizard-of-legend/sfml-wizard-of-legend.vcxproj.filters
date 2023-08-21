@@ -48,6 +48,7 @@
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="GameObjects\Monster\Mage.cpp" />
     <ClCompile Include="PathFinding\AS.cpp" />
+    <ClCompile Include="Scenes\PathfindingScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Monster\Mage.h" />
     <ClInclude Include="PathFinding\AS.h" />
+    <ClInclude Include="Scenes\PathfindingScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

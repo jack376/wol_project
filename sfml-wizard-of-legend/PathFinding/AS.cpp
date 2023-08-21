@@ -33,24 +33,25 @@ std::stack<AS::Pair> AS::tracePath(Cell cellDetails[MAX][MAX], Pair dst, std::ve
 		s.push({ y, x });
 	}
 	
-	std::stack<Pair> result = s;
+	std::stack<Pair> path = s;
 
 	while (!s.empty()) {
 		data[s.top().first][s.top().second] = 9;
 		s.pop();
 	}
 
-	return result;
+	return path;
 }
 
-bool AS::aStarSearch(std::vector<std::vector<int>>& map, Pair src, Pair dst) {
+std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<int>>& map, Pair src, Pair dst) {
 
-	if (!isInRange(src.first, src.second) || !isInRange(dst.first, dst.second)) return false;
-	if (!isUnBlocked(map, src.first, src.second) || !isUnBlocked(map, dst.first, dst.second)) return false;
-	if (isDestination(src.first, src.second, dst)) return false;
+	std::stack<AS::Pair> path;
+
+	if (!isInRange(src.first, src.second) || !isInRange(dst.first, dst.second)) return std::pair<bool, std::stack<AS::Pair>>(false, path);
+	if (!isUnBlocked(map, src.first, src.second) || !isUnBlocked(map, dst.first, dst.second)) return std::pair<bool, std::stack<AS::Pair>>(false, path);
+	if (isDestination(src.first, src.second, dst)) return std::pair<bool, std::stack<AS::Pair>>(false, path);
 
 	bool closedList[MAX][MAX];
-	//std::fill(closedList[0][0], closedList[MAX][MAX], false);
 	std::memset(closedList, false, sizeof(closedList));
 
 	Cell cellDetails[MAX][MAX];
@@ -95,8 +96,8 @@ bool AS::aStarSearch(std::vector<std::vector<int>>& map, Pair src, Pair dst) {
 				if (isDestination(ny, nx, dst)) {
 					cellDetails[ny][nx].parent_y = y;
 					cellDetails[ny][nx].parent_x = x;
-					tracePath(cellDetails, dst, map);
-					return true;
+					path = tracePath(cellDetails, dst, map);
+					return std::pair<bool, std::stack<AS::Pair>>(true, path);
 				}
 
 				// bfs와 굳이 비교하자면, closedList를 방문여부라고 생각하시면 됩니다.
@@ -120,5 +121,5 @@ bool AS::aStarSearch(std::vector<std::vector<int>>& map, Pair src, Pair dst) {
 		}
 	}
 
-	return false;
+	return std::pair<bool, std::stack<AS::Pair>>(false, path);;
 }

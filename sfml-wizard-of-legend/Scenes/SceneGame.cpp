@@ -110,7 +110,6 @@ void SceneGame::Update(float dt)
 	worldView.setCenter(player->GetPosition());
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
-	Scene::Update(dt);
 
 	//if (debugTimer > debugDuration && !isCol)
 	//{
