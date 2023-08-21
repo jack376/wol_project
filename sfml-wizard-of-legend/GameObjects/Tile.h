@@ -43,7 +43,7 @@ public:
     std::function<void()> OnEnter;
     std::function<void()> OnExit;
 
-    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::None);
+    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::Ground);
     virtual ~Tile();
 
     virtual void Init() {}

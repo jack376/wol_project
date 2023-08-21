@@ -186,9 +186,9 @@ void SceneEditor::CreateTile2dVector(int rows, int cols)
 
 std::vector<Tile*> SceneEditor::GetAllTiles()
 {
-	for (auto& row : tilesWorld)
+	for (auto& tiles : tilesWorld)
 	{
-		for (Tile* tile : row)
+		for (Tile* tile : tiles)
 		{
 			allTiles.push_back(tile);
 		}
@@ -198,9 +198,9 @@ std::vector<Tile*> SceneEditor::GetAllTiles()
 
 std::vector<Tile*> SceneEditor::GetSelectedTiles()
 {
-	for (auto& row : tilesWorld) 
+	for (auto& tiles : tilesWorld) 
 	{
-		for (Tile* tile : row) 
+		for (Tile* tile : tiles) 
 		{
 			if (tile->GetState() == Tile::TileState::Select)
 			{
@@ -630,46 +630,57 @@ void SceneEditor::PasteSelectedTiles()
 
 void SceneEditor::ResizeWorld(int newRows, int newCols)
 {
-	std::vector<std::vector<TileCommand::TileState>> tempTileStates;
-	tempTileStates.resize(rows, std::vector<TileCommand::TileState>(cols));
-
-	for (int i = 0; i < tilesWorld.size(); i++)
+	if (!tilesWorld.empty() && !tilesWorld[0].empty()) 
 	{
-		for (int j = 0; j < tilesWorld[i].size(); j++)
+		Tile* firstTile = tilesWorld[0][0];
+		if (firstTile != nullptr) 
 		{
-			if (tilesWorld[i][j])
+			clipboardTiles.clear();
+			if (tilesWorld.empty())
 			{
-				tempTileStates[i][j] = CaptureTileState(tilesWorld[i][j]);
-				tilesWorld[i][j]->SetActive(false);
-				RemoveGo(tilesWorld[i][j]);
-				tilesWorld[i][j] = nullptr;
+				return;
 			}
+			for (auto& tiles : tilesWorld)
+			{
+				for (Tile* tile : tiles)
+				{
+					TileCommand::TileState tileState = CaptureTileState(tile);
+					clipboardTiles.push_back(tileState);
+				}
+			}
+			SetSelectedTilesState(Tile::TileState::Blank);
+		}
+		else 
+		{
+			std::cout << "ERROR : failed copy, first tile nullptr" << std::endl;
 		}
 	}
-
-	tilesWorld.clear();
-	tilesWorld.resize(newRows, std::vector<Tile*>(newCols, nullptr));
-
-	int copyRows = std::min(rows, newRows);
-	int copyCols = std::min(cols, newCols);
-
-	rows = newRows;
-	cols = newCols;
-
+	else 
+	{
+		std::cout << "REPORT : tilesWorld is empty & first sub-vector is empty" << std::endl;
+	}
 	for (int i = 0; i < rows; i++)
 	{
 		for (int j = 0; j < cols; j++)
 		{
-			if (!tilesWorld[i][j])
+			if (tilesWorld[i][j] != nullptr)
 			{
-				tilesWorld[i][j] = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
-			}
-			if (i < copyRows && j < copyCols)
-			{
-				ApplyTileState(tilesWorld[i][j], tempTileStates[i][j]);
+				tilesWorld[i][j]->SetActive(false);
+				RemoveGo(tilesWorld[i][j]);
 			}
 		}
 	}
+	tilesWorld.clear();
+	tilesWorld.resize(newRows, std::vector<Tile*>(newCols, nullptr));
+
+	rows = newRows;
+	cols = newCols;
+	CreateTile2dVector(rows, cols);
+
+	startTileIndex = sf::Vector2i(0, 0);
+	endTileIndex = sf::Vector2i(0, 0);
+	SetSelectedTilesArea();
+	PasteSelectedTiles();
 }
 
 void SceneEditor::DrawEditorUI()
@@ -695,15 +706,15 @@ void SceneEditor::DrawEditorUI()
 	// UI Window Key Shotcut
 	bool showWindow = false;
 	ImGui::SetNextWindowPos(ImVec2(windowSize.x - 256.0f - blankPos, blankPos));
-	ImGui::SetNextWindowSize(ImVec2(256.0f, 576.0f));
+	ImGui::SetNextWindowSize(ImVec2(256.0f, 640.0f));
 	ImGui::Begin("KEY SHOTCUTS GUIDE", &showWindow, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 	ImGui::LabelText("MOUSE L", "SELECT");
 	ImGui::LabelText("MOUSE R", "DESELECT");
 	ImGui::Separator();
 	ImGui::LabelText("W,A,S,D", "MOVE");
 	ImGui::LabelText("Q", "DRAW");
-	ImGui::LabelText("E", "FRONT LAYER");
-	ImGui::LabelText("R", "REAR LAYER");
+	ImGui::LabelText("E", "TOP LAYER");
+	ImGui::LabelText("R", "BOTTOM LAYER");
 	ImGui::Separator();
 	ImGui::LabelText("T", "GRID VIEW");
 	ImGui::LabelText("Y", "TILE OVERLAY");
@@ -713,9 +724,7 @@ void SceneEditor::DrawEditorUI()
 	ImGui::LabelText("1", "GROUND");
 	ImGui::LabelText("2", "CLIFF");
 	ImGui::LabelText("3", "WALL");
-	ImGui::LabelText("4", "SPAWN");
-	ImGui::LabelText("5", "EVENT");
-	ImGui::LabelText("6", "NONE");
+	ImGui::LabelText("4", "NONE");
 	ImGui::Separator();
 	ImGui::LabelText("Ctrl + Z", "UNDO");
 	ImGui::LabelText("Ctrl + X", "REDO");
@@ -744,9 +753,9 @@ void SceneEditor::DrawEditorUI()
 		// °í¹Î Áß
 	}
 	ImGui::SameLine();
-	std::vector<std::string> labels = { "GROUND (1)", "CLIFF (2)", "WALL (3)", "SPAWN (4)", "EVENT (5)", "NONE (6)" };
-	std::vector<int> colors = { 2, 0, 1, 4, 5, 6 };
-	for (int i = 0; i < 6; i++)
+	std::vector<std::string> labels = { "GROUND (1)", "CLIFF (2)", "WALL (3)", "NONE (4)" };
+	std::vector<int> colors = { 2, 0, 1, 4 };
+	for (int i = 0; i < 4; i++)
 	{
 		if (i > 0)
 		{
@@ -770,12 +779,6 @@ void SceneEditor::DrawEditorUI()
 				SetSelectedTilesType(TileType::Wall);
 				break;
 			case 3:
-				SetSelectedTilesType(TileType::MonsterSpawn);
-				break;
-			case 4:
-				SetSelectedTilesType(TileType::EventTrigger);
-				break;
-			case 5:
 				SetSelectedTilesType(TileType::None);
 				break;
 			default:
@@ -828,12 +831,12 @@ void SceneEditor::DrawEditorUI()
 
 	// Map Size Modify
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "MAP SIZE MODIFY");
-	const char* mapSizeX[] = { "16", "32", "48", "64", "80", "96", "112", "128" };
+	const char* mapSizeX[] = { "16", "24", "32", "48", "64", "80", "96", "112", "128" };
 	static int mapSizeIndexX = 0;
 	ImGui::SetNextItemWidth(64.0f);
 	ImGui::Combo("##input4", &mapSizeIndexX, mapSizeX, IM_ARRAYSIZE(mapSizeX));
 	ImGui::SameLine();
-	const char* mapSizeY[] = { "16", "32", "48", "64", "80", "96", "112", "128" };
+	const char* mapSizeY[] = { "16", "24", "32", "48", "64", "80", "96", "112", "128" };
 	static int mapSizeIndexY = 0;
 	ImGui::SetNextItemWidth(64.0f);
 	ImGui::Combo("##input5", &mapSizeIndexY, mapSizeY, IM_ARRAYSIZE(mapSizeY));
@@ -959,9 +962,7 @@ void SceneEditor::InputEditorUI()
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(TileType::Ground); }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(TileType::Cliff); }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(TileType::Wall); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(TileType::MonsterSpawn); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5)) { SetSelectedTilesType(TileType::EventTrigger); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num6)) { SetSelectedTilesType(TileType::None); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(TileType::None); }
 
 	// Deselect
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }

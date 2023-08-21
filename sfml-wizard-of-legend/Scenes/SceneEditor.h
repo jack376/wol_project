@@ -14,8 +14,8 @@ class Tile;
 class SceneEditor : public Scene
 {
 protected:
-	int rows = 32;
-	int cols = 32;
+	int rows = 0;
+	int cols = 0;
 	float tileSize = 16.0f;
 
 	sf::Vector2f windowSize;
