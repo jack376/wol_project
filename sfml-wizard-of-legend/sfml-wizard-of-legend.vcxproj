@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PathFinding\AS.cpp" />
     <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
@@ -176,7 +177,6 @@
     </ClCompile>
     <ClCompile Include="GameObjects\Effects\CustomEffect.cpp" />
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
-    <ClCompile Include="PathFinding\JPSRayPathFinding.cpp" />
     <ClCompile Include="Raycaster\Beam.cpp" />
     <ClCompile Include="Raycaster\Line.cpp" />
     <ClCompile Include="GameObjects\UIButton.cpp" />
@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="PathFinding\AS.h" />
     <ClInclude Include="GameObjects\AnimationProjectile.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
@@ -228,7 +229,6 @@
     <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="GameObjects\Effects\CustomEffect.h" />
     <ClInclude Include="GameObjects\Monster\Lancer.h" />
-    <ClInclude Include="PathFinding\JPSRayPathFinding.h" />
     <ClInclude Include="Raycaster\Beam.h" />
     <ClInclude Include="Raycaster\Line.h" />
     <ClInclude Include="GameObjects\UIButton.h" />

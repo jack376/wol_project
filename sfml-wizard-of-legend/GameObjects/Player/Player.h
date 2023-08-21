@@ -247,4 +247,5 @@ public:
 
 	void PortalAnimations(float dt);
 
+	Tile* GetCurrentTile() { return currentTile; }
 };

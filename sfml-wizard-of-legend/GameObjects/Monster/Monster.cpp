@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Tile.h"
 #include "CustomEffect.h"
+#include "AS.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -212,6 +213,11 @@ void Monster::Move(float dt)
         SetRectBox();
     }
     
+    Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
+    Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
+    
+    //_AS.aStarSearch(*intMap, src, dst);
+    
     prevPos = position;
     SetPosition(position + look * stat.speed * dt);
     CalculatorCurrentTile();
@@ -320,8 +326,8 @@ void Monster::OnAttacked(float damage)  //플레이어에서 몬스터를 공격할 때 호출
 
 void Monster::CalculatorCurrentTile()
 {
-    int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
-    int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
+    int rowIndex = position.x / _TileSize;
+    int columnIndex = position.y / _TileSize;
 
     currentTile = (*worldTiles)[rowIndex][columnIndex];
 }

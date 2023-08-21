@@ -80,10 +80,13 @@ protected:
 	sf::Vector2f prevPos; 
 
 	std::vector<std::vector<Tile*>>* worldTiles = nullptr;
+	std::vector<std::vector<int>>* intMap = nullptr;
 
 	sf::CircleShape searchRange;
 	sf::CircleShape attackRange;
 
+	using Pair = std::pair<int, int>;
+	using pPair = std::pair<double, Pair>;
 public:
 	Monster(MonsterId id, const std::string& textureId = "", const std::string& n = "");
 	virtual ~Monster() override;
@@ -107,6 +110,7 @@ public:
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetRectBox();
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }
+	void SetIntMap(std::vector<std::vector<int>>* intMap) { this->intMap = intMap; }
 
 	void OnAttacked(float damage);
 

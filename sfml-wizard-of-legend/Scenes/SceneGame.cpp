@@ -38,6 +38,7 @@ void SceneGame::Init()
 	player->SetScene(this);
 
 	LoadFromCSV("tables/TileInfoTable.csv");
+	TilesToIntMap();
 
 	tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
 	tempWindSlash->SetScene(this);
@@ -45,10 +46,11 @@ void SceneGame::Init()
 	tempWindSlash->sortLayer = 21;
 
 
-	Monster* go = CreateMonster(MonsterId::Archer);
+	Monster* go = CreateMonster(MonsterId::Mage);
 	monster = go;
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
+	monster->SetIntMap(&intMap);
 
 	player->SetTiles(&tilesWorld);
 	tempWindSlash->SetTiles(&tilesWorld);
@@ -323,4 +325,20 @@ void SceneGame::DestroyBreakableObj(BreakableObj* obj)
 {
 	RemoveGo(obj);
 	count++; // юс╫ц
+}
+
+void SceneGame::TilesToIntMap()
+{
+	for (auto& tiles : tilesWorld)
+	{
+		std::vector<int> row;
+		for (auto& tile : tiles)
+		{
+			if (tile->GetType() == TileType::Ground)
+				row.push_back(0);
+			else
+				row.push_back(-1);
+		}
+		intMap.push_back(row);
+	}
 }

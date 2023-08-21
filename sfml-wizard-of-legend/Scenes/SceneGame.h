@@ -25,7 +25,7 @@ protected:
 	ElementalSpell* tempWindSlash;
 	std::vector<std::vector<Tile*>> tilesWorld;
 	std::vector<Tile*> wallTiles;
-	std::vector<Tile*> cliffesTiles;
+	std::vector<std::vector<int>> intMap;
 
 	int rows = 0;
 	int cols = 0;
@@ -66,5 +66,6 @@ public:
 
 	void SpawnBreakableObj(const std::string& id, int count);
 	void DestroyBreakableObj(BreakableObj* obj);
+	void TilesToIntMap();
 };
 
