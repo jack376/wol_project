@@ -3,6 +3,7 @@
 #include "AnimationController.h"
 #include "BoxCollider2D.h"
 #include "CustomEffect.h";
+#include "Beam.h"
 
 class Player;
 class Tile;
@@ -79,11 +80,14 @@ protected:
 	sf::Vector2f attackDir;
 	sf::Vector2f prevPos; 
 
-	std::vector<std::vector<Tile*>>* worldTiles = nullptr;
+	std::vector<std::vector<Tile*>>* tilesWorld = nullptr;
+	std::vector<Tile*>* nongroundTiles = nullptr;
 	std::vector<std::vector<int>>* intMap = nullptr;
 
 	sf::CircleShape searchRange;
 	sf::CircleShape attackRange;
+
+	Beam raycaster;
 
 	using Pair = std::pair<int, int>;
 	using pPair = std::pair<double, Pair>;
@@ -109,7 +113,7 @@ public:
 	const sf::Vector2f SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetRectBox();
-	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }
+	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->tilesWorld = tiles; }
 	void SetIntMap(std::vector<std::vector<int>>* intMap) { this->intMap = intMap; }
 
 	void OnAttacked(float damage);

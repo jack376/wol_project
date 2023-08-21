@@ -30,7 +30,7 @@ void Mage::Init()
 		fireball.AddClip("animations/Mage_FireballCreate.csv");
 		fireball.AddClip("animations/Mage_FireballActive.csv");
 		fireball.Init();
-		fireball.SetTiles(worldTiles);
+		fireball.SetTiles(tilesWorld);
 	}
 }
 

@@ -13,7 +13,6 @@ protected:
 	
 	AnimationController spearAni;
 	AttackState currentAttackState;
-	Beam raycaster;
 	BoxCollider2D collider;
 
 	float aimRate = 1.f;

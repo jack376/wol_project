@@ -21,7 +21,7 @@ public:
     int getY2() const { return m_y2; }
     void setLength(float len);
     void setEndPoint(int x, int y);
+   
     sf::Vector2f getEndPoint() { return { m_x2, m_y2 }; }
-
     float GetLength();
 };

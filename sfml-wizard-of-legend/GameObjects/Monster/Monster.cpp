@@ -212,6 +212,8 @@ void Monster::Move(float dt)
         SetOrigin(origin);
         SetRectBox();
     }
+
+    raycaster.checkCollision(*nongroundTiles, player);
     
     Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
     Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
@@ -329,7 +331,7 @@ void Monster::CalculatorCurrentTile()
     int rowIndex = position.x / _TileSize;
     int columnIndex = position.y / _TileSize;
 
-    currentTile = (*worldTiles)[rowIndex][columnIndex];
+    currentTile = (*tilesWorld)[rowIndex][columnIndex];
 }
 
 //객체를 중심으로 임의 범위 내의 타일을 반환
@@ -343,14 +345,14 @@ std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 
     int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x;
     int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y;
-    int bottomRowIndex = index.x + searchRowRange >= worldTiles->size() ? worldTiles->size() - 1 : index.x + searchRowRange;
-    int rightColumnIndex = index.y + searchColRange >= worldTiles[0].size() ? worldTiles[0].size() - 1 : index.y + searchColRange;
+    int bottomRowIndex = index.x + searchRowRange >= tilesWorld->size() ? tilesWorld->size() - 1 : index.x + searchRowRange;
+    int rightColumnIndex = index.y + searchColRange >= tilesWorld[0].size() ? tilesWorld[0].size() - 1 : index.y + searchColRange;
 
     for (int i = topRowIndex; i < bottomRowIndex; i++)
     {
         for (int j = leftColumnIndex; j < rightColumnIndex; j++)
         {
-            tiles.push_back((*this->worldTiles)[i][j]);
+            tiles.push_back((*this->tilesWorld)[i][j]);
         }
     }
     return tiles;

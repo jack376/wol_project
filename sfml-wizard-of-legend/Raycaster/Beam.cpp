@@ -199,25 +199,12 @@ void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
             const float u = numerator2 / denominator;
             if (0 < u && 0 < t && u < 1)
             {
-                //std::cout << t << " " << u << std::endl;
                 float intersection_x = x1 + t * (x2 - x1);
                 float intersection_y = y1 + t * (y2 - y1);
-                //std::cout << intersection_x << " " << intersection_y << std::endl;
-                //m_line.setLength(sqrt(pow(m_x - intersection_x, 2) + pow(m_y - intersection_y, 2)));
 
                 collisionPoints.push_back({ intersection_x, intersection_y });
-                //m_line.setEndPoint(intersection_x, intersection_y);
             }
         }
-        //    else
-        //    {
-        //        m_line.setLength(sqrt(pow(SX, 2) + pow(SY, 2)));
-        //    }
-        //}
-        //else
-        //{
-        //    m_line.setLength(sqrt(pow(SX, 2) + pow(SY, 2)));
-        //}
     }
 
     float distance = 1000;
