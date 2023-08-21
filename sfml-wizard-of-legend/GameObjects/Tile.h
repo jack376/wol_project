@@ -17,7 +17,7 @@ public:
     };
 
 protected:
-    TileType type = TileType::None;
+    TileType type = TileType::Wall;
     TileState state = TileState::Blank;
 
     int tileLayer = 0;
@@ -43,7 +43,7 @@ public:
     std::function<void()> OnEnter;
     std::function<void()> OnExit;
 
-    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::None);
+    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::Wall);
     virtual ~Tile();
 
     virtual void Init() {}
@@ -79,7 +79,7 @@ public:
     void SetLayer(int tileLayer = 0);
     int GetLayer() const;
 
-    void SetType(TileType type = TileType::None);
+    void SetType(TileType type = TileType::Wall);
     void SetTypeColor(TileType type);
     TileType GetType() const;
 

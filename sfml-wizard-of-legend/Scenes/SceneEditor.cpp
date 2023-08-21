@@ -179,6 +179,7 @@ void SceneEditor::CreateTile2dVector(int rows, int cols)
 		{
 			Tile* tile = CreateTile("Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")", i * tileSize, j * tileSize);
 			tilesWorld[i][j] = tile;
+			tilesWorld[i][j]->SetIndex(i, j);
 			//std::cout << "Loading : Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")" << std::endl;
 		}
 	}
@@ -431,32 +432,32 @@ void SceneEditor::SaveToCSV(const std::string& path)
 	doc.SetColumnName(10, "bottomTextureRectL");
 	doc.SetColumnName(11, "bottomTextureRectT");
 
-	for (int i = 0; i < tilesWorld.size(); i++)
+	for (int i = 0; i < rows; i++)
 	{
-		for (int j = 0; j < tilesWorld[i].size(); j++)
+		for (int j = 0; j < cols; j++)
 		{
 			Tile* tile = tilesWorld[i][j];
 			if (tile) 
 			{
 				SpriteGo* atlas = (SpriteGo*)FindGo("AtlasPreview");
-				doc.SetCell<std::string>("tileName", i * tilesWorld.size() + j, "Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")");
+				doc.SetCell<std::string>("tileName", i * cols + j, tile->GetName());
 
-				doc.SetCell<int>("tileIndexX", i * tilesWorld.size() + j, i);
-				doc.SetCell<int>("tileIndexY", i * tilesWorld.size() + j, j);
-				doc.SetCell<int>("tileType",   i * tilesWorld.size() + j, (int)tile-> GetType());
-				doc.SetCell<int>("tileSize",   i * tilesWorld.size() + j, (int)tileSize);
-				doc.SetCell<int>("tileScale",  i * tilesWorld.size() + j, tileScaleFactor);
-				doc.SetCell<int>("tileLayer",  i * tilesWorld.size() + j, tile-> GetLayer());
+				doc.SetCell<int>("tileIndexX", i * cols + j, tile->GetIndex().x);
+				doc.SetCell<int>("tileIndexY", i * cols + j, tile->GetIndex().y);
+				doc.SetCell<int>("tileType",   i * cols + j, (int)tile->GetType());
+				doc.SetCell<int>("tileSize",   i * cols + j, (int)tileSize);
+				doc.SetCell<int>("tileScale",  i * cols + j, tileScaleFactor);
+				doc.SetCell<int>("tileLayer",  i * cols + j, tile->GetLayer());
 
-				doc.SetCell<std::string>("textureId", i * tilesWorld.size() + j, atlas->textureId);
+				doc.SetCell<std::string>("textureId", i * cols + j, atlas->textureId);
 
 				sf::IntRect topRect = tile->GetTextureRectTop();
-				doc.SetCell<int>("topTextureRectL", i * tilesWorld.size() + j, topRect.left);
-				doc.SetCell<int>("topTextureRectT", i * tilesWorld.size() + j, topRect.top);
+				doc.SetCell<int>("topTextureRectL", i * cols + j, topRect.left);
+				doc.SetCell<int>("topTextureRectT", i * cols + j, topRect.top);
 
 				sf::IntRect bottomRect = tile->GetTextureRectBottom();
-				doc.SetCell<int>("bottomTextureRectL", i * tilesWorld.size() + j, bottomRect.left);
-				doc.SetCell<int>("bottomTextureRectT", i * tilesWorld.size() + j, bottomRect.top);
+				doc.SetCell<int>("bottomTextureRectL", i * cols + j, bottomRect.left);
+				doc.SetCell<int>("bottomTextureRectT", i * cols + j, bottomRect.top);
 			}
 		}
 	}

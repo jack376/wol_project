@@ -272,7 +272,7 @@ void SceneGame::SpawnBreakableObj(const std::string& id, int count)
 	{
 		for (size_t col = 0; col < tilesWorld[row].size(); col++)
 		{
-			if (tilesWorld[row][col]->GetType() == TileType::EventTrigger)
+			if (tilesWorld[row][col]->GetType() == TileType::Ground)
 			{
 				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
 			}

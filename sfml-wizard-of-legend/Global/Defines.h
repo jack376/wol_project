@@ -86,8 +86,6 @@ enum class TileType
 	Ground,
 	Cliff,
 	Wall,
-	MonsterSpawn,
-	EventTrigger,
 };
 
 enum class ObjectType
