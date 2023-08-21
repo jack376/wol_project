@@ -441,7 +441,7 @@ void SceneEditor::SaveToCSV(const std::string& path)
 				SpriteGo* atlas = (SpriteGo*)FindGo("AtlasPreview");
 				doc.SetCell<std::string>("tileName", i * tilesWorld.size() + j, "Tile(" + std::to_string(i) + ", " + std::to_string(j) + ")");
 
-				doc.SetCell<int>("tileIndexX", i * tilesWorld[i].size() + j, i);
+				doc.SetCell<int>("tileIndexX", i * tilesWorld.size() + j, i);
 				doc.SetCell<int>("tileIndexY", i * tilesWorld.size() + j, j);
 				doc.SetCell<int>("tileType",   i * tilesWorld.size() + j, (int)tile-> GetType());
 				doc.SetCell<int>("tileSize",   i * tilesWorld.size() + j, (int)tileSize);
@@ -466,6 +466,21 @@ void SceneEditor::SaveToCSV(const std::string& path)
 
 void SceneEditor::LoadFromCSV(const std::string& path)
 {
+	for (auto& row : tilesWorld)
+	{
+		for (Tile* tile : row)
+		{
+			if (tile)
+			{
+				//RemoveGo(tile);
+				gameObjects.remove(tile);
+				delete tile;
+			}
+		}
+		row.clear();
+	}
+	tilesWorld.clear();
+	 
 	rapidcsv::Document doc(path);
 
 	int maxTileIndexX = 0;
@@ -481,6 +496,7 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 	}
 	rows = maxTileIndexX + 1;
 	cols = maxTileIndexY + 1;
+
 	CreateTile2dVector(rows, cols);
 
 	for (size_t i = 0; i < doc.GetRowCount(); i++)
@@ -630,10 +646,26 @@ void SceneEditor::PasteSelectedTiles()
 
 void SceneEditor::ResizeWorld(int newRows, int newCols)
 {
-	if (!tilesWorld.empty() && !tilesWorld[0].empty()) 
+	TempWorld();
+	ClearWorld();
+	tilesWorld.resize(newRows, std::vector<Tile*>(newCols, nullptr));
+
+	rows = newRows;
+	cols = newCols;
+	CreateTile2dVector(rows, cols);
+
+	startTileIndex = sf::Vector2i(0, 0);
+	endTileIndex = sf::Vector2i(0, 0);
+	SetSelectedTilesArea();
+	PasteSelectedTiles();
+}
+
+void SceneEditor::TempWorld()
+{
+	if (!tilesWorld.empty() && !tilesWorld[0].empty())
 	{
 		Tile* firstTile = tilesWorld[0][0];
-		if (firstTile != nullptr) 
+		if (firstTile != nullptr)
 		{
 			clipboardTiles.clear();
 			if (tilesWorld.empty())
@@ -650,37 +682,33 @@ void SceneEditor::ResizeWorld(int newRows, int newCols)
 			}
 			SetSelectedTilesState(Tile::TileState::Blank);
 		}
-		else 
+		else
 		{
 			std::cout << "ERROR : failed copy, first tile nullptr" << std::endl;
 		}
 	}
-	else 
+	else
 	{
 		std::cout << "REPORT : tilesWorld is empty & first sub-vector is empty" << std::endl;
 	}
-	for (int i = 0; i < rows; i++)
+}
+
+void SceneEditor::ClearWorld()
+{
+	for (int i = 0; i < tilesWorld.size(); i++)
 	{
-		for (int j = 0; j < cols; j++)
+		for (int j = 0; j < tilesWorld[i].size(); j++)
 		{
 			if (tilesWorld[i][j] != nullptr)
 			{
 				tilesWorld[i][j]->SetActive(false);
-				RemoveGo(tilesWorld[i][j]);
+				//RemoveGo(tilesWorld[i][j]);
+				gameObjects.remove(tilesWorld[i][j]);
 			}
 		}
 	}
 	tilesWorld.clear();
-	tilesWorld.resize(newRows, std::vector<Tile*>(newCols, nullptr));
-
-	rows = newRows;
-	cols = newCols;
-	CreateTile2dVector(rows, cols);
-
-	startTileIndex = sf::Vector2i(0, 0);
-	endTileIndex = sf::Vector2i(0, 0);
-	SetSelectedTilesArea();
-	PasteSelectedTiles();
+	tilesWorld.resize(0, std::vector<Tile*>(0, nullptr));
 }
 
 void SceneEditor::DrawEditorUI()

@@ -106,6 +106,8 @@ public:
 	void PasteSelectedTiles();
 
 	void ResizeWorld(int newRows, int newCols);
+	void TempWorld();
+	void ClearWorld();
 
 	void DrawEditorUI();
 	void InputEditorUI();

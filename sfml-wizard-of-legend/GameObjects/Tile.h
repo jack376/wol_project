@@ -17,8 +17,8 @@ public:
     };
 
 protected:
-    TileType type;
-    TileState state;
+    TileType type = TileType::None;
+    TileState state = TileState::Blank;
 
     int tileLayer = 0;
     float tileSize = 16.0f;
@@ -43,7 +43,7 @@ public:
     std::function<void()> OnEnter;
     std::function<void()> OnExit;
 
-    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::Ground);
+    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::None);
     virtual ~Tile();
 
     virtual void Init() {}
