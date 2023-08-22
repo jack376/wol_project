@@ -10,6 +10,7 @@
 #include "Monster.h"
 #include "Lancer.h"
 #include "Archer.h"
+#include "Mage.h"
 #include "Player.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
@@ -37,6 +38,8 @@ void SceneGame::Init()
 	player->SetScene(this);
 
 	LoadFromCSV("tables/TileInfoTable.csv");
+	TilesToIntMap();
+	CalculatorNongroundTiles();
 
 	tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
 	tempWindSlash->SetScene(this);
@@ -48,6 +51,8 @@ void SceneGame::Init()
 	monster = go;
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
+	monster->SetIntMap(&intMap);
+	monster->SetNonGroundTiles(&nongroundTiles);
 
 	player->SetTiles(&tilesWorld);
 	tempWindSlash->SetTiles(&tilesWorld);
@@ -107,7 +112,6 @@ void SceneGame::Update(float dt)
 	worldView.setCenter(player->GetPosition());
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
-	Scene::Update(dt);
 
 	//if (debugTimer > debugDuration && !isCol)
 	//{
@@ -238,6 +242,9 @@ Monster* SceneGame::CreateMonster(MonsterId id)
 	case MonsterId::Archer:
 		monster = dynamic_cast<Monster*>(AddGo(new Archer(id)));
 		break;
+	case MonsterId::Mage:
+		monster = dynamic_cast<Monster*>(AddGo(new Mage(id)));
+		break;
 	}
 	return monster;
 	std::cout << "SYSTEM : Ingame Tile Load Success" << std::endl;
@@ -319,4 +326,34 @@ void SceneGame::DestroyBreakableObj(BreakableObj* obj)
 {
 	RemoveGo(obj);
 	count++; // юс╫ц
+}
+
+void SceneGame::TilesToIntMap()
+{
+	for (auto& tiles : tilesWorld)
+	{
+		std::vector<int> row;
+		for (auto& tile : tiles)
+		{
+			if (tile->GetType() == TileType::Ground)
+				row.push_back(0);
+			else
+				row.push_back(-1);
+		}
+		intMap.push_back(row);
+	}
+}
+
+void SceneGame::CalculatorNongroundTiles()
+{
+	nongroundTiles.clear();
+
+	for (auto& row : tilesWorld)
+	{
+		for (auto& tile : row)
+		{
+			if (tile->GetType() != TileType::Ground)
+				nongroundTiles.push_back(tile);
+		}
+	}
 }

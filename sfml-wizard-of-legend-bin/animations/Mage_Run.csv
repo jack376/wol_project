@@ -1,0 +1,10 @@
+ID,FPS,LOOPTYPE,,
+MageRun,7,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Mage2.png,60,5,19,40
+graphics/Texture2D/Mage2.png,110,5,19,40
+graphics/Texture2D/Mage2.png,158,5,17,40
+graphics/Texture2D/Mage2.png,204,5,20,40
+graphics/Texture2D/Mage2.png,254,5,17,40
+graphics/Texture2D/Mage2.png,301,5,18,40

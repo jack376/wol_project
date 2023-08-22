@@ -38,3 +38,13 @@
 3,animations/Archer_Run.csv
 3,animations/Archer_Attack.csv
 0,graphics/Texture2D/Arrow2.png
+0,graphics/Texture2D/FireIndexed2.png
+0,graphics/Texture2D/Mage2.png
+3,animations/Mage_AttackAim.csv
+3,animations/Mage_AttackShoot.csv
+3,animations/Mage_Death.csv
+3,animations/Mage_FireballActive.csv
+3,animations/Mage_FireballCreate.csv
+3,animations/Mage_Hurt.csv
+3,animations/Mage_Idle.csv
+3,animations/Mage_Run.csv

@@ -1,6 +1,6 @@
 #pragma once
 #include "Monster.h"
-#include "Bullet.h"
+#include "Projectile.h"
 #include "Beam.h"
 
 
@@ -15,7 +15,7 @@ protected:
 	AnimationController bowAni;
 	AnimationController attackArmAni;
 	AnimationController pullArmAni;	
-	Bullet arrow;
+	Projectile arrow;
 	Beam bulletLine;
 	AttackState currentAttackState;
 

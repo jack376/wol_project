@@ -50,7 +50,6 @@ void BoxCollider2D::SetPosition(float x, float y)
 {
 	SpriteGo::SetPosition(x, y);
 	obbCol.setPosition(position);
-
 }
 
 void BoxCollider2D::SetOrigin(Origins origin)
@@ -99,7 +98,17 @@ bool BoxCollider2D::ObbCol(const sf::RectangleShape& other)
 	return true;
 }
 
-void BoxCollider2D::ObbSet()
+void BoxCollider2D::SetObbRotation()
+{
+	obbCol.setRotation(sprite1.getRotation());
+}
+
+void BoxCollider2D::SetObbOrigins()
+{
+	obbCol.setOrigin(sprite1.getOrigin());
+}
+
+void BoxCollider2D::SetObbCol()
 {
 	SetObbRotation();
 	SetObbOrigins();

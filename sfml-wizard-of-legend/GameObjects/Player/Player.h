@@ -247,4 +247,6 @@ public:
 
 	void PortalAnimations(float dt);
 
+	Tile* GetCurrentTile() { return currentTile; }
+	const sf::FloatRect GetGlobalBounds() { return rect.getGlobalBounds(); }
 };

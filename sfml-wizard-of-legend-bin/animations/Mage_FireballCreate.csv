@@ -1,0 +1,10 @@
+ID,FPS,LOOPTYPE,,
+MageFireballCreate,7,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/FireIndexed2.png,6,4,5,13
+graphics/Texture2D/FireIndexed2.png,26,4,5,13
+graphics/Texture2D/FireIndexed2.png,46,4,7,13
+graphics/Texture2D/FireIndexed2.png,65,4,8,13
+graphics/Texture2D/FireIndexed2.png,84,4,10,13
+graphics/Texture2D/FireIndexed2.png,103,4,12,13

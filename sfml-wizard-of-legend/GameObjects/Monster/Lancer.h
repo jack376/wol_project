@@ -10,10 +10,9 @@ class Lancer :
 {
 protected:
 	sf::Sprite spear;
-	sf::Vector2f attackDir;
+	
 	AnimationController spearAni;
 	AttackState currentAttackState;
-	Beam raycaster;
 	BoxCollider2D collider;
 
 	float aimRate = 1.f;

@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Tile.h"
 #include "CustomEffect.h"
+#include "AS.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -84,6 +85,12 @@ void Monster::Update(float dt)
     animation.Update(dt);
     attackTimer += dt;
 
+    if (position.x < 0)
+    {
+        std::cout << "position erro" << std::endl;
+    }
+
+    CalculatorCurrentTile();
     HandleState(dt);
 
     //Debug Mode
@@ -99,6 +106,19 @@ void Monster::Draw(sf::RenderWindow& window)
     //Debug Mode
     window.draw(searchRange);
     window.draw(attackRange);
+    raycaster.draw(window);
+}
+
+void Monster::SetPosition(const sf::Vector2f& p)
+{
+    SpriteGo::SetPosition(p);
+    raycaster.move(p.x, p.y);
+}
+
+void Monster::SetPosition(float x, float y)
+{
+    SpriteGo::SetPosition(x, y);
+    raycaster.move(x, y);
 }
 
 void Monster::SetState(MonsterState newState)
@@ -210,16 +230,43 @@ void Monster::Move(float dt)
         SetOrigin(origin);
         SetRectBox();
     }
-    
+
+    sf::Vector2f playerPos = player->GetPosition();
+    SetLook(playerPos);
+    raycaster.Rotation(Utils::Angle(look));
     prevPos = position;
-    SetPosition(position + look * stat.speed * dt);
+
+    if (raycaster.CheckShortestPath(position, player->GetPosition(), *nongroundTiles, tilesWorld).first)
+        SetPosition(position + look * stat.speed * dt);    
+    else
+    {     
+        pathUpdateTimer += dt;
+
+        if (path.second.empty() || pathUpdateTimer > pathUpdateRate)
+        {
+            Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
+            Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
+            path = _AS.aStarSearch(*intMap, src, dst);
+            pathUpdateTimer = 0.f;
+        }
+        else if (!path.second.empty())
+        {
+            Pair nextIndex = path.second.top();
+            if ((*tilesWorld)[nextIndex.first][nextIndex.second]->GetTileGlobalBounds().contains(position))
+                path.second.pop();
+            if (!path.second.empty())
+                nextIndex = path.second.top();
+            nextTile = (*tilesWorld)[nextIndex.first][nextIndex.second];
+            sf::Vector2f center = nextTile->GetPosition() + sf::Vector2f(_TileSize / 2, _TileSize / 2);
+            direction = Utils::Normalize(center - position);
+        }
+        SetPosition(position + direction * stat.speed * dt);
+    }
+
     CalculatorCurrentTile();
     if (currentTile->GetType() == TileType::Wall
         || currentTile->GetType() == TileType::Cliff)
         SetPosition(prevPos);
-
-    sf::Vector2f playerPos = player->GetPosition();
-    SetLook(playerPos);
 
     float distance = Utils::Distance(playerPos, position);
     if (hp <= 0 || !player->IsAlive())
@@ -276,36 +323,36 @@ void Monster::KnockBack(float dt)
         sf::Vector2f playerPos = player->GetPosition();
         float distance = Utils::Distance(playerPos, position);
 
+
         if (hp <= 0 || currentTile->GetType() == TileType::Cliff)
         {
             SetState(MonsterState::Dead);
             return;
         }
-        else if (distance <= stat.searchRange || isAwake)  //공격범위 ~ 탐색 범위
+        else if (distance <= stat.searchRange || isAwake)
         {
-            if (distance <= stat.attackRange)
-            {
-                SetState(MonsterState::Attacking);
-                return;
-            }
-            else
-            {
-                SetState(MonsterState::Moving);
-                return;
-            }
+            SetState(MonsterState::Moving);
+            return;
+        }
+        else if (distance <= stat.attackRange && attackTimer >= stat.attackRate)
+        {
+            SetState(MonsterState::Attacking);
+            return;
         }
         else
             SetState(MonsterState::Idle);
     }
 }
 
-void Monster::SetLook(sf::Vector2f playerPos)
+const sf::Vector2f Monster::SetLook(sf::Vector2f playerPos)
 {
-    look = direction = Utils::Normalize(playerPos - position);
+    look = Utils::Normalize(playerPos - position);
     if (look.x < 0)
         SetFlipX(true);
     else
         SetFlipX(false);
+
+    return look;
 }
 
 void Monster::OnAttacked(float damage)  //플레이어에서 몬스터를 공격할 때 호출
@@ -319,10 +366,10 @@ void Monster::OnAttacked(float damage)  //플레이어에서 몬스터를 공격할 때 호출
 
 void Monster::CalculatorCurrentTile()
 {
-    int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
-    int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
+    int rowIndex = position.x / _TileSize;
+    int columnIndex = position.y / _TileSize;
 
-    currentTile = (*wouldTiles)[rowIndex][columnIndex];
+    currentTile = (*tilesWorld)[rowIndex][columnIndex];
 }
 
 //객체를 중심으로 임의 범위 내의 타일을 반환
@@ -336,14 +383,14 @@ std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 
     int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x;
     int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y;
-    int bottomRowIndex = index.x + searchRowRange >= wouldTiles->size() ? wouldTiles->size() - 1 : index.x + searchRowRange;
-    int rightColumnIndex = index.y + searchColRange >= wouldTiles[0].size() ? wouldTiles[0].size() - 1 : index.y + searchColRange;
+    int bottomRowIndex = index.x + searchRowRange >= tilesWorld->size() ? tilesWorld->size() - 1 : index.x + searchRowRange;
+    int rightColumnIndex = index.y + searchColRange >= tilesWorld[0].size() ? tilesWorld[0].size() - 1 : index.y + searchColRange;
 
     for (int i = topRowIndex; i < bottomRowIndex; i++)
     {
         for (int j = leftColumnIndex; j < rightColumnIndex; j++)
         {
-            tiles.push_back((*this->wouldTiles)[i][j]);
+            tiles.push_back((*this->tilesWorld)[i][j]);
         }
     }
     return tiles;

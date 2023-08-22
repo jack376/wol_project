@@ -1,0 +1,12 @@
+ID,FPS,LOOPTYPE,,
+MageDeath,7,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Mage2.png,63,193,22,47
+graphics/Texture2D/Mage2.png,110,193,22,47
+graphics/Texture2D/Mage2.png,158,193,22,47
+graphics/Texture2D/Mage2.png,206,193,23,47
+graphics/Texture2D/Mage2.png,254,193,23,47
+graphics/Texture2D/Mage2.png,300,193,24,47
+graphics/Texture2D/Mage2.png,348,193,24,47
+graphics/Texture2D/Mage2.png,396,193,24,47

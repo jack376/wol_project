@@ -6,6 +6,7 @@
 #include "DataTableMgr.h"
 #include "StringTable.h"
 #include "SceneSkillEditor.h"
+#include "PathfindingScene.h"
 
 void SceneMgr::Init()
 {
@@ -18,6 +19,8 @@ void SceneMgr::Init()
 	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneEditor());
 	scenes.push_back(new SceneSkillEditor());
+	scenes.push_back(new PathfindingScene());
+
 
 	for (auto scene : scenes)
 	{

@@ -27,6 +27,7 @@ void Archer::Init()
 	pullArmAni.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Archer_AttackPullArm.csv"));
 	arrow.textureId = "graphics/Texture2D/Arrow2.png";
 	arrow.Init();
+	arrow.SetTiles(tilesWorld);
 }
 
 void Archer::Release()
@@ -101,7 +102,8 @@ void Archer::Attack(float dt)
 	pullArmAni.Update(dt);
 	bowAni.Update(dt);
 
-	if (attackTimer >= stat.attackRate)
+	if (attackTimer >= stat.attackRate &&
+		raycaster.checkCollision(CalculatorRangeTiles(16, 16), player))
 	{
 		currentAttackState = AttackState::Aim;
 		attackTimer = 0.f;
@@ -126,9 +128,6 @@ void Archer::Attack(float dt)
 	}
 	
 	HandleAttackState(dt);
-
-	sf::Vector2f playerPos = player->GetPosition();
-	float distance = Utils::Distance(playerPos, position);
 
 	if (hp <= 0)
 	{

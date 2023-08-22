@@ -77,7 +77,7 @@ void Lancer::Update(float dt)
  
     collider.SetSprite(spear);
     collider.SetColSize();
-    collider.ObbSet();
+    collider.SetObbCol();
 }
 
 void Lancer::Draw(sf::RenderWindow& window)

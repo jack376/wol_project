@@ -62,5 +62,7 @@ public:
 	static sf::Vector2f GetPerpendicularAxis(const RectVertexArray& vertices, std::size_t index);
 	// 두 개의 OBB에 대한 수직 축 목록을 계산하여 반환
 	static std::array<sf::Vector2f, 4> GetPerpendicularAxes(const RectVertexArray& vertices1, const RectVertexArray& vertices2);
+
+	static sf::Vector2f Direction(const float angle);
 };
 
