@@ -79,8 +79,7 @@ protected:
 
 	float spreadAngle;
 
-	//SpellInfo spellInfo;
-
+	SpellInfo spellInfo;
 	SkillInfo skillInfo;
 	
 	// 실제 스킬

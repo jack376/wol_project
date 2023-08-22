@@ -67,22 +67,20 @@ void SkillMgr::LoadSkill()
 	//stat = DATATABLE_MGR.Get<MonsterTable>(DataTable::Ids::Monster)->Get((int)monsterId);
 
 	//DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)monsterId);
-	int dataSize = DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->GetTable().size();
-	for (int i=0; i < dataSize; i++)
-	{
+	//int dataSize = DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->GetTable().size();
+	//for (int i=0; i < dataSize; i++)
+	//{
 
-	}
-
+	//}
 
 	for (auto table : DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->GetTable())
 	{
-		table.first;
-		Skill* skill; 
-
-		// skillInfoÇüÅÂ
-		DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)table.first);
-
+		Skill* skill = new Skill(); 
+		skill->SetSkillInfo(DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)table.first));
+		skill->Init();
+		existSkillList[skill->GetSkillId()] = skill;
 	}
+	std::cout << "1";
 }
 
 void SkillMgr::SwapSkill(SkillEvents sEvent, Skill* equipSkill)

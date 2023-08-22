@@ -121,6 +121,8 @@ void SceneGame::Init()
 	SKILL_MGR.SetMonsterList(monsters);
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
+
+	SKILL_MGR.LoadSkill();
 }
 
 void SceneGame::Release()
