@@ -15,6 +15,7 @@ Framework::Framework(int w, int h, const std::string& t)
 void Framework::Init(int width, int height, const std::string& title)
 {
     window.create(sf::VideoMode(width, height), title);
+    window.setFramerateLimit(600);
 
     DATATABLE_MGR.LoadAll();
     // Resource
@@ -28,8 +29,9 @@ void Framework::Init(int width, int height, const std::string& title)
     io.Fonts->AddFontDefault();
     ImGui::SFML::UpdateFontTexture();
 
-    //texture.loadFromFile("graphics/editor/FireTileSet.png");
-    //sprite.setTexture(texture);
+    avgFps = 0.0f;
+    minFps = std::numeric_limits<float>::max();
+    maxFps = std::numeric_limits<float>::min();
 }
 
 void Framework::Release()
@@ -60,6 +62,20 @@ void Framework::Run()
         float dt = deltaTime.asSeconds();
         gamePlayTime += deltaTime;
 
+        // FPS Monitor
+        fps = 1.0f / dt;
+        frameCount++;
+        elapsedTime += dt;
+        if (elapsedTime >= 1.0f)
+        { 
+            avgFps = frameCount / elapsedTime;
+            elapsedTime = 0.0f;
+            frameCount = 0;
+
+            if (fps < minFps) { minFps = fps; }
+            if (fps > maxFps) { maxFps = fps; }
+        }
+
         INPUT_MGR.Update(dt);
 
         prevPos = window.getPosition();
@@ -82,6 +98,11 @@ void Framework::Run()
                 break;
             }
             INPUT_MGR.UpdateEvent(event);
+
+            if (INPUT_MGR.GetKeyDown(sf::Keyboard::F1))
+            {
+                showFps = !showFps;
+            }
         }
 
         if (window.isOpen())
@@ -105,9 +126,22 @@ void Framework::Run()
                     sceneEditor->InputEditorUI();
                     sceneEditor->CemeraEditorUI(dt);
                 }
-                //ImGui::Image(texture);
-                //ImGui::Image(sprite);
                 break;
+            }
+
+            // FPS Monitor
+            if (showFps)
+            {
+                ImGui::SetNextWindowPos(ImVec2(8.0f, 8.0f));
+                ImGui::SetNextWindowSize(ImVec2(192.0f, 96.0f));
+                ImGui::Begin("FPS Monitor", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
+                {
+                    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "FPS: %.2f", fps);
+                    ImGui::Text("AVG FPS: %.2f", avgFps);
+                    ImGui::Text("MIN FPS: %.2f", minFps);
+                    ImGui::Text("MAX FPS: %.2f", maxFps);
+                }
+                ImGui::End();
             }
 
             window.clear();

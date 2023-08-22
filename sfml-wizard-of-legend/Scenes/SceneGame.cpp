@@ -39,7 +39,11 @@ void SceneGame::Init()
 	player->sortLayer = 5;
 	player->SetScene(this);
 
-	LoadFromCSV("tables/_0822_175046.csv");
+	// Load Tilemap CSV
+	LoadFromCSV("tables/BossRoom_0822_184837.csv");
+	//LoadFromCSV("tables/EntireRoom_0822_160251.csv");
+	//LoadFromCSV("tables/TestMiniRoom_0822_175046.csv");
+
 	TilesToIntMap();
 	CalculatorNongroundTiles();
 
@@ -71,9 +75,7 @@ void SceneGame::Init()
 	SKILL_MGR.InputSkill(windSlash);
 	SKILL_MGR.InputSkill(fireBall);
 
-
 	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
-
 
 	Monster* go = CreateMonster(MonsterId::Ghoul);
 	monster = go;
@@ -81,9 +83,6 @@ void SceneGame::Init()
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
-
-
-
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
@@ -96,8 +95,6 @@ void SceneGame::Init()
 
 	// Create Particle
 	CreateParticle(1000);
-
-	SpawnBreakableObj("graphics/editor/FireTileSet.png", 15);
 
 	for (auto go : gameObjects)
 	{
@@ -131,7 +128,6 @@ void SceneGame::Enter()
 	Scene::Enter();
 
 	ClearObjectPool(particlePool);
-
 }
 
 void SceneGame::Exit()
@@ -161,18 +157,6 @@ void SceneGame::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
-	}
-
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q))
-	{
-		BreakableObj* targetObj = (BreakableObj*)FindGo("Object" + count);
-		targetObj->OnHitBreakableObj(targetObj->GetName(), 2);
-	}
-
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
-	{
-		SpawnBreakableObj("graphics/editor/FireTileSet.png", 15);
-		count = 0;
 	}
 }
 

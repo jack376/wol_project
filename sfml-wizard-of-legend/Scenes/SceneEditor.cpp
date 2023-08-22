@@ -24,9 +24,6 @@ void SceneEditor::Init()
 	windowSize = FRAMEWORK.GetWindowSize();
 	resolutionScaleFactor = windowSize.x / fhdWidth;
 
-	// Load CSV
-	//LoadFromCSV("tables/TileInfoTable.csv");
-
 	// New Tile
 	CreateTile2dVector(rows, cols);
 
@@ -763,51 +760,40 @@ void SceneEditor::DrawEditorUI()
 	ImGui::End();
 
 	// UI Window Top
-	ImGui::SetNextWindowPos(ImVec2(atlasTextureSize + blankPos * 3.0f, 24.0f));
-	ImGui::SetNextWindowSize(ImVec2(700.0f, 48.0f));
+	float windowTopSizeY = blankPos * 1.5f;
+	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f));
+	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize + blankPos * 2.0f, windowTopSizeY));
 	ImGui::Begin("Top UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBackground);
 
-	// Grid Line View On,Off
-	static bool gridCheck = true;
-	if (ImGui::Checkbox("GRID VIEW", &gridCheck))
-	{
-		// 걍 통이미지로 구현하는게 나을듯
-	}
-	ImGui::SameLine();
-
-	// Tile Overlay Select Button & View On,Off
-	static bool overlayCheck = false;
-	if (ImGui::Checkbox("TILE OVERLAY", &overlayCheck))
-	{
-		// 고민 중
-	}
-	ImGui::SameLine();
-	std::vector<std::string> labels = { "GROUND (1)", "CLIFF (2)", "WALL (3)", "NONE (4)" };
-	std::vector<int> colors = { 2, 0, 1, 4 };
-	for (int i = 0; i < 4; i++)
+	std::vector<std::string> labels = { "DRAW (Q)", "GROUND (1)", "CLIFF (2)", "WALL (3)", "NONE (4)" };
+	std::vector<int> colors = { 5, 2, 0, 1, 4 };
+	for (int i = 0; i < 5; i++)
 	{
 		if (i > 0)
 		{
 			ImGui::SameLine();
 		}
 		ImGui::PushID(i);
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.6f, 0.5f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.7f, 0.65f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.8f, 0.8f));
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.5f, 0.3f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.6f, 0.4f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(colors[i] / 7.0f, 0.7f, 0.5f));
 		if (ImGui::Button(labels[i].c_str()))
 		{
 			switch (i)
 			{
 			case 0:
-				SetSelectedTilesType(TileType::Ground);
+				SetSelectedTilesDraw();
 				break;
 			case 1:
-				SetSelectedTilesType(TileType::Cliff);
+				SetSelectedTilesType(TileType::Ground);
 				break;
 			case 2:
-				SetSelectedTilesType(TileType::Wall);
+				SetSelectedTilesType(TileType::Cliff);
 				break;
 			case 3:
+				SetSelectedTilesType(TileType::Wall);
+				break;
+			case 4:
 				SetSelectedTilesType(TileType::None);
 				break;
 			default:
@@ -817,11 +803,23 @@ void SceneEditor::DrawEditorUI()
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}
+	ImGui::SameLine(0.0f, 8.0f);
+
+	// Texture Atlas Drobbox
+	const char* environment[] = { "DungeonTile", "PlazaTile", "DecoObject", "GlowFX" };
+	// Enable / Disable Check box 
+	// Distroy, Glow, Particle, Wall, Damage
+	// 던전 타일인지 아닌지 구분 필요 csv
+
+	static int environmentIndex = 0;
+	ImGui::SetNextItemWidth(128.0f);
+	ImGui::Combo("##input6", &environmentIndex, environment, IM_ARRAYSIZE(environment));
+
 	ImGui::AlignTextToFramePadding();
 	ImGui::End();
 
 	// UI Window Left
-	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f));
+	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f + windowTopSizeY));
 	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize / 2, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
 	ImGui::Begin("LEFT UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground );
 
@@ -904,7 +902,7 @@ void SceneEditor::DrawEditorUI()
 	ImGui::End();
 
 	// UI Window Right
-	ImGui::SetNextWindowPos(ImVec2(blankPos * 1.25f + atlasTextureSize / 2, atlasTextureSize + blankPos * 2.0f));
+	ImGui::SetNextWindowPos(ImVec2(blankPos * 1.25f + atlasTextureSize / 2, atlasTextureSize + blankPos * 2.0f + windowTopSizeY));
 	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize / 2, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
 	ImGui::Begin("RIGHT UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
 
