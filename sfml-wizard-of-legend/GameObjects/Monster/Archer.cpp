@@ -2,7 +2,8 @@
 #include "Archer.h"
 #include "ResourceMgr.h"
 #include "Player.h"
-
+#include "Tile.h"
+#include "AS.h"
 
 #define _AttackArmLocalPos sf::Vector2f(44, 44)
 #define _PullArmLocalPos sf::Vector2f(0, 42)
@@ -80,6 +81,7 @@ void Archer::Draw(sf::RenderWindow& window)
 		bulletLine.draw(window);
 }
 
+
 void Archer::HandleAttackState(float dt)
 {
 	switch (currentAttackState)
@@ -102,12 +104,17 @@ void Archer::Attack(float dt)
 	pullArmAni.Update(dt);
 	bowAni.Update(dt);
 
-	if (attackTimer >= stat.attackRate &&
-		raycaster.checkCollision(CalculatorRangeTiles(16, 16), player))
+	if (attackTimer >= stat.attackRate)
 	{
+		if (!raycaster.checkCollision(*nongroundTiles, player))
+		{
+			SetState(MonsterState::Moving);
+			return;
+		}
 		currentAttackState = AttackState::Aim;
 		attackTimer = 0.f;
 	}
+
 
 	{
 		sf::Vector2f pos = { sprite.getGlobalBounds().left, sprite.getGlobalBounds().top };
@@ -189,5 +196,14 @@ void Archer::Shoot(float dt)
 		currentAttackState = AttackState::Cool;
 		SetState(MonsterState::Idle);
 	}
+
+}
+
+void Archer::Move(float dt)
+{
+	Monster::Move(dt);
+
+	if (!raycaster.checkCollision(*nongroundTiles, player))
+		SetState(MonsterState::Moving);
 
 }

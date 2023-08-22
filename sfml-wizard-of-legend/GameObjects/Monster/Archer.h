@@ -3,8 +3,6 @@
 #include "Projectile.h"
 #include "Beam.h"
 
-
-
 class Archer :
     public Monster
 {
@@ -22,6 +20,8 @@ protected:
 	float aimRate = 1.f;
 	float aimTimer = 0.f;
 	float arrowSpeed = 1000.f;
+	bool isUpdatePos = false;
+
 public:
 	Archer(MonsterId id, const std::string& textureId = "", const std::string& n = "Archer");
 	virtual ~Archer() override;
@@ -37,5 +37,6 @@ public:
 	virtual void Attack(float dt) override;
 	void Aim(float dt);
 	void Shoot(float dt);
+	virtual void Move(float dt) override;
 };
 

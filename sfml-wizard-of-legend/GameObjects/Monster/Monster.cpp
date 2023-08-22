@@ -85,11 +85,6 @@ void Monster::Update(float dt)
     animation.Update(dt);
     attackTimer += dt;
 
-    if (position.x < 0)
-    {
-        std::cout << "position erro" << std::endl;
-    }
-
     CalculatorCurrentTile();
     HandleState(dt);
 
