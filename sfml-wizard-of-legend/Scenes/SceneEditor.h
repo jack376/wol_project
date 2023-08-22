@@ -62,7 +62,7 @@ protected:
 	int copiedWidth = 0;
 	int copiedHeight = 0;
 
-	bool isTileLeyer = false;
+	bool isTileLayer = false;
 
 	std::vector<std::vector<TileCommand::TileState>> tempTileStates;
 

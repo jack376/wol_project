@@ -258,7 +258,7 @@ void SceneEditor::SetSelectedTilesDraw()
 		Tile* previewTile = tilesPreview[matchPreviewIndex.x][matchPreviewIndex.y];
 
 		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * tileSize, previewTile->GetIndex().y * tileSize, tileSize, tileSize);
-		isTileLeyer ? worldTile->SetTextureRectTop(previewRect, textureId) : worldTile->SetTextureRectBottom(previewRect, textureId);
+		isTileLayer ? worldTile->SetTextureRectTop(previewRect, textureId) : worldTile->SetTextureRectBottom(previewRect, textureId);
 
 		TileCommand::TileState after = CaptureTileState(worldTile);
 
@@ -442,8 +442,8 @@ void SceneEditor::SaveToCSV(const std::string& path)
 				SpriteGo* atlas = (SpriteGo*)FindGo("AtlasPreview");
 				doc.SetCell<std::string>("tileName", i * cols + j, tile->GetName());
 
-				doc.SetCell<int>("tileIndexX", i * cols + j, tile->GetIndex().x);
-				doc.SetCell<int>("tileIndexY", i * cols + j, tile->GetIndex().y);
+				doc.SetCell<int>("tileIndexX", i * cols + j, i);
+				doc.SetCell<int>("tileIndexY", i * cols + j, j);
 				doc.SetCell<int>("tileType",   i * cols + j, (int)tile->GetType());
 				doc.SetCell<int>("tileSize",   i * cols + j, (int)tileSize);
 				doc.SetCell<int>("tileScale",  i * cols + j, tileScaleFactor);
@@ -860,12 +860,12 @@ void SceneEditor::DrawEditorUI()
 
 	// Map Size Modify
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "MAP SIZE MODIFY");
-	const char* mapSizeX[] = { "16", "24", "32", "48", "64", "80", "96", "112", "128" };
+	const char* mapSizeX[] = { "16", "24", "32", "48", "64", "96", "128", "192", "256" };
 	static int mapSizeIndexX = 0;
 	ImGui::SetNextItemWidth(64.0f);
 	ImGui::Combo("##input4", &mapSizeIndexX, mapSizeX, IM_ARRAYSIZE(mapSizeX));
 	ImGui::SameLine();
-	const char* mapSizeY[] = { "16", "24", "32", "48", "64", "80", "96", "112", "128" };
+	const char* mapSizeY[] = { "16", "24", "32", "48", "64", "96", "128", "192", "256"};
 	static int mapSizeIndexY = 0;
 	ImGui::SetNextItemWidth(64.0f);
 	ImGui::Combo("##input5", &mapSizeIndexY, mapSizeY, IM_ARRAYSIZE(mapSizeY));
@@ -931,22 +931,26 @@ void SceneEditor::DrawEditorUI()
 			std::cout << "ERROR : Exception encountered while loading." << std::endl;
 		}
 	}
+	
 	ImGui::Dummy(ImVec2(0.0f, 8.0f));
 
 	// View
-	static int layer = 0;
+	static int layerView = 0;
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "LAVER TOGGLE");
-	if (ImGui::RadioButton("LAYER TOP", &layer, 0))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E) || ImGui::RadioButton("LAYER TOP", &layerView, 0))
 	{
-		isTileLeyer = true;  
+		isTileLayer = true;  
 		std::cout << "Current Layer : Top" << std::endl;
+		layerView = 0;
 	}
 	ImGui::SameLine();
-	if (ImGui::RadioButton("LAYER BOTTOM", &layer, 1))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R) || ImGui::RadioButton("LAYER BOTTOM", &layerView, 1))
 	{
-		isTileLeyer = false; 
+
+		isTileLayer = false; 
 		std::cout << "Current Layer : Bottom" << std::endl;
+		layerView = 1;
 	}
 	ImGui::Dummy(ImVec2(0.0f, 8.0f));
 
@@ -984,8 +988,8 @@ void SceneEditor::InputEditorUI()
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q)) { SetSelectedTilesDraw(); }
 
 	// SetTileLayer
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E)) { isTileLeyer = true;  std::cout << "Current Layer : Top" << std::endl; }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R)) { isTileLeyer = false; std::cout << "Current Layer : Bottom" << std::endl; }
+	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::E)) { isTileLeyer = true;  std::cout << "Current Layer : Top" << std::endl; }
+	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::R)) { isTileLeyer = false; std::cout << "Current Layer : Bottom" << std::endl; }
 
 	// SetTileType
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(TileType::Ground); }
