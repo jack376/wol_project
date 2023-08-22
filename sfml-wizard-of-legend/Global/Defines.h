@@ -101,12 +101,10 @@ enum class SceneId
 
 enum class TileType
 {
-	None,
+	None = -1,
 	Ground,
 	Cliff,
 	Wall,
-	MonsterSpawn,
-	EventTrigger,
 };
 
 enum class ObjectType

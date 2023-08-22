@@ -187,16 +187,6 @@ void SceneGame::Update(float dt)
 		SpawnBreakableObj("graphics/editor/FireTileSet.png", 15);
 		count = 0;
 	}
-
-	// TEST Particle
-	/*
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::G))
-	{
-		BreakableObj* deco = (BreakableObj*)FindGo("Deco");
-		deco->SetParticle({ player->GetPosition() }, 50);
-	}
-	*/
-	//std::cout << "particle test : " << particlePool.GetUseList().size() << std::endl;
 }
 
 template<typename T>
@@ -332,7 +322,7 @@ void SceneGame::CreateParticle(int count)
 void SceneGame::SpawnBreakableObj(const std::string& id, int count)
 {
 	std::vector<sf::Vector2f> objectSpawnArea;
-
+	
 	for (size_t row = 0; row < tilesWorld.size(); row++)
 	{
 		for (size_t col = 0; col < tilesWorld[row].size(); col++)

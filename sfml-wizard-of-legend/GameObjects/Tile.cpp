@@ -15,10 +15,6 @@ Tile::~Tile()
     Release();
 }
 
-void Tile::Init()
-{
-}
-
 void Tile::Reset()
 {
     shape.setFillColor(sf::Color::Transparent);
@@ -211,8 +207,6 @@ void Tile::SetTypeColor(TileType type)
         { TileType::Ground,       sf::Color(0, 192, 0, 128)   },
         { TileType::Cliff,        sf::Color(255, 0, 0, 128)   },
         { TileType::Wall,         sf::Color(255, 160, 0, 128) },
-        { TileType::MonsterSpawn, sf::Color(128, 0, 255, 128) },
-        { TileType::EventTrigger, sf::Color(0, 0, 255, 128)   },
     };
     shape.setFillColor(typeColor[type]);
 }

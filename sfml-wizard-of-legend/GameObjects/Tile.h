@@ -17,8 +17,8 @@ public:
     };
 
 protected:
-    TileType type;
-    TileState state;
+    TileType type = TileType::Wall;
+    TileState state = TileState::Blank;
 
     int tileLayer = 0;
     float tileSize = 16.0f;
@@ -43,10 +43,11 @@ public:
     std::function<void()> OnEnter;
     std::function<void()> OnExit;
 
-    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::None);
+    Tile(const std::string& n = "", TileState state = TileState::Blank, TileType type = TileType::Wall);
     virtual ~Tile();
 
-    virtual void Init();
+    virtual void Init() {}
+
     virtual void Reset();
     virtual void Update(float dt);
     virtual void Draw(sf::RenderWindow& window);
@@ -78,7 +79,7 @@ public:
     void SetLayer(int tileLayer = 0);
     int GetLayer() const;
 
-    void SetType(TileType type = TileType::None);
+    void SetType(TileType type = TileType::Wall);
     void SetTypeColor(TileType type);
     TileType GetType() const;
 

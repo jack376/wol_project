@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "DataTableMgr.h"
 #include "ResourceMgr.h"
+#include "SceneEditor.h"
+
 Framework::Framework(int w, int h, const std::string& t)
     : screenWidth(w), screenHeight(h), title(t)
 {
@@ -12,12 +14,22 @@ Framework::Framework(int w, int h, const std::string& t)
 
 void Framework::Init(int width, int height, const std::string& title)
 {
-	window.create(sf::VideoMode(width, height), title);
+    window.create(sf::VideoMode(width, height), title);
 
     DATATABLE_MGR.LoadAll();
     // Resource
     RESOURCE_MGR.Init();
     SCENE_MGR.Init();
+
+    ImGui::SFML::Init(window, false);
+
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF("fonts/NanumSquareEB.ttf", 13, nullptr, io.Fonts->GetGlyphRangesKorean());
+    io.Fonts->AddFontDefault();
+    ImGui::SFML::UpdateFontTexture();
+
+    //texture.loadFromFile("graphics/editor/FireTileSet.png");
+    //sprite.setTexture(texture);
 }
 
 void Framework::Release()
@@ -59,6 +71,7 @@ void Framework::Run()
         sf::Event event;
         while (window.pollEvent(event))
         {
+            ImGui::SFML::ProcessEvent(event);
             switch (event.type)
             {
             case sf::Event::Closed:
@@ -75,13 +88,36 @@ void Framework::Run()
         {
             UpdateEvent(dt);
 
+            // ImGUI
+            ImGui::SFML::Update(window, deltaTime);
+            SceneId currentSceneId = SCENE_MGR.GetCurrSceneId();
+            switch (currentSceneId)
+            {
+            case SceneId::Game:
+
+                break;
+            case SceneId::Editor:
+                Scene* scene = SCENE_MGR.GetCurrScene();
+                SceneEditor* sceneEditor = dynamic_cast<SceneEditor*>(scene);
+                sceneEditor->DrawEditorUI();
+                if (!ImGui::IsAnyItemActive() && !ImGui::IsWindowFocused())
+                {
+                    sceneEditor->InputEditorUI();
+                    sceneEditor->CemeraEditorUI(dt);
+                }
+                //ImGui::Image(texture);
+                //ImGui::Image(sprite);
+                break;
+            }
+
             window.clear();
             Draw();
+            ImGui::SFML::Render(window);
             window.display();
         }
     }
-
     Release();
+    ImGui::SFML::Shutdown();
 }
 
 sf::Vector2f Framework::GetWindowSize()

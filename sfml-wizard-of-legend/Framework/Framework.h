@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
 
+class SceneEditor;
 class Framework : public Singleton<Framework>
 {
 	friend Singleton<Framework>;
@@ -14,9 +15,12 @@ protected:
 	sf::Clock clock;
 	sf::Time gamePlayTime = sf::Time::Zero;
 
-	int screenWidth = 1920;
-	int screenHeight = 900;
+	int screenWidth = 1600;
+	int screenHeight = 1000;
 	std::string title = "SFML_Wizard_Of_Legend";
+
+	//sf::Texture texture;
+	//sf::Sprite sprite;
 
 public:
 	virtual void Init(int width, int height, const std::string& title);

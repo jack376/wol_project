@@ -4,7 +4,6 @@
 #include "TileCommand.h"
 #include "CommandInvoker.h"
 
-
 class TextGo;
 class SpriteGo;
 class BreakableObj;
@@ -37,7 +36,6 @@ protected:
 	std::vector<Tile*> selectedTiles;
 	sf::Vector2i startTileIndex;
 	sf::Vector2i endTileIndex;
-	bool isUiButtonActive = false;
 	bool isWorldMouseSelect = false;
 
 	std::vector<Tile*> allPreview;
@@ -64,7 +62,7 @@ protected:
 	int copiedWidth = 0;
 	int copiedHeight = 0;
 
-	bool isTileLeyer = false;
+	bool isTileLayer = false;
 
 	std::vector<std::vector<TileCommand::TileState>> tempTileStates;
 
@@ -108,4 +106,10 @@ public:
 	void PasteSelectedTiles();
 
 	void ResizeWorld(int newRows, int newCols);
+	void TempWorld();
+	void ClearWorld();
+
+	void DrawEditorUI();
+	void InputEditorUI();
+	void CemeraEditorUI(float dt);
 };

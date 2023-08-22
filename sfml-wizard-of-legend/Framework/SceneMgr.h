@@ -14,7 +14,7 @@ protected:
 	SceneId currentSceneId = SceneId::None;
 	Scene* currentScene = nullptr;
 
-	SceneId startSceneId = SceneId::SkillEditor;
+	SceneId startSceneId = SceneId::Game;
 
 public:
 	void Init();
