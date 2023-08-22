@@ -164,7 +164,7 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClInclude Include="DataTables\TileInfoTable.h" />
-    <ClInclude Include="BoxCollider2D.h" />
+    <ClInclude Include="GameObjects\BoxCollider2D.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\Command.h" />

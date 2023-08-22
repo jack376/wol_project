@@ -85,6 +85,11 @@ void Monster::Update(float dt)
     animation.Update(dt);
     attackTimer += dt;
 
+    if (position.x < 0)
+    {
+        std::cout << "position erro" << std::endl;
+    }
+
     CalculatorCurrentTile();
     HandleState(dt);
 
@@ -101,6 +106,19 @@ void Monster::Draw(sf::RenderWindow& window)
     //Debug Mode
     window.draw(searchRange);
     window.draw(attackRange);
+    raycaster.draw(window);
+}
+
+void Monster::SetPosition(const sf::Vector2f& p)
+{
+    SpriteGo::SetPosition(p);
+    raycaster.move(p.x, p.y);
+}
+
+void Monster::SetPosition(float x, float y)
+{
+    SpriteGo::SetPosition(x, y);
+    raycaster.move(x, y);
 }
 
 void Monster::SetState(MonsterState newState)
@@ -213,22 +231,42 @@ void Monster::Move(float dt)
         SetRectBox();
     }
 
-    raycaster.checkCollision(*nongroundTiles, player);
-    
-    Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
-    Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
-    
-    //_AS.aStarSearch(*intMap, src, dst);
-    
+    sf::Vector2f playerPos = player->GetPosition();
+    SetLook(playerPos);
+    raycaster.Rotation(Utils::Angle(look));
     prevPos = position;
-    SetPosition(position + look * stat.speed * dt);
+
+    if (raycaster.CheckShortestPath(position, player->GetPosition(), *nongroundTiles, tilesWorld).first)
+        SetPosition(position + look * stat.speed * dt);    
+    else
+    {     
+        pathUpdateTimer += dt;
+
+        if (path.second.empty() || pathUpdateTimer > pathUpdateRate)
+        {
+            Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
+            Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
+            path = _AS.aStarSearch(*intMap, src, dst);
+            pathUpdateTimer = 0.f;
+        }
+        else if (!path.second.empty())
+        {
+            Pair nextIndex = path.second.top();
+            if ((*tilesWorld)[nextIndex.first][nextIndex.second]->GetTileGlobalBounds().contains(position))
+                path.second.pop();
+            if (!path.second.empty())
+                nextIndex = path.second.top();
+            nextTile = (*tilesWorld)[nextIndex.first][nextIndex.second];
+            sf::Vector2f center = nextTile->GetPosition() + sf::Vector2f(_TileSize / 2, _TileSize / 2);
+            direction = Utils::Normalize(center - position);
+        }
+        SetPosition(position + direction * stat.speed * dt);
+    }
+
     CalculatorCurrentTile();
     if (currentTile->GetType() == TileType::Wall
         || currentTile->GetType() == TileType::Cliff)
         SetPosition(prevPos);
-
-    sf::Vector2f playerPos = player->GetPosition();
-    SetLook(playerPos);
 
     float distance = Utils::Distance(playerPos, position);
     if (hp <= 0 || !player->IsAlive())
@@ -308,7 +346,7 @@ void Monster::KnockBack(float dt)
 
 const sf::Vector2f Monster::SetLook(sf::Vector2f playerPos)
 {
-    look = direction = Utils::Normalize(playerPos - position);
+    look = Utils::Normalize(playerPos - position);
     if (look.x < 0)
         SetFlipX(true);
     else

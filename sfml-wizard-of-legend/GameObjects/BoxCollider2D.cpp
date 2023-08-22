@@ -50,7 +50,6 @@ void BoxCollider2D::SetPosition(float x, float y)
 {
 	SpriteGo::SetPosition(x, y);
 	obbCol.setPosition(position);
-
 }
 
 void BoxCollider2D::SetOrigin(Origins origin)

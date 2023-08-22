@@ -27,7 +27,7 @@ public:
 
     const std::pair<bool, Tile*> CheckShortestPath(const sf::Vector2f start, const sf::Vector2f goal, const std::vector<Tile*> tiles, const std::vector<std::vector<Tile*>>* worldTiles);  //tiles == Wall, Cliffs
 
-    void checkCollision(const std::vector<Tile*> tiles, Player* player);
+    bool checkCollision(const std::vector<Tile*> tiles, Player* player);
     void checkCollision(Monster* monster);
     sf::Vector2f GetEndPos() { return  m_line.getEndPoint(); }
 

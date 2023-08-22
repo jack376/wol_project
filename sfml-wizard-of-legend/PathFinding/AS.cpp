@@ -36,7 +36,7 @@ std::stack<AS::Pair> AS::tracePath(Cell cellDetails[MAX][MAX], Pair dst, std::ve
 	std::stack<Pair> path = s;
 
 	while (!s.empty()) {
-		data[s.top().first][s.top().second] = 9;
+		data[s.top().first][s.top().second] = 0;
 		s.pop();
 	}
 

@@ -110,9 +110,6 @@ void PathfindingScene::Update(float dt)
 	{
 		TilesToIntMap();
 		path = _AS.aStarSearch(intMap, AS::Pair(2, 28), AS::Pair(24, 17));
-		std::cout << tilesWorld.size() << std::endl;
-		std::cout << intMap.size() << std::endl;
-		std::cout << path.second.size() << std::endl;
 	}
 	tilesWorld[2][28]->SetShapeColor(sf::Color::Blue);
 	tilesWorld[24][17]->SetShapeColor(sf::Color::Magenta);
@@ -121,7 +118,6 @@ void PathfindingScene::Update(float dt)
 	{
 		if (!path.second.empty())
 		{
-			//tilesWorld[path.second.top().first][path.second.top().second]->SetShapeColor(sf::Color::Black);
 			path.second.pop();
 		}
 	}

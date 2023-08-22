@@ -119,7 +119,7 @@ const std::pair<bool, Tile*> Beam::CheckShortestPath(const sf::Vector2f start, c
 
 
 
-void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
+bool Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
 {
     std::vector<sf::Vector2f> collisionPoints;
     std::vector<Tile*> wallTiles;
@@ -134,14 +134,13 @@ void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
             wallTiles.push_back(tile);
     }
 
-
     float x1 = m_line.getX1();
     float y1 = m_line.getY1();
     float x2 = m_line.getX2();
     float y2 = m_line.getY2();
     float hypo = sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
 
-    //타일을 Wall로 분해
+    //Tile To Wall
     for (auto& tile : wallTiles)
     {
         sf::IntRect rect = (sf::IntRect)tile->GetTileGlobalBounds();
@@ -161,25 +160,24 @@ void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
         walls.push_back(bottomWall);
     }
 
-    {
-        sf::IntRect rect = (sf::IntRect)player->sprite.getGlobalBounds();
-        sf::Vector2i p1 = { rect.left, rect.top };
-        sf::Vector2i p2 = { rect.left + rect.width, rect.top };
-        sf::Vector2i p3 = { rect.left, rect.top + rect.height };
-        sf::Vector2i p4 = { rect.left + rect.width, rect.top + rect.height };
+    //Player To Wall
+    sf::IntRect rect = (sf::IntRect)player->sprite.getGlobalBounds();
+    sf::Vector2i p1 = { rect.left, rect.top };
+    sf::Vector2i p2 = { rect.left + rect.width, rect.top };
+    sf::Vector2i p3 = { rect.left, rect.top + rect.height };
+    sf::Vector2i p4 = { rect.left + rect.width, rect.top + rect.height };
 
-        Wall topWall = { p1, p2 };
-        Wall leftWall = { p1, p3 };
-        Wall rightWall = { p2, p4 };
-        Wall bottomWall = { p3, p4 };
+    Wall topWall = { p1, p2 };
+    Wall leftWall = { p1, p3 };
+    Wall rightWall = { p2, p4 };
+    Wall bottomWall = { p3, p4 };
 
-        walls.push_back(topWall);
-        walls.push_back(leftWall);
-        walls.push_back(rightWall);
-        walls.push_back(bottomWall);
-    }
+    walls.push_back(topWall);
+    walls.push_back(leftWall);
+    walls.push_back(rightWall);
+    walls.push_back(bottomWall);
 
-
+    //Check Collizion Wall
     for (auto wall : walls )
     {
         float x3, y3, x4, y4, numerator1, numerator2, denominator;
@@ -207,7 +205,7 @@ void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
         }
     }
 
-    float distance = 1000;
+    float distance = 10000;
     for (auto& point : collisionPoints)
     {
         float newDistance = Utils::Distance({ (float)m_line.getX1(), (float)m_line.getY1() }, (sf::Vector2f)point);
@@ -217,6 +215,8 @@ void Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
             m_line.setEndPoint(point.x, point.y);
         } 
     }
+    //Player에 맞았는지 확인
+    return player->GetGlobalBounds().contains(m_line.getEndPoint());
 }
 
 void Beam::checkCollision(Monster* monster)

@@ -67,5 +67,6 @@ public:
 	void SpawnBreakableObj(const std::string& id, int count);
 	void DestroyBreakableObj(BreakableObj* obj);
 	void TilesToIntMap();
+	void CalculatorNongroundTiles();
 };
 

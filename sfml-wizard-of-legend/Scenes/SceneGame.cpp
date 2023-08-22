@@ -39,6 +39,7 @@ void SceneGame::Init()
 
 	LoadFromCSV("tables/TileInfoTable.csv");
 	TilesToIntMap();
+	CalculatorNongroundTiles();
 
 	tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
 	tempWindSlash->SetScene(this);
@@ -46,11 +47,12 @@ void SceneGame::Init()
 	tempWindSlash->sortLayer = 21;
 
 
-	Monster* go = CreateMonster(MonsterId::Mage);
+	Monster* go = CreateMonster(MonsterId::Ghoul);
 	monster = go;
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
+	monster->SetNonGroundTiles(&nongroundTiles);
 
 	player->SetTiles(&tilesWorld);
 	tempWindSlash->SetTiles(&tilesWorld);
@@ -339,5 +341,19 @@ void SceneGame::TilesToIntMap()
 				row.push_back(-1);
 		}
 		intMap.push_back(row);
+	}
+}
+
+void SceneGame::CalculatorNongroundTiles()
+{
+	nongroundTiles.clear();
+
+	for (auto& row : tilesWorld)
+	{
+		for (auto& tile : row)
+		{
+			if (tile->GetType() != TileType::Ground)
+				nongroundTiles.push_back(tile);
+		}
 	}
 }

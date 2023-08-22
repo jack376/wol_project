@@ -216,7 +216,7 @@
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="GameObjects\BreakableObj.h" />
-    <ClInclude Include="BoxCollider2D.h" />
+    <ClInclude Include="GameObjects\BoxCollider2D.h" />
     <ClInclude Include="GameObjects\Projectile.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="GameObjects\DestructibleGo.h" />

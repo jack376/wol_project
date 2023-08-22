@@ -102,7 +102,8 @@ void Archer::Attack(float dt)
 	pullArmAni.Update(dt);
 	bowAni.Update(dt);
 
-	if (attackTimer >= stat.attackRate)
+	if (attackTimer >= stat.attackRate &&
+		raycaster.checkCollision(CalculatorRangeTiles(16, 16), player))
 	{
 		currentAttackState = AttackState::Aim;
 		attackTimer = 0.f;

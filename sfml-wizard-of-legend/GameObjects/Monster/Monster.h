@@ -52,6 +52,7 @@ enum class MonsterId
 };
 
 class SceneGame;
+using Pair = std::pair<int, int>;
 
 class Monster :
     public SpriteGo
@@ -69,16 +70,20 @@ protected:
 	float attackTimer = 0.f;
 	float knockBackTime = 0.15f;
 	float knockBackTimer = 0.f;
+	float pathUpdateRate = 1.f;
+	float pathUpdateTimer = 0.f;
 	bool isAttacked = false;
 	bool isAwake = false;
 
 	Player* player = nullptr;
 	Tile* currentTile = nullptr;
+	Tile* nextTile = nullptr;
 
 	sf::Vector2f look; //바라보는 방향
 	sf::Vector2f direction; //이동하는 방향
 	sf::Vector2f attackDir;
-	sf::Vector2f prevPos; 
+	sf::Vector2f prevPos;
+	
 
 	std::vector<std::vector<Tile*>>* tilesWorld = nullptr;
 	std::vector<Tile*>* nongroundTiles = nullptr;
@@ -88,6 +93,7 @@ protected:
 	sf::CircleShape attackRange;
 
 	Beam raycaster;
+	std::pair<bool, std::stack<Pair>> path;
 
 	using Pair = std::pair<int, int>;
 	using pPair = std::pair<double, Pair>;
@@ -101,6 +107,9 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
 
+	virtual void SetPosition(const sf::Vector2f& p) override;
+	virtual void SetPosition(float x, float y) override;
+
     void SetState(MonsterState newState);
 	virtual void HandleState(float dt);
 
@@ -109,12 +118,15 @@ public:
 	virtual void Move(float dt);
 	void Die();
 	virtual void KnockBack(float dt);
+
+	
 	
 	const sf::Vector2f SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetRectBox();
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->tilesWorld = tiles; }
 	void SetIntMap(std::vector<std::vector<int>>* intMap) { this->intMap = intMap; }
+	void SetNonGroundTiles(std::vector<Tile*>* tiles) { nongroundTiles = tiles; }
 
 	void OnAttacked(float damage);
 
