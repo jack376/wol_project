@@ -6,28 +6,17 @@
 #include "ObjectPool.h"
 
 class SpriteGo;
-class SceneGame;
-class Player;
-class Monster;
-class Tile;
+class SkillEditorPlayer;
 
-class ElementalSpell : public SpriteGo
+class SkillEditorElementalSpell : public SpriteGo
 {
 protected:
 	// 현재는 하드코딩이지만 데이터를 넘겨 받는 식으로 수정
-	SceneGame* scene;
-	Player* player;
-	Monster* monster;
-	std::list<Monster*> monsters;
-	std::list<Monster*> colMonsters;
-	Beam raycaster;
+	SkillEditorPlayer* player;
 
-	ObjectPool<ElementalSpell> pool;
+	ObjectPool<SkillEditorElementalSpell> pool;
 
 	AnimationController anim;
-	
-	BoxCollider2D Collider;
-
 
 	ElementTypes currentElementType = ElementTypes::None;
 	SkillTypes currentSkillType = SkillTypes::None;
@@ -62,7 +51,7 @@ protected:
 
 	// 스킬이 공격했는지 여부 / 중복방지
 	bool isAttack = false;
-	
+
 	// 중복 공격 방지
 	float attackTimer = 0.f;
 	float attackDuration = 2.0f;
@@ -92,15 +81,12 @@ protected:
 	// 임시
 	//sf::Vector2f axis(400.0f, 300.0f); // 축 위치
 	float curveAngle = 45.0f; // 축 각도 (도)
-	
+
 	float time = 0.0f; // dt가 누적되는 시간
 
-	Tile* currentTile = nullptr;
-	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
-
 public:
-	ElementalSpell(const std::string& textureId = "", const std::string& n = "");
-	virtual ~ElementalSpell() override;
+	SkillEditorElementalSpell(const std::string& textureId = "", const std::string& n = "");
+	virtual ~SkillEditorElementalSpell() override;
 
 	virtual void Init() override;
 	virtual void Release() override;
@@ -114,25 +100,13 @@ public:
 	void CurveUpdate(float dt);
 	void StraightUpdate(float dt);
 
-	//void SetSpell(SpellInfo skillInfo);
+	void SetPlayer(SkillEditorPlayer* player) { this->player = player; }
+	void SetPool(ObjectPool<SkillEditorElementalSpell>& pool) { this->pool = pool; }
 
-	void SetScene(SceneGame* scene) { this->scene = scene; }
-	void SetPlayer(Player* player) { this->player = player; }
-	void SetMonster(Monster* monster) { this->monster = monster; }
-	void SetMonsterList(std::list<Monster*>& monsters) { this->monsters = monsters; }
-	void SetPool(ObjectPool<ElementalSpell>& pool) { this->pool = pool; }
-	
 	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }
 	void SetRangeType(RangeTypes type) { currentRangeType = type; }
 
-	sf::RectangleShape& GetCollider();
-
-	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
-
 	sf::Vector2f  CalAxisSin(float time, float speed, float frequency, float amplitude, const sf::Vector2f& axis, float angleInDegrees);
-	void CalculatorCurrentTile();
-	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
-
 };
 

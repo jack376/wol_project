@@ -2,6 +2,14 @@
 
 #define _USE_MATH_DEFINES
 
+// Id 추가 시 ConvertNameToId 추가해야함
+enum class SkillIds
+{
+	None = -1,
+	FireBall,
+	WindSlash,
+};
+
 enum class SkillEvents
 {
 	None = -1,
@@ -17,6 +25,14 @@ enum class SkillTypes
 	None = -1,
 	Melee,
 	Range,
+	Petrol,
+};
+
+enum class RangeTypes
+{
+	None = -1,
+	Straight,
+	Curve,
 };
 
 enum class PlayerActions
@@ -27,6 +43,8 @@ enum class PlayerActions
 	Jump,
 	Slam,
 	Focus,
+	JumpKick,
+	JumpSlam,
 };
 
 enum class ElementTypes

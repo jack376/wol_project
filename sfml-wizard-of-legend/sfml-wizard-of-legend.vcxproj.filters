@@ -42,13 +42,16 @@
     <ClCompile Include="GameObjects\Particle.cpp" />
     <ClCompile Include="Raycaster\Beam.cpp" />
     <ClCompile Include="Raycaster\Line.cpp" />
-    <ClCompile Include="SceneSkillEditor.cpp" />
     <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
     <ClCompile Include="GameObjects\Projectile.cpp" />
     <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="GameObjects\Monster\Mage.cpp" />
     <ClCompile Include="PathFinding\AS.cpp" />
     <ClCompile Include="Scenes\PathfindingScene.cpp" />
+    <ClCompile Include="Scenes\SceneSkillEditor.cpp" />
+    <ClCompile Include="GameObjects\Player\SkillEditorPlayer.cpp" />
+    <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
+    <ClCompile Include="DataTables\SkillTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -165,6 +168,7 @@
     </ClCompile>
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="GameObjects\BoxCollider2D.h" />
+    <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\Command.h" />
@@ -176,13 +180,15 @@
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Raycaster\Line.h" />
     <ClInclude Include="Raycaster\Beam.h" />
-    <ClInclude Include="SceneSkillEditor.h" />
     <ClInclude Include="GameObjects\AnimationProjectile.h" />
     <ClInclude Include="GameObjects\Projectile.h" />
-    <ClInclude Include="GameObjects\Monster\Lancer.h" />
     <ClInclude Include="GameObjects\Monster\Mage.h" />
     <ClInclude Include="PathFinding\AS.h" />
     <ClInclude Include="Scenes\PathfindingScene.h" />
+    <ClInclude Include="Scenes\SceneSkillEditor.h" />
+    <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
+    <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />
+    <ClInclude Include="DataTables\SkillTable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

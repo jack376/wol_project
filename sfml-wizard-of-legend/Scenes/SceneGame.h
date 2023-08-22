@@ -23,6 +23,7 @@ class SceneGame : public Scene
 protected:
 	Player* player;
 	ElementalSpell* tempWindSlash;
+	ElementalSpell* tempFireBall;
 	std::vector<std::vector<Tile*>> tilesWorld;
 	std::vector<Tile*> nongroundTiles;
 	std::vector<std::vector<int>> intMap;
@@ -32,6 +33,7 @@ protected:
 	float tileSize = 64.0f;
 
 	Monster* monster;
+	std::list<Monster*> monsters;
 
 	bool isCol = false;
 

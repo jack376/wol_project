@@ -1,9 +1,8 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
-#include "BoxCollider2D.h"
 #include "ObjectPool.h"
-#include "ElementalSpell.h"
+#include "SkillEditorElementalSpell.h"
 
 enum class Dir
 {
@@ -47,13 +46,7 @@ enum class States
 	Die,
 };
 
-
-
-class SceneGame;
-class Monster;
-class Tile;
-
-class Player : public SpriteGo
+class SkillEditorPlayer : public SpriteGo
 {
 private:
 	AnimationController anim;
@@ -65,13 +58,9 @@ private:
 	HitDir hitDir = HitDir::None;
 	SkillEvents sEvent = SkillEvents::None;
 
-	ObjectPool<ElementalSpell> spellPool;
+	ObjectPool<SkillEditorElementalSpell> spellPool;
 
-	SceneGame* scene;
-	Monster* monster;
-	std::list<Monster*> monsters;
 	SpriteGo* dirIcon;
-	SpriteGo* portal;
 
 	sf::CircleShape attackPosCol;	// 스킬 생성 지점 가시화
 
@@ -162,21 +151,12 @@ private:
 
 
 	// 상태변수
-	bool isAlive = true;
 	bool isRun = false;
 	bool isDash = false;
 	bool isSlide = false;
 	bool isDashCool = false;
 	bool isAttack = false;
-	bool isHit = false;
-	bool isHitAnim = false;
-	bool isInvincible = false;
-	bool isDieAnim = false;
-	bool isFalling = false;
-	bool isFallHit = false;
-	bool isPortalBigAnim = false;
-	bool isPortalSmallAnim = false;
-	bool isPortalAnimTerm = false;
+
 
 	bool isMove = false;
 	bool isDashing = false;
@@ -193,12 +173,9 @@ private:
 
 	std::string attackName;
 
-	Tile* currentTile = nullptr;
-	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
-
 public:
-	Player(const std::string& textureId = "", const std::string& n = "");
-	virtual ~Player() override;
+	SkillEditorPlayer(const std::string& textureId = "", const std::string& n = "");
+	virtual ~SkillEditorPlayer() override;
 
 	virtual void Init() override;
 	virtual void Release() override;
@@ -212,52 +189,29 @@ public:
 	void DashUpdate(float dt);
 	void SlideUpdate(float dt);
 	void AttackUpdate(float dt);
-	void HitUpdate(float dt);
-	void FallUpdate(float dt);
-	void DieUpdate(float dt);
+
 
 	void CalDir();
 	void CalLookAngle();
-	void CalHitLookAngle();
 
-
-
-	void SetScene(SceneGame* scene) { this->scene = scene; }
-	void SetMonster(Monster* monster) { this->monster = monster; }	// 하드 코딩용
-	void SetMonsterList(std::list<Monster*>& monsters) { this->monsters = monsters; }
 	void SetAttackPos();
 	void SetDirIconPos();
 	void SetDirIconDir();
 
 
-	Monster* GetMonster() { return monster; }
-
-	// 데미지 : -, 회복 : +
-	void SetHp(int value);
-	void SetHitDir(sf::Vector2f dir) { this->hitLook = dir; };
-
 	// 스킬 생성 지점
 	sf::Vector2f GetAttackPos() { return attackPos; }
 	float GetPlayerLookAngle() { return playerLookAngle; }
+
 	// 스킬 원거리 방향
 	sf::Vector2f& GetLook() { return look; }
+
 	// 스킬 이벤트
 	SkillEvents GetSkillEvent() { return sEvent; }
 
-	bool IsAlive() { return isAlive; }
-	bool IsAttack() { return isAttack; }
-	
 	void ChangeState(States state);
 
 	// 애니메이션 이름 등록
 	void InsertAnimId();
-
-	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
-	void CalculatorCurrentTile();
-	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
-
-	void PortalAnimations(float dt);
-
-	Tile* GetCurrentTile() { return currentTile; }
-	const sf::FloatRect GetGlobalBounds() { return rect.getGlobalBounds(); }
 };
+

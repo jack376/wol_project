@@ -35,9 +35,7 @@ protected:
 
 	std::map<Axis, AxisInfo> axisInfoMap;
 
-	std::string currentInput;
-	bool isConnectedText = false;
-	bool isEnterPressed = false;
+	std::vector<char> textList;
 public:
 	void Update(float dt);
 	void UpdateEvent(const sf::Event& ev);
@@ -56,6 +54,8 @@ public:
 	// Axis
 	float GetAxis(Axis axis);
 	float GetAxisRaw(Axis axis);
+
+	std::vector<char>& GetTextList() { return textList;};
 };
 
 #define INPUT_MGR (InputMgr::Instance())

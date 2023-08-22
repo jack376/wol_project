@@ -74,6 +74,7 @@ protected:
 	float pathUpdateTimer = 0.f;
 	bool isAttacked = false;
 	bool isAwake = false;
+	bool isHit = false;
 
 	Player* player = nullptr;
 	Tile* currentTile = nullptr;
@@ -127,6 +128,9 @@ public:
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->tilesWorld = tiles; }
 	void SetIntMap(std::vector<std::vector<int>>* intMap) { this->intMap = intMap; }
 	void SetNonGroundTiles(std::vector<Tile*>* tiles) { nongroundTiles = tiles; }
+	void SetIsHit(bool isHit) { this->isHit = isHit; }
+
+	bool GetIsHit() { return isHit; }
 
 	void OnAttacked(float damage);
 

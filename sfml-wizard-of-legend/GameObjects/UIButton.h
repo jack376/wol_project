@@ -1,11 +1,15 @@
 #pragma once
 #include "SpriteGo.h"
 
+class TextGo;
+
 class UIButton : public SpriteGo
 {
 protected:
 	bool isHover = false;
 	bool isPressed = false;
+
+	bool isInput = false;
 
 	sf::Font font;
 public:
@@ -31,6 +35,10 @@ public:
 
 	virtual void SetOrigin(Origins origin) override;
 	virtual void SetOrigin(float x, float y) override;
+
+	void SetIsInput(bool isInput) { this->isInput = isInput; }
+
+	void InputString();
 
 	sf::Text text;
 

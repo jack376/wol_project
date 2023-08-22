@@ -9,6 +9,7 @@ public:
 		String,
 		Monster,
 		Tile,
+		Skill,
 	};
 
 	DataTable(const DataTable& other) = delete;

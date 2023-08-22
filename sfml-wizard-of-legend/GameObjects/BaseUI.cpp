@@ -303,4 +303,5 @@ void BaseUI::SetPosition(float x, float y)
 {
     buttonModifyPosition = sf::Vector2f(x, y);
     buttonCollider.setPosition(x, y);
+    position = { x, y };
 }

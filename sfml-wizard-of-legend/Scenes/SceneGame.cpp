@@ -20,6 +20,8 @@
 #include "BoxCollider2D.h"
 #include "BreakableObj.h"
 #include "Particle.h"
+#include "Skill.h"
+#include "SkillMgr.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -41,11 +43,47 @@ void SceneGame::Init()
 	TilesToIntMap();
 	CalculatorNongroundTiles();
 
-	tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
-	tempWindSlash->SetScene(this);
-	tempWindSlash->SetPlayer(player);
-	tempWindSlash->sortLayer = 21;
+	//tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
+	//tempWindSlash->SetScene(this);
+	//tempWindSlash->SetPlayer(player);
+	//tempWindSlash->sortLayer = 21;
+	//tempWindSlash->SetSkillType(SkillTypes::Melee);
 
+	//tempFireBall = (ElementalSpell*)AddGo(new ElementalSpell());
+	//tempFireBall->SetScene(this);
+	//tempFireBall->SetPlayer(player);
+	//tempFireBall->sortLayer = 21;
+	//tempFireBall->SetSkillType(SkillTypes::Range);
+	//tempFireBall->SetRangeType(RangeTypes::Curve);
+
+	Skill* fireBall = (Skill*)AddGo(new Skill());
+	fireBall->SetSkillEvent(SkillEvents::Right);
+	fireBall->SetElementType(ElementTypes::Fire);
+	fireBall->SetSkillType(SkillTypes::Range);
+	fireBall->SetRangeType(RangeTypes::Curve);
+
+	Skill* windSlash = (Skill*)AddGo(new Skill());
+	windSlash->SetSkillEvent(SkillEvents::Left);
+	windSlash->SetElementType(ElementTypes::Wind);
+	windSlash->SetSkillType(SkillTypes::Melee);
+	windSlash->SetRangeType(RangeTypes::Straight);
+
+	SKILL_MGR.InputSkill(windSlash);
+	SKILL_MGR.InputSkill(fireBall);
+
+
+	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
+
+
+	Monster* go1 = CreateMonster(MonsterId::Archer);
+	go1->SetPlayer(player);
+	go1->SetTiles(&tilesWorld);
+	monsters.push_back(go1);
+
+	Monster* go2 = CreateMonster(MonsterId::Ghoul);
+	go2->SetPlayer(player);
+	go2->SetTiles(&tilesWorld);
+	monsters.push_back(go2);
 
 	Monster* go = CreateMonster(MonsterId::Ghoul);
 	monster = go;
@@ -53,12 +91,21 @@ void SceneGame::Init()
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
+	Monster* go3 = CreateMonster(MonsterId::GhoulLarge);
+	go3->SetPlayer(player);
+	go3->SetTiles(&tilesWorld);
+	monsters.push_back(go3);
+
+
 
 	player->SetTiles(&tilesWorld);
-	tempWindSlash->SetTiles(&tilesWorld);
+	player->SetMonsterList(monsters);
 
-	player->SetMonster(go);
-	tempWindSlash->SetMonster(monster);
+	//tempWindSlash->SetTiles(&tilesWorld);
+	//tempFireBall->SetTiles(&tilesWorld);
+
+	//tempWindSlash->SetMonsterList(monsters);
+	//tempFireBall->SetMonsterList(monsters);
 
 	// Create Particle
 	CreateParticle(1000);
@@ -67,12 +114,13 @@ void SceneGame::Init()
 
 	for (auto go : gameObjects)
 	{
-		if (go->GetName() == "a")
-		{
-			std::cout << "";
-		}
 		go->Init();
 	}
+
+	SKILL_MGR.SetTiles(&tilesWorld);
+	SKILL_MGR.SetMonsterList(monsters);
+	SKILL_MGR.SetPlayer(player);
+	SKILL_MGR.Init();
 }
 
 void SceneGame::Release()
@@ -107,7 +155,6 @@ void SceneGame::Exit()
 void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);	
-	worldView.setCenter(player->GetPosition());
 	debugTimer += dt;
 	worldView.setCenter(player->GetPosition());
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
