@@ -2,9 +2,15 @@
 #include "SkillMgr.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
+#include "DataTableMgr.h"
+#include "SkillTable.h"
 
 void SkillMgr::Init()
 {
+	// 모든 스킬 탐색
+	LoadSkill();
+	
+	//
 	for (auto skill : equipSkillList)
 	{
 		skill.second->SetTiles(worldTiles);
@@ -54,6 +60,29 @@ void SkillMgr::UseSpaceSkill()
 	Skill* spaceSkill = equipSkillList[SkillEvents::Space];
 	spaceSkill->UseSkill();
 
+}
+
+void SkillMgr::LoadSkill()
+{
+	//stat = DATATABLE_MGR.Get<MonsterTable>(DataTable::Ids::Monster)->Get((int)monsterId);
+
+	//DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)monsterId);
+	int dataSize = DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->GetTable().size();
+	for (int i=0; i < dataSize; i++)
+	{
+
+	}
+
+
+	for (auto table : DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->GetTable())
+	{
+		table.first;
+		Skill* skill; 
+
+		// skillInfo형태
+		DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)table.first);
+
+	}
 }
 
 void SkillMgr::SwapSkill(SkillEvents sEvent, Skill* equipSkill)

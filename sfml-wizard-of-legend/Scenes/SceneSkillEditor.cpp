@@ -374,6 +374,7 @@ void SceneSkillEditor::Apply()
 	std::cout << "Button Apply" << std::endl;
 	ConvertEnumToInt();
 	ConvertBoolToInt();
+	//ConvertNameToId();
 	Skill* skill = new Skill();
 	SpellInfo spellInfo;
 	SkillInfo skillInfo;

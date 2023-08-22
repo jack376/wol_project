@@ -15,5 +15,6 @@ public:
 	virtual void Release() override;
 
 	const SkillInfo& Get(int id) const;
+	const std::unordered_map<int, SkillInfo>& GetTable() { return table; }
 };
 

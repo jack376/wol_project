@@ -41,6 +41,8 @@ public:
 	void UseLeftSkill();
 	void UseRightSkill();
 	void UseSpaceSkill();
+	
+	void LoadSkill();
 	void SwapSkill(SkillEvents sEvent, Skill* equipSkill);
 	void AddSkill(Skill* newSkill);
 	void BuySkill(Skill* newSkill);

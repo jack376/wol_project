@@ -132,6 +132,7 @@ public:
 	void SaveCSV(std::vector<SkillInfo>& info);
 	void Apply();
 	void Play();
+
 	void ConvertEnumToInt();
 	void ConvertBoolToInt();
 	void ConvertNameToId();

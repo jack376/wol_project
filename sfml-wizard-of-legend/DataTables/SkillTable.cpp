@@ -14,11 +14,9 @@ const SkillInfo& SkillTable::Get(int id) const
 
 bool SkillTable::Load()
 {
-	rapidcsv::Document doc("SkillTables/SkillInfo.csv");
+	rapidcsv::Document doc("tables/SkillInfo.csv");
 	std::vector<int> id = doc.GetColumn<int>(0);
 
-	std::vector<SkillInfo> skillInfo;
-	std::vector<SpellInfo> spellInfo;
 
 	std::vector<std::string> skillNames = doc.GetColumn<std::string>(1);
 	std::vector<int> elementTypes = doc.GetColumn<int>(2);
@@ -47,11 +45,40 @@ bool SkillTable::Load()
 	std::vector<int> isPenetratings = doc.GetColumn<int>(22);
 	std::vector<int> canMoveDuringSkills = doc.GetColumn<int>(23);
 
+	std::vector<SkillInfo> skillInfos;
+	std::vector<SpellInfo> spellInfos;
 
 	for (int i = 0; i < id.size(); i++)
 	{
-		//info.push_back({ names[i], (AttactType)types[i], maxHps[i], speeds[i], damages[i], attactRates[i], attactRanges[i], searchRanges[i] });
-		//table.insert({ id[i], skillInfo[i] });
+		spellInfos.push_back({ 
+			skillNames[i],
+			damages[i],
+			comboDamages[i],
+			comboMaxCounts[i],
+			comboDurations[i],
+			maxSkillChages[i],
+			shotCounts[i],
+			speeds[i],
+			ranges[i],
+			explosionRanges[i],
+			amplitudes[i],
+			frequencys[i],
+			delayDurations[i],
+			damageDelays[i],
+			coolTimes[i],
+			rotateSpeeds[i],
+			(bool)isPenetratings[i],
+			(bool)canMoveDuringSkills[i]});
+
+		skillInfos.push_back({ id[i], 
+			(ElementTypes)elementTypes[i], 
+			(SkillTypes)skillTypes[i], 
+			(RangeTypes)rangeTypes[i], 
+			(SkillEvents)eventTypes[i], 
+			(PlayerActions)playerActions[i], 
+			spellInfos[i]});
+
+		table.insert({ id[i], skillInfos[i] });
 	}
 	return true;
 }
