@@ -40,7 +40,6 @@ protected:
 	float debugTimer = 0.f;
 	float debugDuration = 1.f;
 	ObjectPool<Particle> particlePool;
-	ObjectPool<SpriteEffect> hitEffects;
 	int count = 0;
 
 public:

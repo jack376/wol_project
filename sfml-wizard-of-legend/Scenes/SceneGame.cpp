@@ -39,7 +39,7 @@ void SceneGame::Init()
 	player->sortLayer = 5;
 	player->SetScene(this);
 
-	LoadFromCSV("tables/TileInfoTable.csv");
+	LoadFromCSV("tables/_0822_175046.csv");
 	TilesToIntMap();
 	CalculatorNongroundTiles();
 
@@ -75,26 +75,13 @@ void SceneGame::Init()
 	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
 
 
-	Monster* go1 = CreateMonster(MonsterId::Archer);
-	go1->SetPlayer(player);
-	go1->SetTiles(&tilesWorld);
-	monsters.push_back(go1);
-
-	Monster* go2 = CreateMonster(MonsterId::Ghoul);
-	go2->SetPlayer(player);
-	go2->SetTiles(&tilesWorld);
-	monsters.push_back(go2);
-
 	Monster* go = CreateMonster(MonsterId::Ghoul);
 	monster = go;
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
-	Monster* go3 = CreateMonster(MonsterId::GhoulLarge);
-	go3->SetPlayer(player);
-	go3->SetTiles(&tilesWorld);
-	monsters.push_back(go3);
+
 
 
 
@@ -327,7 +314,7 @@ void SceneGame::SpawnBreakableObj(const std::string& id, int count)
 	{
 		for (size_t col = 0; col < tilesWorld[row].size(); col++)
 		{
-			if (tilesWorld[row][col]->GetType() == TileType::EventTrigger)
+			if (tilesWorld[row][col]->GetType() == TileType::None)
 			{
 				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
 			}

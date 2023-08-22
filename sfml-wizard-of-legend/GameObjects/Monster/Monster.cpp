@@ -236,6 +236,7 @@ void Monster::Move(float dt)
     raycaster.Rotation(Utils::Angle(look));
     prevPos = position;
 
+    
     if (raycaster.CheckShortestPath(position, player->GetPosition(), *nongroundTiles, tilesWorld).first)
         SetPosition(position + look * stat.speed * dt);    
     else
@@ -262,6 +263,7 @@ void Monster::Move(float dt)
         }
         SetPosition(position + direction * stat.speed * dt);
     }
+    
 
     CalculatorCurrentTile();
     if (currentTile->GetType() == TileType::Wall

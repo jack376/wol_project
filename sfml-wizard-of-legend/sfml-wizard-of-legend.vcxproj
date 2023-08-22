@@ -186,7 +186,6 @@
     <ClCompile Include="GameObjects\UIButton.cpp" />
     <ClCompile Include="GameObjects\VertexArrayGo.cpp" />
     <ClCompile Include="Global\Utils.cpp" />
-    <ClCompile Include="GameObjects\Monster\Lancer.cpp" />
     <ClCompile Include="imgui\imgui-SFML.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -231,7 +230,6 @@
     <ClInclude Include="GameObjects\BreakableObj.h" />
     <ClInclude Include="GameObjects\BoxCollider2D.h" />
     <ClInclude Include="GameObjects\Projectile.h" />
-    <ClInclude Include="GameObjects\BoxCollider2D.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
     <ClInclude Include="GameObjects\DestructibleGo.h" />
