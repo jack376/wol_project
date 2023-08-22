@@ -47,6 +47,7 @@
     <ClCompile Include="Scenes\SceneSkillEditor.cpp" />
     <ClCompile Include="GameObjects\Player\SkillEditorPlayer.cpp" />
     <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
+    <ClCompile Include="DataTables\SkillTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Scenes\SceneSkillEditor.h" />
     <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
     <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />
+    <ClInclude Include="DataTables\SkillTable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

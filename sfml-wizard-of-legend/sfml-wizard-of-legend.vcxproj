@@ -205,6 +205,7 @@
     <ClCompile Include="Framework\TileCommand.cpp" />
     <ClCompile Include="GameObjects\Player\SkillEditorPlayer.cpp" />
     <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
+    <ClCompile Include="DataTables\SkillTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -241,6 +242,7 @@
     <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
     <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />
+    <ClInclude Include="DataTables\SkillTable.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />

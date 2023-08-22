@@ -5,7 +5,7 @@
 
 void SkillMgr::Init()
 {
-	for (auto skill : skillList)
+	for (auto skill : equipSkillList)
 	{
 		skill.second->SetTiles(worldTiles);
 		skill.second->SetMonsterList(monsters);
@@ -17,13 +17,13 @@ void SkillMgr::Init()
 
 void SkillMgr::UseSkill(SkillEvents sEvent)
 {
-	Skill* useSkill = skillList[sEvent];
+	Skill* useSkill = equipSkillList[sEvent];
 	useSkill->UseSkill();
 }
 
 void SkillMgr::UseEditorSkill(SkillEvents sEvent)
 {
-	Skill* useSkill = skillList[sEvent];
+	Skill* useSkill = equipSkillList[sEvent];
 	useSkill->UseEditorSkill();
 
 }
@@ -31,45 +31,61 @@ void SkillMgr::UseEditorSkill(SkillEvents sEvent)
 
 void SkillMgr::UseQSkill()
 {
-	Skill* qSkill = skillList[SkillEvents::Q];
+	Skill* qSkill = equipSkillList[SkillEvents::Q];
 	qSkill->UseSkill();
 }
 
 void SkillMgr::UseLeftSkill()
 {
-	Skill* leftSkill = skillList[SkillEvents::Left];
+	Skill* leftSkill = equipSkillList[SkillEvents::Left];
 	leftSkill->UseSkill();
 
 }
 
 void SkillMgr::UseRightSkill()
 {
-	Skill* rightSkill = skillList[SkillEvents::Right];
+	Skill* rightSkill = equipSkillList[SkillEvents::Right];
 	rightSkill->UseSkill();
 
 }
 
 void SkillMgr::UseSpaceSkill()
 {
-	Skill* spaceSkill = skillList[SkillEvents::Space];
+	Skill* spaceSkill = equipSkillList[SkillEvents::Space];
 	spaceSkill->UseSkill();
 
 }
 
 void SkillMgr::SwapSkill(SkillEvents sEvent, Skill* equipSkill)
 {
-	Skill* changeTemp = skillList[sEvent];
+	Skill* changeTemp = equipSkillList[sEvent];
 	changeTemp->SetSkillEvent(equipSkill->GetSkillEvent());
 	equipSkill->SetSkillEvent(sEvent);
 }
 
+void SkillMgr::AddSkill(Skill* newSkill)
+{
+	auto it = existSkillList.find(newSkill->GetSkillId());
+	if (it == existSkillList.end())
+		existSkillList[newSkill->GetSkillId()] = newSkill;
+	else
+		std::cout << "is already" << std::endl;
+}
+
+void SkillMgr::BuySkill(Skill* newSkill)
+{
+	auto it = buyedSkillList.find(newSkill->GetSkillId());
+	if (it == buyedSkillList.end())
+		buyedSkillList[newSkill->GetSkillId()] = newSkill;
+	else
+		std::cout << "is already" << std::endl;
+}
+
 void SkillMgr::InputSkill(Skill* newSkill)
 {
-	auto it = skillList.find(newSkill->GetSkillEvent());
-	if(it == skillList.end())
-		skillList[newSkill->GetSkillEvent()] = newSkill;
+	auto it = equipSkillList.find(newSkill->GetSkillEvent());
+	if(it == equipSkillList.end())
+		equipSkillList[newSkill->GetSkillEvent()] = newSkill;
 	else
-	{
 		std::cout << "is already" << std::endl;
-	}
 }

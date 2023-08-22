@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "rapidcsv.h"
 #include "SceneSkillEditor.h"
 #include "Framework.h"
 #include "GameObject.h"
@@ -29,11 +30,11 @@ void SceneSkillEditor::Init()
 	elementType = CreateUI("ElementType", uiStandardPosX, uiStandardPosY + offsetY * 1, nameSize);
 	elementTypeValue = CreateInputField("Wind", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 1, valueSize);
 
-	skillType = CreateUI("ElementType", uiStandardPosX, uiStandardPosY + offsetY * 2, nameSize);
+	skillType = CreateUI("SkillType", uiStandardPosX, uiStandardPosY + offsetY * 2, nameSize);
 	skillTypeValue = CreateInputField("Melee", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 2, valueSize);
 	
-	skillType = CreateUI("RangeType", uiStandardPosX, uiStandardPosY + offsetY * 3, nameSize);
-	skillTypeValue = CreateInputField("None", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 3, valueSize);
+	rangeType = CreateUI("RangeType", uiStandardPosX, uiStandardPosY + offsetY * 3, nameSize);
+	rangeTypeValue = CreateInputField("None", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 3, valueSize);
 	
 	eventType = CreateUI("EventType", uiStandardPosX, uiStandardPosY + offsetY * 4, nameSize);
 	eventTypeValue = CreateInputField("Left", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 4, valueSize);
@@ -152,6 +153,220 @@ void SceneSkillEditor::Draw(sf::RenderWindow& window)
 void SceneSkillEditor::Save()
 {
 	std::cout << "Button Save" << std::endl;
+
+	ConvertEnumToInt();
+	ConvertBoolToInt();
+	ConvertNameToId();
+
+	Skill* skill = new Skill();
+	SpellInfo spellInfo;
+	SkillInfo skillInfo;
+
+	spellInfo.skillName = skillNameValue->text.getString();
+
+	skill->SetElementType((ElementTypes)elemetTypeInt);
+	skill->SetSkillType((SkillTypes)skillTypeInt);
+	skill->SetRangeType((RangeTypes)rangeTypeInt);
+	skill->SetSkillEvent((SkillEvents)eventTypeInt);
+	skill->SetPlayerAction((PlayerActions)playerActionInt);
+
+	std::string damageStr = damageValue->text.getString();
+	spellInfo.damage = std::stoi(damageStr);
+
+	std::string comboDamageStr = comboDamageValue->text.getString();
+	spellInfo.comboDamage = std::stoi(comboDamageStr);
+
+	std::string comboMaxCountStr = comboMaxCountValue->text.getString();
+	spellInfo.comboMaxCount = std::stoi(comboMaxCountStr);
+
+	std::string comboDurationStr = comboDurationValue->text.getString();
+	spellInfo.comboDuration = std::stof(comboDurationStr);
+
+	std::string maxSkillChargeStr = maxSkillChargeValue->text.getString();
+	spellInfo.maxSkillCharge = std::stoi(maxSkillChargeStr);
+
+	std::string shotCountStr = shotCountValue->text.getString();
+	spellInfo.shotCount = std::stoi(shotCountStr);
+
+	std::string speedStr = speedValue->text.getString();
+	spellInfo.speed = std::stof(speedStr);
+
+	std::string rangeStr = rangeValue->text.getString();
+	spellInfo.range = std::stof(rangeStr);
+
+	std::string explosionRangeStr = explosionRangeValue->text.getString();
+	spellInfo.explosionRange = std::stof(explosionRangeStr);
+
+	std::string amplitudeStr = amplitudeValue->text.getString();
+	spellInfo.amplitude = std::stof(amplitudeStr);
+
+	std::string frquencyStr = frequencyValue->text.getString();
+	spellInfo.frquency = std::stof(frquencyStr);
+
+	std::string delayDurationStr = delayDurationValue->text.getString();
+	spellInfo.delayDuration = std::stof(delayDurationStr);
+
+	std::string damageDelayStr = damageDelayValue->text.getString();
+	spellInfo.damageDelay = std::stof(damageDelayStr);
+
+	std::string coolTimeStr = coolTimeValue->text.getString();
+	spellInfo.coolTime = std::stof(coolTimeStr);
+
+	std::string rotateSpeedStr = rotateSpeedValue->text.getString();
+	spellInfo.rotateSpeed = std::stof(rotateSpeedStr);
+
+	// bool형 
+	spellInfo.isPenetrating = isPenetratingInt;
+	spellInfo.canMoveDuringSkill = canMoveDuringSkillInt;
+
+	// Save에 필요한가?
+	skillInfo.elementType = (ElementTypes)elemetTypeInt;
+	skillInfo.skillType = (SkillTypes)skillTypeInt;
+	skillInfo.rangeType = (RangeTypes)rangeTypeInt;
+	skillInfo.evnetType = (SkillEvents)eventTypeInt;
+	skillInfo.playerAction = (PlayerActions)playerActionInt;
+	skillInfo.spellinfo = spellInfo;
+	skillInfo.skillId = skillId;
+
+	skillInfos.push_back(skillInfo);
+
+	SaveCSV(skillInfos);
+
+	// skillInfo를 넘긴다 그걸 토대로 정보를 skill에 입력하여 대입시킨다.
+	// 아래의 부분을 실제 스킬에 적용할 때 해야함
+	 
+	//skill->SetEditorPlayer(player);
+	//skill->SetSkillInfo(skillInfo);
+	//skill->SetElementType(skillInfo.elementType);
+	//skill->SetSkillType(skillInfo.skillType);
+	//skill->SetRangeType(skillInfo.rangeType);
+	//skill->SetSkillEvent(skillInfo.evnetType);
+	//skill->SetPlayerAction(skillInfo.playerAction);
+}
+
+void SceneSkillEditor::SaveCSV(std::vector<SkillInfo>& info)
+{
+	rapidcsv::Document doc;
+	doc.Clear();
+
+	std::string fileName = "tables/SkillInfo.csv";
+
+	doc.SetColumnName(0, "Id");
+	doc.SetColumnName(1, "SkillNames");
+	doc.SetColumnName(2, "ElementTypes / -1: None / 0: Fire / 1: Water / 2: Thunder / 3: Earth / 4: Wind /");
+	doc.SetColumnName(3, "SkillTypes / -1: None / 0: Melee / 1: Range / 2: Petrol /");
+	doc.SetColumnName(4, "RangeTypes / -1: None / 0: Straight / 1: Curve /");
+	doc.SetColumnName(5, "EventTypes / -1: None / 0: Left / 1: Right / 2: Space / 3: Q /");
+	doc.SetColumnName(6, "PlayerActions / -1: None / 0: Hand / 1: Kick / 2: Jump / 3: Slam / 4: Focus / 5: JumpKick / 6: JumpSlam /");
+	
+	doc.SetColumnName(7, "Damages");
+	doc.SetColumnName(8, "ComboDamages");
+	doc.SetColumnName(9, "ComboMaxCounts");
+	doc.SetColumnName(10, "ComboDurations");
+	doc.SetColumnName(11, "MaxSkillChages");
+	doc.SetColumnName(12, "ShotCounts");
+
+	doc.SetColumnName(13, "Speeds");
+	doc.SetColumnName(14, "Ranges");
+	doc.SetColumnName(15, "ExplosionRanges");
+	doc.SetColumnName(16, "Amplitudes");
+	doc.SetColumnName(17, "Frequencys");
+	doc.SetColumnName(18, "DelayDurations");
+	doc.SetColumnName(19, "DamageDelays");
+	doc.SetColumnName(20, "CoolTimes");
+	doc.SetColumnName(21, "RotateSpeeds");
+
+	doc.SetColumnName(22, "IsPenetratings");
+	doc.SetColumnName(23, "CanMoveDuringSkills");
+
+	std::vector<int> skillIds;
+	std::vector<std::string> skillNames;
+	std::vector<int> elementTypes;
+	std::vector<int> skillTypes;
+	std::vector<int> rangeTypes;
+	std::vector<int> eventTypes;
+	std::vector<int> playerActions;
+
+	std::vector<int> damages;
+	std::vector<int> comboDamages;
+	std::vector<int> comboMaxCounts;
+	std::vector<float> comboDurations;
+	std::vector<int> maxSkillChages;
+	std::vector<int> shotCounts;
+
+	std::vector<float> speeds;
+	std::vector<float> ranges;
+	std::vector<float> explosionRanges;
+	std::vector<float> amplitudes;
+	std::vector<float> frequencys;
+	std::vector<float> delayDurations;
+	std::vector<float> damageDelays;
+	std::vector<float> coolTimes;
+	std::vector<float> rotateSpeeds;
+
+	std::vector<int> isPenetratings;
+	std::vector<int> canMoveDuringSkills;
+
+	for (auto skillInfo : skillInfos)
+	{
+		skillIds.push_back(skillInfo.skillId);
+		skillNames.push_back(skillInfo.spellinfo.skillName);
+		elementTypes.push_back((int)skillInfo.elementType);
+		skillTypes.push_back((int)skillInfo.skillType);
+		rangeTypes.push_back((int)skillInfo.rangeType);
+		eventTypes.push_back((int)skillInfo.evnetType);
+		playerActions.push_back((int)skillInfo.playerAction);
+
+		damages.push_back(skillInfo.spellinfo.damage);
+		comboDamages.push_back(skillInfo.spellinfo.comboDamage);
+		comboMaxCounts.push_back(skillInfo.spellinfo.comboMaxCount);
+		comboDurations.push_back(skillInfo.spellinfo.comboDuration);
+		maxSkillChages.push_back(skillInfo.spellinfo.maxSkillCharge);
+		shotCounts.push_back(skillInfo.spellinfo.shotCount);
+
+		speeds.push_back(skillInfo.spellinfo.speed);
+		ranges.push_back(skillInfo.spellinfo.range);
+		explosionRanges.push_back(skillInfo.spellinfo.explosionRange);
+		amplitudes.push_back(skillInfo.spellinfo.amplitude);
+		frequencys.push_back(skillInfo.spellinfo.frquency);
+		delayDurations.push_back(skillInfo.spellinfo.delayDuration);
+		damageDelays.push_back(skillInfo.spellinfo.damageDelay);
+		coolTimes.push_back(skillInfo.spellinfo.coolTime);
+		rotateSpeeds.push_back(skillInfo.spellinfo.rotateSpeed);
+
+		isPenetratings.push_back(skillInfo.spellinfo.isPenetrating);
+		canMoveDuringSkills.push_back(skillInfo.spellinfo.canMoveDuringSkill);
+	}
+	doc.SetColumn<int>("Id", skillIds);
+	doc.SetColumn<std::string>("SkillNames", skillNames);
+	
+	doc.SetColumn<int>("ElementTypes / -1: None / 0: Fire / 1: Water / 2: Thunder / 3: Earth / 4: Wind /", elementTypes);
+	doc.SetColumn<int>("SkillTypes / -1: None / 0: Melee / 1: Range / 2: Petrol /", skillTypes);
+	doc.SetColumn<int>("RangeTypes / -1: None / 0: Straight / 1: Curve /", rangeTypes);
+	doc.SetColumn<int>("EventTypes / -1: None / 0: Left / 1: Right / 2: Space / 3: Q /", eventTypes);
+	doc.SetColumn<int>("PlayerActions / -1: None / 0: Hand / 1: Kick / 2: Jump / 3: Slam / 4: Focus / 5: JumpKick / 6: JumpSlam /", playerActions);
+
+	doc.SetColumn<int>("Damages", damages);
+	doc.SetColumn<int>("ComboDamages", comboDamages);
+	doc.SetColumn<int>("ComboMaxCounts", comboMaxCounts);
+	doc.SetColumn<float>("ComboDurations", comboDurations);
+	doc.SetColumn<int>("MaxSkillChages", maxSkillChages);
+	doc.SetColumn<int>("ShotCounts", shotCounts);
+
+	doc.SetColumn<float>("Speeds", speeds);
+	doc.SetColumn<float>("Ranges", ranges);
+	doc.SetColumn<float>("ExplosionRanges", explosionRanges);
+	doc.SetColumn<float>("Amplitudes", amplitudes);
+	doc.SetColumn<float>("Frequencys", frequencys);
+	doc.SetColumn<float>("DelayDurations", delayDurations);
+	doc.SetColumn<float>("DamageDelays", damageDelays);
+	doc.SetColumn<float>("CoolTimes", coolTimes);
+	doc.SetColumn<float>("RotateSpeeds", rotateSpeeds);
+
+	doc.SetColumn<int>("IsPenetratings", isPenetratings);
+	doc.SetColumn<int>("CanMoveDuringSkills", canMoveDuringSkills);
+
+	doc.Save(fileName);
 }
 
 void SceneSkillEditor::Apply()
@@ -159,39 +374,102 @@ void SceneSkillEditor::Apply()
 	std::cout << "Button Apply" << std::endl;
 	ConvertEnumToInt();
 	ConvertBoolToInt();
-	Skill* skill = nullptr;
-	SpellInfo info;
-	info.skillName = skillNameValue->text.getString();
+	Skill* skill = new Skill();
+	SpellInfo spellInfo;
+	SkillInfo skillInfo;
+
+	spellInfo.skillName = skillNameValue->text.getString();
+
 	skill->SetElementType((ElementTypes)elemetTypeInt);
 	skill->SetSkillType((SkillTypes)skillTypeInt);
 	skill->SetRangeType((RangeTypes)rangeTypeInt);
 	skill->SetSkillEvent((SkillEvents)eventTypeInt);
 	skill->SetPlayerAction((PlayerActions)playerActionInt);
+
 	std::string damageStr = damageValue->text.getString();
-	info.damage = std::stoi(damageStr);
-	info.comboDamage;
-	info.comboMaxCount;
-	info.maxSkillCharge;
-	info.shotCount;
-	info.speed;
-	info.range;
-	info.explosionRange;
-	info.amplitude;
-	info.frquency;
-	info.delayDuration;
-	info.damageDelay;
-	info.coolTime;
-	info.rotateSpeed;
-	info.isPenetrating;
-	info.canMoveDuringSkill;
+	spellInfo.damage = std::stoi(damageStr);
+
+	std::string comboDamageStr = comboDamageValue->text.getString();
+	spellInfo.comboDamage = std::stoi(comboDamageStr);
+
+	std::string comboMaxCountStr = comboMaxCountValue->text.getString();
+	spellInfo.comboMaxCount = std::stoi(comboMaxCountStr);
+
+	std::string comboDurationStr = comboDurationValue->text.getString();
+	spellInfo.comboDuration = std::stof(comboDurationStr);
+
+	std::string maxSkillChargeStr = maxSkillChargeValue->text.getString();
+	spellInfo.maxSkillCharge = std::stoi(maxSkillChargeStr);
+
+	std::string shotCountStr = shotCountValue->text.getString();
+	spellInfo.shotCount = std::stoi(shotCountStr);
+
+	std::string speedStr = speedValue->text.getString();
+	spellInfo.speed = std::stof(speedStr);
+
+	std::string rangeStr = rangeValue->text.getString();
+	spellInfo.range = std::stof(rangeStr);
+
+	std::string explosionRangeStr = explosionRangeValue->text.getString();
+	spellInfo.explosionRange = std::stof(explosionRangeStr);
+
+	std::string amplitudeStr = amplitudeValue->text.getString();
+	spellInfo.amplitude = std::stof(amplitudeStr);
+
+	std::string frquencyStr = frequencyValue->text.getString();
+	spellInfo.frquency = std::stof(frquencyStr);
+
+	std::string delayDurationStr = delayDurationValue->text.getString();
+	spellInfo.delayDuration = std::stof(delayDurationStr);
+
+	std::string damageDelayStr = damageDelayValue->text.getString();
+	spellInfo.damageDelay = std::stof(damageDelayStr);
+
+	std::string coolTimeStr = coolTimeValue->text.getString();
+	spellInfo.coolTime = std::stof(coolTimeStr);
+
+	std::string rotateSpeedStr = rotateSpeedValue->text.getString();
+	spellInfo.rotateSpeed = std::stof(rotateSpeedStr);
+
+	// bool형 
+	spellInfo.isPenetrating = isPenetratingInt;
+	spellInfo.canMoveDuringSkill = canMoveDuringSkillInt;
 
 
-	//skill->SetSpellInfo();
+	skillInfo.elementType = (ElementTypes)elemetTypeInt;
+	skillInfo.skillType = (SkillTypes)skillTypeInt;
+	skillInfo.rangeType = (RangeTypes)rangeTypeInt;
+	skillInfo.evnetType = (SkillEvents)eventTypeInt;
+	skillInfo.playerAction = (PlayerActions)playerActionInt;
+	//skill->SetElementType((ElementTypes)elemetTypeInt);
+	//skill->SetSkillType((SkillTypes)skillTypeInt);
+	//skill->SetRangeType((RangeTypes)rangeTypeInt);
+	//skill->SetSkillEvent((SkillEvents)eventTypeInt);
+	//skill->SetPlayerAction((PlayerActions)playerActionInt);
+	 
+	 
+	 
+	// 아래의 것들은 실제 스킬에 적용해야함
+	skill->SetEditorPlayer(player);
+	skill->SetSkillInfo(skillInfo);
+
+	skill->SetElementType(skillInfo.elementType);
+	skill->SetSkillType(skillInfo.skillType);
+	skill->SetRangeType(skillInfo.rangeType);
+	skill->SetSkillEvent(skillInfo.evnetType);
+	skill->SetPlayerAction(skillInfo.playerAction);
+
+
+
+
+
+	currentSkill = skill;
 }
 
 void SceneSkillEditor::Play()
 {
 	std::cout << "Button Play" << std::endl;
+	currentSkill->UseEditorSkill();
 }
 
 void SceneSkillEditor::ConvertEnumToInt()
@@ -225,16 +503,16 @@ void SceneSkillEditor::ConvertEnumToInt()
 	}
 	// SkillTypes
 	{
-		if (elementTypeValue->text.getString() == "Melee")
+		if (skillTypeValue->text.getString() == "Melee")
 		{
 			skillTypeInt = 0;
 		}
-		else if (elementTypeValue->text.getString() == "Range")
+		else if (skillTypeValue->text.getString() == "Range")
 		{
 			skillTypeInt = 1;
 
 		}
-		else if (elementTypeValue->text.getString() == "Petrol")
+		else if (skillTypeValue->text.getString() == "Petrol")
 		{
 			skillTypeInt = 2;
 		}
@@ -354,6 +632,27 @@ void SceneSkillEditor::ConvertBoolToInt()
 	}
 }
 
+void SceneSkillEditor::ConvertNameToId()
+{
+	if (skillNameValue->text.getString() == "FireBall")
+	{
+		skillId = 0;
+	}
+	else if (skillNameValue->text.getString() == "WindSlash")
+	{
+		skillId = 1;
+	}
+	//else if (skillNameValue->text.getString() == "~!~!")
+	//{
+	//	skillId = 2;
+	//}
+	else
+	{
+		skillId = -1;
+	}
+
+}
+
 UIButton* SceneSkillEditor::CreateUI(const std::string& text, float posX, float posY, sf::Vector2f size)
 {
 	TextGo* buttonText = (TextGo*)AddGo(new TextGo("fonts/NanumSquareEB.ttf"));
@@ -376,8 +675,6 @@ UIButton* SceneSkillEditor::CreateUI(const std::string& text, float posX, float 
 
 UIButton* SceneSkillEditor::CreateButton(const std::string& text, float posX, float posY, sf::Vector2f size, std::function<void()> onClickAction)
 {
-
-
 	TextGo* buttonText = (TextGo*)AddGo(new TextGo("fonts/NanumSquareEB.ttf"));
 	buttonText->sortLayer = 101;
 	buttonText->text.setCharacterSize(15);

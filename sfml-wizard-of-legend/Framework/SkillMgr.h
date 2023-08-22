@@ -15,10 +15,13 @@ protected:
 	SkillMgr() = default;
 	virtual ~SkillMgr() override = default;
 
-	// 키 입력
+	// AddSkill을 이용해서 저장
+	std::unordered_map<int, Skill*> existSkillList;
 
-	// 스킬 에디터에서 세이브시 InputSkill을 이용해서 저장
-	std::unordered_map<SkillEvents, Skill*> skillList;
+	std::unordered_map<int, Skill*> buyedSkillList;
+
+	// 슬롯에 넣을시 InputSkill을 이용해서 저장
+	std::unordered_map<SkillEvents, Skill*> equipSkillList;
 
 
 	std::vector<std::vector<Tile*>>* worldTiles = nullptr;
@@ -39,6 +42,8 @@ public:
 	void UseRightSkill();
 	void UseSpaceSkill();
 	void SwapSkill(SkillEvents sEvent, Skill* equipSkill);
+	void AddSkill(Skill* newSkill);
+	void BuySkill(Skill* newSkill);
 	void InputSkill(Skill* newSkill);
 
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }
@@ -47,7 +52,7 @@ public:
 	void SetEditorPlayer(SkillEditorPlayer*& player) { this->editorPlayer = player; }
 
 	// 리스트를 넘겨받아 디버그중에서 확인하기 위한 함수
-	std::unordered_map<SkillEvents, Skill*>& ForTestDebugSize() { return skillList; }
+	std::unordered_map<SkillEvents, Skill*>& ForTestDebugSize() { return equipSkillList; }
 
 };
 

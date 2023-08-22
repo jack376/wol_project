@@ -6,7 +6,6 @@
 
 struct SpellInfo
 {
-
 	std::string skillName;
 	std::string playerAction;
 
@@ -20,6 +19,7 @@ struct SpellInfo
 	float range;
 	float explosionRange;
 	float delayDuration;
+	float comboDuration;
 	float damageDelay;
 	float coolTime;
 
@@ -39,6 +39,17 @@ struct SpellInfo
 	float petrolDistance;
 };
 
+struct SkillInfo
+{
+	int skillId;
+	ElementTypes elementType;
+	SkillTypes skillType;
+	RangeTypes rangeType;
+	SkillEvents evnetType;
+	PlayerActions playerAction;
+
+	SpellInfo spellinfo;
+};
 class ElementalSpell;
 class SkillEditorElementalSpell;
 class Tile;
@@ -50,6 +61,7 @@ class Skill : public SpriteGo
 protected:
 	// UI아이콘 텍스쳐 필요?
 	// 실제 스킬 애니메이션 클립 어디서 관리할지
+	int skillId;
 	ElementTypes currentElementType = ElementTypes::None;
 	SkillTypes currentSkillType = SkillTypes::None;
 	RangeTypes currentRangeType = RangeTypes::None;
@@ -67,7 +79,9 @@ protected:
 
 	float spreadAngle;
 
-	SpellInfo spellInfo;
+	//SpellInfo spellInfo;
+
+	SkillInfo skillInfo;
 	
 	// 실제 스킬
 	//ElementalSpell* elementSpell;
@@ -92,6 +106,8 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	SkillEvents GetSkillEvent() const { return currentEventType; }
+	int GetSkillId() const { return skillId; }
+
 	void SetSkillEvent(SkillEvents sEvent) { currentEventType = sEvent; }
 	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }
@@ -108,7 +124,10 @@ public:
 	void UseSkill();
 	void UseEditorSkill();
 
-	void SetSpellInfo(SpellInfo info) { this->spellInfo = info; }
+	void SetSkillInfo(SkillInfo info) { this->skillInfo = info; }
+	void SetSpellInfo(SpellInfo info) { this->skillInfo.spellinfo = info; }
 	void InsertAnimId();
+
+
 };
 

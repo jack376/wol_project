@@ -2,6 +2,14 @@
 
 #define _USE_MATH_DEFINES
 
+// Id 추가 시 ConvertNameToId 추가해야함
+enum class SkillIds
+{
+	None = -1,
+	FireBall,
+	WindSlash,
+};
+
 enum class SkillEvents
 {
 	None = -1,

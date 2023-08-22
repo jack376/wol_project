@@ -200,7 +200,7 @@ void SkillEditorPlayer::Update(float dt)
 
 		//elemental->SetScene(scene);
 
-		SKILL_MGR.UseEditorSkill(sEvent);
+		//SKILL_MGR.UseEditorSkill(sEvent);
 
 		ChangeState(States::Attack);
 
@@ -211,7 +211,7 @@ void SkillEditorPlayer::Update(float dt)
 		attackCount++;
 		sEvent = SkillEvents::Right;
 
-		SKILL_MGR.UseEditorSkill(sEvent);
+		//SKILL_MGR.UseEditorSkill(sEvent);
 		//ElementalSpell* elemental = spellPool.Get();
 		//elemental->SetScene(scene);
 		//elemental->SetPlayer(this);
@@ -229,7 +229,7 @@ void SkillEditorPlayer::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide )
 	{
 		sEvent = SkillEvents::Q;
-		SKILL_MGR.UseSkill(sEvent);
+		//SKILL_MGR.UseEditorSkill(sEvent);
 	}
 
 	// 대쉬 쿨타임 계산

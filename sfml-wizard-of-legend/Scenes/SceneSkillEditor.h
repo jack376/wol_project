@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Skill.h"
 
 class TextGo;
 class SpriteGo;
@@ -15,9 +16,11 @@ class SceneSkillEditor : public Scene
 protected:
 	sf::Vector2f windowSize;
 
+	std::vector<SkillInfo> skillInfos;
 
 	UIButton* skillName;
 	UIButton* skillNameValue;
+	int skillId;
 
 	UIButton* elementType;
 	UIButton* elementTypeValue;
@@ -101,7 +104,7 @@ protected:
 	SkillEditorPlayer* player;
 
 	// csv, 
-	Skill* skill;
+	Skill* currentSkill;
 
 	float blankPos = 32.0f;
 
@@ -126,10 +129,12 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	void Save();
+	void SaveCSV(std::vector<SkillInfo>& info);
 	void Apply();
 	void Play();
 	void ConvertEnumToInt();
 	void ConvertBoolToInt();
+	void ConvertNameToId();
 
 
 	UIButton* CreateUI(const std::string& text, float posX, float posY, sf::Vector2f size);
