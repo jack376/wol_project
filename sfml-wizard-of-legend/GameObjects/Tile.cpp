@@ -26,84 +26,102 @@ void Tile::Reset()
 
 void Tile::Update(float dt)
 {
-    sf::Vector2f mousePos = GetMousePosBasedOnState();
-
-    bool prevHover = isHover;
-    isHover = shape.getGlobalBounds().contains(mousePos);
-
     // Button Action
-    if (!prevHover && isHover)
+    if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
     {
-        if (OnEnter != nullptr)
-        {
-            OnEnter();
-        }
-    }
-    if (prevHover && !isHover)
-    {
-        if (OnExit != nullptr)
-        {
-            OnExit();
-        }
-    }
-    if (isHover)
-    {
-        if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-        {
-            if (OnClickDown != nullptr)
-            {
-                OnClickDown();
-            }
-        }
-        else if (INPUT_MGR.GetMouseButton(sf::Mouse::Left))
-        {
-            if (OnClickDrag != nullptr)
-            {
-                OnClickDrag();
-            }
-        }
-        else if (INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
-        {
-            if (OnClickUp != nullptr)
-            {
-                OnClickUp();
-            }
-        }
-    }
+        sf::Vector2f mousePos = GetMousePosBasedOnState();
 
-    // TileType View Mode On/Off
-    if (!isTypeView && INPUT_MGR.GetKeyDown(sf::Keyboard::T))
-    {
-        isTypeView = !isTypeView;
-    }
-    else if (isTypeView && INPUT_MGR.GetKeyDown(sf::Keyboard::T))
-    {
-        shape.setFillColor(sf::Color::Transparent);
-        isTypeView = !isTypeView;
-    }
-    if (isTypeView && !INPUT_MGR.GetMouseButton(sf::Mouse::Left))
-    {
-        SetTypeColor(GetType());
-    }
+        bool prevHover = isHover;
+        isHover = shape.getGlobalBounds().contains(mousePos);
 
-    // Tile Grid View Mode On/Off
-    if (!isGridView && INPUT_MGR.GetKeyDown(sf::Keyboard::Y))
-    {
-        isGridView = !isGridView;
-        shape.setOutlineThickness(0.0f);
-    }
-    else if (isGridView && INPUT_MGR.GetKeyDown(sf::Keyboard::Y))
-    {
-        isGridView = !isGridView;
-        shape.setOutlineThickness(1.0f);
+        if (!prevHover && isHover)
+        {
+            if (OnEnter != nullptr)
+            {
+                OnEnter();
+            }
+        }
+        if (prevHover && !isHover)
+        {
+            if (OnExit != nullptr)
+            {
+                OnExit();
+            }
+        }
+        if (isHover)
+        {
+            if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
+            {
+                if (OnClickDown != nullptr)
+                {
+                    OnClickDown();
+                }
+            }
+            else if (INPUT_MGR.GetMouseButton(sf::Mouse::Left))
+            {
+                if (OnClickDrag != nullptr)
+                {
+                    OnClickDrag();
+                }
+            }
+            else if (INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
+            {
+                if (OnClickUp != nullptr)
+                {
+                    OnClickUp();
+                }
+            }
+        }
+
+        // TileType View Mode On/Off
+        if (!isTypeView && INPUT_MGR.GetKeyDown(sf::Keyboard::T))
+        {
+            isTypeView = !isTypeView;
+        }
+        else if (isTypeView && INPUT_MGR.GetKeyDown(sf::Keyboard::T))
+        {
+            shape.setFillColor(sf::Color::Transparent);
+            isTypeView = !isTypeView;
+        }
+        if (isTypeView && !INPUT_MGR.GetMouseButton(sf::Mouse::Left))
+        {
+            SetTypeColor(GetType());
+        }
+
+        // Tile Grid View Mode On/Off
+        if (!isGridView && INPUT_MGR.GetKeyDown(sf::Keyboard::Y))
+        {
+            isGridView = !isGridView;
+            shape.setOutlineThickness(0.0f);
+        }
+        else if (isGridView && INPUT_MGR.GetKeyDown(sf::Keyboard::Y))
+        {
+            isGridView = !isGridView;
+            shape.setOutlineThickness(1.0f);
+        }
     }
 }
 
 void Tile::Draw(sf::RenderWindow& window)
 {
-    window.draw(spriteBottom);
-    window.draw(spriteTop);
-    window.draw(shape, sf::BlendAlpha);
+    if (SCENE_MGR.GetCurrSceneId() == SceneId::Game)
+    {
+        sf::View currentView = window.getView();
+        sf::FloatRect viewBounds(currentView.getCenter() - currentView.getSize() / 2.f, currentView.getSize());
+
+        if (shape.getGlobalBounds().intersects(viewBounds))
+        {
+            window.draw(spriteBottom);
+            window.draw(spriteTop);
+        }
+    }
+
+    if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
+    {
+        window.draw(spriteBottom);
+        window.draw(spriteTop);
+        window.draw(shape, sf::BlendAlpha);
+    }
 }
 
 void Tile::SetCollision(bool collision)

@@ -78,6 +78,11 @@ void Monster::Reset()
         rect.setOutlineColor(sf::Color::Blue);
         rect.setOutlineThickness(1.f);
     }  
+
+    paletteTexture.loadFromFile("shader/" + stat.name + "ColorIndex.png");
+    shader.loadFromFile("shader/FragShader.frag", sf::Shader::Fragment);
+    shader.setUniform("paletteTexture", paletteTexture);
+    shader.setUniform("paletteYOffset", yOffset);
 }
 
 void Monster::Update(float dt)
@@ -101,7 +106,8 @@ void Monster::Update(float dt)
 
 void Monster::Draw(sf::RenderWindow& window)
 {
-    SpriteGo::Draw(window);
+    //SpriteGo::Draw(window);
+    window.draw(sprite, &shader);
 
     //Debug Mode
     window.draw(searchRange);

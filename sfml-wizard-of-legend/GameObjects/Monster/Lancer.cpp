@@ -84,12 +84,13 @@ void Lancer::Draw(sf::RenderWindow& window)
 {
     if (currentAttackState == AttackState::Aim ||
         currentAttackState == AttackState::Shoot)
-        window.draw(spear);
+        window.draw(spear, &shader);
     Monster::Draw(window);
-    if (attackEffect.GetActive())
+    if (attackEffect.GetActive()) 
         attackEffect.Draw(window);
-    if (currentAttackState == AttackState::Shoot)
-        collider.Draw(window);   
+    //if (currentAttackState == AttackState::Shoot) collider.Draw(window); 
+
+    window.draw(sprite, &shader);
 }
 
 void Lancer::HandleAttackState(float dt)

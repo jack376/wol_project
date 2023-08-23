@@ -75,11 +75,11 @@ private:
 
 	sf::CircleShape attackPosCol;	// 스킬 생성 지점 가시화
 
-	//BoxCollider2D obb;
-
-	sf::Shader currentShader;
-	sf::Sprite palette;
+	// Player Shader
+	sf::Shader shader;
 	sf::Texture paletteTexture;
+
+	//BoxCollider2D obb;
 
 	// 스킬 클래스
 	//4개는 고정이란 뜻

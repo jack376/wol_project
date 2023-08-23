@@ -41,7 +41,7 @@ void SceneGame::Init()
 
 	// Load Tilemap CSV
 	LoadFromCSV("tables/BossRoom_0822_184837.csv");
-	//LoadFromCSV("tables/EntireRoom_0822_160251.csv");
+	//LoadFromCSV("tables/EntireRoom_0823_102544.csv");
 	//LoadFromCSV("tables/TestMiniRoom_0822_175046.csv");
 
 	TilesToIntMap();
@@ -77,7 +77,7 @@ void SceneGame::Init()
 
 	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
 
-	Monster* go = CreateMonster(MonsterId::Ghoul);
+	Monster* go = CreateMonster(MonsterId::Mage);
 	monster = go;
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
@@ -229,6 +229,11 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetTextureRectBottom(bottomTextureRect, textureId);
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
+
+		if (tile->GetType() == TileType::None)
+		{
+			tile->SetActive(false);
+		}
 	}
 	//std::cout << "SYSTEM : Load Success" << std::endl;
 }
@@ -255,7 +260,6 @@ Monster* SceneGame::CreateMonster(MonsterId id)
 		break;
 	}
 	return monster;
-	std::cout << "SYSTEM : Ingame Tile Load Success" << std::endl;
 }
 
 void SceneGame::CreateTile2dVector(int rows, int cols)

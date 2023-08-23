@@ -71,8 +71,12 @@ void Player::Init()
 		spell->SetPool(spellPool);
 	};
 
-	//sf::Image grayImage = sprite.getTexture()->copyToImage();
-	//sf::Vector2u imageSize = grayImage.getSize();
+	// Player Shader
+	float yOffset = 15.0f / 31.0f;
+	paletteTexture.loadFromFile("shader/WizardPalette.png");
+	shader.loadFromFile("shader/FragShader.frag", sf::Shader::Fragment);
+	shader.setUniform("paletteTexture", paletteTexture);
+	shader.setUniform("paletteYOffset", yOffset);
 }
 
 void Player::Release()
@@ -351,10 +355,10 @@ void Player::Update(float dt)
 
 void Player::Draw(sf::RenderWindow& window)
 {
-	SpriteGo::Draw(window);
-	window.draw(palette);
+	//SpriteGo::Draw(window);
+	window.draw(sprite, &shader);
+	window.draw(rect);
 	window.draw(attackPosCol);
-	//window.draw(sprite, &currentShader);
 }
 
 void Player::IdleUpdate(float dt)

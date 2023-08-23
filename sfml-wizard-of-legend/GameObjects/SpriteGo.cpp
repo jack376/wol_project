@@ -63,7 +63,6 @@ void SpriteGo::SetOrigin(sf::RectangleShape& rect, Origins origin)
 
 void SpriteGo::Init()
 {
-
 }
 
 void SpriteGo::Release()
@@ -89,8 +88,8 @@ void SpriteGo::Update(float dt)
 void SpriteGo::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
-	window.draw(animSprite1);
-	window.draw(animSprite2);
+	//window.draw(animSprite1);
+	//window.draw(animSprite2);
 	window.draw(rect);
 }
 

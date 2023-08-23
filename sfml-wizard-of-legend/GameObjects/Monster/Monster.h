@@ -98,6 +98,7 @@ protected:
 
 	using Pair = std::pair<int, int>;
 	using pPair = std::pair<double, Pair>;
+
 public:
 	Monster(MonsterId id, const std::string& textureId = "", const std::string& n = "");
 	virtual ~Monster() override;

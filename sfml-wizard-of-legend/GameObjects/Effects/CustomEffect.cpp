@@ -12,6 +12,8 @@ CustomEffect::CustomEffect(const std::string& textureId, const std::string& n)
 void CustomEffect::Init()
 {
 	SpriteGo::Init();
+
+	paletteTexture.loadFromFile("shader/LancerColorIndex.png");
 }
 
 void CustomEffect::Reset()
@@ -42,7 +44,8 @@ void CustomEffect::Update(float dt)
 
 void CustomEffect::Draw(sf::RenderWindow& window)
 {
-	SpriteGo::Draw(window);
+	//SpriteGo::Draw(window);
+	window.draw(sprite, &shader);
 }
 
 void CustomEffect::SetAnim(const std::string& path)

@@ -23,6 +23,11 @@ protected:
 	BoxCollider2D collider;
 	Beam raycaster;	
 	//충돌한 순간 Bullet에서 쏜 레이에 맞은 충돌체의 위치에 이팩트 발생 
+
+	float yOffset = 3.0f / 8.0f;
+	sf::Shader shader;
+	sf::Texture paletteTexture;
+
 public:
 	Projectile(const std::string& textureId = "", const std::string& n = "");
 	virtual ~Projectile() override;

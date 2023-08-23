@@ -28,6 +28,12 @@ void Archer::Init()
 	arrow.textureId = "graphics/Texture2D/Arrow2.png";
 	arrow.Init();
 	arrow.SetTiles(tilesWorld);
+
+	// Shader
+	paletteTexture.loadFromFile("shader/ArcherColorIndex.png");
+	shader.loadFromFile("shader/FragShader.frag", sf::Shader::Fragment);
+	shader.setUniform("paletteTexture", paletteTexture);
+	shader.setUniform("paletteYOffset", yOffset);
 }
 
 void Archer::Release()
@@ -67,12 +73,12 @@ void Archer::Update(float dt)
 void Archer::Draw(sf::RenderWindow& window)
 {
 	if (currentState == MonsterState::Attacking)
-		window.draw(attackArm);
+		window.draw(attackArm, &shader);
 	Monster::Draw(window);
 	if (currentState == MonsterState::Attacking)
 	{
-		window.draw(pullArm);
-		window.draw(bow);
+		window.draw(pullArm, &shader);
+		window.draw(bow, &shader);
 	}
 	if (arrow.GetActive())
 		arrow.Draw(window);

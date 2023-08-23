@@ -3,6 +3,9 @@
 class SpriteGo : public GameObject
 {
 protected:
+	float yOffset = 3.0f / 8.0f;
+	sf::Shader shader;
+	sf::Texture paletteTexture;
 
 public:
 	sf::Sprite sprite;

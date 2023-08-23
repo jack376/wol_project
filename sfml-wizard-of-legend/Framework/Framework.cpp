@@ -15,7 +15,6 @@ Framework::Framework(int w, int h, const std::string& t)
 void Framework::Init(int width, int height, const std::string& title)
 {
     window.create(sf::VideoMode(width, height), title);
-    window.setFramerateLimit(600);
 
     DATATABLE_MGR.LoadAll();
     // Resource

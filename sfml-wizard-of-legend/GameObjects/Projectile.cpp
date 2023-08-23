@@ -43,6 +43,11 @@ void Projectile::Reset()
 	speed = 0.f;
 	damage = 0;
 	direction = { 0.f, 0.f };
+
+	paletteTexture.loadFromFile("shader/ArcherColorIndex.png");
+	shader.loadFromFile("shader/FragShader.frag", sf::Shader::Fragment);
+	shader.setUniform("paletteTexture", paletteTexture);
+	shader.setUniform("paletteYOffset", yOffset);
 }
 
 void Projectile::Update(float dt)
@@ -84,7 +89,8 @@ void Projectile::Update(float dt)
 
 void Projectile::Draw(sf::RenderWindow& window)
 {
-	SpriteGo::Draw(window);
+	//SpriteGo::Draw(window);
+	window.draw(sprite, &shader);
 	if (collider.GetActive())
 		collider.Draw(window);
 }
