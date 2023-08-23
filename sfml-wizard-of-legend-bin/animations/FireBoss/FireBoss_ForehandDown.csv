@@ -1,0 +1,6 @@
+ID,FPS,LOOPTYPE,,
+FireBossForehandDown,2,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/fireboss2.png,295,156,30,30
+graphics/Texture2D/fireboss2.png,347,156,26,32

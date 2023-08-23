@@ -1,0 +1,7 @@
+ID,FPS,LOOPTYPE,,
+FireBossDashUp,2,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/fireboss2.png,58,18,28,24
+graphics/Texture2D/fireboss2.png,155,2,23,40
+graphics/Texture2D/fireboss2.png,250,18,27,26

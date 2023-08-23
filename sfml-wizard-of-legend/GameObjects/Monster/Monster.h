@@ -15,6 +15,7 @@ enum class MonsterState
 	Attacking,
 	Dead,
 	KnockBack,
+	BossStart,
 };
 
 enum class AttackState
@@ -49,6 +50,7 @@ enum class MonsterId
 	Lancer,
 	Archer,
 	Mage,
+	FireBoss,
 };
 
 class SceneGame;
@@ -116,10 +118,10 @@ public:
 	virtual void Idle();
 	virtual void Attack(float dt);
 	virtual void Move(float dt);
-	void Die();
+	virtual void Die();
 	virtual void KnockBack(float dt);
 
-	
+	virtual void OnAttacked(float damage);
 	
 	const sf::Vector2f SetLook(sf::Vector2f playerPos);
 	void SetPlayer(Player* player) { this->player = player; }
@@ -127,8 +129,6 @@ public:
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->tilesWorld = tiles; }
 	void SetIntMap(std::vector<std::vector<int>>* intMap) { this->intMap = intMap; }
 	void SetNonGroundTiles(std::vector<Tile*>* tiles) { nongroundTiles = tiles; }
-
-	void OnAttacked(float damage);
 
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);

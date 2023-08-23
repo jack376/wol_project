@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="Scenes\PathfindingScene.cpp" />
     <ClCompile Include="PathFinding\AS.cpp" />
     <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
@@ -210,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="Scenes\PathfindingScene.h" />
     <ClInclude Include="PathFinding\AS.h" />
     <ClInclude Include="GameObjects\AnimationProjectile.h" />

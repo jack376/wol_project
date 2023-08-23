@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+FireBossLand,1,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/fireboss2.png,249,67,25,25

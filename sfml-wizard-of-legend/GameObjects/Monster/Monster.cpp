@@ -231,6 +231,7 @@ void Monster::Move(float dt)
     raycaster.Rotation(Utils::Angle(look));
     prevPos = position;
 
+
     if (raycaster.CheckShortestPath(position, player->GetPosition(), *nongroundTiles, tilesWorld).first)
         SetPosition(position + look * stat.speed * dt);    
     else
@@ -241,7 +242,7 @@ void Monster::Move(float dt)
         {
             Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
             Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
-            path = _AS.aStarSearch(*intMap, src, dst);
+            path = _AS.aStarSearch(*intMap, src, dst);  //실패하면 isAwake를 false로 하고 Idle상태로ㄱ
             pathUpdateTimer = 0.f;
         }
         else if (!path.second.empty())
