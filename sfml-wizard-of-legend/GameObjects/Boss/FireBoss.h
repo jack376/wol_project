@@ -1,20 +1,26 @@
 #pragma once
 #include "Monster.h"
+#include "ObjectPool.h"
+#include "AnimationProjectile.h"
 
 enum class FireBossAttackPattern
 {
 	Jump,
 	Dash,
 	Kick,
-	Shoot,
+	Fire,
 };
 class FireBoss :
     public Monster
 {
 protected:
-	int patternCount = 0;
-	FireBossAttackPattern currentAttackState;
+	std::vector<int> randomNums;
 
+	int patternCount = 0;
+	int fireCount = 0;
+
+	FireBossAttackPattern currentAttackPattern;
+	ObjectPool<AnimationProjectile> projectilePool;
 public:
 	FireBoss(MonsterId id, const std::string& textureId = "", const std::string& n = "");
 	virtual ~FireBoss() override;
@@ -31,7 +37,6 @@ public:
 	virtual void HandleState(float dt);
 	void HandleAttackPattern(float dt);
 
-
 	virtual void Start();
 	virtual void Idle();
 	virtual void Attack(float dt);
@@ -42,6 +47,7 @@ public:
 	void Jump(float dt);
 	void Kick(float dt);
 	void Fire(float dt);
+	void SetAttackPattern(FireBossAttackPattern pattern);
 
 	virtual void OnAttacked(float damage);
 };

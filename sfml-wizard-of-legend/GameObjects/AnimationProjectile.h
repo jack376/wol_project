@@ -1,13 +1,18 @@
 #pragma once
 #include "Projectile.h"
 #include "AnimationController.h"
+
+
 class AnimationProjectile :
     public Projectile
 {
 protected:
     AnimationController animation;
 
+
 public:
+    ObjectPool<AnimationProjectile>* pool;
+
     AnimationProjectile(const std::string& textureId = "", const std::string& n = "");
     virtual ~AnimationProjectile() override;
 

@@ -20,7 +20,6 @@ void Skill::Init()
 	if (INPUT_MGR.GetKeyDown(currentKey))
 	{
 		elementSpell = (ElementalSpell*)SCENE_MGR.GetCurrScene()->AddGo(new ElementalSpell());
-
 	}
 }
 

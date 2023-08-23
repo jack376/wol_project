@@ -74,7 +74,7 @@ void Projectile::Update(float dt)
 		}
 	}
 
-	if (currentTile->GetType() == TileType::Wall || currentTile->GetType() == TileType::Cliff)
+	if (currentTile->GetType() == TileType::Wall)
 	{
 		isFire = false;
 		SetActive(false);
