@@ -23,6 +23,7 @@
 #include "Skill.h"
 #include "SkillMgr.h"
 #include "Slot.h"
+#include "MenuInventory.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -32,6 +33,8 @@ void SceneGame::Init()
 {
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
+
+	menu = (MenuInventory*)AddGo(new MenuInventory());
 
 	slot1 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
 	slot1->SetPosition(500, 700);

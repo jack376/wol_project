@@ -20,6 +20,8 @@ void Slot::Init()
 	UIButton::Init();
 	sf::Vector2f windowSize = FRAMEWORK.GetWindowSize();
 	SetPosition(position);
+	SetSelectedSlotIcon();
+
 	sortLayer = 101;
 	sprite.setScale(4, 4);
 
@@ -32,7 +34,7 @@ void Slot::Init()
 
 	};
 	OnEnter = [this]() {
-
+		OnEnterEvent();
 	};
 	OnExit = [this]() {
 		OnExitEvent();
@@ -77,15 +79,23 @@ void Slot::Reset()
 void Slot::Update(float dt)
 {
 	UIButton::Update(dt);
-
+	if (selectedSlotIcon.GetActive())
+	{
+		FadeInOutSlotColor(dt);
+	}
+	else
+	{
+		fadeInOutTimer = 0.f;
+	}
 }
 
 void Slot::Draw(sf::RenderWindow& window)
 {
+	if(selectedSlotIcon.GetActive())
+		window.draw(selectedSlotIcon.sprite);
 	UIButton::Draw(window);
 	window.draw(skillEventIcon.sprite);
-
-		window.draw(currentSkillIcon.sprite);
+	window.draw(currentSkillIcon.sprite);
 }
 
 void Slot::SetPosition(const sf::Vector2f& p)
@@ -93,7 +103,7 @@ void Slot::SetPosition(const sf::Vector2f& p)
 	UIButton::SetPosition(p);
 	currentSkillIcon.SetPosition(p);
 	skillEventIcon.SetPosition(p);
-
+	selectedSlotIcon.SetPosition(p);
 }
 
 void Slot::SetPosition(float x, float y)
@@ -101,6 +111,7 @@ void Slot::SetPosition(float x, float y)
 	UIButton::SetPosition(x, y);
 	currentSkillIcon.SetPosition(x, y);
 	skillEventIcon.SetPosition(x, y);
+	selectedSlotIcon.SetPosition(x, y);
 
 }
 
@@ -109,6 +120,7 @@ void Slot::SetOrigin(Origins origin)
 	UIButton::SetOrigin(origin);
 	currentSkillIcon.SetOrigin(origin);
 	skillEventIcon.SetOrigin(origin);
+	selectedSlotIcon.SetOrigin(origin);
 
 }
 
@@ -117,6 +129,7 @@ void Slot::SetOrigin(float x, float y)
 	UIButton::SetOrigin(x, y);
 	currentSkillIcon.SetOrigin(x, y);
 	skillEventIcon.SetOrigin(x, y);
+	selectedSlotIcon.SetOrigin(x, y);
 
 }
 
@@ -127,19 +140,21 @@ void Slot::SetString(const std::string& str)
 
 void Slot::OnClickEvent()
 {
-	sprite.setColor(sf::Color::Color(255, 255, 255, 255));
+	//sprite.setColor(sf::Color::Color(255, 255, 255, 255));
 	if (selectedSlot)
 	{
-		//currentSkillIcon.sprite = selectedSlot->currentSkillIcon.sprite;
+		// 바뀌는 부분 적용
 		std::string tempStr = GetString();
 		SetSkillIcon(selectedSlot->GetString());
 		selectedSlot->SetSkillIcon(tempStr);
+		selectedSlot->sprite.setColor(sf::Color::Color(255, 255, 255, 255));
 
 		selectedSlot = nullptr;
 		std::cout << "Slot Deselected" << std::endl;
 	}
 	else
 	{
+		sprite.setColor(sf::Color::Green);
 		selectedSlot = this;
 		std::cout << "Slot Selected" << std::endl;
 	}
@@ -148,18 +163,6 @@ void Slot::OnClickEvent()
 
 void Slot::SetSkillIcon(std::string skillIconId)
 {
-	//밑에 그리는 방법
-	//currentSkillIcon = SpriteGo("");
-	
-	//sf::Texture* tex = RESOURCE_MGR.GetTexture(textureId);
-	//if (tex != nullptr)
-	//{
-	//	currentSkillIcon.sprite.setTexture(*tex);
-	//}
-	
-	//currentSkillIcon.sprite.setTexture();
-	//skillEventIcon.sprite.setTexture();
-	
 	iconId = skillIconId;
 	currentSkillIcon.sprite.setTexture(*RESOURCE_MGR.GetTexture(iconId));
 	currentSkillIcon.sprite.setScale(4, 4);
@@ -171,8 +174,41 @@ void Slot::OnClickingEvnet()
 	sprite.setColor(sf::Color::Color(255, 255, 255, 150));
 }
 
+void Slot::SetSelectedSlotIcon()
+{
+	selectedSlotIcon.sprite.setTexture(*RESOURCE_MGR.GetTexture("graphics/UI/selectSlot1.png"));
+	selectedSlotIcon.sprite.setScale(4.5, 4.5);
+	SetOrigin(origin);
+	selectedSlotIcon.SetActive(false);
+}
+
 void Slot::OnExitEvent()
 {
-	sprite.setColor(sf::Color::Color(255, 255, 255, 255));
+	if (!selectedSlot)
+		sprite.setColor(sf::Color::Color(255, 255, 255, 255));
+	selectedSlotIcon.SetActive(false);
+}
+
+void Slot::FadeInOutSlotColor(float dt)
+{
+	fadeInOutTimer += dt;
+
+	if (fadeInOutTimer > fadeInOutDuration)
+	{
+		fadeInOutTimer = 0.f;
+	}
+
+	float oscillation = std::sin(fadeInOutTimer / fadeInOutDuration * (2 * M_PI)); // Range: -1 to 1
+	float normalizedOscillation = (oscillation + 1.f) / 2.f; // Normalize to 0 to 1
+	sf::Color currentColor = selectedSlotIcon.sprite.getColor();
+	sf::Color fadeInOutColor = currentColor;
+	fadeInOutColor.a = static_cast<sf::Uint8>(255 * normalizedOscillation); // Use normalized oscillation as alpha
+	selectedSlotIcon.sprite.setColor(fadeInOutColor);
+}
+
+void Slot::OnEnterEvent()
+{
+	SetSelectedSlotIcon();
+	selectedSlotIcon.SetActive(true);
 
 }

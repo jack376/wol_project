@@ -7,6 +7,7 @@ class Slot;
 class MenuInventory : public GameObject
 {
 protected:
+	sf::Sprite panel;
 	std::map<int, Slot*>slotList;
 
 public:

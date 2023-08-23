@@ -10,15 +10,22 @@ protected:
 	static Slot* selectedSlot;
 
 	Skill* currentSkill;
+
+	// 스킬 아이디를 이용해서 Sprite 이미지 변경
+
 	SkillEvents slotSkillEvent = SkillEvents::None;
 	SkillIds skillId = SkillIds::None;
 
 	SpriteGo currentSkillIcon;
 	SpriteGo skillEventIcon;
+	SpriteGo selectedSlotIcon;
 
 	std::string iconId;
+
 	bool isUsed = false;
 
+	float fadeInOutTimer = 0.f;
+	float fadeInOutDuration = 1.0f;
 
 
 public:
@@ -40,11 +47,14 @@ public:
 
 	void SetString(const std::string& str);
 	void SetSkillIcon(const std::string skillIconId);
+	void SetSelectedSlotIcon();
+	void FadeInOutSlotColor(float dt);
 
 	std::string GetString() { return iconId; }
 
 	void OnClickEvent();
 	void OnClickingEvnet();
+	void OnEnterEvent();
 	void OnExitEvent();
 
  };

@@ -18,11 +18,14 @@ class Monster;
 class CustomEffect;
 enum class MonsterId;
 class Slot;
+class MenuInventory;
 
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
+
+	MenuInventory* menu;
 	Slot* slot1;
 	Slot* slot2;
 
