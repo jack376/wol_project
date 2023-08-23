@@ -216,8 +216,8 @@ void SceneSkillEditor::Save()
 	spellInfo.rotateSpeed = std::stof(rotateSpeedStr);
 
 	// bool형 
-	spellInfo.isPenetrating = isPenetratingInt;
-	spellInfo.canMoveDuringSkill = canMoveDuringSkillInt;
+	spellInfo.isPenetrating = (bool)isPenetratingInt;
+	spellInfo.canMoveDuringSkill = (bool)canMoveDuringSkillInt;
 
 	// Save에 필요한가?
 	skillInfo.elementType = (ElementTypes)elemetTypeInt;
@@ -249,7 +249,7 @@ void SceneSkillEditor::SaveCSV(std::vector<SkillInfo>& info)
 	rapidcsv::Document doc;
 	doc.Clear();
 
-	std::string fileName = "tables/SkillInfo.csv";
+	std::string fileName = "tables/ExistedSkillInfo.csv";
 
 	doc.SetColumnName(0, "Id");
 	doc.SetColumnName(1, "SkillNames");
@@ -433,8 +433,8 @@ void SceneSkillEditor::Apply()
 	spellInfo.rotateSpeed = std::stof(rotateSpeedStr);
 
 	// bool형 
-	spellInfo.isPenetrating = isPenetratingInt;
-	spellInfo.canMoveDuringSkill = canMoveDuringSkillInt;
+	spellInfo.isPenetrating = (bool)isPenetratingInt;
+	spellInfo.canMoveDuringSkill = (bool)canMoveDuringSkillInt;
 
 
 	skillInfo.elementType = (ElementTypes)elemetTypeInt;
@@ -459,10 +459,6 @@ void SceneSkillEditor::Apply()
 	skill->SetRangeType(skillInfo.rangeType);
 	skill->SetSkillEvent(skillInfo.evnetType);
 	skill->SetPlayerAction(skillInfo.playerAction);
-
-
-
-
 
 	currentSkill = skill;
 }

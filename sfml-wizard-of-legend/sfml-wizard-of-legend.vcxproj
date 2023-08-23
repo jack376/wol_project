@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="Scenes\PathfindingScene.cpp" />
     <ClCompile Include="PathFinding\AS.cpp" />
     <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
@@ -210,9 +211,11 @@
     <ClCompile Include="GameObjects\Player\SkillEditorPlayer.cpp" />
     <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
     <ClCompile Include="DataTables\SkillTable.cpp" />
+    <ClCompile Include="Slot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="Scenes\PathfindingScene.h" />
     <ClInclude Include="PathFinding\AS.h" />
     <ClInclude Include="GameObjects\AnimationProjectile.h" />
@@ -253,6 +256,7 @@
     <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
     <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />
     <ClInclude Include="DataTables\SkillTable.h" />
+    <ClInclude Include="Slot.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />

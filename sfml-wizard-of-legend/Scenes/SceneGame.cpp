@@ -22,6 +22,7 @@
 #include "Particle.h"
 #include "Skill.h"
 #include "SkillMgr.h"
+#include "Slot.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -31,6 +32,11 @@ void SceneGame::Init()
 {
 	Release();
 	auto size = FRAMEWORK.GetWindowSize();
+
+	slot1 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
+	slot1->SetPosition(500, 700);
+	slot2 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
+	slot2->SetPosition(700, 700);
 
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(700, 700);
@@ -68,22 +74,12 @@ void SceneGame::Init()
 	windSlash->SetSkillType(SkillTypes::Melee);
 	windSlash->SetRangeType(RangeTypes::Straight);
 
-	SKILL_MGR.InputSkill(windSlash);
-	SKILL_MGR.InputSkill(fireBall);
+	SKILL_MGR.EquipSkill(windSlash);
+	SKILL_MGR.EquipSkill(fireBall);
 
 
 	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
 
-
-	Monster* go1 = CreateMonster(MonsterId::Archer);
-	go1->SetPlayer(player);
-	go1->SetTiles(&tilesWorld);
-	monsters.push_back(go1);
-
-	Monster* go2 = CreateMonster(MonsterId::Ghoul);
-	go2->SetPlayer(player);
-	go2->SetTiles(&tilesWorld);
-	monsters.push_back(go2);
 
 	Monster* go = CreateMonster(MonsterId::Ghoul);
 	monster = go;
@@ -91,10 +87,6 @@ void SceneGame::Init()
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
-	Monster* go3 = CreateMonster(MonsterId::GhoulLarge);
-	go3->SetPlayer(player);
-	go3->SetTiles(&tilesWorld);
-	monsters.push_back(go3);
 
 
 
@@ -121,8 +113,6 @@ void SceneGame::Init()
 	SKILL_MGR.SetMonsterList(monsters);
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
-
-	SKILL_MGR.LoadSkill();
 }
 
 void SceneGame::Release()

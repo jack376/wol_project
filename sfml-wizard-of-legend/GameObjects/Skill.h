@@ -106,6 +106,7 @@ public:
 
 	SkillEvents GetSkillEvent() const { return currentEventType; }
 	int GetSkillId() const { return skillId; }
+	SkillInfo& GetSkillInfo() { return skillInfo; }
 
 	void SetSkillEvent(SkillEvents sEvent) { currentEventType = sEvent; }
 	void SetElementType(ElementTypes type) { currentElementType = type; }
