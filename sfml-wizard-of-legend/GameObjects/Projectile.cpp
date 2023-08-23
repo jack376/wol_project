@@ -87,6 +87,10 @@ void Projectile::Draw(sf::RenderWindow& window)
 	SpriteGo::Draw(window);
 	if (collider.GetActive())
 		collider.Draw(window);
+
+	std::cout << "Pos( " << position.x << ", " << position.y << " ) Origin( " << sprite.getOrigin().x << ", " << sprite.getOrigin().y << " ) Rot( " << sprite.getRotation() << " )\t" <<
+		"Pos( " << collider.obbCol.getPosition().x << ", " << collider.obbCol.getPosition().y << " ) Origin( " << collider.obbCol.getOrigin().x << ", " << collider.obbCol.getOrigin().y << " ) Rot( " << collider.obbCol.getRotation() << " )\t"
+		<< std::endl;
 }
 
 void Projectile::SetRotation(const sf::Vector2f dir)
@@ -128,13 +132,13 @@ void Projectile::SetOrigin(float x, float y)
 
 void Projectile::Fire(const sf::Vector2f pos, const sf::Vector2f direction, float speed, int damage)
 {
+	collider.SetColSize();
 	SetActive(true);
 	SetOrigin(origin);
 	SetPosition(pos);
 	SetRotation(Utils::Angle(direction) + 90);
-
-
 	collider.SetActive(true);
+
 	//collider.SetPosition(pos);
 	//collider.GetObbCol().setRotation(Utils::Angle(direction) + 90);
 	//collider.SetOrigin(origin);
