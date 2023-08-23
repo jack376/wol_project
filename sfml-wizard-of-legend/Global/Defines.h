@@ -15,7 +15,7 @@ enum class SkillDatas
 enum class SkillIds
 {
 	None = -1,
-	FireBall,
+	ExplodingFireball,
 	WindSlash,
 };
 

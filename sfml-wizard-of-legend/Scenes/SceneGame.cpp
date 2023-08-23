@@ -35,8 +35,13 @@ void SceneGame::Init()
 
 	slot1 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
 	slot1->SetPosition(500, 700);
+	slot1->SetSkillIcon("graphics/UI/SkillIcon/ExplodingFireball.png");
+	slot1->SetOrigin(Origins::MC);
+
 	slot2 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
 	slot2->SetPosition(700, 700);
+	slot2->SetSkillIcon("graphics/UI/SkillIcon/WindSlash.png");
+	slot2->SetOrigin(Origins::MC);
 
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(700, 700);
@@ -84,12 +89,12 @@ void SceneGame::Init()
 	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
 
 
-	Monster* go = CreateMonster(MonsterId::Ghoul);
-	monster = go;
-	monster->SetPlayer(player);
-	monster->SetTiles(&tilesWorld);
-	monster->SetIntMap(&intMap);
-	monster->SetNonGroundTiles(&nongroundTiles);
+	//Monster* go = CreateMonster(MonsterId::Ghoul);
+	//monster = go;
+	//monster->SetPlayer(player);
+	//monster->SetTiles(&tilesWorld);
+	//monster->SetIntMap(&intMap);
+	//monster->SetNonGroundTiles(&nongroundTiles);
 
 
 

@@ -3,6 +3,8 @@
 #include "ResourceMgr.h"
 #include "Framework.h"
 
+Slot* Slot::selectedSlot = nullptr;
+
 Slot::Slot(const std::string& textureId, const std::string& n)
 	: UIButton(textureId, n)
 {
@@ -21,48 +23,40 @@ void Slot::Init()
 	sortLayer = 101;
 	sprite.setScale(4, 4);
 
-
 	OnClick = [this]() {
-		if (selectedSlot)
-		{
-
-			selectedSlot = nullptr;
-		}
-		else
-		{
-			selectedSlot = this;
-		}
+		OnClickEvent();
 	};
 
 	OnClicking = [this]() {
+		OnClickingEvnet();
 
 	};
 	OnEnter = [this]() {
 
 	};
 	OnExit = [this]() {
-
+		OnExitEvent();
 	};
 
 	switch (slotSkillEvent)
 	{
 	case SkillEvents::Left:
-		skillEvent = "Left";
+		iconId = "Left";
 		break;
 	case SkillEvents::Right:
-		skillEvent = "Right";
+		iconId = "Right";
 		break;
 	case SkillEvents::Space:
-		skillEvent = "Space";
+		iconId = "Space";
 		break;
 	case SkillEvents::Q:
-		skillEvent = "Q";
+		iconId = "Q";
 		break;
 	case SkillEvents::E:
-		skillEvent = "E";
+		iconId = "E";
 		break;
 	case SkillEvents::R:
-		skillEvent = "R";
+		iconId = "R";
 		break;
 	}
 }
@@ -77,17 +71,7 @@ void Slot::Reset()
 {
 	UIButton::Reset();
 	isUsed = false;
-	//关俊 弊府绰 规过
-	//currentSkillIcon = SpriteGo("");
-	
-	//sf::Texture* tex = RESOURCE_MGR.GetTexture(textureId);
-	//if (tex != nullptr)
-	//{
-	//	currentSkillIcon.sprite.setTexture(*tex);
-	//}
-	
-	//currentSkillIcon.sprite.setTexture();
-	//skillEventIcon.sprite.setTexture();
+
 }
 
 void Slot::Update(float dt)
@@ -100,10 +84,8 @@ void Slot::Draw(sf::RenderWindow& window)
 {
 	UIButton::Draw(window);
 	window.draw(skillEventIcon.sprite);
-	if (isUsed)
-	{
+
 		window.draw(currentSkillIcon.sprite);
-	}
 }
 
 void Slot::SetPosition(const sf::Vector2f& p)
@@ -135,5 +117,62 @@ void Slot::SetOrigin(float x, float y)
 	UIButton::SetOrigin(x, y);
 	currentSkillIcon.SetOrigin(x, y);
 	skillEventIcon.SetOrigin(x, y);
+
+}
+
+void Slot::SetString(const std::string& str)
+{
+	iconId = str;
+}
+
+void Slot::OnClickEvent()
+{
+	sprite.setColor(sf::Color::Color(255, 255, 255, 255));
+	if (selectedSlot)
+	{
+		//currentSkillIcon.sprite = selectedSlot->currentSkillIcon.sprite;
+		std::string tempStr = GetString();
+		SetSkillIcon(selectedSlot->GetString());
+		selectedSlot->SetSkillIcon(tempStr);
+
+		selectedSlot = nullptr;
+		std::cout << "Slot Deselected" << std::endl;
+	}
+	else
+	{
+		selectedSlot = this;
+		std::cout << "Slot Selected" << std::endl;
+	}
+
+}
+
+void Slot::SetSkillIcon(std::string skillIconId)
+{
+	//关俊 弊府绰 规过
+	//currentSkillIcon = SpriteGo("");
+	
+	//sf::Texture* tex = RESOURCE_MGR.GetTexture(textureId);
+	//if (tex != nullptr)
+	//{
+	//	currentSkillIcon.sprite.setTexture(*tex);
+	//}
+	
+	//currentSkillIcon.sprite.setTexture();
+	//skillEventIcon.sprite.setTexture();
+	
+	iconId = skillIconId;
+	currentSkillIcon.sprite.setTexture(*RESOURCE_MGR.GetTexture(iconId));
+	currentSkillIcon.sprite.setScale(4, 4);
+}
+
+void Slot::OnClickingEvnet()
+{
+	//std::cout << skillEventStr << std::endl;
+	sprite.setColor(sf::Color::Color(255, 255, 255, 150));
+}
+
+void Slot::OnExitEvent()
+{
+	sprite.setColor(sf::Color::Color(255, 255, 255, 255));
 
 }

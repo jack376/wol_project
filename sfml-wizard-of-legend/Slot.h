@@ -7,7 +7,7 @@ class Skill;
 class Slot : public UIButton
 {
 protected:
-	Slot* selectedSlot = nullptr;
+	static Slot* selectedSlot;
 
 	Skill* currentSkill;
 	SkillEvents slotSkillEvent = SkillEvents::None;
@@ -16,7 +16,7 @@ protected:
 	SpriteGo currentSkillIcon;
 	SpriteGo skillEventIcon;
 
-	std::string skillEvent;
+	std::string iconId;
 	bool isUsed = false;
 
 
@@ -37,4 +37,14 @@ public:
 
 	virtual void SetOrigin(Origins origin) override;
 	virtual void SetOrigin(float x, float y) override;
-};
+
+	void SetString(const std::string& str);
+	void SetSkillIcon(const std::string skillIconId);
+
+	std::string GetString() { return iconId; }
+
+	void OnClickEvent();
+	void OnClickingEvnet();
+	void OnExitEvent();
+
+ };
