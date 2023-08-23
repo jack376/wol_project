@@ -17,11 +17,15 @@ class Particle;
 class Monster;
 class CustomEffect;
 enum class MonsterId;
+class Slot;
 
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
+	Slot* slot1;
+	Slot* slot2;
+
 	ElementalSpell* tempWindSlash;
 	ElementalSpell* tempFireBall;
 	std::vector<std::vector<Tile*>> tilesWorld;

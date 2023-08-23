@@ -2,6 +2,15 @@
 
 #define _USE_MATH_DEFINES
 
+
+enum class SkillDatas
+{
+	Exist,
+	Buyed,
+	Equiped,
+	Count,
+};
+
 // Id 추가 시 ConvertNameToId 추가해야함
 enum class SkillIds
 {
@@ -17,6 +26,8 @@ enum class SkillEvents
 	Right,
 	Space,
 	Q,
+	E,
+	R,
 	Count,
 };
 

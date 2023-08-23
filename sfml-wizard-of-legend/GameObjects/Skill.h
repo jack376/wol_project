@@ -7,36 +7,36 @@
 struct SpellInfo
 {
 	std::string skillName;
-	std::string playerAction;
+	//std::string playerAction;
 
 	int damage;
 	int comboDamage;
 	int comboMaxCount;
+	float comboDuration;
 	int maxSkillCharge;
 	int shotCount;
 
 	float speed;
 	float range;
 	float explosionRange;
+	float amplitude;
+	float frquency;
 	float delayDuration;
-	float comboDuration;
 	float damageDelay;
 	float coolTime;
-
-	float frquency;
-	float amplitude;
-
-
 	float rotateSpeed;
-
-	float animAngle;
 
 	// 관통여부
 	// 0, 1 로 인트형 넘기고 받을때 bool
 	bool isPenetrating = false;
 	bool canMoveDuringSkill = false;
 
-	float petrolDistance;
+
+
+
+
+	//float animAngle;
+	//float petrolDistance;
 };
 
 struct SkillInfo
@@ -79,8 +79,7 @@ protected:
 
 	float spreadAngle;
 
-	//SpellInfo spellInfo;
-
+	SpellInfo spellInfo;
 	SkillInfo skillInfo;
 	
 	// 실제 스킬
@@ -107,6 +106,7 @@ public:
 
 	SkillEvents GetSkillEvent() const { return currentEventType; }
 	int GetSkillId() const { return skillId; }
+	SkillInfo& GetSkillInfo() { return skillInfo; }
 
 	void SetSkillEvent(SkillEvents sEvent) { currentEventType = sEvent; }
 	void SetElementType(ElementTypes type) { currentElementType = type; }

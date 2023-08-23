@@ -13,7 +13,6 @@ const std::string& StringTable::Get(const std::string& id, Languages lang) const
 	return find->second;
 }
 
-
 bool StringTable::Load()
 {
 	std::vector<std::string> filenames;

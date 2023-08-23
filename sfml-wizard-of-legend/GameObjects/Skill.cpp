@@ -26,6 +26,14 @@ void Skill::Init()
 	{
 		spell->SetPool(editorPool);
 	};
+
+	skillId = skillInfo.skillId;
+	currentElementType = skillInfo.elementType;
+	currentSkillType = skillInfo.skillType;
+	currentRangeType = skillInfo.rangeType;
+	currentEventType = skillInfo.evnetType;
+	currentPlayerActionType = skillInfo.playerAction;
+	spellInfo = skillInfo.spellinfo;
 }
 
 void Skill::Release()
