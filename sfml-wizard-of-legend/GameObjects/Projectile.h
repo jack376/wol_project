@@ -57,5 +57,7 @@ public:
 	void Fire(const sf::Vector2f direction, float speed, int damage);
 
 	void CalculatorCurrentTile();
+
+	std::function<void()> action;
 };
 

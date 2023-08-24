@@ -63,6 +63,7 @@
     <ClCompile Include="DataTables\SkillTable.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="Slot.cpp" />
+    <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="Slot.h" />
+    <ClInclude Include="GameObjects\Boss\FireBoss.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

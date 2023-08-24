@@ -1,0 +1,14 @@
+ID,FPS,LOOPTYPE,,
+FireBossSquat,7,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/fireboss2.png,397,393,29,23
+graphics/Texture2D/fireboss2.png,350,392,27,24
+graphics/Texture2D/fireboss2.png,301,391,26,25
+graphics/Texture2D/fireboss2.png,297,439,25,25
+graphics/Texture2D/fireboss2.png,343,440,27,24
+graphics/Texture2D/fireboss2.png,390,441,29,23
+graphics/Texture2D/fireboss2.png,113,388,13,30
+graphics/Texture2D/fireboss2.png,161,387,13,31
+graphics/Texture2D/fireboss2.png,205,392,21,26
+graphics/Texture2D/fireboss2.png,255,391,17,27

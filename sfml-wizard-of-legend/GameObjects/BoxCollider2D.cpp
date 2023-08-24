@@ -59,7 +59,6 @@ void BoxCollider2D::SetOrigin(Origins origin)
 	{
 		Utils::SetOrigin(obbCol, origin);
 	}
-
 }
 
 void BoxCollider2D::SetOrigin(float x, float y)

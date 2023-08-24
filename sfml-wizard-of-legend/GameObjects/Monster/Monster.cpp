@@ -90,11 +90,6 @@ void Monster::Update(float dt)
     animation.Update(dt);
     attackTimer += dt;
 
-    if (position.x < 0)
-    {
-        std::cout << "position erro" << std::endl;
-    }
-
     CalculatorCurrentTile();
     HandleState(dt);
 
@@ -172,7 +167,7 @@ void Monster::Idle()
         SetState(MonsterState::Dead);
         return;
     }
-    else if (distance <= stat.searchRange || isAwake)  //°ø°Ý¹üÀ§ ~ Å½»ö ¹üÀ§
+    else if (distance <= stat.searchRange || isAwake)  //ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½ ~ Å½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         isAwake = true;
         if (distance <= stat.attackRange)
@@ -216,7 +211,7 @@ void Monster::Attack(float dt)
         SetState(MonsterState::Dead);
         return;
     }
-    else if (distance <= stat.searchRange || isAwake)  //°ø°Ý¹üÀ§ ~ Å½»ö ¹üÀ§
+    else if (distance <= stat.searchRange || isAwake)  //ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½ ~ Å½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (distance > stat.attackRange)
         {
@@ -253,7 +248,7 @@ void Monster::Move(float dt)
         {
             Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
             Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
-            path = _AS.aStarSearch(*intMap, src, dst);
+            path = _AS.aStarSearch(*intMap, src, dst);  //ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ isAwakeï¿½ï¿½ falseï¿½ï¿½ ï¿½Ï°ï¿½ Idleï¿½ï¿½ï¿½Â·Î¤ï¿½
             pathUpdateTimer = 0.f;
         }
         else if (!path.second.empty())
@@ -316,7 +311,7 @@ void Monster::KnockBack(float dt)
         SetRectBox();
     }
 
-    //°ø°Ý ´çÇÑ ¹Ý´ë ¹æÇâÀ¸·Î ÀÌµ¿ (°ø°ÝÀÇ ÁÖÃ¼°¡ ÇÃ·¹ÀÌ¾î°¡ ¾Æ´Ï¶ó ¹ß»çÃ¼¶ó¸é ¹ß»çÃ¼ÀÇ À§Ä¡¸¦ ³Ñ°Ü ¹Þ¾Æ ¼öÁ¤)
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½Æ´Ï¶ï¿½ ï¿½ß»ï¿½Ã¼ï¿½ï¿½ï¿½ ï¿½ß»ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ñ°ï¿½ ï¿½Þ¾ï¿½ ï¿½ï¿½ï¿½ï¿½)
     prevPos = position;
     SetPosition(position + -look * 500.f * dt);
     CalculatorCurrentTile();
@@ -363,7 +358,7 @@ const sf::Vector2f Monster::SetLook(sf::Vector2f playerPos)
     return look;
 }
 
-void Monster::OnAttacked(float damage)  //ÇÃ·¹ÀÌ¾î¿¡¼­ ¸ó½ºÅÍ¸¦ °ø°ÝÇÒ ¶§ È£Ãâ
+void Monster::OnAttacked(float damage)  //ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
 {
     if (currentState != MonsterState::Dead)
     {
@@ -380,7 +375,7 @@ void Monster::CalculatorCurrentTile()
     currentTile = (*tilesWorld)[rowIndex][columnIndex];
 }
 
-//°´Ã¼¸¦ Áß½ÉÀ¸·Î ÀÓÀÇ ¹üÀ§ ³»ÀÇ Å¸ÀÏÀ» ¹ÝÈ¯
+//ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ß½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 {
     int searchRowRange = row;

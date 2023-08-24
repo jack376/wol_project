@@ -1,0 +1,9 @@
+ID,FPS,LOOPTYPE,,
+FireBossRoundhouseKick,7,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/fireboss2.png,10,55,29,35
+graphics/Texture2D/fireboss2.png,58,54,36,36
+graphics/Texture2D/fireboss2.png,107,51,29,38
+graphics/Texture2D/fireboss2.png,152,57,26,31
+graphics/Texture2D/fireboss2.png,201,55,28,35

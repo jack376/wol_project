@@ -1,0 +1,5 @@
+ID,FPS,LOOPTYPE,,
+FireBossIdle,1,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/fireboss2.png,15,4,17,38

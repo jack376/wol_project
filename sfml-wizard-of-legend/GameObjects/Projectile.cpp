@@ -79,7 +79,7 @@ void Projectile::Update(float dt)
 		}
 	}
 
-	if (currentTile->GetType() == TileType::Wall || currentTile->GetType() == TileType::Cliff)
+	if (currentTile->GetType() == TileType::Wall)
 	{
 		isFire = false;
 		SetActive(false);
@@ -93,6 +93,10 @@ void Projectile::Draw(sf::RenderWindow& window)
 	window.draw(sprite, &shader);
 	if (collider.GetActive())
 		collider.Draw(window);
+
+	std::cout << "Pos( " << position.x << ", " << position.y << " ) Origin( " << sprite.getOrigin().x << ", " << sprite.getOrigin().y << " ) Rot( " << sprite.getRotation() << " )\t" <<
+		"Pos( " << collider.obbCol.getPosition().x << ", " << collider.obbCol.getPosition().y << " ) Origin( " << collider.obbCol.getOrigin().x << ", " << collider.obbCol.getOrigin().y << " ) Rot( " << collider.obbCol.getRotation() << " )\t"
+		<< std::endl;
 }
 
 void Projectile::SetRotation(const sf::Vector2f dir)
@@ -134,13 +138,13 @@ void Projectile::SetOrigin(float x, float y)
 
 void Projectile::Fire(const sf::Vector2f pos, const sf::Vector2f direction, float speed, int damage)
 {
+	collider.SetColSize();
 	SetActive(true);
 	SetOrigin(origin);
 	SetPosition(pos);
 	SetRotation(Utils::Angle(direction) + 90);
-
-
 	collider.SetActive(true);
+
 	//collider.SetPosition(pos);
 	//collider.GetObbCol().setRotation(Utils::Angle(direction) + 90);
 	//collider.SetOrigin(origin);

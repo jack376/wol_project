@@ -4,10 +4,12 @@
 class BoxCollider2D : public SpriteGo
 {
 protected:
-	sf::RectangleShape obbCol;
+	//sf::RectangleShape obbCol;
 
 	sf::Sprite sprite1;
 public:
+	sf::RectangleShape obbCol;
+
 	BoxCollider2D(const std::string& textureId = "", const std::string& n = "");
 	virtual ~BoxCollider2D() override;
 

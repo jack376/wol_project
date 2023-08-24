@@ -2,7 +2,8 @@
 #include "Archer.h"
 #include "ResourceMgr.h"
 #include "Player.h"
-
+#include "Tile.h"
+#include "AS.h"
 
 #define _AttackArmLocalPos sf::Vector2f(44, 44)
 #define _PullArmLocalPos sf::Vector2f(0, 42)
@@ -86,6 +87,7 @@ void Archer::Draw(sf::RenderWindow& window)
 		bulletLine.draw(window);
 }
 
+
 void Archer::HandleAttackState(float dt)
 {
 	switch (currentAttackState)
@@ -108,29 +110,28 @@ void Archer::Attack(float dt)
 	pullArmAni.Update(dt);
 	bowAni.Update(dt);
 
-	if (attackTimer >= stat.attackRate &&
-		raycaster.checkCollision(CalculatorRangeTiles(16, 16), player))
+	if (attackTimer >= stat.attackRate)
 	{
+		if (!raycaster.checkCollision(*nongroundTiles, player))
+		{
+			SetState(MonsterState::Moving);
+			return;
+		}
 		currentAttackState = AttackState::Aim;
 		attackTimer = 0.f;
 	}
 
+	sf::Vector2f pos = { sprite.getGlobalBounds().left, sprite.getGlobalBounds().top };
+	if (look.x < 0)
 	{
-		sf::Vector2f pos = { sprite.getGlobalBounds().left, sprite.getGlobalBounds().top };
-		if (look.x < 0)
-		{
-			pos.x += sprite.getGlobalBounds().width;
-			attackArm.setPosition(pos.x + -_AttackArmLocalPos.x, pos.y + _AttackArmLocalPos.y);
-			pullArm.setPosition(pos.x + -_PullArmLocalPos.x, pos.y + _PullArmLocalPos.y);
-		}
-		else
-		{
-			attackArm.setPosition(pos + _AttackArmLocalPos);
-			pullArm.setPosition(pos + _PullArmLocalPos);
-		}
-		bow.setPosition(attackArm.getPosition());
-		arrow.SetPosition(bow.getPosition());
-		bulletLine.move(position.x, position.y);
+		pos.x += sprite.getGlobalBounds().width;
+		attackArm.setPosition(pos.x + -_AttackArmLocalPos.x, pos.y + _AttackArmLocalPos.y);
+		pullArm.setPosition(pos.x + -_PullArmLocalPos.x, pos.y + _PullArmLocalPos.y);
+	}
+	else
+	{
+		attackArm.setPosition(pos + _AttackArmLocalPos);
+		pullArm.setPosition(pos + _PullArmLocalPos);
 	}
 	
 	HandleAttackState(dt);
@@ -162,6 +163,10 @@ void Archer::Aim(float dt)
 	}
 	sf::Vector2f playerPos = player->GetPosition();
 	SetLook(playerPos);
+
+	bow.setPosition(attackArm.getPosition());
+	arrow.SetPosition(bow.getPosition());
+	bulletLine.move(position.x, position.y);
 
 	float angle = Utils::Angle(look);
 	attackArm.setRotation(angle);
@@ -195,5 +200,13 @@ void Archer::Shoot(float dt)
 		currentAttackState = AttackState::Cool;
 		SetState(MonsterState::Idle);
 	}
+}
+
+void Archer::Move(float dt)
+{
+	Monster::Move(dt);
+
+	if (!raycaster.checkCollision(*nongroundTiles, player))
+		SetState(MonsterState::Moving);
 
 }

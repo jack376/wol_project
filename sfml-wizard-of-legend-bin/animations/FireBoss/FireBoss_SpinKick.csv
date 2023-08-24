@@ -1,0 +1,9 @@
+ID,FPS,LOOPTYPE,,
+FireBossSpinKick,7,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/fireboss2.png,13,102,18,36
+graphics/Texture2D/fireboss2.png,55,101,32,34
+graphics/Texture2D/fireboss2.png,108,101,21,34
+graphics/Texture2D/fireboss2.png,156,102,20,34
+graphics/Texture2D/fireboss2.png,201,100,28,34
