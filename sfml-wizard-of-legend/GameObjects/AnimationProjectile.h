@@ -1,6 +1,7 @@
 #pragma once
 #include "Projectile.h"
 #include "AnimationController.h"
+#include "ObjectPool.h"
 
 
 class AnimationProjectile :
@@ -8,7 +9,6 @@ class AnimationProjectile :
 {
 protected:
     AnimationController animation;
-
 
 public:
     ObjectPool<AnimationProjectile>* pool;

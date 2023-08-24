@@ -11,6 +11,7 @@
 #include "Lancer.h"
 #include "Archer.h"
 #include "Mage.h"
+#include "FireBoss.h"
 #include "Player.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
@@ -90,8 +91,8 @@ void SceneGame::Init()
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
-
-
+	monster->SetPosition(1024, 1024);
+	monsters.push_back(monster);
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
@@ -266,6 +267,9 @@ Monster* SceneGame::CreateMonster(MonsterId id)
 		break;
 	case MonsterId::Mage:
 		monster = dynamic_cast<Monster*>(AddGo(new Mage(id)));
+		break;
+	case MonsterId::FireBoss:
+		monster = dynamic_cast<Monster*>(AddGo(new FireBoss(id)));
 		break;
 	}
 	return monster;

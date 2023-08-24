@@ -38,6 +38,7 @@ void Lancer::Init()
     spearAni.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Lancer_SpearUpDownAttack.csv"));
 
     attackEffect.AddClip("animations/Lancer_AttackEffect.csv");
+    attackEffect.SetOrigin(Origins::MC);
     CustomEffect* ptr = &attackEffect;
     attackEffect.PlaySup = [this, ptr]() {
         if (ptr->GetAnimation()->IsAnimEndFrame())
@@ -62,11 +63,11 @@ void Lancer::Reset()
 {
     Monster::Reset();
     collider.Reset();
+    attackEffect.Reset();
 
     spearAni.SetTarget(&spear);
     spear.setScale({ 4.f, 4.f });
     Utils::SetOrigin(spear, Origins::BC);
-
 }
 
 void Lancer::Update(float dt)
@@ -174,7 +175,6 @@ void Lancer::Aim(float dt)
         aimTimer = 0;
         collider.SetActive(true);
     }
-
 }
 
 void Lancer::Shoot(float dt)
@@ -220,7 +220,7 @@ void Lancer::Shoot(float dt)
 
         attackEffect.SetActive(true);
         attackEffect.Play("LancerAttackEffect", spear.getPosition() + attackDir
-            * 30.f, attackDir);
+            * 50.f, attackDir);
         isAttacked = false;
     }
 

@@ -53,7 +53,7 @@ void Monster::Reset()
     animation.SetTarget(&sprite);
     animation.Play(stat.name + "Idle");
 
-    SetPosition({ 500, 500 });
+    SetPosition(position);
     SetOrigin(Origins::MC);
     SetFlipX(false);
     SetRectBox();
@@ -248,7 +248,7 @@ void Monster::Move(float dt)
         {
             Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
             Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
-            path = _AS.aStarSearch(*intMap, src, dst);  //�����ϸ� isAwake�� false�� �ϰ� Idle���·Τ�
+            path = _AS.aStarSearch(*intMap, src, dst);  //false면 isAwake를 false로. SetState(Idle).
             pathUpdateTimer = 0.f;
         }
         else if (!path.second.empty())

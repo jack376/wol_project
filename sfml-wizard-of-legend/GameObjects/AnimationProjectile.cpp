@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "AnimationProjectile.h"
 #include "ResourceMgr.h"
+#include "SceneMgr.h"
+#include "Tile.h"
+#include "Player.h"
 
 AnimationProjectile::AnimationProjectile(const std::string& textureId, const std::string& n)
 {
@@ -28,8 +31,51 @@ void AnimationProjectile::Reset()
 
 void AnimationProjectile::Update(float dt)
 {
-	Projectile::Update(dt);
+	SpriteGo::Update(dt);
 	animation.Update(dt);
+
+	if (!isFire)
+		return;
+
+	position += direction * speed * dt;
+	SetPosition(position);
+	collider.SetPosition(position);
+
+	if (collider.GetActive())
+		collider.Update(dt);
+
+	CalculatorCurrentTile();
+
+	if (isActive && player != nullptr && player->IsAlive())
+	{
+		if (collider.ObbCol(player->rect))
+		{
+			player->SetHitDir(direction);
+			player->SetHp(-damage);
+			isAttacked = true;
+			isFire = false;
+			SetActive(false);
+			collider.SetActive(false);
+
+			if (animation.GetCurrentClipId() == "Fireball")
+			{
+				SCENE_MGR.GetCurrScene()->RemoveGo(this);
+				pool->Return(this);
+			}
+		}
+	}
+
+	if (currentTile->GetType() == TileType::Wall)
+	{
+		isFire = false;
+		SetActive(false);
+		collider.SetActive(false);
+		if (animation.GetCurrentClipId() == "Fireball")
+		{
+			SCENE_MGR.GetCurrScene()->RemoveGo(this);
+			pool->Return(this);
+		}
+	}
 }
 
 void AnimationProjectile::Draw(sf::RenderWindow& window)

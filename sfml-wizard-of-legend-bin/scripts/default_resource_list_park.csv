@@ -69,3 +69,7 @@
 3,animations/FireBoss/FireBoss_SpinKick.csv
 3,animations/FireBoss/FireBoss_Squat.csv
 0,graphics/Texture2D/fireboss2.png
+0,graphics/Texture2D/FireWings.png
+0,graphics/Texture2D/Fireball.png
+3,animations/FireBoss/FireWings.csv
+3,animations/FireBoss/Fireball.csv

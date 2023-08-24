@@ -199,7 +199,6 @@ bool Beam::checkCollision(const std::vector<Tile*> tiles, Player* player)
         float newDistance = Utils::Distance({ (float)m_line.getX1(), (float)m_line.getY1() }, (sf::Vector2f)point);
         if (distance > newDistance)
         {
-            hitPlayer = false;
             distance = newDistance;
             m_line.setEndPoint(point.x, point.y);
         } 

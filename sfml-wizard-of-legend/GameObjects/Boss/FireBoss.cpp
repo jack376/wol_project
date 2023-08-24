@@ -18,6 +18,7 @@ FireBoss::~FireBoss()
 void FireBoss::Init()
 {
     stat = DATATABLE_MGR.Get<MonsterTable>(DataTable::Ids::Monster)->Get((int)monsterId);
+    Scene* scene = SCENE_MGR.GetCurrScene();
 
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/FireBoss/FireBoss_BackhandDown.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/FireBoss/FireBoss_BackhandRight.csv"));
@@ -40,14 +41,14 @@ void FireBoss::Init()
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/FireBoss/FireBoss_SpinKick.csv"));
     animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/FireBoss/FireBoss_Squat.csv"));
 
+    attackEffect.AddClip("animations/FireBoss/FireWings.csv");
+    attackEffect.SetOrigin(Origins::BC);
+    
     ObjectPool<AnimationProjectile>* ptr = &projectilePool;
     projectilePool.OnCreate = [ptr, this](AnimationProjectile* skill)
     {
-        skill->AddClip("");
-        skill->AddClip("");
-        skill->AddClip("");
-        skill->AddClip("");
-        skill->textureId = "";
+        skill->AddClip("animations/FireBoss/Fireball.csv");
+        //skill->textureId = "";
         skill->pool = ptr;
         skill->SetPlayer(player);
         skill->SetTiles(tilesWorld);
@@ -68,23 +69,33 @@ void FireBoss::Release()
 void FireBoss::Reset()
 {
     Monster::Reset();
+    attackEffect.Reset();
 
     for (auto bullet : projectilePool.GetUseList())
     {
         SCENE_MGR.GetCurrScene()->RemoveGo(bullet);
     }
-
     projectilePool.Clear();
 }
 
 void FireBoss::Update(float dt)
 {
     Monster::Update(dt);
+
+    SetLook(player->GetPosition());
+    raycaster.Rotation(Utils::Angle(look));
+
+    if (attackEffect.GetActive())
+        attackEffect.Update(dt);      
 }
 
 void FireBoss::Draw(sf::RenderWindow& window)
 {
-    Monster::Draw(window);
+    window.draw(sprite);
+    raycaster.draw(window);   
+
+    if (attackEffect.GetActive())
+        window.draw(attackEffect.sprite);
 }
 
 void FireBoss::SetPosition(const sf::Vector2f& p)
@@ -109,7 +120,6 @@ void FireBoss::HandleState(float dt)
         break;
 
     case MonsterState::Attacking:
-        //std::cout << "Monster is attacking.\n";
         Attack(dt);
         break;
 
@@ -153,7 +163,13 @@ void FireBoss::Start()
 
 void FireBoss::Idle()
 {
-    animation.Play(stat.name + "Squat");
+    if (!stateStart)
+    {
+        animation.Play("FireBossIdle");
+        animation.PlayQueue("FireBossSquat");
+        stateStart = true;
+    }
+
     SetOrigin(origin);
     SetRectBox();
 
@@ -163,47 +179,65 @@ void FireBoss::Idle()
     if (hp <= 0 || !player->IsAlive())
     {
         SetState(MonsterState::Dead);
+        stateStart = false;
         return;
     }
-    if (distance <= stat.attackRange)
+    else if (animation.GetCurrentClipId() == "FireBossSquat" && animation.IsAnimEndFrame())
     {
-        if (attackTimer >= stat.attackRate)
-            SetState(MonsterState::Attacking);
+        SetState(MonsterState::Attacking);
+        stateStart = false;
         return;
     }
 }
 
 void FireBoss::Attack(float dt)
 {
-    if (patternCount == 0)
+    if (!stateStart)
     {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-
-        // 가능한 숫자 범위와 벡터를 초기화
-        int minValue = 0;
-        int maxValue = 3;
-        randomNums.clear();
-        for (int i = minValue; i <= maxValue; ++i)
-            randomNums.push_back(i);
-
-        // 벡터를 섞음
-        std::shuffle(randomNums.begin(), randomNums.end(), gen);
+        animation.Play("FireBossIdle");
+        if (patternCount == 0)
+            attackEffect.Play("FireWings", position, sf::Vector2f(0, -1));
+        stateStart = true;
     }
-    std::cout << patternCount << "번째 숫자: " << randomNums[patternCount] << std::endl;
-
-    sf::Vector2f playerPos = player->GetPosition();
-    SetLook(playerPos);
-
-    HandleAttackPattern(dt);
-
-    if (hp <= 0 || !player->IsAlive())
+        
+    if (attackEffect.GetAnimation()->IsAnimEndFrame())
     {
-        SetState(MonsterState::Dead);
-        return;
+        attackEffect.SetActive(false);
+        if (patternCount == 0)
+        {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+
+            // 가능한 숫자 범위와 벡터를 초기화
+            int minValue = 3;
+            int maxValue = 3;
+            randomNums.clear();
+            for (int i = minValue; i <= maxValue; ++i)
+                randomNums.push_back(i);
+
+            // 벡터를 섞음
+            std::shuffle(randomNums.begin(), randomNums.end(), gen);
+        }
+        //std::cout << patternCount << "번째 숫자: " << randomNums[patternCount] << std::endl;
+
+        sf::Vector2f playerPos = player->GetPosition();
+        SetLook(playerPos);
+
+        HandleAttackPattern(dt);
+
+        if (hp <= 0 || !player->IsAlive())
+        {
+            SetState(MonsterState::Dead);
+            stateStart = false;
+            return;
+        }
+        else if (patternCount > 0)
+        {
+            SetState(MonsterState::Idle());
+            patternCount == 0;
+            stateStart = false;
+        }
     }
-    else if (patternCount > 3)
-        SetState(MonsterState::Idle());
 }
 
 
@@ -234,38 +268,42 @@ void FireBoss::Fire(float dt)
         animation.GetCurrentClipId() != "FireBossPointUp")
     {
         if (abs(look.x) > abs(look.y))
-        {
             animation.Play("FireBossPointRight");
-        }
-        else if (look.y >= 0)
-        {
+        else if (look.y <= 0)
             animation.Play("FireBossPointUp");
-        }
         else
-        {
             animation.Play("FireBossPointDown");
-        }
         SetLook(player->GetPosition());
+
+        fireballPoss = CalculateProjectilePositions(player->GetPosition(), position, 150, 10, 180);
     }
 
-    if (animation.IsAnimEndFrame())
+    fireballTimer += dt;
+    if (animation.IsAnimEndFrame() && fireballTimer > fireballRate && fireCount < 10)
     {
         AnimationProjectile* fireball = projectilePool.Get();
-        fireball->Play(""); 
-        //fireball->Fire();
+        sf::Vector2f dir = Utils::Normalize(player->GetPosition() - position);
+        fireball->SetPosition(position);
+        fireball->SetRotation(Utils::Angle(dir));
+        fireball->Play("Fireball"); 
+        fireball->Fire(dir, 1000, stat.damage);
+        SCENE_MGR.GetCurrScene()->AddGo(fireball);
         fireCount++;
+        fireballTimer = 0;
     }  
-
-
-
-    /*if (patternCount < 2)
-        patternCount++;
-    else
+    else if (fireCount == 10)
     {
-        SetState(MonsterState::Idle);
-        patternCount = 0;
-    }*/
+        fireCount = 0;
+        fireballTimer = 0.f;
 
+        /*if (patternCount < 2)
+            patternCount++;
+        else
+        {
+            SetState(MonsterState::Idle);
+            patternCount = 0;
+        }*/
+    }
 }
 
 void FireBoss::SetAttackPattern(FireBossAttackPattern pattern)
@@ -275,4 +313,25 @@ void FireBoss::SetAttackPattern(FireBossAttackPattern pattern)
 
 void FireBoss::OnAttacked(float damage)
 {
+}
+
+std::vector<sf::Vector2f> FireBoss::CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count, float angleRange) {
+    std::vector<sf::Vector2f> positions;
+
+    sf::Vector2f direction = playerPosition - monsterPosition;
+    direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+    // 중심 투사체 위치 계산 (플레이어 방향)
+    float centerAngle = Utils::Angle(direction);
+    // 투사체 위치 계산
+    float angleIncrement = angleRange / count;
+    float startAngle = centerAngle - angleRange / 2.0f;
+
+    for (int i = 0; i < count; ++i) {
+        float adjustedAngle = startAngle + i * angleIncrement;
+        sf::Vector2f offset = radius * Utils::Direction(adjustedAngle);
+        sf::Vector2f projectilePosition = monsterPosition + offset;
+        positions.emplace_back(projectilePosition);
+    }
+    return positions;
 }

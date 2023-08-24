@@ -208,5 +208,5 @@ void Archer::Move(float dt)
 
 	if (!raycaster.checkCollision(*nongroundTiles, player))
 		SetState(MonsterState::Moving);
-
+	
 }

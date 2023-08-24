@@ -21,7 +21,7 @@ void CustomEffect::Reset()
 	SpriteGo::Reset();
 	animation.SetTarget(&sprite);
 	sprite.setScale({ 4.0f, 4.0f });
-	SetOrigin(Origins::BC);
+	SetOrigin(origin);
 	SetActive(false);
 
 	//Debug Mode
@@ -35,7 +35,7 @@ void CustomEffect::Update(float dt)
 	if (animation.IsPlaying())
 	{
 		animation.Update(dt);
-		SetOrigin(Origins::MC);
+		SetOrigin(origin);
 	}
 
 	//Debug Mode

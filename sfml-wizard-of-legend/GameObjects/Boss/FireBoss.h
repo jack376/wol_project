@@ -15,9 +15,13 @@ class FireBoss :
 {
 protected:
 	std::vector<int> randomNums;
+	std::vector<sf::Vector2f> fireballPoss;
 
 	int patternCount = 0;
 	int fireCount = 0;
+	float fireballRate = 0.5f;
+	float fireballTimer = 0.5f;
+	bool stateStart = false;
 
 	FireBossAttackPattern currentAttackPattern;
 	ObjectPool<AnimationProjectile> projectilePool;
@@ -50,5 +54,7 @@ public:
 	void SetAttackPattern(FireBossAttackPattern pattern);
 
 	virtual void OnAttacked(float damage);
+
+	std::vector<sf::Vector2f> CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count, float angleRange);
 };
 
