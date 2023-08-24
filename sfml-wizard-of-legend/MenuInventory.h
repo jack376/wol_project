@@ -8,7 +8,8 @@ class MenuInventory : public GameObject
 {
 protected:
 	sf::Sprite panel;
-	std::map<int, Slot*>slotList;
+	std::vector<std::string> slotKey;
+	std::map<std::string, Slot*>slotList;
 
 public:
 	MenuInventory(const std::string& n = "");

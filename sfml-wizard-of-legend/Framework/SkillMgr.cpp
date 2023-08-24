@@ -10,9 +10,11 @@ void SkillMgr::Init()
 {
 	// 모든 스킬 Load
 	LoadExistSkill();
-	//LoadBuyedSkill();
-	//LoadEquipedSkill();
-	//
+	if(!buyedSkillList.empty())
+		LoadBuyedSkill();
+	if (!equipedSkillList.empty())
+		LoadEquipedSkill();
+
 	for (auto skill : equipedSkillList)
 	{
 		skill.second->SetTiles(worldTiles);
@@ -510,13 +512,25 @@ void SkillMgr::EquipSkill(Skill* newSkill)
 		std::cout << "is already" << std::endl;
 }
 
-Skill* SkillMgr::SearchSkill(SkillIds id)
+Skill* SkillMgr::SearchExistedSkill(SkillIds id)
+{
+	return existSkillList[(int)id];
+}
+
+Skill* SkillMgr::SearchBuyedSkill(SkillIds id)
 {
 	return buyedSkillList[(int)id];
+}
+
+Skill* SkillMgr::SearchEquipedSkill(SkillIds id)
+{
+	Skill* skill = buyedSkillList[(int)id];
+	return equipedSkillList[skill->GetSkillEvent()];
 }
 
 Skill* SkillMgr::SearchSkill(SkillEvents sEvent)
 {
 	Skill* skill = equipedSkillList[sEvent];
-	return buyedSkillList[skill->GetSkillId()];
+	return skill;
+	//return buyedSkillList[skill->GetSkillId()];
 }

@@ -2,6 +2,7 @@
 #include "Slot.h"
 #include "ResourceMgr.h"
 #include "Framework.h"
+#include "SkillMgr.h"
 
 Slot* Slot::selectedSlot = nullptr;
 
@@ -22,7 +23,7 @@ void Slot::Init()
 	SetPosition(position);
 	SetSelectedSlotIcon();
 
-	sortLayer = 101;
+	sortLayer = 102;
 	sprite.setScale(4, 4);
 
 	OnClick = [this]() {
@@ -43,36 +44,46 @@ void Slot::Init()
 	switch (slotSkillEvent)
 	{
 	case SkillEvents::Left:
-		iconId = "Left";
+		skillEventIconId = "Left";
 		break;
 	case SkillEvents::Right:
-		iconId = "Right";
+		skillEventIconId = "Right";
 		break;
 	case SkillEvents::Space:
-		iconId = "Space";
+		skillEventIconId = "Space";
 		break;
 	case SkillEvents::Q:
-		iconId = "Q";
+		skillEventIconId = "Q";
 		break;
 	case SkillEvents::E:
-		iconId = "E";
+		skillEventIconId = "E";
 		break;
 	case SkillEvents::R:
-		iconId = "R";
+		skillEventIconId = "R";
+		break;
+	case SkillEvents::M:
+		skillEventIconId = "M";
+		break;
+	case SkillEvents::Tab:
+		skillEventIconId = "Tab";
+		break;
+	default:
+		skillEventIconId = "";
 		break;
 	}
+	SetSlotEventIcon(skillEventIconId);
 }
 
 void Slot::Release()
 {
 	UIButton::Release();
-
 }
 
 void Slot::Reset()
 {
 	UIButton::Reset();
 	isUsed = false;
+	fadeInOutTimer = 0.f;
 
 }
 
@@ -102,15 +113,15 @@ void Slot::SetPosition(const sf::Vector2f& p)
 {
 	UIButton::SetPosition(p);
 	currentSkillIcon.SetPosition(p);
-	skillEventIcon.SetPosition(p);
 	selectedSlotIcon.SetPosition(p);
+	skillEventIcon.SetPosition(p.x, p.y - 60.f);
 }
 
 void Slot::SetPosition(float x, float y)
 {
 	UIButton::SetPosition(x, y);
 	currentSkillIcon.SetPosition(x, y);
-	skillEventIcon.SetPosition(x, y);
+	skillEventIcon.SetPosition(x, y - 20.f);
 	selectedSlotIcon.SetPosition(x, y);
 
 }
@@ -133,44 +144,57 @@ void Slot::SetOrigin(float x, float y)
 
 }
 
-void Slot::SetString(const std::string& str)
+
+void Slot::SetSkillIconId(const std::string& id)
 {
-	iconId = str;
+	skillIconId = id;
+}
+
+void Slot::SetSlotEventIcon(std::string eventId)
+{
+	skillEventIconId = "graphics/UI/CommandEvent/" + eventId + ".png";
+	skillEventIcon.sprite.setTexture(*RESOURCE_MGR.GetTexture(skillEventIconId));
+	skillEventIcon.sprite.setScale(3, 3);
 }
 
 void Slot::OnClickEvent()
 {
-	//sprite.setColor(sf::Color::Color(255, 255, 255, 255));
 	if (selectedSlot)
 	{
-		// 바뀌는 부분 적용
-		std::string tempStr = GetString();
-		SetSkillIcon(selectedSlot->GetString());
-		selectedSlot->SetSkillIcon(tempStr);
-		selectedSlot->sprite.setColor(sf::Color::Color(255, 255, 255, 255));
+		// 스킬이 바뀌는 부분
+		// 스킬 매니저에서 스킬에 해당하는 부분 바꾸기
+		std::string tempStr = GetSkillIconId();
+		SetSkillIconId(selectedSlot->GetSkillIconId());
+		selectedSlot->SetSkillIconId(tempStr);
+		SetSkillIcon();
+		selectedSlot->SetSkillIcon();
+		
+		Skill* selectedSkill = SKILL_MGR.SearchSkill(selectedSlot->slotSkillEvent);
+		SKILL_MGR.SwapSkill(slotSkillEvent, selectedSkill);
 
+		selectedSlot->sprite.setColor(sf::Color::Color(255, 255, 255, 255));
 		selectedSlot = nullptr;
-		std::cout << "Slot Deselected" << std::endl;
 	}
 	else
 	{
 		sprite.setColor(sf::Color::Green);
 		selectedSlot = this;
-		std::cout << "Slot Selected" << std::endl;
 	}
-
 }
 
-void Slot::SetSkillIcon(std::string skillIconId)
+void Slot::SetSkillIcon()
 {
-	iconId = skillIconId;
-	currentSkillIcon.sprite.setTexture(*RESOURCE_MGR.GetTexture(iconId));
-	currentSkillIcon.sprite.setScale(4, 4);
+	std::string id = "graphics/UI/SkillIcon/" + skillIconId + ".png";
+	if (skillIconId.compare("") != 0)
+	{
+		currentSkillIcon.sprite.setTexture(*RESOURCE_MGR.GetTexture(id));
+		currentSkillIcon.sprite.setScale(4, 4);
+
+	}
 }
 
 void Slot::OnClickingEvnet()
 {
-	//std::cout << skillEventStr << std::endl;
 	sprite.setColor(sf::Color::Color(255, 255, 255, 150));
 }
 

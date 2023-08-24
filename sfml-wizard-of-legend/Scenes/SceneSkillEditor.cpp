@@ -110,7 +110,7 @@ void SceneSkillEditor::Init()
 		go->Init();
 	}
 	SKILL_MGR.SetEditorPlayer(player);
-	SKILL_MGR.Init();
+	//SKILL_MGR.Init();
 
 }
 
@@ -163,7 +163,7 @@ void SceneSkillEditor::Save()
 	SkillInfo skillInfo;
 
 	spellInfo.skillName = skillNameValue->text.getString();
-
+	skill->SetSkillIconId(skillNameValue->text.getString());
 	skill->SetElementType((ElementTypes)elemetTypeInt);
 	skill->SetSkillType((SkillTypes)skillTypeInt);
 	skill->SetRangeType((RangeTypes)rangeTypeInt);
@@ -374,7 +374,7 @@ void SceneSkillEditor::Apply()
 	std::cout << "Button Apply" << std::endl;
 	ConvertEnumToInt();
 	ConvertBoolToInt();
-	//ConvertNameToId();
+	ConvertNameToId();
 	Skill* skill = new Skill();
 	SpellInfo spellInfo;
 	SkillInfo skillInfo;
@@ -442,11 +442,7 @@ void SceneSkillEditor::Apply()
 	skillInfo.rangeType = (RangeTypes)rangeTypeInt;
 	skillInfo.evnetType = (SkillEvents)eventTypeInt;
 	skillInfo.playerAction = (PlayerActions)playerActionInt;
-	//skill->SetElementType((ElementTypes)elemetTypeInt);
-	//skill->SetSkillType((SkillTypes)skillTypeInt);
-	//skill->SetRangeType((RangeTypes)rangeTypeInt);
-	//skill->SetSkillEvent((SkillEvents)eventTypeInt);
-	//skill->SetPlayerAction((PlayerActions)playerActionInt);
+	skillInfo.spellinfo = spellInfo;
 	 
 	 
 	 
@@ -631,7 +627,7 @@ void SceneSkillEditor::ConvertBoolToInt()
 
 void SceneSkillEditor::ConvertNameToId()
 {
-	if (skillNameValue->text.getString() == "FireBall")
+	if (skillNameValue->text.getString() == "ExplodingFireball")
 	{
 		skillId = 0;
 	}

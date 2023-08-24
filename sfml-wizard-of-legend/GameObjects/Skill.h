@@ -62,6 +62,8 @@ protected:
 	// UI아이콘 텍스쳐 필요?
 	// 실제 스킬 애니메이션 클립 어디서 관리할지
 	int skillId;
+	std::string skillIconId;
+
 	ElementTypes currentElementType = ElementTypes::None;
 	SkillTypes currentSkillType = SkillTypes::None;
 	RangeTypes currentRangeType = RangeTypes::None;
@@ -71,7 +73,6 @@ protected:
 	sf::Keyboard::Key currentKey = sf::Keyboard::Unknown;
 	sf::Mouse::Button currentButton = sf::Mouse::None;
 
-	SpriteGo* skillIcon;
 
 	// 최대 발사개수
 	int shotCount;
@@ -106,8 +107,10 @@ public:
 
 	SkillEvents GetSkillEvent() const { return currentEventType; }
 	int GetSkillId() const { return skillId; }
+	std::string& GetSkillIconId() { return skillIconId; }
 	SkillInfo& GetSkillInfo() { return skillInfo; }
 
+	void SetSkillIconId(std::string id) { skillIconId = id; }
 	void SetSkillEvent(SkillEvents sEvent) { currentEventType = sEvent; }
 	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }

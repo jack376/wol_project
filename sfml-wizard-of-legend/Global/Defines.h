@@ -17,6 +17,7 @@ enum class SkillIds
 	None = -1,
 	ExplodingFireball,
 	WindSlash,
+	Count,
 };
 
 enum class SkillEvents
@@ -28,6 +29,8 @@ enum class SkillEvents
 	Q,
 	E,
 	R,
+	M,
+	Tab,
 	Count,
 };
 

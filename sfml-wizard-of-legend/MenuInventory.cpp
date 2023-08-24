@@ -3,6 +3,8 @@
 #include "Slot.h"
 #include "ResourceMgr.h"
 #include "Framework.h"
+#include "SceneMgr.h"
+#include "SkillMgr.h"
 
 MenuInventory::MenuInventory(const std::string& n) : GameObject(n)
 {
@@ -59,20 +61,49 @@ void MenuInventory::Init()
 	SetOrigin(Origins::MC);
 	panel.setScale(6, 8);
 
+	slotKey.push_back("Left");
+	slotKey.push_back("Right");
+	slotKey.push_back("Space");
+	slotKey.push_back("Q");
+	slotKey.push_back("E");
+	slotKey.push_back("R");
+
+
+
+	//slot.SetSkillIconId();
 
 	sortLayer = 101;
 }
 
 void MenuInventory::Release()
 {
+	
 }
 
 void MenuInventory::Reset()
 {
+	for (int i = 0; i < slotKey.size(); i++)
+	{
+		Slot* slot = (Slot*)SCENE_MGR.GetCurrScene()->AddGo(new Slot("graphics/UI/slot1.png"));
+		slot->SetPosition((370 + i * 85), 350);
+		slot->SetSlotEvent((SkillEvents)i);
+		slot->SetOrigin(Origins::MC);
+		slot->Init();
+		slotList[slotKey[i]] = slot;
+	}
+	for (int i = 0; i < (int)SkillIds::Count; i++)
+	{
+		slotList[slotKey[i]]->SetSkillIconId(SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId());
+		std::cout << SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId() << std::endl;
+		Skill* temp = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent());
+		std::string str = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId();
+		slotList[slotKey[i]]->SetSkillIcon();
+	}
 }
 
 void MenuInventory::Update(float dt)
 {
+
 }
 
 void MenuInventory::Draw(sf::RenderWindow& window)

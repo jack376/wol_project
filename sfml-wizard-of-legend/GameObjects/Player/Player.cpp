@@ -253,7 +253,7 @@ void Player::Update(float dt)
 
 		//elemental->SetScene(scene);
 
-		SKILL_MGR.UseSkill(sEvent);
+		//SKILL_MGR.UseSkill(sEvent);
 
 		ChangeState(States::Attack);
 

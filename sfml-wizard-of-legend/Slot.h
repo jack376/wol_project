@@ -17,10 +17,12 @@ protected:
 	SkillIds skillId = SkillIds::None;
 
 	SpriteGo currentSkillIcon;
-	SpriteGo skillEventIcon;
 	SpriteGo selectedSlotIcon;
 
-	std::string iconId;
+	SpriteGo skillEventIcon;
+
+	std::string skillIconId;
+	std::string skillEventIconId;
 
 	bool isUsed = false;
 
@@ -45,12 +47,17 @@ public:
 	virtual void SetOrigin(Origins origin) override;
 	virtual void SetOrigin(float x, float y) override;
 
-	void SetString(const std::string& str);
-	void SetSkillIcon(const std::string skillIconId);
+	SkillEvents GetSlotEvent() { return slotSkillEvent; }
+
+	void SetSlotEvent(SkillEvents sEvent) { slotSkillEvent = sEvent; }
+	void SetSlotEventIcon(const std::string eventId);
+	void SetSkillIconId(const std::string& id);
+	void SetSkillIcon();
+
 	void SetSelectedSlotIcon();
 	void FadeInOutSlotColor(float dt);
 
-	std::string GetString() { return iconId; }
+	std::string GetSkillIconId() { return skillIconId; }
 
 	void OnClickEvent();
 	void OnClickingEvnet();
