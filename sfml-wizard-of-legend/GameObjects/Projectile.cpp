@@ -29,14 +29,13 @@ void Projectile::Reset()
 {
 	SpriteGo::Reset();
 	collider.Reset();
+	collider.SetColSize();
+	collider.SetSprite(sprite);
 
 	SetPosition(0.f, 0.f);
 	SetOrigin(origin);
 	sprite.setRotation(0.f);
 	sprite.setScale({ 4, 4 });
-
-	collider.SetSprite(sprite);
-	collider.SetObbCol();
 
 	isAttacked = false;
 	isFire = false;

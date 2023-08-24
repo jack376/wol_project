@@ -36,14 +36,19 @@ void AnimationProjectile::Update(float dt)
 
 	if (!isFire)
 		return;
-
+	collider.SetColSize();
 	position += direction * speed * dt;
 	SetPosition(position);
+	SetOrigin(origin);
 	collider.SetPosition(position);
+	collider.SetOrigin(origin);
 
 	if (collider.GetActive())
+	{
+		collider.SetSprite(sprite);
 		collider.Update(dt);
-
+	}
+		
 	CalculatorCurrentTile();
 
 	if (isActive && player != nullptr && player->IsAlive())

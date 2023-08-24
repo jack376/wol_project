@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-FireWings,7,0,,
+FireWings,10,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/Texture2D/FireWings.png,21,47,56,14

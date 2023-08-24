@@ -17,6 +17,7 @@ protected:
 	std::vector<int> randomNums;
 	std::vector<sf::Vector2f> fireballPoss;
 
+	sf::Vector2f jumpPos;
 	int patternCount = 0;
 	int fireCount = 0;
 	float fireballRate = 0.5f;

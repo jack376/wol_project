@@ -255,6 +255,14 @@ void FireBoss::Dash(float dt)
 
 void FireBoss::Jump(float dt)
 {
+    if (animation.GetCurrentClipId() != "FireBossHeel")
+    {
+        animation.Play("FireBossHeel");
+        jumpPos = player->GetPosition();
+    }
+
+
+
 }
 
 void FireBoss::Kick(float dt)
@@ -274,7 +282,6 @@ void FireBoss::Fire(float dt)
         else
             animation.Play("FireBossPointDown");
         SetLook(player->GetPosition());
-
         fireballPoss = CalculateProjectilePositions(player->GetPosition(), position, 150, 10, 180);
     }
 
