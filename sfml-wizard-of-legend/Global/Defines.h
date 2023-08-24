@@ -116,11 +116,21 @@ enum class ObjectType
 	Count,
 };
 
-
 enum class UiType
 {
 	Text,
 	Box,
+};
+
+enum class SpawnLocation
+{
+	None = -1,
+	Monster,
+	Object,
+	WallObject,
+	Torch,
+	Embers,
+	FireLight,
 };
 
 #include "AnimationClip.h"

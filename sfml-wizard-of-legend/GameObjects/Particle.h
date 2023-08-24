@@ -19,6 +19,8 @@ protected:
 	float gravity  = 15.0f;
 	float rotation = 1.0f;
 
+	bool isLighting = false;
+
 	ObjectPool<Particle>* pool = nullptr;
 
 public:

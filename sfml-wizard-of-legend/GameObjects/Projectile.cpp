@@ -44,7 +44,7 @@ void Projectile::Reset()
 	damage = 0;
 	direction = { 0.f, 0.f };
 
-	paletteTexture.loadFromFile("shader/ArcherColorIndex.png");
+	paletteTexture.loadFromFile("shader/FireColorIndex.png");
 	shader.loadFromFile("shader/FragShader.frag", sf::Shader::Fragment);
 	shader.setUniform("paletteTexture", paletteTexture);
 	shader.setUniform("paletteYOffset", yOffset);

@@ -18,7 +18,7 @@
 #include "rapidcsv.h"
 #include "Tile.h"
 #include "BoxCollider2D.h"
-#include "BreakableObj.h"
+#include "DecoGo.h"
 #include "Particle.h"
 #include "Skill.h"
 #include "SkillMgr.h"
@@ -40,9 +40,7 @@ void SceneGame::Init()
 	player->SetScene(this);
 
 	// Load Tilemap CSV
-	LoadFromCSV("tables/BossRoom_0822_184837.csv");
-	//LoadFromCSV("tables/EntireRoom_0823_102544.csv");
-	//LoadFromCSV("tables/TestMiniRoom_0822_175046.csv");
+	LoadFromCSV("tables/EntireRoom_0824_190727.csv");
 
 	TilesToIntMap();
 	CalculatorNongroundTiles();
@@ -95,6 +93,9 @@ void SceneGame::Init()
 
 	// Create Particle
 	CreateParticle(1000);
+
+	// Spawn Deco
+	SpawnDecoGo(100); // max 133
 
 	for (auto go : gameObjects)
 	{
@@ -215,8 +216,11 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		int tileLayer  = doc.GetCell<int>("tileLayer", i);
 
 		std::string textureId = doc.GetCell<std::string>("textureId", i);
+
 		sf::IntRect topTextureRect(doc.GetCell<int>("topTextureRectL", i), doc.GetCell<int>("topTextureRectT", i), tileSize, tileSize);
 		sf::IntRect bottomTextureRect(doc.GetCell<int>("bottomTextureRectL", i), doc.GetCell<int>("bottomTextureRectT", i), tileSize, tileSize);
+
+		int spawnLocation = doc.GetCell<int>("spawnLocation", i);
 
 		Tile* tile = (Tile*)FindGo(tileName);
 		tile->SetIndex(tileIndexX, tileIndexY);
@@ -227,6 +231,7 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetTexture(textureId);
 		tile->SetTextureRectTop(topTextureRect, textureId);
 		tile->SetTextureRectBottom(bottomTextureRect, textureId);
+		tile->SetSpawnLocation(static_cast<SpawnLocation>(spawnLocation));
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 
@@ -294,7 +299,7 @@ void SceneGame::CreateParticle(int count)
 	particlePool.Init(count);
 }
 
-void SceneGame::SpawnBreakableObj(const std::string& id, int count)
+void SceneGame::SpawnDecoGo(int count)
 {
 	std::vector<sf::Vector2f> objectSpawnArea;
 	
@@ -302,7 +307,7 @@ void SceneGame::SpawnBreakableObj(const std::string& id, int count)
 	{
 		for (size_t col = 0; col < tilesWorld[row].size(); col++)
 		{
-			if (tilesWorld[row][col]->GetType() == TileType::None)
+			if (tilesWorld[row][col]->GetSpawnLocation() == SpawnLocation::Object)
 			{
 				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
 			}
@@ -317,24 +322,25 @@ void SceneGame::SpawnBreakableObj(const std::string& id, int count)
 	for (int i = 0; i < count && !objectSpawnArea.empty(); i++)
 	{
 		int randomIndex = Utils::RandomRange(0, objectSpawnArea.size() - 1);
-		int randomNumber = Utils::RandomRange(0, 6);
+		int randomNumber = Utils::RandomRange(0, 11);
 		sf::Vector2f randomPosition = objectSpawnArea[randomIndex];
 
 		objectSpawnArea.erase(objectSpawnArea.begin() + randomIndex);
 
-		BreakableObj* object = (BreakableObj*)AddGo(new BreakableObj(id, "Object" + i));
-		object->sortLayer = 30;
+		DecoGo* object = (DecoGo*)AddGo(new DecoGo("graphics/editor/FireTileSet.png", "Object" + i));
+		object->sortLayer = 0;
 		object->SetActive(true);
 		object->SetPlayer(player);
 		object->SetPosition(randomPosition);
+		object->SetTextureRect(sf::IntRect(304 + (randomNumber * 16), 384, 16, 32));
 		object->SetScale(4.0f, 4.0f);
-		object->SetTextureRect(sf::IntRect(368 + (randomNumber * 16), 384, 16, 32));
 		object->SetParticlePool(&particlePool);
+		object->SetOrigin(Origins::TL);
 		object->Reset();
 	}
 }
 
-void SceneGame::DestroyBreakableObj(BreakableObj* obj)
+void SceneGame::DestroyDecoGo(DecoGo* obj)
 {
 	RemoveGo(obj);
 	count++; // юс╫ц

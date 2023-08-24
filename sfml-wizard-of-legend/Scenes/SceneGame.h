@@ -12,7 +12,7 @@ class Tile;
 class Player;
 class Monster;
 class ElementalSpell;
-class BreakableObj;
+class DecoGo;
 class Particle;
 class Monster;
 class CustomEffect;
@@ -60,14 +60,14 @@ public:
 
 	Player* GetPlayer() { return player; }
 
-	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
+	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 1);
 	void LoadFromCSV(const std::string& path);
 	void CreateTile2dVector(int rows, int cols);
 	void CreateParticle(int count);
 	Monster* CreateMonster(MonsterId id);
 
-	void SpawnBreakableObj(const std::string& id, int count);
-	void DestroyBreakableObj(BreakableObj* obj);
+	void SpawnDecoGo(int count);
+	void DestroyDecoGo(DecoGo* obj);
 	void TilesToIntMap();
 	void CalculatorNongroundTiles();
 };

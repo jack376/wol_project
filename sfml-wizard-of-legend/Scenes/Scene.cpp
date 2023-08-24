@@ -88,6 +88,7 @@ void Scene::RemoveGo(GameObject* go)
 
 void Scene::SortGos()
 {
+	/*
 	gameObjects.sort([](GameObject* lhs, GameObject* rhs) {
 		if (lhs->sortLayer != rhs->sortLayer)
 			return lhs->sortLayer < rhs->sortLayer;
@@ -96,6 +97,17 @@ void Scene::SortGos()
 			return lhs->sortOrder < rhs->sortOrder;
 
 		return lhs->GetPosition().y < rhs->GetPosition().y;
+	});
+	*/
+
+	gameObjects.sort([](GameObject* lhs, GameObject* rhs) {
+		if (lhs->GetPosition().y != rhs->GetPosition().y)
+			return lhs->GetPosition().y < rhs->GetPosition().y;
+
+		if (lhs->sortLayer != rhs->sortLayer)
+			return lhs->sortLayer < rhs->sortLayer;
+
+		return lhs->sortOrder < rhs->sortOrder;
 	});
 }
 
