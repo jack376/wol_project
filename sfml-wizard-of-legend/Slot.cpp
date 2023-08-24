@@ -26,20 +26,23 @@ void Slot::Init()
 	sortLayer = 102;
 	sprite.setScale(4, 4);
 
-	OnClick = [this]() {
-		OnClickEvent();
-	};
+	if (isUsed)
+	{
+		OnClick = [this]() {
+			OnClickEvent();
+		};
 
-	OnClicking = [this]() {
-		OnClickingEvnet();
+		OnClicking = [this]() {
+			OnClickingEvnet();
 
-	};
-	OnEnter = [this]() {
-		OnEnterEvent();
-	};
-	OnExit = [this]() {
-		OnExitEvent();
-	};
+		};
+		OnEnter = [this]() {
+			OnEnterEvent();
+		};
+		OnExit = [this]() {
+			OnExitEvent();
+		};
+	}
 
 	switch (slotSkillEvent)
 	{
@@ -90,6 +93,7 @@ void Slot::Reset()
 void Slot::Update(float dt)
 {
 	UIButton::Update(dt);
+
 	if (selectedSlotIcon.GetActive())
 	{
 		FadeInOutSlotColor(dt);
@@ -168,7 +172,7 @@ void Slot::OnClickEvent()
 		selectedSlot->SetSkillIconId(tempStr);
 		SetSkillIcon();
 		selectedSlot->SetSkillIcon();
-		
+
 		Skill* selectedSkill = SKILL_MGR.SearchSkill(selectedSlot->slotSkillEvent);
 		SKILL_MGR.SwapSkill(slotSkillEvent, selectedSkill);
 
@@ -188,14 +192,17 @@ void Slot::SetSkillIcon()
 	if (skillIconId.compare("") != 0)
 	{
 		currentSkillIcon.sprite.setTexture(*RESOURCE_MGR.GetTexture(id));
-		currentSkillIcon.sprite.setScale(4, 4);
+		sf::IntRect spriteIntRect = sf::IntRect{ 0, 0, (int)currentSkillIcon.sprite.getLocalBounds().width, (int)currentSkillIcon.sprite.getLocalBounds().height };
+		currentSkillIcon.sprite.setTextureRect(spriteIntRect);
+		currentSkillIcon.sprite.setScale(3, 3);
 
 	}
 }
 
 void Slot::OnClickingEvnet()
 {
-	sprite.setColor(sf::Color::Color(255, 255, 255, 150));
+	if(isUsed)
+		sprite.setColor(sf::Color::Color(255, 255, 255, 150));
 }
 
 void Slot::SetSelectedSlotIcon()
@@ -204,6 +211,11 @@ void Slot::SetSelectedSlotIcon()
 	selectedSlotIcon.sprite.setScale(4.5, 4.5);
 	SetOrigin(origin);
 	selectedSlotIcon.SetActive(false);
+}
+
+void Slot::SetIsUsed(bool isUsed)
+{
+	this->isUsed = isUsed;
 }
 
 void Slot::OnExitEvent()
@@ -234,5 +246,4 @@ void Slot::OnEnterEvent()
 {
 	SetSelectedSlotIcon();
 	selectedSlotIcon.SetActive(true);
-
 }

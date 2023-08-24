@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "MenuInventory.h"
+#include "QuickSlot.h"
 #include "Slot.h"
 #include "ResourceMgr.h"
 #include "Framework.h"
@@ -7,43 +7,39 @@
 #include "SkillMgr.h"
 #include "InputMgr.h"
 
-MenuInventory::MenuInventory(const std::string& n) : GameObject(n)
+QuickSlot::QuickSlot(const std::string& n) : GameObject(n)
 {
 }
 
-MenuInventory::~MenuInventory()
+QuickSlot::~QuickSlot()
 {
 }
 
-void MenuInventory::SetPosition(const sf::Vector2f& p)
+void QuickSlot::SetPosition(const sf::Vector2f& p)
 {
 	position = p;
-	panel.setPosition(p);
 }
 
-void MenuInventory::SetPosition(float x, float y)
+void QuickSlot::SetPosition(float x, float y)
 {
 	position.x = x;
 	position.y = y;
-	panel.setPosition({ x,y });
 }
 
-void MenuInventory::SetOrigin(Origins origin)
+void QuickSlot::SetOrigin(Origins origin)
 {
 	GameObject::SetOrigin(origin);
 	if (this->origin != Origins::CUSTOM)
 	{
-		Utils::SetOrigin(panel, origin);
 	}
 }
 
-void MenuInventory::SetOrigin(float x, float y)
+void QuickSlot::SetOrigin(float x, float y)
 {
 	GameObject::SetOrigin(x, y);
-	panel.setOrigin(x, y);
 }
 
-void MenuInventory::SetOrigin(sf::RectangleShape& rect, Origins origin)
+void QuickSlot::SetOrigin(sf::RectangleShape& rect, Origins origin)
 {
 	GameObject::SetOrigin(origin);
 	//if (this->origin != Origins::CUSTOM)
@@ -52,15 +48,13 @@ void MenuInventory::SetOrigin(sf::RectangleShape& rect, Origins origin)
 	//}
 }
 
-void MenuInventory::Init()
+void QuickSlot::Init()
 {
 	sf::Vector2f windowSize = FRAMEWORK.GetWindowSize();
 
-	
-	panel.setTexture(*RESOURCE_MGR.GetTexture("graphics/UI/Panel.png"));
-	SetPosition(windowSize.x * 0.3f,windowSize.y * 0.5f);
+
+	SetPosition(windowSize.x * 0.05f, windowSize.y * 0.95f);
 	SetOrigin(Origins::MC);
-	panel.setScale(6, 8);
 
 	slotKey.push_back("Left");
 	slotKey.push_back("Space");
@@ -68,6 +62,8 @@ void MenuInventory::Init()
 	slotKey.push_back("Q");
 	slotKey.push_back("E");
 	slotKey.push_back("R");
+	slotKey.push_back("Tab");
+	slotKey.push_back("M");
 
 
 
@@ -76,7 +72,7 @@ void MenuInventory::Init()
 	sortLayer = 101;
 }
 
-void MenuInventory::Release()
+void QuickSlot::Release()
 {
 	for (auto& pair : slotList)
 	{
@@ -87,15 +83,15 @@ void MenuInventory::Release()
 	slotList.clear();
 }
 
-void MenuInventory::Reset()
+void QuickSlot::Reset()
 {
 	for (int i = 0; i < slotKey.size(); i++)
 	{
 		Slot* slot = (Slot*)SCENE_MGR.GetCurrScene()->AddGo(new Slot("graphics/UI/slot1.png"));
-		slot->SetPosition((370 + i * 85), 350);
+		slot->SetPosition((100 + i * 70), 900);
 		slot->SetSlotEvent((SkillEvents)i);
 		slot->SetOrigin(Origins::MC);
-		slot->SetIsUsed(true);
+		slot->SetIsUsed(false);
 		slot->Init();
 		slotList[slotKey[i]] = slot;
 	}
@@ -109,26 +105,33 @@ void MenuInventory::Reset()
 		slotList[slotKey[i]]->SetSkillIcon();
 	}
 
+	slotList["Tab"]->sprite.setScale(3.5, 3.5);
+	slotList["Tab"]->SetPosition(550, 900);
+	slotList["Tab"]->SetSkillIcon();
+
+	slotList["M"]->sprite.setScale(3.5, 3.5);
+	slotList["M"]->SetPosition(620, 900);
+	slotList["M"]->SetSkillIcon();
+
 	//SetActive(false);
 }
 
-void MenuInventory::Update(float dt)
+void QuickSlot::Update(float dt)
 {
-			
+
 }
 
-void MenuInventory::Draw(sf::RenderWindow& window)
+void QuickSlot::Draw(sf::RenderWindow& window)
 {
-	window.draw(panel);
 }
 
-void MenuInventory::AllSetActive(bool isActive)
+void QuickSlot::AllSetActive(bool isActive)
 {
 	for (auto table : slotList)
 	{
 		table.second->sprite.setColor(sf::Color::Color(255, 255, 255, 255));
 		table.second->SetActive(isActive);
 	}
-	
+
 	SetActive(isActive);
 }

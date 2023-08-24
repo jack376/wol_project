@@ -40,9 +40,6 @@
     <ClCompile Include="Framework\CommandInvoker.cpp" />
     <ClCompile Include="GameObjects\BreakableObj.cpp" />
     <ClCompile Include="GameObjects\Particle.cpp" />
-    <ClCompile Include="GameObjects\Raycaster\Beam.cpp" />
-    <ClCompile Include="GameObjects\Raycaster\Line.cpp" />
-    <ClCompile Include="SceneSkillEditor.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -63,6 +60,7 @@
     <ClCompile Include="DataTables\SkillTable.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="Slot.cpp" />
+    <ClCompile Include="QuickSlot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -188,9 +186,6 @@
     <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="GameObjects\Particle.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
-    <ClInclude Include="GameObjects\Raycaster\Line.h" />
-    <ClInclude Include="GameObjects\Raycaster\Beam.h" />
-    <ClInclude Include="SceneSkillEditor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imconfig-SFML.h" />
@@ -215,6 +210,7 @@
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="Slot.h" />
+    <ClInclude Include="QuickSlot.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

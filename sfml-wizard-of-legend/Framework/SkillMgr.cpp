@@ -480,9 +480,12 @@ void SkillMgr::SaveEquipedSkill()
 
 void SkillMgr::SwapSkill(SkillEvents sEvent, Skill* equipSkill)
 {
-	Skill* changeTemp = equipedSkillList[sEvent];
-	changeTemp->SetSkillEvent(equipSkill->GetSkillEvent());
+  	Skill* changeSlot = equipedSkillList[sEvent];
+	changeSlot->SetSkillEvent(equipSkill->GetSkillEvent());
 	equipSkill->SetSkillEvent(sEvent);
+
+	equipedSkillList[equipSkill->GetSkillEvent()] = equipSkill;
+	equipedSkillList[changeSlot->GetSkillEvent()] = changeSlot;
 }
 
 void SkillMgr::AddSkill(Skill* newSkill)

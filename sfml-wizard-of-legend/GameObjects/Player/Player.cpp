@@ -242,19 +242,7 @@ void Player::Update(float dt)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Left;
-
-		//ElementalSpell* elemental = spellPool.Get();
-		//elemental->SetPlayer(this);
-		//elemental->sortLayer = 21;
-		//elemental->SetSkillType(SkillTypes::Melee);
-		//elemental->SetTiles(wouldTiles);
-		//elemental->SetMonsterList(monsters);
-		//scene->AddGo(elemental);
-
-		//elemental->SetScene(scene);
-
-		//SKILL_MGR.UseSkill(sEvent);
-
+		SKILL_MGR.UseSkill(sEvent);
 		ChangeState(States::Attack);
 
 	}
@@ -263,26 +251,17 @@ void Player::Update(float dt)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Right;
-
 		SKILL_MGR.UseSkill(sEvent);
-		//ElementalSpell* elemental = spellPool.Get();
-		//elemental->SetScene(scene);
-		//elemental->SetPlayer(this);
-		//elemental->sortLayer = 21;
-		//elemental->SetSkillType(SkillTypes::Range);
-		//elemental->SetRangeType(RangeTypes::Curve);
-		//elemental->SetTiles(wouldTiles);
-		//elemental->SetMonsterList(monsters);
-		//scene->AddGo(elemental);
-
 		ChangeState(States::Attack);
 	}
 	
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide && !isFalling)
 	{
+		attackCount++;
 		sEvent = SkillEvents::Q;
 		SKILL_MGR.UseSkill(sEvent);
+		ChangeState(States::Attack);
 	}
 
 	// 대쉬 쿨타임 계산
@@ -298,8 +277,9 @@ void Player::Update(float dt)
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack && !isFalling)
 	{
 		sEvent = SkillEvents::Space;
+		isAttack = true;
+		SKILL_MGR.UseSkill(sEvent);
 		ChangeState(States::Dash);
-		//SKILL_MGR.UseSkill(sEvent);
 	}
 
 
@@ -464,6 +444,7 @@ void Player::DashUpdate(float dt)
 	// 타일 충돌 방지
 	if(currentTile->GetType() == TileType::Wall)
 	{
+		isAttack = false;
 		SetPosition(prevPos);
 		ChangeState(States::Slide);
 	}
@@ -480,7 +461,9 @@ void Player::DashUpdate(float dt)
 		isDash = false;
 		isRun = false;
 		isSlide = false;
+		isAttack = false;
 		isDashCool = true;
+
 		if (currentTile->GetType() == TileType::Cliff)
 		{
 			std::cout << "Cliff" << std::endl;

@@ -24,6 +24,7 @@
 #include "SkillMgr.h"
 #include "Slot.h"
 #include "MenuInventory.h"
+#include "QuickSlot.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -67,25 +68,25 @@ void SceneGame::Init()
 	//tempFireBall->SetRangeType(RangeTypes::Curve);
 
 
-	Skill* fireBall = (Skill*)AddGo(new Skill());
-	fireBall->SetSkillIconId("ExplodingFireball");
-	fireBall->SetSkillEvent(SkillEvents::Right);
-	fireBall->SetElementType(ElementTypes::Fire);
-	fireBall->SetSkillType(SkillTypes::Range);
-	fireBall->SetRangeType(RangeTypes::Curve);
+	//Skill* fireBall = (Skill*)AddGo(new Skill());
+	//fireBall->SetSkillIconId("ExplodingFireball");
+	//fireBall->SetSkillEvent(SkillEvents::Right);
+	//fireBall->SetElementType(ElementTypes::Fire);
+	//fireBall->SetSkillType(SkillTypes::Range);
+	//fireBall->SetRangeType(RangeTypes::Curve);
 
-	Skill* windSlash = (Skill*)AddGo(new Skill());
-	windSlash->SetSkillIconId("WindSlash");
-	windSlash->SetSkillEvent(SkillEvents::Left);
-	windSlash->SetElementType(ElementTypes::Wind);
-	windSlash->SetSkillType(SkillTypes::Melee);
-	windSlash->SetRangeType(RangeTypes::Straight);
+	//Skill* windSlash = (Skill*)AddGo(new Skill());
+	//windSlash->SetSkillIconId("WindSlash");
+	//windSlash->SetSkillEvent(SkillEvents::Left);
+	//windSlash->SetElementType(ElementTypes::Wind);
+	//windSlash->SetSkillType(SkillTypes::Melee);
+	//windSlash->SetRangeType(RangeTypes::Straight);
 
-	Skill* straightFireBall = (Skill*)AddGo(new Skill());
-	straightFireBall->SetSkillEvent(SkillEvents::Q);
-	straightFireBall->SetElementType(ElementTypes::Fire);
-	straightFireBall->SetSkillType(SkillTypes::Range);
-	straightFireBall->SetRangeType(RangeTypes::Straight);
+	//Skill* straightFireBall = (Skill*)AddGo(new Skill());
+	//straightFireBall->SetSkillEvent(SkillEvents::Q);
+	//straightFireBall->SetElementType(ElementTypes::Fire);
+	//straightFireBall->SetSkillType(SkillTypes::Range);
+	//straightFireBall->SetRangeType(RangeTypes::Straight);
 	// CSV파일 스킬 정보 저장후 입력
 
 
@@ -101,6 +102,7 @@ void SceneGame::Init()
 
 	//fireBall->GetSkillId();
 	menu = (MenuInventory*)AddGo(new MenuInventory());
+	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
 
 	//slot1 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
 	//slot1->SetPosition(500, 700);
@@ -122,9 +124,15 @@ void SceneGame::Init()
 
 	//tempWindSlash->SetTiles(&tilesWorld);
 	//tempFireBall->SetTiles(&tilesWorld);
-
+	//SetSkillIconId
 	//tempWindSlash->SetMonsterList(monsters);
 	//tempFireBall->SetMonsterList(monsters);
+	//SetMonsterList / SetTiles / 
+	// SetSkillEvent(
+	// SetElementType
+	// SetSkillType(S
+	// SetRangeType(R
+	
 
 	// Create Particle
 	CreateParticle(1000);
@@ -142,15 +150,24 @@ void SceneGame::Init()
 	// 스킬 임시 장착 / 스킬 구매하면 Tab메뉴에 생성하고
 	// 그 Tab메뉴에서 장착해야 Equip슬롯으로 간다
 	// 스킬 장착 이후에 스킬을 슬롯에 적용시켜야한다.
-	if (SKILL_MGR.GetEquipSkillList().empty())
+
+	for (auto skillTable : SKILL_MGR.GetExistSkillList())
 	{
-		for (int i = 0; i < (int)SkillIds::Count; i++)
-		{
-			Skill* skill = SKILL_MGR.SearchExistedSkill((SkillIds)i);
-			skill->SetSkillEvent((SkillEvents)i);
-			SKILL_MGR.EquipSkill(skill);
-		}
+		skillTable.second->SetPlayer(player);
+		skillTable.second->SetMonsterList(monsters);
+		skillTable.second->SetPlayer(player);
+		SKILL_MGR.EquipSkill(skillTable.second);
 	}
+
+	//for (int i = 0; i < SKILL_MGR.GetExistSkillList().size(); i++)
+	//{
+	//	Skill* skill = SKILL_MGR.SearchExistedSkill((SkillIds)i);
+	//	skill->SetSkillEvent((SkillEvents)i);
+	//	skill->SetPlayer(player);
+	//	skill->SetMonsterList(monsters);
+	//	skill->SetTiles(&tilesWorld);
+	//	SKILL_MGR.EquipSkill(skill);
+	//}
 	// 슬롯 작업
 }
 
@@ -206,6 +223,14 @@ void SceneGame::Update(float dt)
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
 	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tab))
+	{
+		menu->AllSetActive(!menu->GetActive());
+		Slot::selectedSlot = nullptr;
+		isMenuOn = true;
+	}
+
 }
 
 template<typename T>

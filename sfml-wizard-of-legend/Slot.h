@@ -7,7 +7,6 @@ class Skill;
 class Slot : public UIButton
 {
 protected:
-	static Slot* selectedSlot;
 
 	Skill* currentSkill;
 
@@ -21,7 +20,7 @@ protected:
 
 	SpriteGo skillEventIcon;
 
-	std::string skillIconId;
+	std::string skillIconId = "Disabled";
 	std::string skillEventIconId;
 
 	bool isUsed = false;
@@ -31,6 +30,8 @@ protected:
 
 
 public:
+	static Slot* selectedSlot;
+
 	Slot(const std::string& textureId = "", const std::string& n = "");
 	virtual ~Slot() override;
 
@@ -55,6 +56,7 @@ public:
 	void SetSkillIcon();
 
 	void SetSelectedSlotIcon();
+	void SetIsUsed(bool isUsed);
 	void FadeInOutSlotColor(float dt);
 
 	std::string GetSkillIconId() { return skillIconId; }
@@ -63,5 +65,7 @@ public:
 	void OnClickingEvnet();
 	void OnEnterEvent();
 	void OnExitEvent();
+
+	void ChangeSlot();
 
  };

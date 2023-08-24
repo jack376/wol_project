@@ -1,19 +1,17 @@
 #pragma once
 #include "GameObject.h"
-#include "Slot.h"
 
 class Slot;
 
-class MenuInventory : public GameObject
+class QuickSlot : public GameObject
 {
 protected:
-	sf::Sprite panel;
 	std::vector<std::string> slotKey;
 	std::map<std::string, Slot*>slotList;
 
 public:
-	MenuInventory(const std::string& n = "");
-	virtual ~MenuInventory() override;
+	QuickSlot(const std::string& n = "");
+	virtual ~QuickSlot() override;
 
 	virtual void SetPosition(const sf::Vector2f& p);
 	virtual void SetPosition(float x, float y);
@@ -28,7 +26,8 @@ public:
 
 	virtual void Update(float dt) override;
 	virtual void Draw(sf::RenderWindow& window) override;
-	
+
 	void AllSetActive(bool isActive);
+
 };
 
