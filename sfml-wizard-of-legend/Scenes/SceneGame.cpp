@@ -91,7 +91,7 @@ void SceneGame::Init()
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
-	monster->SetPosition(1024, 1024);
+	monster->SetPosition(512, 1024);
 	monsters.push_back(monster);
 
 	player->SetTiles(&tilesWorld);

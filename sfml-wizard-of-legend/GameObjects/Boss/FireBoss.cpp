@@ -6,6 +6,8 @@
 #include "SceneMgr.h"
 #include "Player.h"
 
+#define _CenterPos sf::Vector2f(1024, 1024);
+
 FireBoss::FireBoss(MonsterId id, const std::string& textureId, const std::string& n)
 	: Monster(id, textureId, n)
 {
@@ -83,7 +85,7 @@ void FireBoss::Update(float dt)
     Monster::Update(dt);
 
     SetLook(player->GetPosition());
-    raycaster.Rotation(Utils::Angle(look));
+    raycaster.Rotation(Utils::Angle(look)); //방향 확인만
 
     if (attackEffect.GetActive())
         attackEffect.Update(dt);      
@@ -139,18 +141,20 @@ void FireBoss::HandleAttackPattern(float dt)
 {
     switch ((FireBossAttackPattern)randomNums[patternCount])
     {
-    case FireBossAttackPattern::Dash:
-        Dash(dt);
-        break;
+
     case FireBossAttackPattern::Jump:
         Jump(dt);
-        break;
-    case FireBossAttackPattern::Kick:
-        Kick(dt);
         break;
     case FireBossAttackPattern::Fire:
         Fire(dt);
         break;
+    case FireBossAttackPattern::Kick:
+        Kick(dt);
+        break;
+    case FireBossAttackPattern::Dash:
+        Dash(dt);
+        break;
+
     default:
         std::cout << "HandleAttackState default" << std::endl;
         break;
@@ -209,14 +213,14 @@ void FireBoss::Attack(float dt)
             std::mt19937 gen(rd());
 
             // 가능한 숫자 범위와 벡터를 초기화
-            int minValue = 3;
-            int maxValue = 3;
+            int minValue = 0;
+            int maxValue = 1;
             randomNums.clear();
             for (int i = minValue; i <= maxValue; ++i)
                 randomNums.push_back(i);
 
             // 벡터를 섞음
-            std::shuffle(randomNums.begin(), randomNums.end(), gen);
+            //std::shuffle(randomNums.begin(), randomNums.end(), gen);
         }
         //std::cout << patternCount << "번째 숫자: " << randomNums[patternCount] << std::endl;
 
@@ -231,7 +235,7 @@ void FireBoss::Attack(float dt)
             stateStart = false;
             return;
         }
-        else if (patternCount > 0)
+        else if (patternCount > 1)
         {
             SetState(MonsterState::Idle());
             patternCount == 0;
@@ -255,14 +259,42 @@ void FireBoss::Dash(float dt)
 
 void FireBoss::Jump(float dt)
 {
-    if (animation.GetCurrentClipId() != "FireBossHeel")
+    if (!patternStart)
     {
         animation.Play("FireBossHeel");
-        jumpPos = player->GetPosition();
+        jumpUpPos = position;
+        jumpDownPos = player->GetPosition();
+        patternStart = true;
     }
 
+    if (!isDelay)
+    {
+        jumpTimer += dt;
+        sf::Vector2f supVector = Utils::Lerp(jumpUpPos, jumpDownPos, jumpTimer / jumpDuration);
+        float t = std::sin((jumpTimer / jumpDuration) * 3.14159);
+        float supY = Utils::Lerp(0, 200, t);
 
+        SetPosition(supVector.x, supVector.y - supY);
+    }
 
+    if (jumpTimer > jumpDuration)
+    {
+        patternDelayTimer += dt;
+        isDelay = true;
+        if (patternDelayTimer > patternDelayRate)
+        {
+            if (patternCount < 1)
+                patternCount++;
+            else
+                patternCount = 0;
+
+            patternDelayTimer = 0.f;
+            jumpTimer = 0.f;
+            patternStart = false;
+            isDelay = false;
+        }  
+    }
+        
 }
 
 void FireBoss::Kick(float dt)
@@ -271,9 +303,7 @@ void FireBoss::Kick(float dt)
 
 void FireBoss::Fire(float dt)
 {
-    if (animation.GetCurrentClipId() != "FireBossPointRight" && 
-        animation.GetCurrentClipId() != "FireBossPointDown" &&
-        animation.GetCurrentClipId() != "FireBossPointUp")
+    if (!patternStart)
     {
         if (abs(look.x) > abs(look.y))
             animation.Play("FireBossPointRight");
@@ -283,33 +313,42 @@ void FireBoss::Fire(float dt)
             animation.Play("FireBossPointDown");
         SetLook(player->GetPosition());
         fireballPoss = CalculateProjectilePositions(player->GetPosition(), position, 150, 10, 180);
+        patternStart = true;
     }
 
-    fireballTimer += dt;
-    if (animation.IsAnimEndFrame() && fireballTimer > fireballRate && fireCount < 10)
+    if (!isDelay)
     {
-        AnimationProjectile* fireball = projectilePool.Get();
-        sf::Vector2f dir = Utils::Normalize(player->GetPosition() - position);
-        fireball->SetPosition(position);
-        fireball->SetRotation(Utils::Angle(dir));
-        fireball->Play("Fireball"); 
-        fireball->Fire(dir, 1000, stat.damage);
-        SCENE_MGR.GetCurrScene()->AddGo(fireball);
-        fireCount++;
-        fireballTimer = 0;
-    }  
+        fireballTimer += dt;
+        if (animation.IsAnimEndFrame() && fireballTimer > fireballRate && fireCount < 10)
+        {
+            AnimationProjectile* fireball = projectilePool.Get();
+            sf::Vector2f dir = Utils::Normalize(player->GetPosition() - position);
+            fireball->SetPosition(position);
+            fireball->SetRotation(Utils::Angle(dir));
+            fireball->Play("Fireball");
+            fireball->Fire(dir, 1000, stat.damage / 2);
+            SCENE_MGR.GetCurrScene()->AddGo(fireball);
+            fireCount++;
+            fireballTimer = 0;
+        }
+    }
+    
     else if (fireCount == 10)
     {
-        fireCount = 0;
-        fireballTimer = 0.f;
-
-        /*if (patternCount < 2)
-            patternCount++;
-        else
+        patternDelayTimer += dt;
+        isDelay = true;
+        if (patternDelayTimer > patternDelayRate)
         {
-            SetState(MonsterState::Idle);
-            patternCount = 0;
-        }*/
+            if (patternCount < 1)
+                patternCount++;
+            else
+                patternCount = 0;
+            fireCount = 0;
+            fireballTimer = 0.f;
+            patternDelayTimer = 0.f;
+            patternStart = false; 
+            isDelay = false;
+        }
     }
 }
 

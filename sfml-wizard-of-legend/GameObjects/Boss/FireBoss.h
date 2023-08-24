@@ -6,9 +6,9 @@
 enum class FireBossAttackPattern
 {
 	Jump,
+	Fire,
 	Dash,
 	Kick,
-	Fire,
 };
 class FireBoss :
     public Monster
@@ -17,12 +17,19 @@ protected:
 	std::vector<int> randomNums;
 	std::vector<sf::Vector2f> fireballPoss;
 
-	sf::Vector2f jumpPos;
+	sf::Vector2f jumpDownPos;
+	sf::Vector2f jumpUpPos;
 	int patternCount = 0;
 	int fireCount = 0;
 	float fireballRate = 0.5f;
 	float fireballTimer = 0.5f;
+	float jumpDuration = 0.5f;
+	float jumpTimer = 0.f;
+	float patternDelayRate = 2.f;
+	float patternDelayTimer = 0.f;
 	bool stateStart = false;
+	bool patternStart = false;
+	bool isDelay = false;
 
 	FireBossAttackPattern currentAttackPattern;
 	ObjectPool<AnimationProjectile> projectilePool;
