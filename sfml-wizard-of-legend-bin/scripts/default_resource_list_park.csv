@@ -73,3 +73,6 @@
 0,graphics/Texture2D/Fireball.png
 3,animations/FireBoss/FireWings.csv
 3,animations/FireBoss/Fireball.csv
+0,graphics/Texture2D/MeteorStrike.png
+3,animations/FireBoss/MeteorStrike.csv
+3,animations/FireBoss/MeteorStrikeSonicBoom.csv

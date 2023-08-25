@@ -170,6 +170,7 @@ void Projectile::CalculatorCurrentTile()
 {
 	int rowIndex = position.x / _TileSize;
 	int columnIndex = position.y / _TileSize;
-
+	if (rowIndex < 0 || rowIndex >= worldTiles->size() || columnIndex < 0 || columnIndex >= worldTiles[0].size())
+		currentTile = (*worldTiles)[0][0];
 	currentTile = (*worldTiles)[rowIndex][columnIndex];
 }

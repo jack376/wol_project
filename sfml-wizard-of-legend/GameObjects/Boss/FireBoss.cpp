@@ -5,6 +5,7 @@
 #include "MonsterTable.h"
 #include "SceneMgr.h"
 #include "Player.h"
+#include "Particle.h"
 
 #define _CenterPos sf::Vector2f(1024, 1024);
 
@@ -45,15 +46,15 @@ void FireBoss::Init()
 
     attackEffect.AddClip("animations/FireBoss/FireWings.csv");
     attackEffect.SetOrigin(Origins::BC);
-    
     ObjectPool<AnimationProjectile>* ptr = &projectilePool;
     projectilePool.OnCreate = [ptr, this](AnimationProjectile* skill)
     {
         skill->AddClip("animations/FireBoss/Fireball.csv");
-        //skill->textureId = "";
+        skill->AddClip("animations/FireBoss/MeteorStrike.csv");
         skill->pool = ptr;
         skill->SetPlayer(player);
         skill->SetTiles(tilesWorld);
+        skill->SetParticlePool(particlePool);
     };
     projectilePool.Init();
 
@@ -148,6 +149,9 @@ void FireBoss::HandleAttackPattern(float dt)
     case FireBossAttackPattern::Fire:
         Fire(dt);
         break;
+    case FireBossAttackPattern::Meteor:
+        Meteor(dt);
+        break;
     case FireBossAttackPattern::Kick:
         Kick(dt);
         break;
@@ -211,10 +215,10 @@ void FireBoss::Attack(float dt)
         {
             std::random_device rd;
             std::mt19937 gen(rd());
-
+            
             // 가능한 숫자 범위와 벡터를 초기화
             int minValue = 0;
-            int maxValue = 1;
+            int maxValue = 2;
             randomNums.clear();
             for (int i = minValue; i <= maxValue; ++i)
                 randomNums.push_back(i);
@@ -235,10 +239,10 @@ void FireBoss::Attack(float dt)
             stateStart = false;
             return;
         }
-        else if (patternCount > 1)
+        else if (patternCount > 2)
         {
             SetState(MonsterState::Idle());
-            patternCount == 0;
+            patternCount = 0;
             stateStart = false;
         }
     }
@@ -279,22 +283,38 @@ void FireBoss::Jump(float dt)
 
     if (jumpTimer > jumpDuration)
     {
+        if (patternDelayTimer < 0.2f)
+            SetParticle(position, 10);
+
+        if (!isAttacked && player->IsAlive())
+        {
+            if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+            {
+                attackTimer = 0.f;
+                player->SetHp(-stat.damage);
+                isAttacked = true;
+            }
+        }
+
         patternDelayTimer += dt;
         isDelay = true;
         if (patternDelayTimer > patternDelayRate)
         {
-            if (patternCount < 1)
+            if (patternCount < 2)
                 patternCount++;
             else
+            {
+                SetState(MonsterState::Idle());
+                stateStart = false;
                 patternCount = 0;
-
+            }
             patternDelayTimer = 0.f;
             jumpTimer = 0.f;
             patternStart = false;
             isDelay = false;
+            isAttacked = false;
         }  
-    }
-        
+    }  
 }
 
 void FireBoss::Kick(float dt)
@@ -312,42 +332,139 @@ void FireBoss::Fire(float dt)
         else
             animation.Play("FireBossPointDown");
         SetLook(player->GetPosition());
-        fireballPoss = CalculateProjectilePositions(player->GetPosition(), position, 150, 10, 180);
+        fireballPoss = CalculateProjectilePositions(player->GetPosition(), position, 150, 5, 180);
         patternStart = true;
     }
 
     if (!isDelay)
     {
-        fireballTimer += dt;
-        if (animation.IsAnimEndFrame() && fireballTimer > fireballRate && fireCount < 10)
+        if (fireCount != 5)
         {
-            AnimationProjectile* fireball = projectilePool.Get();
-            sf::Vector2f dir = Utils::Normalize(player->GetPosition() - position);
-            fireball->SetPosition(position);
-            fireball->SetRotation(Utils::Angle(dir));
-            fireball->Play("Fireball");
-            fireball->Fire(dir, 1000, stat.damage / 2);
-            SCENE_MGR.GetCurrScene()->AddGo(fireball);
-            fireCount++;
-            fireballTimer = 0;
+            for (auto& pos : fireballPoss)
+            {
+                AnimationProjectile* fireball = projectilePool.Get();
+                sf::Vector2f dir = Utils::Normalize(player->GetPosition() - position);
+                fireball->SetOrigin(Origins::MC);
+                fireball->SetPosition(fireballPoss[fireCount]);
+                fireball->SetRotation(look);
+                fireball->Play("Fireball");
+                fireballs.push_back(fireball);
+                SCENE_MGR.GetCurrScene()->AddGo(fireball);
+                fireCount++;
+            }
+        }
+
+        fireballTimer += dt;
+
+        if (fireCount == 5)
+        {
+            if (fireballTimer > fireballRate)
+            {
+                fireballs[shotCount]->Fire(Utils::Normalize(player->GetPosition() - fireballPoss[shotCount]), 1000, stat.damage / 2);
+                shotCount++;
+                fireballTimer = 0;
+            }    
         }
     }
-    
-    else if (fireCount == 10)
+
+    if (fireCount == 5 && shotCount == 5)
     {
         patternDelayTimer += dt;
         isDelay = true;
         if (patternDelayTimer > patternDelayRate)
         {
-            if (patternCount < 1)
+            if (patternCount < 2)
                 patternCount++;
             else
+            {
+                SetState(MonsterState::Idle());
+                stateStart = false;
                 patternCount = 0;
+            }
             fireCount = 0;
+            shotCount = 0;
             fireballTimer = 0.f;
             patternDelayTimer = 0.f;
             patternStart = false; 
             isDelay = false;
+            fireballs.clear();
+        }
+    }
+}
+
+void FireBoss::Meteor(float dt)
+{
+    if (!patternStart)
+    {
+        animation.Play("FireBossHeel");
+        jumpUpPos = position;
+        patternStart = true;
+    }
+
+    if (position != sf::Vector2f(1024, 980))
+    {
+        jumpTimer += dt;
+        sf::Vector2f supVector = Utils::Lerp(jumpUpPos, {1024, 980}, jumpTimer / meteoJumpDuration);
+        float t = std::sin((jumpTimer / meteoJumpDuration) * 3.14159);
+        float supY = Utils::Lerp(0, 200, t);
+        SetPosition(supVector.x, supVector.y - supY);
+    }
+    if (jumpTimer > meteoJumpDuration)
+    {
+        SetParticle(position, 50);
+
+        if (!isAttacked && player->IsAlive())
+        {
+            if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
+            {
+                attackTimer = 0.f;
+                player->SetHp(-stat.damage);
+                isAttacked = true;
+            }
+        }
+
+        if (!isDelay)
+        {
+            fireballTimer += dt;
+            if (animation.IsAnimEndFrame() && fireballTimer > fireballRate && fireCount < 10)
+            {
+                AnimationProjectile* Meteor = projectilePool.Get();
+
+                sf::Vector2f createPos = player->GetPosition() - sf::Vector2f(400, 700);
+                sf::Vector2f dir = Utils::Normalize(player->GetPosition() - createPos);
+
+                Meteor->SetPosition(createPos);
+                Meteor->SetRotation(Utils::Angle(dir) - 90);
+                Meteor->Play("MeteorStrike");
+                Meteor->MeteorFire(createPos, player->GetPosition(), stat.damage);
+
+                SCENE_MGR.GetCurrScene()->AddGo(Meteor);
+                fireCount++;
+                fireballTimer = 0;
+            }
+        }
+        if (fireCount == 10)
+        {
+            patternDelayTimer += dt;
+            isDelay = true;
+            if (patternDelayTimer > patternDelayRate)
+            {
+                if (patternCount < 2)
+                    patternCount++;
+                else
+                {
+                    SetState(MonsterState::Idle());
+                    stateStart = false;
+                    patternCount = 0; 
+                }    
+                fireCount = 0;
+                fireballTimer = 0.f;
+                patternDelayTimer = 0.f;
+                jumpTimer = 0.f;
+                patternStart = false;
+                isDelay = false;
+                isAttacked = false;
+            }
         }
     }
 }

@@ -85,13 +85,13 @@ void SceneGame::Init()
 	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
 
 
-	Monster* go = CreateMonster(MonsterId::FireBoss);
-	monster = go;
+	monster = CreateMonster(MonsterId::FireBoss);
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
 	monster->SetPosition(512, 1024);
+	monster->particlePool = &this->particlePool;
 	monsters.push_back(monster);
 
 	player->SetTiles(&tilesWorld);
