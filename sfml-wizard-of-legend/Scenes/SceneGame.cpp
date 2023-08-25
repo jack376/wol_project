@@ -24,6 +24,8 @@
 #include "Skill.h"
 #include "SkillMgr.h"
 #include "Slot.h"
+#include "MenuInventory.h"
+#include "QuickSlot.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -32,12 +34,9 @@ SceneGame::SceneGame() : Scene(SceneId::Game)
 void SceneGame::Init()
 {
 	Release();
+
 	auto size = FRAMEWORK.GetWindowSize();
 
-	slot1 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
-	slot1->SetPosition(500, 700);
-	slot2 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
-	slot2->SetPosition(700, 700);
 
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(700, 700);
@@ -54,45 +53,33 @@ void SceneGame::Init()
 	TilesToIntMap();
 	CalculatorNongroundTiles();
 
-	//tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
-	//tempWindSlash->SetScene(this);
-	//tempWindSlash->SetPlayer(player);
-	//tempWindSlash->sortLayer = 21;
-	//tempWindSlash->SetSkillType(SkillTypes::Melee);
-
-	//tempFireBall = (ElementalSpell*)AddGo(new ElementalSpell());
-	//tempFireBall->SetScene(this);
-	//tempFireBall->SetPlayer(player);
-	//tempFireBall->sortLayer = 21;
-	//tempFireBall->SetSkillType(SkillTypes::Range);
-	//tempFireBall->SetRangeType(RangeTypes::Curve);
-
-	Skill* fireBall = (Skill*)AddGo(new Skill());
-	fireBall->SetSkillEvent(SkillEvents::Right);
-	fireBall->SetElementType(ElementTypes::Fire);
-	fireBall->SetSkillType(SkillTypes::Range);
-	fireBall->SetRangeType(RangeTypes::Curve);
-
-	Skill* windSlash = (Skill*)AddGo(new Skill());
-	windSlash->SetSkillEvent(SkillEvents::Left);
-	windSlash->SetElementType(ElementTypes::Wind);
-	windSlash->SetSkillType(SkillTypes::Melee);
-	windSlash->SetRangeType(RangeTypes::Straight);
-
-	SKILL_MGR.EquipSkill(windSlash);
-	SKILL_MGR.EquipSkill(fireBall);
-
-	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
+	
+	menu = (MenuInventory*)AddGo(new MenuInventory());
+	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
+	menu->SetQuickSlot(quickSlot);
 
 
-	Monster* go = CreateMonster(MonsterId::Archer);
-	monster = go;
+	player->SetTiles(&tilesWorld);
+	player->SetMonsterList(monsters);
+
+	
+	Monster* monster = (Monster*)AddGo(CreateMonster(MonsterId::Archer));
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
-	monster->SetPosition(1024, 1024);
+	monster->SetPosition(500, 500);
 	monsters.push_back(monster);
+
+	monster = (Monster*)AddGo(CreateMonster(MonsterId::Ghoul));
+	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
+	monster->SetIntMap(&intMap);
+	monster->SetNonGroundTiles(&nongroundTiles);
+	monster->SetPosition(700, 500);
+	monsters.push_back(monster);
+
+
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
@@ -101,6 +88,8 @@ void SceneGame::Init()
 	//tempFireBall->SetTiles(&tilesWorld);
 
 	//tempWindSlash->SetMonsterList(monsters);
+	//tempFireBall->SetMonsterList(monsters);
+
 	//tempFireBall->SetMonsterList(monsters);
 
 	// Create Particle
@@ -115,6 +104,29 @@ void SceneGame::Init()
 	SKILL_MGR.SetMonsterList(monsters);
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
+
+	// 스킬 임시 장착 / 스킬 구매하면 Tab메뉴에 생성하고
+	// 그 Tab메뉴에서 장착해야 Equip슬롯으로 간다
+	// 스킬 장착 이후에 스킬을 슬롯에 적용시켜야한다.
+
+	for (auto skillTable : SKILL_MGR.GetExistSkillList())
+	{
+		skillTable.second->SetPlayer(player);
+		skillTable.second->SetMonsterList(monsters);
+		skillTable.second->SetPlayer(player);
+		SKILL_MGR.EquipSkill(skillTable.second);
+	}
+
+	//for (int i = 0; i < SKILL_MGR.GetExistSkillList().size(); i++)
+	//{
+	//	Skill* skill = SKILL_MGR.SearchExistedSkill((SkillIds)i);
+	//	skill->SetSkillEvent((SkillEvents)i);
+	//	skill->SetPlayer(player);
+	//	skill->SetMonsterList(monsters);
+	//	skill->SetTiles(&tilesWorld);
+	//	SKILL_MGR.EquipSkill(skill);
+	//}
+	// 슬롯 작업
 }
 
 void SceneGame::Release()
@@ -142,6 +154,7 @@ void SceneGame::Enter()
 
 void SceneGame::Exit()
 {
+	SKILL_MGR.SaveEquipedSkill();
 	Scene::Exit();
 }
 
@@ -168,6 +181,21 @@ void SceneGame::Update(float dt)
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
 	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tab))
+	{
+		menu->AllSetActive(!menu->GetActive());
+		Slot::selectedSlot = nullptr;
+		isMenuOn = menu->GetActive();
+		std::cout << isMenuOn << std::endl;
+	}
+
+	if (!isMenuOn)
+	{
+		menu->AllSetActive(isMenuOn);
+	}
+
+
 }
 
 template<typename T>

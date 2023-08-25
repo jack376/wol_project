@@ -56,7 +56,14 @@ public:
 	void AddSkill(Skill* newSkill);
 	void BuySkill(Skill* newSkill);
 	void EquipSkill(Skill* newSkill);
-	Skill* SearchSkill(SkillIds id);
+
+	std::unordered_map<int, Skill*>& GetExistSkillList() { return existSkillList; }
+	std::unordered_map<int, Skill*>& GetBuyedSkillList() { return buyedSkillList; }
+	std::unordered_map<SkillEvents, Skill*>& GetEquipSkillList() { return equipedSkillList; }
+
+	Skill* SearchExistedSkill(SkillIds id);
+	Skill* SearchBuyedSkill(SkillIds id);
+	Skill* SearchEquipedSkill(SkillIds id);
 	Skill* SearchSkill(SkillEvents sEvent);
 
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }

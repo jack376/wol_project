@@ -18,11 +18,16 @@ class Monster;
 class CustomEffect;
 enum class MonsterId;
 class Slot;
+class MenuInventory;
+class QuickSlot;
 
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
+
+	MenuInventory* menu;
+	QuickSlot* quickSlot;
 	Slot* slot1;
 	Slot* slot2;
 
@@ -38,6 +43,8 @@ protected:
 
 	Monster* monster;
 	std::list<Monster*> monsters;
+
+	bool isMenuOn = false;
 
 	bool isCol = false;
 
@@ -74,5 +81,8 @@ public:
 	void DestroyBreakableObj(BreakableObj* obj);
 	void TilesToIntMap();
 	void CalculatorNongroundTiles();
+
+	bool GetIsMenuOn() { return isMenuOn; }
+	void SetIsMenuOn(bool isOn) { isMenuOn = isOn; }
 };
 

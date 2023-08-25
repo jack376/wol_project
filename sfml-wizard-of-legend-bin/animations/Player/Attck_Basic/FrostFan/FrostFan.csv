@@ -1,0 +1,8 @@
+ID,FPS,LOOPTYPE,,
+FrostFan,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/Attck_Basic/FrostFan/FrostFan.png,104,114,8,24
+graphics/Player/Attck_Basic/FrostFan/FrostFan.png,94,114,8,24
+graphics/Player/Attck_Basic/FrostFan/FrostFan.png,72,104,8,24
+graphics/Player/Attck_Basic/FrostFan/FrostFan.png,115,105,8,24

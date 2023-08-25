@@ -1,3 +1,12 @@
-Id,SkillNames,"ElementTypes / -1: None / 0: Fire / 1: Water / 2: Thunder / 3: Earth / 4: Wind /","SkillTypes / -1: None / 0: Melee / 1: Range / 2: Petrol /","RangeTypes / -1: None / 0: Straight / 1: Curve /","EventTypes / -1: None / 0: Left / 1: Right / 2: Space / 3: Q /","PlayerActions / -1: None / 0: Hand / 1: Kick / 2: Jump / 3: Slam / 4: Focus / 5: JumpKick / 6: JumpSlam /",Damages,ComboDamages,ComboMaxCounts,ComboDurations,MaxSkillChages,ShotCounts,Speeds,Ranges,ExplosionRanges,Amplitudes,Frequencys,DelayDurations,DamageDelays,CoolTimes,RotateSpeeds,IsPenetratings,CanMoveDuringSkills
-1,WindSlash,4,0,-1,0,2,10,2,1,0.600000024,1,1,100,500,400,8,1.20000005,1,0,0,30,1,0
-0,FireBall,4,0,-1,0,2,10,2,1,0.600000024,1,1,100,500,400,8,1.20000005,1,0,0,30,1,0
+Id,SkillNames,ElementTypes / -1: None / 0: Fire / 1: Water / 2: Thunder / 3: Earth / 4: Wind /,SkillTypes / -1: None / 0: Melee / 1: Range / 2: Petrol /,RangeTypes / -1: None / 0: Straight / 1: Curve /,EventTypes / -1: None / 0: Left / 1: Right / 2: Space / 3: Q /,PlayerActions / -1: None / 0: Hand / 1: Kick / 2: Jump / 3: Slam / 4: Focus / 5: JumpKick / 6: JumpSlam /,Damages,ComboDamages,ComboMaxCounts,ComboDurations,MaxSkillChages,ShotCounts,Speeds,Ranges,ExplosionRanges,Amplitudes,Frequencys,DelayDurations,DamageDelays,CoolTimes,SpreadAngles,IsPenetratings,CanMoveDuringSkills
+1,WindSlash,4,0,-1,0,0,10,2,3,0.600000024,0,0,0,0,400,0,0,0.6,0,0,0,1,0
+0,ExplodingFireball,0,1,1,1,0,50,0,0,0,1,1,12,500,400,8,1.2,0.6,0,5,0,0,0
+2,DragonArc,0,1,1,-1,0,8,0,0,0,8,1,12,500,0,8,1.2,0.6,0,0.6,0,1,0
+3,EarthKnuckles,3,0,-1,-1,0,16,2,2,0.6,0,0,0,0,0,0,0,0.8,0,0,0,1,1
+4,FlameCleaver,0,1,0,-1,0,16,0,0,0,2,1,400,500,0,0,0,0.6,0.4,4,0,1,0
+5,FlameStrike,0,0,-1,-1,0,10,2,3,0.6,0,0,0,0,0,0,0,0.6,0,0,0,1,0
+6,FrostFan,1,1,0,2,0,25,0,0,0,1,5,700,500,0,0,0,0.6,0,5,60,0,0
+7,GustVolley,4,1,0,3,4,12,0,0,0,1,6,800,500,0,0,0,0.6,0,5,60,1,0
+8,IceDagger,1,0,-1,4,0,6,2,4,0.6,0,0,500,500,0,0,0,0.6,0,0,0,1,0
+9,StoneShot,3,1,0,-1,5,12,2,3,0.6,0,1,400,500,0,0,0,0.6,0,0,0,1,0
+10,VoltDisc,2,1,0,5,0,9,0,0,0.6,0,1,400,500,0,0,0,0.6,0,0,0,1,0

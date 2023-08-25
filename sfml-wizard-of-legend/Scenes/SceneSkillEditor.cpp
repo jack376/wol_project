@@ -84,8 +84,8 @@ void SceneSkillEditor::Init()
 	coolTime = CreateUI("CoolTime", uiStandardPosX, uiStandardPosY + offsetY * 19, nameSize);
 	coolTimeValue = CreateInputField("0", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 19, valueSize);
 	
-	rotateSpeed = CreateUI("RotateSpeed", uiStandardPosX, uiStandardPosY + offsetY * 20, nameSize);
-	rotateSpeedValue = CreateInputField("30", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 20, valueSize);
+	spreadAngle = CreateUI("SpreadAngle", uiStandardPosX, uiStandardPosY + offsetY * 20, nameSize);
+	spreadAngleValue = CreateInputField("30", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 20, valueSize);
 
 	isPenetrating = CreateUI("IsPenetrating", uiStandardPosX, uiStandardPosY + offsetY * 21, nameSize);
 	isPenetratingValue = CreateInputField("True", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 21, valueSize);
@@ -110,7 +110,7 @@ void SceneSkillEditor::Init()
 		go->Init();
 	}
 	SKILL_MGR.SetEditorPlayer(player);
-	SKILL_MGR.Init();
+	//SKILL_MGR.Init();
 
 }
 
@@ -163,7 +163,7 @@ void SceneSkillEditor::Save()
 	SkillInfo skillInfo;
 
 	spellInfo.skillName = skillNameValue->text.getString();
-
+	skill->SetSkillIconId(skillNameValue->text.getString());
 	skill->SetElementType((ElementTypes)elemetTypeInt);
 	skill->SetSkillType((SkillTypes)skillTypeInt);
 	skill->SetRangeType((RangeTypes)rangeTypeInt);
@@ -201,7 +201,7 @@ void SceneSkillEditor::Save()
 	spellInfo.amplitude = std::stof(amplitudeStr);
 
 	std::string frquencyStr = frequencyValue->text.getString();
-	spellInfo.frquency = std::stof(frquencyStr);
+	spellInfo.frequency = std::stof(frquencyStr);
 
 	std::string delayDurationStr = delayDurationValue->text.getString();
 	spellInfo.delayDuration = std::stof(delayDurationStr);
@@ -212,8 +212,8 @@ void SceneSkillEditor::Save()
 	std::string coolTimeStr = coolTimeValue->text.getString();
 	spellInfo.coolTime = std::stof(coolTimeStr);
 
-	std::string rotateSpeedStr = rotateSpeedValue->text.getString();
-	spellInfo.rotateSpeed = std::stof(rotateSpeedStr);
+	std::string spreadAngleStr = spreadAngleValue->text.getString();
+	spellInfo.spreadAngle = std::stof(spreadAngleStr);
 
 	// boolÇü 
 	spellInfo.isPenetrating = (bool)isPenetratingInt;
@@ -274,7 +274,7 @@ void SceneSkillEditor::SaveCSV(std::vector<SkillInfo>& info)
 	doc.SetColumnName(18, "DelayDurations");
 	doc.SetColumnName(19, "DamageDelays");
 	doc.SetColumnName(20, "CoolTimes");
-	doc.SetColumnName(21, "RotateSpeeds");
+	doc.SetColumnName(21, "SpreadAngles");
 
 	doc.SetColumnName(22, "IsPenetratings");
 	doc.SetColumnName(23, "CanMoveDuringSkills");
@@ -328,11 +328,11 @@ void SceneSkillEditor::SaveCSV(std::vector<SkillInfo>& info)
 		ranges.push_back(skillInfo.spellinfo.range);
 		explosionRanges.push_back(skillInfo.spellinfo.explosionRange);
 		amplitudes.push_back(skillInfo.spellinfo.amplitude);
-		frequencys.push_back(skillInfo.spellinfo.frquency);
+		frequencys.push_back(skillInfo.spellinfo.frequency);
 		delayDurations.push_back(skillInfo.spellinfo.delayDuration);
 		damageDelays.push_back(skillInfo.spellinfo.damageDelay);
 		coolTimes.push_back(skillInfo.spellinfo.coolTime);
-		rotateSpeeds.push_back(skillInfo.spellinfo.rotateSpeed);
+		rotateSpeeds.push_back(skillInfo.spellinfo.spreadAngle);
 
 		isPenetratings.push_back(skillInfo.spellinfo.isPenetrating);
 		canMoveDuringSkills.push_back(skillInfo.spellinfo.canMoveDuringSkill);
@@ -374,7 +374,7 @@ void SceneSkillEditor::Apply()
 	std::cout << "Button Apply" << std::endl;
 	ConvertEnumToInt();
 	ConvertBoolToInt();
-	//ConvertNameToId();
+	ConvertNameToId();
 	Skill* skill = new Skill();
 	SpellInfo spellInfo;
 	SkillInfo skillInfo;
@@ -418,7 +418,7 @@ void SceneSkillEditor::Apply()
 	spellInfo.amplitude = std::stof(amplitudeStr);
 
 	std::string frquencyStr = frequencyValue->text.getString();
-	spellInfo.frquency = std::stof(frquencyStr);
+	spellInfo.frequency = std::stof(frquencyStr);
 
 	std::string delayDurationStr = delayDurationValue->text.getString();
 	spellInfo.delayDuration = std::stof(delayDurationStr);
@@ -429,8 +429,8 @@ void SceneSkillEditor::Apply()
 	std::string coolTimeStr = coolTimeValue->text.getString();
 	spellInfo.coolTime = std::stof(coolTimeStr);
 
-	std::string rotateSpeedStr = rotateSpeedValue->text.getString();
-	spellInfo.rotateSpeed = std::stof(rotateSpeedStr);
+	std::string rotateSpeedStr = spreadAngleValue->text.getString();
+	spellInfo.spreadAngle = std::stof(rotateSpeedStr);
 
 	// boolÇü 
 	spellInfo.isPenetrating = (bool)isPenetratingInt;
@@ -442,11 +442,7 @@ void SceneSkillEditor::Apply()
 	skillInfo.rangeType = (RangeTypes)rangeTypeInt;
 	skillInfo.evnetType = (SkillEvents)eventTypeInt;
 	skillInfo.playerAction = (PlayerActions)playerActionInt;
-	//skill->SetElementType((ElementTypes)elemetTypeInt);
-	//skill->SetSkillType((SkillTypes)skillTypeInt);
-	//skill->SetRangeType((RangeTypes)rangeTypeInt);
-	//skill->SetSkillEvent((SkillEvents)eventTypeInt);
-	//skill->SetPlayerAction((PlayerActions)playerActionInt);
+	skillInfo.spellinfo = spellInfo;
 	 
 	 
 	 
@@ -553,6 +549,14 @@ void SceneSkillEditor::ConvertEnumToInt()
 		{
 			eventTypeInt = 3;
 		}
+		else if (eventTypeValue->text.getString() == "E")
+		{
+			eventTypeInt = 4;
+		}
+		else if (eventTypeValue->text.getString() == "R")
+		{
+			eventTypeInt = 5;
+		}
 		else
 		{
 			eventTypeInt = -1;
@@ -580,13 +584,17 @@ void SceneSkillEditor::ConvertEnumToInt()
 		{
 			playerActionInt = 4;
 		}
-		else if (playerActionValue->text.getString() == "JumpKick")
+		else if (playerActionValue->text.getString() == "HandKick")
 		{
 			playerActionInt = 5;
 		}
-		else if (playerActionValue->text.getString() == "JumpSlam")
+		else if (playerActionValue->text.getString() == "JumpKick")
 		{
 			playerActionInt = 6;
+		}
+		else if (playerActionValue->text.getString() == "JumpSlam")
+		{
+			playerActionInt = 7;
 		}
 		else
 		{
@@ -631,7 +639,7 @@ void SceneSkillEditor::ConvertBoolToInt()
 
 void SceneSkillEditor::ConvertNameToId()
 {
-	if (skillNameValue->text.getString() == "FireBall")
+	if (skillNameValue->text.getString() == "ExplodingFireball")
 	{
 		skillId = 0;
 	}
@@ -639,10 +647,42 @@ void SceneSkillEditor::ConvertNameToId()
 	{
 		skillId = 1;
 	}
-	//else if (skillNameValue->text.getString() == "~!~!")
-	//{
-	//	skillId = 2;
-	//}
+	else if (skillNameValue->text.getString() == "DragonArc")
+	{
+		skillId = 2;
+	}
+	else if (skillNameValue->text.getString() == "EarthKnuckles")
+	{
+		skillId = 3;
+	}
+	else if (skillNameValue->text.getString() == "FlameCleaver")
+	{
+		skillId = 4;
+	}
+	else if (skillNameValue->text.getString() == "FlameStrike")
+	{
+		skillId = 5;
+	}
+	else if (skillNameValue->text.getString() == "FrostFan")
+	{
+		skillId = 6;
+	}
+	else if (skillNameValue->text.getString() == "GustVolley")
+	{
+		skillId = 7;
+	}
+	else if (skillNameValue->text.getString() == "IceDagger")
+	{
+		skillId = 8;
+	}
+	else if (skillNameValue->text.getString() == "StoneShot")
+	{
+		skillId = 9;
+	}	
+	else if (skillNameValue->text.getString() == "VoltDisc")
+	{
+		skillId = 10;
+	}
 	else
 	{
 		skillId = -1;

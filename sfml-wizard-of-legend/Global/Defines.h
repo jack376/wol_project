@@ -15,19 +15,31 @@ enum class SkillDatas
 enum class SkillIds
 {
 	None = -1,
-	FireBall,
+	ExplodingFireball,
 	WindSlash,
+	DragonArc,
+	EarthKnuckles,
+	FlameCleaver,
+	FlameStrike,
+	FrostFan,
+	GustVolley,
+	IceDagger,
+	StoneShot,
+	VoltDisc,
+	Count,
 };
 
 enum class SkillEvents
 {
 	None = -1,
 	Left,
-	Right,
 	Space,
+	Right,
 	Q,
 	E,
 	R,
+	Tab,
+	M,
 	Count,
 };
 
@@ -54,6 +66,7 @@ enum class PlayerActions
 	Jump,
 	Slam,
 	Focus,
+	HandKick,
 	JumpKick,
 	JumpSlam,
 };

@@ -20,11 +20,11 @@ struct SpellInfo
 	float range;
 	float explosionRange;
 	float amplitude;
-	float frquency;
+	float frequency;
 	float delayDuration;
 	float damageDelay;
 	float coolTime;
-	float rotateSpeed;
+	float spreadAngle;
 
 	// 관통여부
 	// 0, 1 로 인트형 넘기고 받을때 bool
@@ -62,21 +62,19 @@ protected:
 	// UI아이콘 텍스쳐 필요?
 	// 실제 스킬 애니메이션 클립 어디서 관리할지
 	int skillId;
+	std::string skillName;
+
 	ElementTypes currentElementType = ElementTypes::None;
 	SkillTypes currentSkillType = SkillTypes::None;
 	RangeTypes currentRangeType = RangeTypes::None;
 	SkillEvents currentEventType = SkillEvents::None;
 	PlayerActions currentPlayerActionType = PlayerActions::None;
 
-	sf::Keyboard::Key currentKey = sf::Keyboard::Unknown;
-	sf::Mouse::Button currentButton = sf::Mouse::None;
-
-	SpriteGo* skillIcon;
-
 	// 최대 발사개수
 	int shotCount;
-	float coolTime;
+	int maxSkillCharge;
 
+	float coolTime;
 	float spreadAngle;
 
 	SpellInfo spellInfo;
@@ -106,8 +104,10 @@ public:
 
 	SkillEvents GetSkillEvent() const { return currentEventType; }
 	int GetSkillId() const { return skillId; }
+	std::string& GetSkillIconId() { return skillName; }
 	SkillInfo& GetSkillInfo() { return skillInfo; }
 
+	void SetSkillIconId(std::string id) { skillName = id; }
 	void SetSkillEvent(SkillEvents sEvent) { currentEventType = sEvent; }
 	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }

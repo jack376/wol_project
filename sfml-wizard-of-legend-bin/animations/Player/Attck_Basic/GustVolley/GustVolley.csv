@@ -1,0 +1,14 @@
+ID,FPS,LOOPTYPE,,
+GustVolley,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,39,46,18,15
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,74,49,18,16
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,105,47,20,13
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,144,47,16,13
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,29,86,18,15
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,85,86,14,18
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,134,84,14,19
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,188,89,9,20
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,37,136,49,16
+graphics/Player/Attck_Basic/GustVolley/GustVolley.png,111,141,10,5

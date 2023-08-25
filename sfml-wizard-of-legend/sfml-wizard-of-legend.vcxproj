@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
+    <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="Scenes\PathfindingScene.cpp" />
     <ClCompile Include="PathFinding\AS.cpp" />
     <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
+    <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="Scenes\PathfindingScene.h" />
     <ClInclude Include="PathFinding\AS.h" />
     <ClInclude Include="GameObjects\AnimationProjectile.h" />
