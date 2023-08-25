@@ -184,11 +184,11 @@ void SkillMgr::SaveExistedSkill()
 		ranges.push_back(skillInfo.spellinfo.range);
 		explosionRanges.push_back(skillInfo.spellinfo.explosionRange);
 		amplitudes.push_back(skillInfo.spellinfo.amplitude);
-		frequencys.push_back(skillInfo.spellinfo.frquency);
+		frequencys.push_back(skillInfo.spellinfo.frequency);
 		delayDurations.push_back(skillInfo.spellinfo.delayDuration);
 		damageDelays.push_back(skillInfo.spellinfo.damageDelay);
 		coolTimes.push_back(skillInfo.spellinfo.coolTime);
-		rotateSpeeds.push_back(skillInfo.spellinfo.rotateSpeed);
+		rotateSpeeds.push_back(skillInfo.spellinfo.spreadAngle);
 
 		isPenetratings.push_back((int)skillInfo.spellinfo.isPenetrating);
 		canMoveDuringSkills.push_back((int)skillInfo.spellinfo.canMoveDuringSkill);
@@ -311,11 +311,11 @@ void SkillMgr::SaveBuyedSkill()
 		ranges.push_back(skillInfo.spellinfo.range);
 		explosionRanges.push_back(skillInfo.spellinfo.explosionRange);
 		amplitudes.push_back(skillInfo.spellinfo.amplitude);
-		frequencys.push_back(skillInfo.spellinfo.frquency);
+		frequencys.push_back(skillInfo.spellinfo.frequency);
 		delayDurations.push_back(skillInfo.spellinfo.delayDuration);
 		damageDelays.push_back(skillInfo.spellinfo.damageDelay);
 		coolTimes.push_back(skillInfo.spellinfo.coolTime);
-		rotateSpeeds.push_back(skillInfo.spellinfo.rotateSpeed);
+		rotateSpeeds.push_back(skillInfo.spellinfo.spreadAngle);
 
 		isPenetratings.push_back((int)skillInfo.spellinfo.isPenetrating);
 		canMoveDuringSkills.push_back((int)skillInfo.spellinfo.canMoveDuringSkill);
@@ -382,7 +382,7 @@ void SkillMgr::SaveEquipedSkill()
 	doc.SetColumnName(18, "DelayDurations");
 	doc.SetColumnName(19, "DamageDelays");
 	doc.SetColumnName(20, "CoolTimes");
-	doc.SetColumnName(21, "RotateSpeeds");
+	doc.SetColumnName(21, "SpreadAngles");
 
 	doc.SetColumnName(22, "IsPenetratings");
 	doc.SetColumnName(23, "CanMoveDuringSkills");
@@ -410,7 +410,7 @@ void SkillMgr::SaveEquipedSkill()
 	std::vector<float> delayDurations;
 	std::vector<float> damageDelays;
 	std::vector<float> coolTimes;
-	std::vector<float> rotateSpeeds;
+	std::vector<float> spreadAngles;
 
 	std::vector<int> isPenetratings;
 	std::vector<int> canMoveDuringSkills;
@@ -437,11 +437,11 @@ void SkillMgr::SaveEquipedSkill()
 		ranges.push_back(skillInfo.spellinfo.range);
 		explosionRanges.push_back(skillInfo.spellinfo.explosionRange);
 		amplitudes.push_back(skillInfo.spellinfo.amplitude);
-		frequencys.push_back(skillInfo.spellinfo.frquency);
+		frequencys.push_back(skillInfo.spellinfo.frequency);
 		delayDurations.push_back(skillInfo.spellinfo.delayDuration);
 		damageDelays.push_back(skillInfo.spellinfo.damageDelay);
 		coolTimes.push_back(skillInfo.spellinfo.coolTime);
-		rotateSpeeds.push_back(skillInfo.spellinfo.rotateSpeed);
+		spreadAngles.push_back(skillInfo.spellinfo.spreadAngle);
 
 		isPenetratings.push_back((int)skillInfo.spellinfo.isPenetrating);
 		canMoveDuringSkills.push_back((int)skillInfo.spellinfo.canMoveDuringSkill);
@@ -470,7 +470,7 @@ void SkillMgr::SaveEquipedSkill()
 	doc.SetColumn<float>("DelayDurations", delayDurations);
 	doc.SetColumn<float>("DamageDelays", damageDelays);
 	doc.SetColumn<float>("CoolTimes", coolTimes);
-	doc.SetColumn<float>("RotateSpeeds", rotateSpeeds);
+	doc.SetColumn<float>("SpreadAngles", spreadAngles);
 
 	doc.SetColumn<int>("IsPenetratings", isPenetratings);
 	doc.SetColumn<int>("CanMoveDuringSkills", canMoveDuringSkills);

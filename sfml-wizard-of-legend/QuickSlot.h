@@ -28,6 +28,7 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	void AllSetActive(bool isActive);
+	std::map<std::string, Slot*>& GetSlotList() { return slotList; }
 
 };
 

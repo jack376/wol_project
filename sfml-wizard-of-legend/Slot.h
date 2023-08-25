@@ -3,6 +3,7 @@
 
 class SpriteGo;
 class Skill;
+class QuickSlot;
 
 class Slot : public UIButton
 {
@@ -23,6 +24,12 @@ protected:
 	std::string skillIconId = "Disabled";
 	std::string skillEventIconId;
 
+	std::string slotKey;
+
+
+	QuickSlot* quickSlot;
+
+	// 버튼 사용 여부
 	bool isUsed = false;
 
 	float fadeInOutTimer = 0.f;
@@ -50,10 +57,13 @@ public:
 
 	SkillEvents GetSlotEvent() { return slotSkillEvent; }
 
+	void SetQuickSlot(QuickSlot* quick) { quickSlot = quick; }
+
 	void SetSlotEvent(SkillEvents sEvent) { slotSkillEvent = sEvent; }
 	void SetSlotEventIcon(const std::string eventId);
 	void SetSkillIconId(const std::string& id);
 	void SetSkillIcon();
+	void SetSlotKey(std::string& str) { slotKey = str; }
 
 	void SetSelectedSlotIcon();
 	void SetIsUsed(bool isUsed);
@@ -66,6 +76,6 @@ public:
 	void OnEnterEvent();
 	void OnExitEvent();
 
-	void ChangeSlot();
+	//void ChangeSlot();
 
  };

@@ -3,6 +3,7 @@
 #include "ResourceMgr.h"
 #include "Framework.h"
 #include "SkillMgr.h"
+#include "QuickSlot.h"
 
 Slot* Slot::selectedSlot = nullptr;
 
@@ -23,7 +24,7 @@ void Slot::Init()
 	SetPosition(position);
 	SetSelectedSlotIcon();
 
-	sortLayer = 102;
+	sortLayer = 101;
 	sprite.setScale(4, 4);
 
 	if (isUsed)
@@ -177,6 +178,14 @@ void Slot::OnClickEvent()
 		SKILL_MGR.SwapSkill(slotSkillEvent, selectedSkill);
 
 		selectedSlot->sprite.setColor(sf::Color::Color(255, 255, 255, 255));
+
+		// Äü½½·Ô º¯°æ ºÎºÐ
+		std::string tempQuickStr =  quickSlot->GetSlotList()[slotKey]->GetSkillIconId();
+		quickSlot->GetSlotList()[slotKey]->SetSkillIconId(quickSlot->GetSlotList()[selectedSlot->slotKey]->GetSkillIconId());
+		quickSlot->GetSlotList()[selectedSlot->slotKey]->SetSkillIconId(tempQuickStr);
+		quickSlot->GetSlotList()[slotKey]->SetSkillIcon();
+		quickSlot->GetSlotList()[selectedSlot->slotKey]->SetSkillIcon();
+
 		selectedSlot = nullptr;
 	}
 	else

@@ -192,6 +192,7 @@ void Player::Update(float dt)
 	SetAttackPos();
 
 
+
 	// 디버그 타이머
 	//debugTimer += dt;
 	//if (debugTimer > debugDuration)
@@ -212,11 +213,6 @@ void Player::Update(float dt)
 
 	isMove = dir.x != 0 || dir.y != 0;
 	isDashing = dashDir.x != 0 || dashDir.y != 0;
-	
-	if (currentTile->GetType() == TileType::Ground && isMove)
-	{
-
-	}
 
 
 	if (!isAlive)
@@ -233,12 +229,15 @@ void Player::Update(float dt)
 	// 맞으면 무적상태와 맞는 상태 표시
 	if (isHit)
 	{
+		scene->SetIsMenuOn(false);
 		CalHitLookAngle();
 		ChangeState(States::Hit);
 	}
 
+	if (scene->GetIsMenuOn())
+		return;
 
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling)
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Left;
@@ -247,7 +246,7 @@ void Player::Update(float dt)
 
 	}
 
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide && !isFalling)
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Right;
@@ -256,10 +255,24 @@ void Player::Update(float dt)
 	}
 	
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide && !isFalling)
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Q;
+		SKILL_MGR.UseSkill(sEvent);
+		ChangeState(States::Attack);
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
+	{
+		attackCount++;
+		sEvent = SkillEvents::E;
+		SKILL_MGR.UseSkill(sEvent);
+		ChangeState(States::Attack);
+	}	
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
+	{
+		attackCount++;
+		sEvent = SkillEvents::R;
 		SKILL_MGR.UseSkill(sEvent);
 		ChangeState(States::Attack);
 	}
@@ -274,7 +287,7 @@ void Player::Update(float dt)
 		dashCoolTimer = 0.f;
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack && !isFalling)
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack && !isFalling && !isHit && isAlive)
 	{
 		sEvent = SkillEvents::Space;
 		isAttack = true;

@@ -37,8 +37,6 @@ void SceneGame::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 
 
-
-
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(700, 700);
 	player->sprite.setScale(4, 4);
@@ -54,85 +52,32 @@ void SceneGame::Init()
 	TilesToIntMap();
 	CalculatorNongroundTiles();
 
-	//tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
-	//tempWindSlash->SetScene(this);
-	//tempWindSlash->SetPlayer(player);
-	//tempWindSlash->sortLayer = 21;
-	//tempWindSlash->SetSkillType(SkillTypes::Melee);
-
-	//tempFireBall = (ElementalSpell*)AddGo(new ElementalSpell());
-	//tempFireBall->SetScene(this);
-	//tempFireBall->SetPlayer(player);
-	//tempFireBall->sortLayer = 21;
-	//tempFireBall->SetSkillType(SkillTypes::Range);
-	//tempFireBall->SetRangeType(RangeTypes::Curve);
-
-
-	//Skill* fireBall = (Skill*)AddGo(new Skill());
-	//fireBall->SetSkillIconId("ExplodingFireball");
-	//fireBall->SetSkillEvent(SkillEvents::Right);
-	//fireBall->SetElementType(ElementTypes::Fire);
-	//fireBall->SetSkillType(SkillTypes::Range);
-	//fireBall->SetRangeType(RangeTypes::Curve);
-
-	//Skill* windSlash = (Skill*)AddGo(new Skill());
-	//windSlash->SetSkillIconId("WindSlash");
-	//windSlash->SetSkillEvent(SkillEvents::Left);
-	//windSlash->SetElementType(ElementTypes::Wind);
-	//windSlash->SetSkillType(SkillTypes::Melee);
-	//windSlash->SetRangeType(RangeTypes::Straight);
-
-	//Skill* straightFireBall = (Skill*)AddGo(new Skill());
-	//straightFireBall->SetSkillEvent(SkillEvents::Q);
-	//straightFireBall->SetElementType(ElementTypes::Fire);
-	//straightFireBall->SetSkillType(SkillTypes::Range);
-	//straightFireBall->SetRangeType(RangeTypes::Straight);
-	// CSV파일 스킬 정보 저장후 입력
-
-
-	// EquipSkill로 해당 이벤트에 스킬 장착
-	// 이후 플레이어에서	SKILL_MGR.UseSkill(sEvent); 로 이벤트 입력시 스킬 사용
 	
-
-
-
-	//SKILL_MGR.EquipSkill(windSlash);
-	//SKILL_MGR.EquipSkill(fireBall);
-	//SKILL_MGR.EquipSkill(straightFireBall);
-
-	//fireBall->GetSkillId();
 	menu = (MenuInventory*)AddGo(new MenuInventory());
 	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
-
-	//slot1 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
-	//slot1->SetPosition(500, 700);
-	//slot1->SetSkillIconId(fireBall->GetSkillIconId());
-	//slot1->SetSlotEvent(SkillEvents::Left);
-	//slot1->SetOrigin(Origins::MC);
-	////slot1->SetSkillIcon();
-
-	//slot2 = (Slot*)AddGo(new Slot("graphics/UI/slot1.png"));
-	//slot2->SetPosition(700, 700);
-	//slot2->SetSkillIconId(windSlash->GetSkillIconId());
-	//slot2->SetSlotEvent(SkillEvents::Right);
-	//slot2->SetOrigin(Origins::MC);
-	//slot2->SetSkillIcon();
+	menu->SetQuickSlot(quickSlot);
 
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
 
-	//tempWindSlash->SetTiles(&tilesWorld);
-	//tempFireBall->SetTiles(&tilesWorld);
-	//SetSkillIconId
-	//tempWindSlash->SetMonsterList(monsters);
-	//tempFireBall->SetMonsterList(monsters);
-	//SetMonsterList / SetTiles / 
-	// SetSkillEvent(
-	// SetElementType
-	// SetSkillType(S
-	// SetRangeType(R
 	
+	Monster* monster = (Monster*)AddGo(CreateMonster(MonsterId::Archer));
+	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
+	monster->SetIntMap(&intMap);
+	monster->SetNonGroundTiles(&nongroundTiles);
+	monster->SetPosition(500, 500);
+	monsters.push_back(monster);
+
+	monster = (Monster*)AddGo(CreateMonster(MonsterId::Ghoul));
+	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
+	monster->SetIntMap(&intMap);
+	monster->SetNonGroundTiles(&nongroundTiles);
+	monster->SetPosition(700, 500);
+	monsters.push_back(monster);
+
 
 	// Create Particle
 	CreateParticle(1000);
@@ -228,8 +173,15 @@ void SceneGame::Update(float dt)
 	{
 		menu->AllSetActive(!menu->GetActive());
 		Slot::selectedSlot = nullptr;
-		isMenuOn = true;
+		isMenuOn = menu->GetActive();
+		std::cout << isMenuOn << std::endl;
 	}
+
+	if (!isMenuOn)
+	{
+		menu->AllSetActive(isMenuOn);
+	}
+
 
 }
 

@@ -1,0 +1,12 @@
+ID,FPS,LOOPTYPE,,
+IceDagger,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/Attck_Basic/IceDagger/IceDagger.png,204,246,15,19
+graphics/Player/Attck_Basic/IceDagger/IceDagger.png,231,241,14,24
+graphics/Player/Attck_Basic/IceDagger/IceDagger.png,253,236,14,31
+graphics/Player/Attck_Basic/IceDagger/IceDagger.png,276,226,13,40
+graphics/Player/Attck_Basic/IceDagger/IceDagger.png,306,233,13,41
+graphics/Player/Attck_Basic/IceDagger/IceDagger.png,331,231,12,40
+graphics/Player/Attck_Basic/IceDagger/IceDagger.png,353,229,13,37
+graphics/Player/Attck_Basic/IceDagger/IceDagger.png,382,230,13,24

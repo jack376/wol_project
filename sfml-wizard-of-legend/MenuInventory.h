@@ -3,10 +3,13 @@
 #include "Slot.h"
 
 class Slot;
+class QuickSlot;
 
 class MenuInventory : public GameObject
 {
 protected:
+	QuickSlot* quickSlot;
+
 	sf::Sprite panel;
 	std::vector<std::string> slotKey;
 	std::map<std::string, Slot*>slotList;
@@ -30,5 +33,6 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 	
 	void AllSetActive(bool isActive);
+	void SetQuickSlot(QuickSlot* quick) { quickSlot = quick; }
 };
 

@@ -1,0 +1,8 @@
+ID,FPS,LOOPTYPE,,
+VoltDisc,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/Attck_Basic/VoltDisc/VoltDisc.png,37,102,24,24
+graphics/Player/Attck_Basic/VoltDisc/VoltDisc.png,72,103,24,24
+graphics/Player/Attck_Basic/VoltDisc/VoltDisc.png,107,102,23,23
+graphics/Player/Attck_Basic/VoltDisc/VoltDisc.png,143,103,21,21

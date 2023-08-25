@@ -4,6 +4,7 @@
 #include "BoxCollider2D.h"
 #include "Beam.h"
 #include "ObjectPool.h"
+#include "Skill.h"
 
 class SpriteGo;
 class SceneGame;
@@ -34,12 +35,12 @@ protected:
 	RangeTypes currentRangeType = RangeTypes::None;
 	SkillEvents currentEvent = SkillEvents::None;
 
-	sf::Keyboard::Key currentKey = sf::Keyboard::Unknown;
-	sf::Mouse::Button currentButton = sf::Mouse::None;
+	SpellInfo currentInfo;
+
 
 	std::queue <float> comboQueue;
 
-	std::vector<std::string> currentAnimId;
+	std::string currentAnimId;
 
 
 	// 방향 벡터 sf::Vector2f
@@ -63,6 +64,11 @@ protected:
 	// 스킬이 공격했는지 여부 / 중복방지
 	bool isAttack = false;
 	
+	// 콤보 횟수
+	int attackCount = 0;
+
+	int damage;
+
 	// 중복 공격 방지
 	float attackTimer = 0.f;
 	float attackDuration = 2.0f;
@@ -74,15 +80,13 @@ protected:
 	float comboDuration = 0.6f;
 
 	float speed = 500.f;
-
 	float curveSpeed = 12.f;
+	float range;
 
-
-	// 콤보 횟수
-	int attackCount = 0;
 
 	// 애니메이션 각도
 	float angle = 0.f;
+	float addAngle;
 
 	// 대각선 sin곡선
 	float amplitude = 8.f;
@@ -94,6 +98,8 @@ protected:
 	float curveAngle = 45.0f; // 축 각도 (도)
 	
 	float time = 0.0f; // dt가 누적되는 시간
+
+
 
 	Tile* currentTile = nullptr;
 	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
@@ -125,6 +131,9 @@ public:
 	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }
 	void SetRangeType(RangeTypes type) { currentRangeType = type; }
+	void SetSpellInfo(SpellInfo info) { currentInfo = info; }
+	void SetAngle(float angle) { this->angle = angle; }
+	void SetDir(sf::Vector2f dir) { this->dir = dir; }
 
 	sf::RectangleShape& GetCollider();
 

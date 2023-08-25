@@ -95,10 +95,9 @@ void QuickSlot::Reset()
 		slot->Init();
 		slotList[slotKey[i]] = slot;
 	}
-	// 스킬 아이디 만큼이 아니라 SKILL_MGR.에서 buye
 	for (int i = 0; i < 6; i++)
 	{
-		slotList[slotKey[i]]->SetSkillIconId(SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId());
+		slotList[slotKey[i]]->SetSkillIconId(SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId());		
 		std::cout << SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId() << std::endl;
 		Skill* temp = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent());
 		std::string str = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId();

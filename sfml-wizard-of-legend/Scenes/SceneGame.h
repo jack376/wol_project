@@ -81,5 +81,8 @@ public:
 	void DestroyBreakableObj(BreakableObj* obj);
 	void TilesToIntMap();
 	void CalculatorNongroundTiles();
+
+	bool GetIsMenuOn() { return isMenuOn; }
+	void SetIsMenuOn(bool isOn) { isMenuOn = isOn; }
 };
 

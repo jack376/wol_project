@@ -84,8 +84,8 @@ protected:
 	UIButton* coolTime;
 	UIButton* coolTimeValue;
 
-	UIButton* rotateSpeed;
-	UIButton* rotateSpeedValue;
+	UIButton* spreadAngle;
+	UIButton* spreadAngleValue;
 
 	UIButton* isPenetrating;
 	UIButton* isPenetratingValue;

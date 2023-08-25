@@ -57,8 +57,8 @@ void MenuInventory::Init()
 	sf::Vector2f windowSize = FRAMEWORK.GetWindowSize();
 
 	
-	panel.setTexture(*RESOURCE_MGR.GetTexture("graphics/UI/Panel.png"));
-	SetPosition(windowSize.x * 0.3f,windowSize.y * 0.5f);
+	panel.setTexture(*RESOURCE_MGR.GetTexture("graphics/UI/ItemInfoPanel.png"));
+	SetPosition(windowSize.x * 0.3f,windowSize.y * 0.4f);
 	SetOrigin(Origins::MC);
 	panel.setScale(6, 8);
 
@@ -73,7 +73,7 @@ void MenuInventory::Init()
 
 	//slot.SetSkillIconId();
 
-	sortLayer = 101;
+	sortLayer = 105;
 }
 
 void MenuInventory::Release()
@@ -97,9 +97,9 @@ void MenuInventory::Reset()
 		slot->SetOrigin(Origins::MC);
 		slot->SetIsUsed(true);
 		slot->Init();
+		slot->sortLayer = 106;
 		slotList[slotKey[i]] = slot;
 	}
-	// 스킬 아이디 만큼이 아니라 SKILL_MGR.에서 buye
 	for (int i = 0; i < 6; i++)
 	{
 		slotList[slotKey[i]]->SetSkillIconId(SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId());
@@ -107,9 +107,11 @@ void MenuInventory::Reset()
 		Skill* temp = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent());
 		std::string str = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId();
 		slotList[slotKey[i]]->SetSkillIcon();
+		slotList[slotKey[i]]->SetQuickSlot(quickSlot);
+		slotList[slotKey[i]]->SetSlotKey(slotKey[i]);
 	}
 
-	//SetActive(false);
+	AllSetActive(false);
 }
 
 void MenuInventory::Update(float dt)
