@@ -11,6 +11,7 @@ class Projectile :
 {
 protected:
 	sf::Vector2f direction;
+	
 	float speed = 0.f;
 	int damage = 0;
 	bool isAttacked = false;

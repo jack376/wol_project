@@ -1,0 +1,8 @@
+ID,FPS,LOOPTYPE,,
+MeteorStrike,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/MeteorStrike.png,9,400,79,110
+graphics/Texture2D/MeteorStrike.png,107,391,72,118
+graphics/Texture2D/MeteorStrike.png,199,386,76,122
+graphics/Texture2D/MeteorStrike.png,291,388,79,123

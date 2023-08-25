@@ -59,16 +59,25 @@ void SceneGame::Init()
 	menu->SetQuickSlot(quickSlot);
 
 
+<<<<<<< HEAD
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
 
 	
 	Monster* monster = (Monster*)AddGo(CreateMonster(MonsterId::Archer));
+=======
+	monster = CreateMonster(MonsterId::FireBoss);
+>>>>>>> fireboss
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
+<<<<<<< HEAD
 	monster->SetPosition(500, 500);
+=======
+	monster->SetPosition(512, 1024);
+	monster->particlePool = &this->particlePool;
+>>>>>>> fireboss
 	monsters.push_back(monster);
 
 	monster = (Monster*)AddGo(CreateMonster(MonsterId::Ghoul));

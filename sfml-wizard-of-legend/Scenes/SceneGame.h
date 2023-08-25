@@ -51,6 +51,7 @@ protected:
 	float debugTimer = 0.f;
 	float debugDuration = 1.f;
 	ObjectPool<Particle> particlePool;
+	ObjectPool<Particle> fireParticlePool;
 	int count = 0;
 
 public:

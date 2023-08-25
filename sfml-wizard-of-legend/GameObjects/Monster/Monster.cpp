@@ -9,6 +9,7 @@
 #include "Tile.h"
 #include "CustomEffect.h"
 #include "AS.h"
+#include "Particle.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -399,10 +400,24 @@ std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
     return tiles;
 }
 
-
 void Monster::SetRectBox()
 {
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
     rect.setSize({ spriteBounds.width, spriteBounds.height });
     Utils::SetOrigin(rect, Origins::MC);
 }
+
+void Monster::SetParticle(sf::Vector2f position, int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        Particle* particle = particlePool->Get();
+        particle->SetPosition(position);
+        SCENE_MGR.GetCurrScene()->AddGo(particle);
+    }
+}
+
+void Monster::SetParticlePool(ObjectPool<Particle>* pool)
+{
+    particlePool = pool;
+};

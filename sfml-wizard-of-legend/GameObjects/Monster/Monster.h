@@ -7,6 +7,7 @@
 
 class Player;
 class Tile;
+class Particle;
 
 enum class MonsterState 
 {
@@ -102,6 +103,8 @@ protected:
 	using pPair = std::pair<double, Pair>;
 
 public:
+	ObjectPool<Particle>* particlePool = nullptr;
+
 	Monster(MonsterId id, const std::string& textureId = "", const std::string& n = "");
 	virtual ~Monster() override;
 
@@ -137,4 +140,6 @@ public:
 
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
+	void SetParticle(sf::Vector2f position, int count);
+	void SetParticlePool(ObjectPool<Particle>* pool);
 };
