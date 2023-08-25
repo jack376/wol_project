@@ -78,6 +78,12 @@ void SceneGame::Init()
 	hpb->SetPosition(size.x * 0.4, size.y * 0.1);
 	hpb->sortLayer = 105;
 
+	hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("PlayerHP")));
+	hpb->SetTarget(player->GetMaxHP(), player->GetHP());
+	hpb->SetOrigin(Origins::ML);
+	hpb->SetPosition(size.x * 0.05, size.y * 0.05);
+	hpb->sortLayer = 105;
+
 	monster = CreateMonster(MonsterId::Ghoul);
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);

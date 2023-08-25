@@ -8,9 +8,9 @@ HPBar::HPBar(const std::string& n)
 {
 	if (n == "PlayerHP")
 	{
-		hpBarBGTextureId = "Resources/assets/sprites/ui/HPBarBG.png";
-		hpBarFillTextureId = "Resources/assets/sprites/ui/HPBarFill.png";
-		hurtBarFillTextureId = "Resources/assets/sprites/ui/HPBarHurtFill.png";
+		hpBarBGTextureId = "Resources/assets/sprites/ui/HPBarBG3.png";
+		hpBarFillTextureId = "Resources/assets/sprites/ui/HPBarFill2.png";
+		hurtBarFillTextureId = "Resources/assets/sprites/ui/HPBarHurtFill2.png";
 	}
 	else if (n == "BossHP")
 	{
@@ -97,15 +97,17 @@ void HPBar::Update(float dt)
 	float percent = (float)*hp / (float)*maxHp;
 
 	if (percent >= 0)
-	{
 		hpBarFill.setScale(4.f * percent, 4.f);
-	}
-	if (*hp < hurtHp)
+	else
+		hpBarFill.setScale(0, 4.f);
+
+	if (*hp < hurtHp && hurtHp > 0)
 	{
 		hurtHp -= (hurtHp - *hp) * dt;
 		float hurtPercent = (float)hurtHp / (float)*maxHp;
 		hurtBarFill.setScale(4.f * hurtPercent, 4.f);
-	}	
+	}
+	
 }
 
 void HPBar::Draw(sf::RenderWindow& window)
