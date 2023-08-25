@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
@@ -225,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="HPBar.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="QuickSlot.h" />

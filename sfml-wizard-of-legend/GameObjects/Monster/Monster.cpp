@@ -298,6 +298,7 @@ void Monster::Die()
         animation.Play(stat.name + "Death");
         SetOrigin(origin);
         SetRectBox();
+        std::cout << "Monster::Die()" << std::endl;
     }
     else if (animation.IsAnimEndFrame())
         SetActive(false);
@@ -312,7 +313,6 @@ void Monster::KnockBack(float dt)
         SetRectBox();
     }
 
-    //���� ���� �ݴ� �������� �̵� (������ ��ü�� �÷��̾ �ƴ϶� �߻�ü��� �߻�ü�� ��ġ�� �Ѱ� �޾� ����)
     prevPos = position;
     SetPosition(position + -look * 500.f * dt);
     CalculatorCurrentTile();

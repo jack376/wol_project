@@ -26,6 +26,7 @@
 #include "Slot.h"
 #include "MenuInventory.h"
 #include "QuickSlot.h"
+#include "HPBar.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -71,6 +72,12 @@ void SceneGame::Init()
 	monster->particlePool = &this->particlePool;
 	monsters.push_back(monster);
 
+	HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
+	hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
+	hpb->SetOrigin(Origins::ML);
+	hpb->SetPosition(size.x * 0.4, size.y * 0.1);
+	hpb->sortLayer = 105;
+
 	monster = CreateMonster(MonsterId::Ghoul);
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
@@ -78,6 +85,8 @@ void SceneGame::Init()
 	monster->SetNonGroundTiles(&nongroundTiles);
 	monster->SetPosition(700, 500);
 	monsters.push_back(monster);
+
+
 
 
 

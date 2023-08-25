@@ -87,10 +87,6 @@ void Projectile::Draw(sf::RenderWindow& window)
 
 	if (collider.GetActive())
 		collider.Draw(window);
-
-	std::cout << "Pos( " << position.x << ", " << position.y << " ) Origin( " << sprite.getOrigin().x << ", " << sprite.getOrigin().y << " ) Rot( " << sprite.getRotation() << " )\t" <<
-		"Pos( " << collider.obbCol.getPosition().x << ", " << collider.obbCol.getPosition().y << " ) Origin( " << collider.obbCol.getOrigin().x << ", " << collider.obbCol.getOrigin().y << " ) Rot( " << collider.obbCol.getRotation() << " )\t"
-		<< std::endl;
 }
 
 void Projectile::SetRotation(const sf::Vector2f dir)
@@ -171,6 +167,10 @@ void Projectile::CalculatorCurrentTile()
 	int rowIndex = position.x / _TileSize;
 	int columnIndex = position.y / _TileSize;
 	if (rowIndex < 0 || rowIndex >= worldTiles->size() || columnIndex < 0 || columnIndex >= worldTiles[0].size())
-		currentTile = (*worldTiles)[0][0];
+	{
+		rowIndex = 0;
+		columnIndex = 0;
+		std::cout << "erro: Projectile::CalculatorCurrentTile() Over Range" << std::endl;
+	}	
 	currentTile = (*worldTiles)[rowIndex][columnIndex];
 }

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "FireBoss.h"
+#include "Framework.h"
 #include "ResourceMgr.h"
 #include "DataTableMgr.h"
 #include "MonsterTable.h"
@@ -111,6 +112,11 @@ void FireBoss::SetPosition(float x, float y)
     Monster::SetPosition(x, y);
 }
 
+void FireBoss::SetActive(bool active)
+{
+    GameObject::SetActive(active);
+}
+
 void FireBoss::HandleState(float dt)
 {
     switch (currentState) {
@@ -196,6 +202,7 @@ void FireBoss::Idle()
         stateStart = false;
         return;
     }
+    
 }
 
 void FireBoss::Attack(float dt)
@@ -251,10 +258,18 @@ void FireBoss::Attack(float dt)
 
 void FireBoss::Die()
 {
+    if (animation.GetCurrentClipId() != stat.name + "Death")
+    {
+        animation.Play(stat.name + "Death");
+        SetOrigin(origin);
+        SetRectBox();
+        std::cout << "FireBoss::Die()" << std::endl;
+    }
 }
 
 void FireBoss::KnockBack(float dt)
 {
+    Monster::KnockBack(dt);
 }
 
 void FireBoss::Dash(float dt)
@@ -476,6 +491,15 @@ void FireBoss::SetAttackPattern(FireBossAttackPattern pattern)
 
 void FireBoss::OnAttacked(float damage)
 {
+    if (currentState != MonsterState::Dead && currentState == MonsterState::Idle)
+    {
+        SetState(MonsterState::KnockBack);
+        hp -= damage;
+    }
+    else
+    {
+        hp -= damage;
+    }
 }
 
 std::vector<sf::Vector2f> FireBoss::CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count, float angleRange) {

@@ -76,3 +76,10 @@
 0,graphics/Texture2D/MeteorStrike.png
 3,animations/FireBoss/MeteorStrike.csv
 3,animations/FireBoss/MeteorStrikeSonicBoom.csv
+0,Resources/assets/sprites/ui/EnemyHealthBarBG.png
+0,Resources/assets/sprites/ui/EnemyHealthBarFill.png
+0,Resources/assets/sprites/ui/EnemyHurtBarFill.png
+0,Resources/assets/sprites/ui/HPBarBG.png
+0,Resources/assets/sprites/ui/HPBarFill.png
+0,Resources/assets/sprites/ui/HPBarHurtFill.png
+0,graphics/UI/CastingCircle.png

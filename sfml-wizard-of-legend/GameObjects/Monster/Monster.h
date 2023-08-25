@@ -137,7 +137,8 @@ public:
 	void SetIsHit(bool isHit) { this->isHit = isHit; }
 
 	bool GetIsHit() { return isHit; }
-
+	int* GetMaxHP() { return &stat.maxHp; }
+	int* GetHP() { return &hp; }
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
 	void SetParticle(sf::Vector2f position, int count);
