@@ -182,8 +182,9 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);	
 	debugTimer += dt;
 	worldView.setCenter(player->GetPosition());
-	miniMapView.setCenter(player->GetPosition());
-	CheckMiniMap(11, 22);
+	miniMapView.setCenter(player->GetPosition() );
+
+	lookMap = CheckMiniMap(20, 20);
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 
@@ -234,17 +235,19 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	Scene::Draw(window);
 
 	window.setView(miniMapView);
-	sf::View currentView = window.getView();
-	sf::FloatRect viewBounds(currentView.getCenter() - currentView.getSize() / 2.f, currentView.getSize());
 
-	for (auto& row : miniMap)
+	for (auto& cell : lookMap)
+	{
+		window.draw(*cell);
+	}
+	/*for (auto& row : miniMap)
 	{
 		for (auto& cell : row)
 		{
 			if (cell.first->getGlobalBounds().intersects(viewBounds))
 				window.draw(*cell.first);
 		}
-	}
+	}*/
 	window.draw(miniMapPlayer);
 	
 }

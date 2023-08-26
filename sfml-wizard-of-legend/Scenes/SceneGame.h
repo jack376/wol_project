@@ -56,7 +56,10 @@ protected:
 
 	sf::View miniMapView;
 	std::vector<std::vector<std::pair<sf::RectangleShape*, bool>>> miniMap;
+	std::vector<sf::RectangleShape*> lookMap;
 	sf::RectangleShape miniMapPlayer;
+	float miniMapTimer = 0.f;
+	float miniMapDuration = 1.f;
 	 
 public:
 	SceneGame();
