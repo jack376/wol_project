@@ -130,6 +130,7 @@ void SceneGame::Init()
 		skillTable.second->SetPlayer(player);
 		skillTable.second->SetMonsterList(monsters);
 		skillTable.second->SetPlayer(player);
+		skillTable.second->Init();
 		SKILL_MGR.EquipSkill(skillTable.second);
 	}
 

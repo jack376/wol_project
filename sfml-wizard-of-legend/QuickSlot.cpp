@@ -92,25 +92,28 @@ void QuickSlot::Reset()
 		slot->SetSlotEvent((SkillEvents)i);
 		slot->SetOrigin(Origins::MC);
 		slot->SetIsUsed(false);
+		Skill* skill = SKILL_MGR.SearchSkill(slot->GetSlotEvent());
+		slot->SetSkill(SKILL_MGR.SearchSkill(slot->GetSlotEvent()));
+		Skill* tmep = slot->GetSkill();
+		slot->SetIsCoolSlot(true);
 		slot->Init();
 		slotList[slotKey[i]] = slot;
 	}
 	for (int i = 0; i < 6; i++)
 	{
 		slotList[slotKey[i]]->SetSkillIconId(SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId());		
-		std::cout << SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId() << std::endl;
-		Skill* temp = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent());
-		std::string str = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId();
 		slotList[slotKey[i]]->SetSkillIcon();
 	}
 
 	slotList["Tab"]->sprite.setScale(3.5, 3.5);
 	slotList["Tab"]->SetPosition(550, 900);
 	slotList["Tab"]->SetSkillIcon();
+	slotList["Tab"]->SetIsCoolSlot(false);
 
 	slotList["M"]->sprite.setScale(3.5, 3.5);
 	slotList["M"]->SetPosition(620, 900);
 	slotList["M"]->SetSkillIcon();
+	slotList["M"]->SetIsCoolSlot(false);
 
 	//SetActive(false);
 }

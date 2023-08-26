@@ -241,17 +241,22 @@ void Player::Update(float dt)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Left;
-		SKILL_MGR.UseSkill(sEvent);
-		ChangeState(States::Attack);
-
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
 	}
 
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Right;
-		SKILL_MGR.UseSkill(sEvent);
-		ChangeState(States::Attack);
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
 	}
 	
 
@@ -259,22 +264,31 @@ void Player::Update(float dt)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Q;
-		SKILL_MGR.UseSkill(sEvent);
-		ChangeState(States::Attack);
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
 	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
 		attackCount++;
 		sEvent = SkillEvents::E;
-		SKILL_MGR.UseSkill(sEvent);
-		ChangeState(States::Attack);
-	}	
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
+	}
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
 		attackCount++;
 		sEvent = SkillEvents::R;
-		SKILL_MGR.UseSkill(sEvent);
-		ChangeState(States::Attack);
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
 	}
 
 	// 대쉬 쿨타임 계산
@@ -479,7 +493,7 @@ void Player::DashUpdate(float dt)
 
 		if (currentTile->GetType() == TileType::Cliff)
 		{
-			std::cout << "Cliff" << std::endl;
+			//std::cout << "Cliff" << std::endl;
 			ChangeState(States::Fall);
 		}
 		else
@@ -601,19 +615,19 @@ void Player::HitUpdate(float dt)
 	{
 	case HitDir::Up:
 
-		std::cout << "Hit Up" << std::endl;
+		//std::cout << "Hit Up" << std::endl;
 		break;
 	case HitDir::Right:
-		std::cout << "Hit Right" << std::endl;
+		//std::cout << "Hit Right" << std::endl;
 
 		break;
 	case HitDir::Down:
-		std::cout << "Hit Down" << std::endl;
+		//std::cout << "Hit Down" << std::endl;
 
 		break;
 	case HitDir::Left:
 		SetFlipX(true);
-		std::cout << "Hit Left" << std::endl;
+		//std::cout << "Hit Left" << std::endl;
 		break;
 	}
 
@@ -634,7 +648,7 @@ void Player::FallUpdate(float dt)
 	{
 		anim.Play(fallId[(int)slideDir]);
 		isFalling = true;
-		std::cout << "IsFall" << std::endl;
+		//std::cout << "IsFall" << std::endl;
 
 		switch (slideDir)
 		{
@@ -659,7 +673,7 @@ void Player::FallUpdate(float dt)
 	if (t >= 1.0f && !isFallHit)
 	{
 		isFallHit = true;
-		std::cout << t << std::endl;
+		//std::cout << t << std::endl;
 		originAngle = sprite.getRotation();
 		float randomAngle = Utils::RandomRange(0.f, 360.f);
 		anim.Play("HitEffect");

@@ -183,7 +183,7 @@ void FireBoss::HandleAttackPattern(float dt)
         break;
 
     default:
-        std::cout << "HandleAttackState default" << std::endl;
+        //std::cout << "HandleAttackState default" << std::endl;
         break;
     }
 }

@@ -73,9 +73,14 @@ protected:
 	// 최대 발사개수
 	int shotCount;
 	int maxSkillCharge;
+	int currentSkillCharge;
 
 	float coolTime;
 	float spreadAngle;
+
+
+	bool isUsed = false;
+
 
 	SpellInfo spellInfo;
 	SkillInfo skillInfo;
@@ -106,6 +111,11 @@ public:
 	int GetSkillId() const { return skillId; }
 	std::string& GetSkillIconId() { return skillName; }
 	SkillInfo& GetSkillInfo() { return skillInfo; }
+	bool GetIsUsed() { return isUsed; }
+	int GetCurrentSkillCharge() { return currentSkillCharge; }
+	int GetMaxSkillCharege() { return maxSkillCharge; }
+
+	void AddCurrentSkillCharge(int charge) { currentSkillCharge += charge; }
 
 	void SetSkillIconId(std::string id) { skillName = id; }
 	void SetSkillEvent(SkillEvents sEvent) { currentEventType = sEvent; }
@@ -121,11 +131,14 @@ public:
 
 	void SetEditorPlayer(SkillEditorPlayer*& player) { this->editorPlayer = player; }
 
+
+	void SetIsUsed(bool isUsed) { this->isUsed = isUsed; }
+	void SetSkillInfo(SkillInfo info) { this->skillInfo = info; }
+	void SetSpellInfo(SpellInfo info) { this->skillInfo.spellinfo = info; }
+
 	void UseSkill();
 	void UseEditorSkill();
 
-	void SetSkillInfo(SkillInfo info) { this->skillInfo = info; }
-	void SetSpellInfo(SpellInfo info) { this->skillInfo.spellinfo = info; }
 	void InsertAnimId();
 
 

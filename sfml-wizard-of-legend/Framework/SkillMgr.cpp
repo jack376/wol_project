@@ -417,34 +417,38 @@ void SkillMgr::SaveEquipedSkill()
 
 	for (auto skill : equipedSkillList)
 	{
-		SkillInfo skillInfo = skill.second->GetSkillInfo();
-		skillIds.push_back(skillInfo.skillId);
-		skillNames.push_back(skillInfo.spellinfo.skillName);
-		elementTypes.push_back((int)skillInfo.elementType);
-		skillTypes.push_back((int)skillInfo.skillType);
-		rangeTypes.push_back((int)skillInfo.rangeType);
-		eventTypes.push_back((int)skillInfo.evnetType);
-		playerActions.push_back((int)skillInfo.playerAction);
+		if (skill.second)
+		{
+			SkillInfo skillInfo = skill.second->GetSkillInfo();
+			skillIds.push_back(skillInfo.skillId);
+			skillNames.push_back(skillInfo.spellinfo.skillName);
+			elementTypes.push_back((int)skillInfo.elementType);
+			skillTypes.push_back((int)skillInfo.skillType);
+			rangeTypes.push_back((int)skillInfo.rangeType);
+			eventTypes.push_back((int)skillInfo.evnetType);
+			playerActions.push_back((int)skillInfo.playerAction);
 
-		damages.push_back(skillInfo.spellinfo.damage);
-		comboDamages.push_back(skillInfo.spellinfo.comboDamage);
-		comboMaxCounts.push_back(skillInfo.spellinfo.comboMaxCount);
-		comboDurations.push_back(skillInfo.spellinfo.comboDuration);
-		maxSkillChages.push_back(skillInfo.spellinfo.maxSkillCharge);
-		shotCounts.push_back(skillInfo.spellinfo.shotCount);
+			damages.push_back(skillInfo.spellinfo.damage);
+			comboDamages.push_back(skillInfo.spellinfo.comboDamage);
+			comboMaxCounts.push_back(skillInfo.spellinfo.comboMaxCount);
+			comboDurations.push_back(skillInfo.spellinfo.comboDuration);
+			maxSkillChages.push_back(skillInfo.spellinfo.maxSkillCharge);
+			shotCounts.push_back(skillInfo.spellinfo.shotCount);
 
-		speeds.push_back(skillInfo.spellinfo.speed);
-		ranges.push_back(skillInfo.spellinfo.range);
-		explosionRanges.push_back(skillInfo.spellinfo.explosionRange);
-		amplitudes.push_back(skillInfo.spellinfo.amplitude);
-		frequencys.push_back(skillInfo.spellinfo.frequency);
-		delayDurations.push_back(skillInfo.spellinfo.delayDuration);
-		damageDelays.push_back(skillInfo.spellinfo.damageDelay);
-		coolTimes.push_back(skillInfo.spellinfo.coolTime);
-		spreadAngles.push_back(skillInfo.spellinfo.spreadAngle);
+			speeds.push_back(skillInfo.spellinfo.speed);
+			ranges.push_back(skillInfo.spellinfo.range);
+			explosionRanges.push_back(skillInfo.spellinfo.explosionRange);
+			amplitudes.push_back(skillInfo.spellinfo.amplitude);
+			frequencys.push_back(skillInfo.spellinfo.frequency);
+			delayDurations.push_back(skillInfo.spellinfo.delayDuration);
+			damageDelays.push_back(skillInfo.spellinfo.damageDelay);
+			coolTimes.push_back(skillInfo.spellinfo.coolTime);
+			spreadAngles.push_back(skillInfo.spellinfo.spreadAngle);
 
-		isPenetratings.push_back((int)skillInfo.spellinfo.isPenetrating);
-		canMoveDuringSkills.push_back((int)skillInfo.spellinfo.canMoveDuringSkill);
+			isPenetratings.push_back((int)skillInfo.spellinfo.isPenetrating);
+			canMoveDuringSkills.push_back((int)skillInfo.spellinfo.canMoveDuringSkill);
+
+		}
 	}
 	doc.SetColumn<int>("Id", skillIds);
 	doc.SetColumn<std::string>("SkillNames", skillNames);

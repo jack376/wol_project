@@ -76,6 +76,24 @@ void Slot::Init()
 		break;
 	}
 	SetSlotEventIcon(skillEventIconId);
+
+
+
+	coolTimeText.setCharacterSize(25);
+	coolTimeText.setFont(*RESOURCE_MGR.GetFont("fonts/NanumSquareB.ttf"));
+	coolTimeText.setColor(sf::Color::White);
+
+	skillChargeText.setCharacterSize(25);
+	skillChargeText.setFont(*RESOURCE_MGR.GetFont("fonts/NanumSquareB.ttf"));
+	skillChargeText.setColor(sf::Color::White);
+	skillChargeText.setOutlineColor(sf::Color::Black);
+	skillChargeText.setOutlineThickness(3);
+	
+	if (!isUsed) 
+	{
+		coolDownUI.setFillColor(sf::Color::Red);
+		coolDownUI.setSize({ 50, 50 });
+	}
 }
 
 void Slot::Release()
@@ -86,8 +104,20 @@ void Slot::Release()
 void Slot::Reset()
 {
 	UIButton::Reset();
-	isUsed = false;
+	//isUsed = false;
+	//isCool = false;
 	fadeInOutTimer = 0.f;
+	coolDownTimer = 0.f;
+
+	if (isCoolSlot)
+	{
+		coolDownDuration = currentSkill->GetSkillInfo().spellinfo.coolTime;
+		maxCharge = currentSkill->GetSkillInfo().spellinfo.maxSkillCharge;
+	}
+	else
+	{
+		coolDownDuration = 0;
+	}
 
 }
 
@@ -103,15 +133,80 @@ void Slot::Update(float dt)
 	{
 		fadeInOutTimer = 0.f;
 	}
+
+	if (isCoolSlot)
+	{
+		if (currentSkill->GetCurrentSkillCharge() < currentSkill->GetMaxSkillCharege() && !isCool)
+		{
+			isCool = true;
+			coolDownTimer = coolDownDuration;
+		}
+	}
+
+	if(isCool)
+		coolDownTimer -= dt;
+
+	// ÄðÀÌ µ¹¸é
+	if (isCoolSlot)
+	{
+		if (coolDownTimer < 0)
+		{
+			coolDownTimer = 0;
+			isCool = false;
+			currentSkill->AddCurrentSkillCharge(1);
+			if(currentSkill->GetCurrentSkillCharge() > 0 && currentSkill->GetMaxSkillCharege() != 0)
+				currentSkill->SetIsUsed(false);
+		}
+	}
+
+	if (isCoolSlot)
+	{
+		if (currentSkill->GetCurrentSkillCharge() < currentSkill->GetMaxSkillCharege()
+			&& currentSkill->GetCurrentSkillCharge() > 0)
+		{
+			std::stringstream skillChargeStr;
+			skillChargeStr << currentSkill->GetCurrentSkillCharge();
+			std::string temp = skillChargeStr.str();
+			skillChargeText.setString(skillChargeStr.str());
+			Utils::SetOrigin(skillChargeText, origin);
+		}
+		else if (currentSkill->GetCurrentSkillCharge() <= 0)
+		{
+			std::stringstream coolTimeStr;
+			coolTimeStr << std::fixed << std::setprecision(1) << coolDownTimer;
+			if (coolDownTimer > 0)
+			{
+				coolTimeText.setString(coolTimeStr.str());
+				Utils::SetOrigin(coolTimeText, origin);
+			}
+		}
+	}
+
 }
 
 void Slot::Draw(sf::RenderWindow& window)
 {
+	if (isCoolSlot)
+	{
+		if (currentSkill->GetIsUsed())
+			window.draw(coolDownUI);
+	}
 	if(selectedSlotIcon.GetActive())
 		window.draw(selectedSlotIcon.sprite);
 	UIButton::Draw(window);
 	window.draw(skillEventIcon.sprite);
 	window.draw(currentSkillIcon.sprite);
+
+	if (isCoolSlot)
+	{
+		if (currentSkill->GetCurrentSkillCharge() < currentSkill->GetMaxSkillCharege()
+			&& currentSkill->GetCurrentSkillCharge() > 0)
+		{
+			window.draw(skillChargeText);
+		}
+		else if(currentSkill->GetCurrentSkillCharge() <= 0)
+			window.draw(coolTimeText);
+	}
 }
 
 void Slot::SetPosition(const sf::Vector2f& p)
@@ -120,6 +215,10 @@ void Slot::SetPosition(const sf::Vector2f& p)
 	currentSkillIcon.SetPosition(p);
 	selectedSlotIcon.SetPosition(p);
 	skillEventIcon.SetPosition(p.x, p.y - 60.f);
+	coolDownUI.setPosition(p);
+	coolTimeText.setPosition(p.x - 3.f, p.y - 10.f);
+	skillChargeText.setPosition(p.x, p.y - 10.f);
+
 }
 
 void Slot::SetPosition(float x, float y)
@@ -128,7 +227,9 @@ void Slot::SetPosition(float x, float y)
 	currentSkillIcon.SetPosition(x, y);
 	skillEventIcon.SetPosition(x, y - 20.f);
 	selectedSlotIcon.SetPosition(x, y);
-
+	coolDownUI.setPosition(x, y);
+	coolTimeText.setPosition(x - 3.f, y - 10.f);
+	skillChargeText.setPosition(x , y - 10.f);
 }
 
 void Slot::SetOrigin(Origins origin)
@@ -137,7 +238,9 @@ void Slot::SetOrigin(Origins origin)
 	currentSkillIcon.SetOrigin(origin);
 	skillEventIcon.SetOrigin(origin);
 	selectedSlotIcon.SetOrigin(origin);
-
+	Utils::SetOrigin(coolDownUI, origin);
+	Utils::SetOrigin(coolTimeText, origin);
+	Utils::SetOrigin(skillChargeText, origin);
 }
 
 void Slot::SetOrigin(float x, float y)
@@ -146,7 +249,9 @@ void Slot::SetOrigin(float x, float y)
 	currentSkillIcon.SetOrigin(x, y);
 	skillEventIcon.SetOrigin(x, y);
 	selectedSlotIcon.SetOrigin(x, y);
-
+	coolDownUI.setOrigin(x, y);
+	coolTimeText.setOrigin(x, y);
+	skillChargeText.setOrigin(x, y);
 }
 
 
@@ -179,6 +284,9 @@ void Slot::OnClickEvent()
 
 		selectedSlot->sprite.setColor(sf::Color::Color(255, 255, 255, 255));
 
+		Skill* selceted1 = SKILL_MGR.SearchSkill(selectedSlot->slotSkillEvent);
+		Skill* selceted2 = SKILL_MGR.SearchSkill(slotSkillEvent);
+
 		// Äü½½·Ô º¯°æ ºÎºÐ
 		std::string tempQuickStr =  quickSlot->GetSlotList()[slotKey]->GetSkillIconId();
 		quickSlot->GetSlotList()[slotKey]->SetSkillIconId(quickSlot->GetSlotList()[selectedSlot->slotKey]->GetSkillIconId());
@@ -186,6 +294,13 @@ void Slot::OnClickEvent()
 		quickSlot->GetSlotList()[slotKey]->SetSkillIcon();
 		quickSlot->GetSlotList()[selectedSlot->slotKey]->SetSkillIcon();
 
+		Skill* selectedSlotSkill = SKILL_MGR.SearchSkill(slotSkillEvent);
+		Skill* currentSlotSkill = selectedSkill;
+
+		quickSlot->GetSlotList()[selectedSlot->slotKey]->currentSkill = selectedSlotSkill;
+		quickSlot->GetSlotList()[slotKey]->currentSkill = currentSlotSkill;
+		//quickSlot->GetSlotList()[selectedSlot->slotKey]->currentSkill = SKILL_MGR.SearchSkill(slotSkillEvent);
+		//quickSlot->GetSlotList()[slotKey]->currentSkill = selectedSkill;
 		selectedSlot = nullptr;
 	}
 	else

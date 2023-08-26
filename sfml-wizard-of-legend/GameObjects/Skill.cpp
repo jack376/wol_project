@@ -36,6 +36,8 @@ void Skill::Init()
 	currentRangeType = skillInfo.rangeType;
 	currentEventType = skillInfo.evnetType;
 	currentPlayerActionType = skillInfo.playerAction;
+	maxSkillCharge = spellInfo.maxSkillCharge;
+	currentSkillCharge = maxSkillCharge;
 }
 
 void Skill::Release()
@@ -65,13 +67,26 @@ void Skill::UseSkill()
 	spreadAngle = spellInfo.spreadAngle;
 	maxSkillCharge = spellInfo.maxSkillCharge;
 
-
 	// 중심 투사체 위치 계산 (플레이어 방향)
 	float centerAngle = player->GetPlayerLookAngle(); //360도 기준
 
 	// 투사체 위치 계산
 	float angleIncrement = spreadAngle / shotCount;
 	float startAngle = centerAngle - spreadAngle / 2.0f;
+
+	if (isUsed)
+		return;
+	//std::cout << currentSkillCharge << std::endl;
+	currentSkillCharge--;
+
+	if (currentSkillCharge < maxSkillCharge && maxSkillCharge != 0)
+	{
+		// 타이머 돌리고 충전
+		std::cout << currentSkillCharge << std::endl;
+
+	}
+	if(currentSkillCharge <= 0 && maxSkillCharge != 0)
+		isUsed = true;
 
 	if (shotCount > 1)
 	{
@@ -122,6 +137,7 @@ void Skill::UseSkill()
 		elementalSpell->SetMonsterList(monsters);
 		elementalSpell->SetTiles(worldTiles);
 	}
+
 }
 
 void Skill::UseEditorSkill()

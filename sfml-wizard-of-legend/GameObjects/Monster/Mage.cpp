@@ -85,7 +85,7 @@ void Mage::HandleAttackState(float dt)
 		Shoot(dt);
 		break;
 	default:
-		std::cout << "HandleAttackState default" << std::endl;
+		//std::cout << "HandleAttackState default" << std::endl;
 		break;
 	}
 }
