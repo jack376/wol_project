@@ -88,7 +88,7 @@ void Scene::RemoveGo(GameObject* go)
 
 void Scene::SortGos()
 {
-	/*
+	
 	gameObjects.sort([](GameObject* lhs, GameObject* rhs) {
 		if (lhs->sortLayer != rhs->sortLayer)
 			return lhs->sortLayer < rhs->sortLayer;
@@ -98,8 +98,8 @@ void Scene::SortGos()
 
 		return lhs->GetPosition().y < rhs->GetPosition().y;
 	});
-	*/
-
+	
+	/*
 	gameObjects.sort([](GameObject* lhs, GameObject* rhs) {
 		if (lhs->GetPosition().y != rhs->GetPosition().y)
 			return lhs->GetPosition().y < rhs->GetPosition().y;
@@ -109,6 +109,7 @@ void Scene::SortGos()
 
 		return lhs->sortOrder < rhs->sortOrder;
 	});
+	*/
 }
 
 sf::Vector2f Scene::ScreenToWorldPos(sf::Vector2f screenPos)

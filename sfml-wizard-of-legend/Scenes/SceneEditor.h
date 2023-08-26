@@ -100,7 +100,7 @@ public:
 	void SetSelectedTilesArea();
 	sf::Vector2i GetCurrentTileIntIndex();
 
-	Tile* CreateTilePreview(const std::string& name, float posX, float posY, int sort = 100);
+	Tile* CreateTilePreview(const std::string& name, float posX, float posY, int sort = 110);
 	void SetSelectedPreviewState(Tile::TileState state);
 	void SetSelectedPreviewArea();
 	sf::Vector2i GetCurrentPreviewIntIndex();

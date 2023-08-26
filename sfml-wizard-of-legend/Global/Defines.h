@@ -131,6 +131,7 @@ enum class SpawnLocation
 	Torch,
 	Embers,
 	FireLight,
+	Portal,
 };
 
 #include "AnimationClip.h"

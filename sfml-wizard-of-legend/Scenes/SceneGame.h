@@ -13,6 +13,7 @@ class Player;
 class Monster;
 class ElementalSpell;
 class DecoGo;
+class GlowGo;
 class Particle;
 class Monster;
 class CustomEffect;
@@ -67,7 +68,12 @@ public:
 	Monster* CreateMonster(MonsterId id);
 
 	void SpawnDecoGo(int count);
+	void SpawnWallDecoGo(int count);
+	void SpawnGlowGoLarge();
+	void SpawnGlowGoSmall();
+
 	void DestroyDecoGo(DecoGo* obj);
+
 	void TilesToIntMap();
 	void CalculatorNongroundTiles();
 };

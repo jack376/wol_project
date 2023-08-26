@@ -24,9 +24,10 @@ void SceneEditor::Init()
 	windowSize = FRAMEWORK.GetWindowSize();
 	resolutionScaleFactor = windowSize.x / fhdWidth;
 
+
 	// Texture Atlas
 	tileAtlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "TileAtlasPreview"));
-	tileAtlasPreview->sortLayer = 105;
+	tileAtlasPreview->sortLayer = 106;
 	tileAtlasPreview->SetOrigin(Origins::TL);
 	tileAtlasPreview->SetPosition(blankPos, blankPos);
 	tileAtlasPreview->SetActive(true);
@@ -744,14 +745,14 @@ void SceneEditor::DrawEditorUI()
 	// UI Style
 	ImGui::StyleColorsClassic();
 	ImGuiStyle& style = ImGui::GetStyle();
-	style.WindowPadding.x  = 0.0f;
-	style.WindowRounding   = 4.0f;
+	style.WindowPadding.x = 0.0f;
+	style.WindowRounding = 4.0f;
 	style.WindowBorderSize = 0.0f;
-	style.FrameRounding    = 4.0f;
-	style.FramePadding.x   = 8.0f;
-	style.FramePadding.y   = 4.0f;
-	style.ItemSpacing.x    = 4.0f;
-	style.ItemSpacing.y    = 6.0f;
+	style.FrameRounding = 4.0f;
+	style.FramePadding.x = 8.0f;
+	style.FramePadding.y = 4.0f;
+	style.ItemSpacing.x = 4.0f;
+	style.ItemSpacing.y = 6.0f;
 
 	// UI Window Key Shotcut
 	bool showWindow = false;
@@ -857,7 +858,7 @@ void SceneEditor::DrawEditorUI()
 	// UI Window Left
 	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f + windowTopSizeY));
 	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize / 2, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
-	ImGui::Begin("LEFT UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground );
+	ImGui::Begin("LEFT UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
 
 	// Save
 	static char maxPathLengthSave[128] = "";
@@ -899,7 +900,7 @@ void SceneEditor::DrawEditorUI()
 	ImGui::SetNextItemWidth(64.0f);
 	ImGui::Combo("##input4", &mapSizeIndexX, mapSizeX, IM_ARRAYSIZE(mapSizeX));
 	ImGui::SameLine();
-	const char* mapSizeY[] = { "16", "24", "32", "48", "64", "96", "128", "192", "256"};
+	const char* mapSizeY[] = { "16", "24", "32", "48", "64", "96", "128", "192", "256" };
 	static int mapSizeIndexY = 0;
 	ImGui::SetNextItemWidth(64.0f);
 	ImGui::Combo("##input5", &mapSizeIndexY, mapSizeY, IM_ARRAYSIZE(mapSizeY));
@@ -915,24 +916,24 @@ void SceneEditor::DrawEditorUI()
 
 	// Edit
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "EDIT TOOL");
-	if (ImGui::Button("UNDO")) 
-	{ 
-		commandInvoker.Undo(); 
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("REDO")) 
+	if (ImGui::Button("UNDO"))
 	{
-		commandInvoker.Redo(); 
+		commandInvoker.Undo();
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("COPY")) 
-	{ 
-		CopySelectedTiles(); 
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("PASTE")) 
+	if (ImGui::Button("REDO"))
 	{
-		PasteSelectedTiles(); 
+		commandInvoker.Redo();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("COPY"))
+	{
+		CopySelectedTiles();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("PASTE"))
+	{
+		PasteSelectedTiles();
 	}
 	ImGui::AlignTextToFramePadding();
 	ImGui::End();
@@ -965,7 +966,7 @@ void SceneEditor::DrawEditorUI()
 			std::cout << "ERROR : Exception encountered while loading." << std::endl;
 		}
 	}
-	
+
 	ImGui::Dummy(ImVec2(0.0f, 8.0f));
 
 	// View
@@ -974,7 +975,7 @@ void SceneEditor::DrawEditorUI()
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "LAVER TOGGLE");
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E) || ImGui::RadioButton("LAYER TOP", &layerView, 0))
 	{
-		isTileLayer = true;  
+		isTileLayer = true;
 		std::cout << "Current Layer : Top" << std::endl;
 		layerView = 0;
 	}
@@ -982,7 +983,7 @@ void SceneEditor::DrawEditorUI()
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R) || ImGui::RadioButton("LAYER BOTTOM", &layerView, 1))
 	{
 
-		isTileLayer = false; 
+		isTileLayer = false;
 		std::cout << "Current Layer : Bottom" << std::endl;
 		layerView = 1;
 	}
@@ -990,16 +991,31 @@ void SceneEditor::DrawEditorUI()
 
 	// Zoom
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "VIEW OPTION");
-	if (ImGui::Button("ZOOM IN")) 
-	{ 
-		scene-> Zoom(zoomInFactor);  
-	} 
-	ImGui::SameLine();
-	if (ImGui::Button("ZOOM OUT")) 
+	if (ImGui::Button("ZOOM IN"))
 	{
-		scene-> Zoom(zoomOutFactor); 
+		scene->Zoom(zoomInFactor);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("ZOOM OUT"))
+	{
+		scene->Zoom(zoomOutFactor);
 	}
 	ImGui::AlignTextToFramePadding();
+	ImGui::End();
+
+	// UI Window Top
+	ImGui::SetNextWindowPos(ImVec2(blankPos * 3.0f + atlasTextureSize, 24.0f));
+	ImGui::SetNextWindowSize(ImVec2(700.0f, blankPos));
+	ImGui::Begin("TOP UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
+
+	ImGui::ColorButton("NONE",   ImVec4(0.5f, 0.5f, 0.5f, 0.2f)); ImGui::SameLine(); ImGui::Text("NONE");      ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("LAVER",  ImVec4(0.8f, 0.2f, 0.2f, 1.0f)); ImGui::SameLine(); ImGui::Text("LAVER");     ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("OBJECT", ImVec4(1.0f, 1.0f, 0.0f, 1.0f)); ImGui::SameLine(); ImGui::Text("OBJECT");    ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("WALL",   ImVec4(0.0f, 0.6f, 1.0f, 1.0f)); ImGui::SameLine(); ImGui::Text("WALL");      ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("TORCH",  ImVec4(1.0f, 0.2f, 0.7f, 1.0f)); ImGui::SameLine(); ImGui::Text("TORCH");     ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("LIGHT1", ImVec4(0.5f, 0.2f, 0.8f, 1.0f)); ImGui::SameLine(); ImGui::Text("LIGHT 1x1"); ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("LIGHT2", ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); ImGui::SameLine(); ImGui::Text("LIGHT 2x2"); ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("PORTAL", ImVec4(0.2f, 0.8f, 0.2f, 1.0f)); ImGui::SameLine(); ImGui::Text("PORTAL");
 	ImGui::End();
 }
 
@@ -1022,23 +1038,14 @@ void SceneEditor::InputEditorUI()
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q)) { SetSelectedTilesDraw(); }
 
 	// SetSpawnLocation
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F)) { SetSelectedSpawnLocation(SpawnLocation::Monster); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::G)) { SetSelectedSpawnLocation(SpawnLocation::Object); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::H)) { SetSelectedSpawnLocation(SpawnLocation::WallObject); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::J)) { SetSelectedSpawnLocation(SpawnLocation::None); }
-
-	/*
-	None,
-	
-	Monster,
-	Object,
-	WallObject,
-
-	Torch,
-	Embers,
-	Glow,
-	Fire, (Particle)
-	*/
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F1)) { SetSelectedSpawnLocation(SpawnLocation::None);       }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F2)) { SetSelectedSpawnLocation(SpawnLocation::Monster);    }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F3)) { SetSelectedSpawnLocation(SpawnLocation::Object);     }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F4)) { SetSelectedSpawnLocation(SpawnLocation::WallObject); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F5)) { SetSelectedSpawnLocation(SpawnLocation::Torch);      }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F6)) { SetSelectedSpawnLocation(SpawnLocation::Embers);     }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F7)) { SetSelectedSpawnLocation(SpawnLocation::FireLight);  }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F8)) { SetSelectedSpawnLocation(SpawnLocation::Portal);     }
 
 	// SetTileType
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(TileType::Ground); }

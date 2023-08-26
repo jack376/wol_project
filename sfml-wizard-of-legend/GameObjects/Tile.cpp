@@ -118,7 +118,7 @@ void Tile::Draw(sf::RenderWindow& window)
     {
         window.draw(spriteBottom);
         window.draw(spriteTop);
-        window.draw(shape, sf::BlendAlpha);
+        window.draw(shape);
     }
 }
 
@@ -286,11 +286,16 @@ void Tile::SetSpawnLocationColor(SpawnLocation spawnLocation)
 {
     std::map<SpawnLocation, sf::Color> spawnColor =
     {
-        { SpawnLocation::None,       sf::Color(128, 128, 128, 48) },
-        { SpawnLocation::Monster,    sf::Color(255, 16, 255, 192) },
-        { SpawnLocation::Object,     sf::Color(16, 128, 255, 224) },
-        { SpawnLocation::WallObject, sf::Color(16, 255, 255, 160) },
-        };
+        { SpawnLocation::None,       sf::Color(128, 128, 128, 48)  },
+        { SpawnLocation::Monster,    sf::Color(224, 48, 48, 255)   },
+        { SpawnLocation::Object,     sf::Color(255, 255, 0, 255)   },
+        { SpawnLocation::WallObject, sf::Color(0, 160, 255, 255)   },
+        { SpawnLocation::Torch,      sf::Color(255, 48, 192, 255)  },
+        { SpawnLocation::Embers,     sf::Color(128, 64, 224, 255)  },
+        { SpawnLocation::FireLight,  sf::Color(255, 128, 128, 255) },
+        { SpawnLocation::Portal,     sf::Color(64, 224, 48, 255)   },
+    };
+
     shape.setOutlineColor(spawnColor[spawnLocation]);
     shape.setOutlineThickness(-1.5f);
 }

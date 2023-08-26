@@ -1,11 +1,15 @@
 #pragma once
 #include "GameObject.h"
 
+class Player;
 class GlowGo : public GameObject
 {
 protected:
+
 	std::string textureId;
 	sf::Sprite sprite;
+
+	Player* player = nullptr;
 
 public:
 	GlowGo(const std::string& textureId = "", const std::string& n = "")
@@ -24,5 +28,8 @@ public:
 	void SetOrigin(Origins origin);
 	void SetOrigin(float x, float y);
 	void SetTexture(const std::string& id);
+	void SetScale(float x, float y);
+
+	void SetPlayer(Player* player) { this->player = player; }
 };
 

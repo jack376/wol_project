@@ -19,6 +19,7 @@
 #include "Tile.h"
 #include "BoxCollider2D.h"
 #include "DecoGo.h"
+#include "GlowGo.h"
 #include "Particle.h"
 #include "Skill.h"
 #include "SkillMgr.h"
@@ -40,7 +41,7 @@ void SceneGame::Init()
 	player->SetScene(this);
 
 	// Load Tilemap CSV
-	LoadFromCSV("tables/EntireRoom_0824_190727.csv");
+	LoadFromCSV("tables/EntireRoom_0825_182721.csv");
 
 	TilesToIntMap();
 	CalculatorNongroundTiles();
@@ -95,7 +96,10 @@ void SceneGame::Init()
 	CreateParticle(1000);
 
 	// Spawn Deco
-	SpawnDecoGo(100); // max 133
+	SpawnDecoGo(100);
+	SpawnWallDecoGo(15);
+	SpawnGlowGoLarge();
+	//SpawnGlowGoSmall();
 
 	for (auto go : gameObjects)
 	{
@@ -328,7 +332,7 @@ void SceneGame::SpawnDecoGo(int count)
 		objectSpawnArea.erase(objectSpawnArea.begin() + randomIndex);
 
 		DecoGo* object = (DecoGo*)AddGo(new DecoGo("graphics/editor/FireTileSet.png", "Object" + i));
-		object->sortLayer = 0;
+		object->sortLayer = 3;
 		object->SetActive(true);
 		object->SetPlayer(player);
 		object->SetPosition(randomPosition);
@@ -337,6 +341,108 @@ void SceneGame::SpawnDecoGo(int count)
 		object->SetParticlePool(&particlePool);
 		object->SetOrigin(Origins::TL);
 		object->Reset();
+	}
+}
+
+void SceneGame::SpawnWallDecoGo(int count)
+{
+	std::vector<sf::Vector2f> objectSpawnArea;
+
+	for (size_t row = 0; row < tilesWorld.size(); row++)
+	{
+		for (size_t col = 0; col < tilesWorld[row].size(); col++)
+		{
+			if (tilesWorld[row][col]->GetSpawnLocation() == SpawnLocation::WallObject)
+			{
+				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
+			}
+		}
+	}
+
+	if (objectSpawnArea.empty())
+	{
+		return;
+	}
+
+	for (int i = 0; i < count && !objectSpawnArea.empty(); i++)
+	{
+		int randomIndex = Utils::RandomRange(0, objectSpawnArea.size() - 1);
+		int randomNumber = Utils::RandomRange(0, 2);
+		sf::Vector2f randomPosition = objectSpawnArea[randomIndex];
+
+		objectSpawnArea.erase(objectSpawnArea.begin() + randomIndex);
+
+		DecoGo* object = (DecoGo*)AddGo(new DecoGo("graphics/editor/FireTileSet.png", "WallObject" + i));
+		object->sortLayer = 4;
+		object->SetActive(true);
+		object->SetPlayer(player);
+		object->SetPosition(randomPosition);
+		object->SetTextureRect(sf::IntRect(240 + (randomNumber * 32), 288, 32, 32));
+		object->SetScale(4.0f, 4.0f);
+		object->SetParticlePool(&particlePool);
+		object->SetOrigin(Origins::TL);
+		object->Reset();
+	}
+}
+
+void SceneGame::SpawnGlowGoLarge()
+{
+	std::vector<sf::Vector2f> objectSpawnArea;
+
+	for (size_t row = 0; row < tilesWorld.size(); row++)
+	{
+		for (size_t col = 0; col < tilesWorld[row].size(); col++)
+		{
+			if (tilesWorld[row][col]->GetSpawnLocation() == SpawnLocation::FireLight)
+			{
+				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
+			}
+		}
+	}
+
+	if (objectSpawnArea.empty())
+	{
+		return;
+	}
+
+	for (int i = 0; i < objectSpawnArea.size() && !objectSpawnArea.empty(); i++)
+	{
+		GlowGo* object = (GlowGo*)AddGo(new GlowGo("graphics/effect/Glow.png", "GlowL" + i));
+		object->sortLayer = 10;
+		object->SetActive(true);
+		object->SetPlayer(player);
+		object->SetPosition(objectSpawnArea[i]);
+	}
+}
+
+void SceneGame::SpawnGlowGoSmall()
+{
+	std::vector<sf::Vector2f> objectSpawnArea;
+
+	for (size_t row = 0; row < tilesWorld.size(); row++)
+	{
+		for (size_t col = 0; col < tilesWorld[row].size(); col++)
+		{
+			if (tilesWorld[row][col]->GetSpawnLocation() == SpawnLocation::Embers);
+			{
+				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
+			}
+		}
+	}
+
+	if (objectSpawnArea.empty())
+	{
+		return;
+	}
+
+	for (int i = 0; i < objectSpawnArea.size() && !objectSpawnArea.empty(); i++)
+	{
+		GlowGo* object = (GlowGo*)AddGo(new GlowGo("graphics/effect/Glow.png", "GlowS" + i));
+		object->sortLayer = 10;
+		object->SetActive(true);
+		object->SetPlayer(player);
+		object->SetScale(0.66f, 0.66f);
+		object->SetPosition(objectSpawnArea[i]);
 	}
 }
 

@@ -10,9 +10,6 @@ void GlowGo::Reset()
 {
 	sf::Texture* tex = RESOURCE_MGR.GetTexture(textureId);
 	if (tex != nullptr) { sprite.setTexture(*tex); }
-
-	SetOrigin(origin);
-	SetPosition(0.0f, 0.0f);
 }
 
 void GlowGo::Update(float dt)
@@ -74,6 +71,11 @@ void GlowGo::SetOrigin(float x, float y)
 {
 	GameObject::SetOrigin(x, y);
 	sprite.setOrigin(x, y);
+}
+
+void GlowGo::SetScale(float x, float y)
+{
+	sprite.setScale(x, y);
 }
 
 void GlowGo::SetTexture(const std::string& id)
