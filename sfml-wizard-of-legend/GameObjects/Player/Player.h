@@ -88,8 +88,8 @@ private:
 	//Skill wdash;
 	//Skill wslash;
 
-	int maxHp = 100;
-	int hp = 100;
+	int maxHp = 500;
+	int hp = 500;
 
 	// 공격 포즈
 	int attackCount = 0;
@@ -114,6 +114,12 @@ private:
 	sf::Vector2f fallStart;
 	sf::Vector2f fallDest;
 
+	sf::Vector2f knockBackStart;
+	sf::Vector2f knockBackDest;
+
+	sf::Vector2f attackStart;
+	sf::Vector2f attackDest;
+
 	sf::Vector2f attackPos;
 
 	sf::Vector2f prevPos;
@@ -136,6 +142,9 @@ private:
 
 	float dashTimer = 0.f;
 	float dashDuration = 0.3f;
+	
+	float attackMoveTimer = 0.f;
+	float attackMoveDuration = 0.3f;
 
 	float fallTimer = 0.f;
 	float fallDuration = 0.4f;
