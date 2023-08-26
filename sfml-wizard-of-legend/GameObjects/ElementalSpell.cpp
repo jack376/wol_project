@@ -107,9 +107,14 @@ void ElementalSpell::Update(float dt)
 void ElementalSpell::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
-	if(Collider.GetActive())
+	//if(Collider.GetActive())
+	//	Collider.Draw(window);
+	//raycaster.draw(window);
+	if (isSpawn)
+	{
 		Collider.Draw(window);
-	raycaster.draw(window);
+		raycaster.draw(window);
+	}
 }
 
 void ElementalSpell::MeleeUpdate(float dt)
@@ -199,14 +204,18 @@ void ElementalSpell::MeleeUpdate(float dt)
 
 	// 사정거리 밖이면 isSpawn false로
 
-
+	range -= speed * dt;
+	if (range < 0)
+	{
+		isSpawn = false;
+	}
 
 	// isSpawn 이 false가 되면 사라진다
 	if (!isSpawn)
 	{
 		colMonsters.clear();
-		scene->RemoveGo(this);
 		pool.Return(this);
+		SCENE_MGR.GetCurrScene()->RemoveGo(this);
 	}
 }
 
@@ -247,6 +256,7 @@ void ElementalSpell::RangeUpdate(float dt)
 	}
 
 
+
 	// 중복 공격 방지용
 	if (isSpawn)
 	{
@@ -278,14 +288,19 @@ void ElementalSpell::RangeUpdate(float dt)
 
 
 	// 사정거리 밖이면 isSpawn false로
-	
-
 	// isSpawn 이 false가 되면 사라진다
+
+	range -= speed * dt;
+	if (range < 0)
+	{
+		isSpawn = false;
+	}
+
 	if (!isSpawn)
 	{
 		pool.Return(this);
 		colMonsters.clear();
-		scene->RemoveGo(this);
+		SCENE_MGR.GetCurrScene()->RemoveGo(this);
 	}
 
 }
