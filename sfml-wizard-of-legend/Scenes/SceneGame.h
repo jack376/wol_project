@@ -55,7 +55,9 @@ protected:
 	int count = 0;
 
 	sf::View miniMapView;
-	sf::RectangleShape miniMapBackground;
+	std::vector<std::vector<std::pair<sf::RectangleShape*, bool>>> miniMap;
+	sf::RectangleShape miniMapPlayer;
+	 
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
@@ -74,7 +76,7 @@ public:
 
 	Player* GetPlayer() { return player; }
 
-	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 1);
+	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
 	void LoadFromCSV(const std::string& path);
 	void CreateTile2dVector(int rows, int cols);
 	void CreateParticle(int count);
@@ -92,5 +94,7 @@ public:
 
 	bool GetIsMenuOn() { return isMenuOn; }
 	void SetIsMenuOn(bool isOn) { isMenuOn = isOn; }
+	void CreateMiniMap();
+	std::vector<sf::RectangleShape*> CheckMiniMap(int row, int col);
 };
 

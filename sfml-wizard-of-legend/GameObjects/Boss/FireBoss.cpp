@@ -443,12 +443,11 @@ void FireBoss::Meteor(float dt)
     }
     if (jumpTimer > meteoJumpDuration)
     {
-        SetParticle(position, 50);
-
         if (!isAttacked && player->IsAlive())
         {
             if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
             {
+                SetParticle(position, 50);
                 attackTimer = 0.f;
                 player->SetHp(-stat.damage);
                 isAttacked = true;
