@@ -113,7 +113,7 @@ void FireBoss::Update(float dt)
 void FireBoss::Draw(sf::RenderWindow& window)
 {
     window.draw(sprite);
-    raycaster.draw(window);   
+    //raycaster.draw(window);   
 
     if (attackEffect.GetActive())
         window.draw(attackEffect.sprite);

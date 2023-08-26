@@ -103,12 +103,15 @@ void Monster::Update(float dt)
 void Monster::Draw(sf::RenderWindow& window)
 {
     //SpriteGo::Draw(window);
-    window.draw(sprite, &shader);
+    if (monsterId == MonsterId::Ghoul || monsterId == MonsterId::GhoulLarge)
+        window.draw(sprite);
+    else
+        window.draw(sprite, &shader);
 
     //Debug Mode
-    window.draw(searchRange);
-    window.draw(attackRange);
-    raycaster.draw(window);
+    //window.draw(searchRange);
+    //window.draw(attackRange);
+    //raycaster.draw(window);
 }
 
 void Monster::SetPosition(const sf::Vector2f& p)
