@@ -20,6 +20,7 @@ class CustomEffect;
 class Slot;
 class MenuInventory;
 class QuickSlot;
+class TextGo;
 enum class MonsterId;
 
 class SceneGame : public Scene
@@ -58,8 +59,11 @@ protected:
 	std::vector<std::vector<std::pair<sf::RectangleShape*, bool>>> miniMap;
 	std::vector<sf::RectangleShape*> lookMap;
 	sf::RectangleShape miniMapPlayer;
+	TextGo* mapDiscovery = nullptr;
 	float miniMapTimer = 0.f;
 	float miniMapDuration = 1.f;
+	int mapMaxCount = 0;
+	int mapCount = 0;
 	 
 public:
 	SceneGame();

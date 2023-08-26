@@ -28,6 +28,7 @@
 #include "MenuInventory.h"
 #include "QuickSlot.h"
 #include "HPBar.h"
+#include "TextGo.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -53,6 +54,11 @@ void SceneGame::Init()
 	TilesToIntMap();
 	CalculatorNongroundTiles();
 	CreateMiniMap();
+
+	mapDiscovery = dynamic_cast<TextGo*>(AddGo(new TextGo("fonts/neodgm_code.ttf", "MapText")));
+	mapDiscovery->SetPosition(280, 60);
+	//mapDiscovery->text.setColor(sf::Color::Black);
+	mapDiscovery->sortLayer = 110;
 
 	menu = (MenuInventory*)AddGo(new MenuInventory());
 	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
@@ -185,6 +191,11 @@ void SceneGame::Update(float dt)
 	miniMapView.setCenter(player->GetPosition() );
 
 	lookMap = CheckMiniMap(20, 20);
+	
+	int percent = (float)mapCount / (float)mapMaxCount * 100;
+	std::cout << percent << "=" << mapCount << "/" << mapMaxCount << std::endl;
+	mapDiscovery->SetString(std::to_string(percent) + "%");
+
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 
@@ -553,6 +564,8 @@ void SceneGame::CalculatorNongroundTiles()
 		{
 			if (tile->GetType() != TileType::Ground)
 				nongroundTiles.push_back(tile);
+			else
+				mapMaxCount++;
 		}
 	}
 }
@@ -610,7 +623,13 @@ std::vector<sf::RectangleShape*> SceneGame::CheckMiniMap(int row, int col)
 	{
 		for (int j = leftColumnIndex; j < rightColumnIndex; j++)
 		{
-			miniMap[i][j].second = true;
+			if (!miniMap[i][j].second)
+			{
+				miniMap[i][j].second = true;
+				if (intMap[i][j] == 0)
+					mapCount++;
+			}
+			
 			
 			if (intMap[i][j] == 0)
 			{
