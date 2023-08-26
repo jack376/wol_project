@@ -38,7 +38,7 @@
     <ClCompile Include="Framework\Command.cpp" />
     <ClCompile Include="Framework\TileCommand.cpp" />
     <ClCompile Include="Framework\CommandInvoker.cpp" />
-    <ClCompile Include="GameObjects\BreakableObj.cpp" />
+    <ClCompile Include="GameObjects\DecoGo.cpp" />
     <ClCompile Include="GameObjects\Particle.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -58,6 +58,7 @@
     <ClCompile Include="GameObjects\Player\SkillEditorPlayer.cpp" />
     <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
     <ClCompile Include="DataTables\SkillTable.cpp" />
+    <ClCompile Include="GameObjects\GlowGo.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="Slot.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
@@ -183,8 +184,8 @@
     <ClInclude Include="Framework\Command.h" />
     <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
-    <ClInclude Include="GameObjects\BreakableObj.h" />
-    <ClInclude Include="GameObjects\DestructibleGo.h" />
+    <ClInclude Include="GameObjects\DecoGo.h" />
+
     <ClInclude Include="GameObjects\Particle.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="stdafx.h" />
@@ -208,6 +209,8 @@
     <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
     <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />
     <ClInclude Include="DataTables\SkillTable.h" />
+    <ClInclude Include="GameObjects\Bullet.h" />
+    <ClInclude Include="GameObjects\GlowGo.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="Slot.h" />

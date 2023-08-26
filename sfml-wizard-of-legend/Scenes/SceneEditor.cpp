@@ -7,7 +7,7 @@
 #include "SceneEditor.h"
 #include "TextGo.h"
 #include "SpriteGo.h"
-#include "BreakableObj.h"
+#include "DecoGo.h"
 #include "BaseUI.h"
 #include "Tile.h"
 #include "Particle.h"
@@ -24,14 +24,19 @@ void SceneEditor::Init()
 	windowSize = FRAMEWORK.GetWindowSize();
 	resolutionScaleFactor = windowSize.x / fhdWidth;
 
-	// New Tile
-	CreateTile2dVector(rows, cols);
 
 	// Texture Atlas
-	SpriteGo* atlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "AtlasPreview"));
-	atlasPreview->sortLayer = 105;
-	atlasPreview->SetOrigin(Origins::TL);
-	atlasPreview->SetPosition(blankPos, blankPos);
+	tileAtlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "TileAtlasPreview"));
+	tileAtlasPreview->sortLayer = 106;
+	tileAtlasPreview->SetOrigin(Origins::TL);
+	tileAtlasPreview->SetPosition(blankPos, blankPos);
+	tileAtlasPreview->SetActive(true);
+
+	decoAtlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/DecoSet.png", "DecoAtlasPreview"));
+	decoAtlasPreview->sortLayer = 105;
+	decoAtlasPreview->SetOrigin(Origins::TL);
+	decoAtlasPreview->SetPosition(blankPos, blankPos);
+	decoAtlasPreview->SetActive(false);
 
 	// TextureRect
 	const int tilesPerRow = atlasTextureSize / tileTextureSize;
@@ -229,6 +234,16 @@ void SceneEditor::SetSelectedTilesType(TileType type)
 	SetSelectedTilesState();
 }
 
+void SceneEditor::SetSelectedSpawnLocation(SpawnLocation spawn)
+{
+	for (Tile* tile : selectedTiles)
+	{
+		tile->SetSpawnLocation(spawn);
+		tile->SetSpawnLocationColor(spawn);
+	}
+	SetSelectedTilesState();
+}
+
 void SceneEditor::SetSelectedTilesDraw()
 {
 	if (selectedTiles.empty() || selectedPreview.empty())
@@ -255,7 +270,8 @@ void SceneEditor::SetSelectedTilesDraw()
 		Tile* previewTile = tilesPreview[matchPreviewIndex.x][matchPreviewIndex.y];
 
 		sf::IntRect previewRect = sf::IntRect(previewTile->GetIndex().x * tileSize, previewTile->GetIndex().y * tileSize, tileSize, tileSize);
-		isTileLayer ? worldTile->SetTextureRectTop(previewRect, textureId) : worldTile->SetTextureRectBottom(previewRect, textureId);
+
+		isTileLayer ? worldTile->SetTextureRectTop(previewRect, tileTextureId) : worldTile->SetTextureRectBottom(previewRect, tileTextureId);
 
 		TileCommand::TileState after = CaptureTileState(worldTile);
 
@@ -306,7 +322,7 @@ sf::Vector2i SceneEditor::GetCurrentTileIntIndex()
 		yIndex = std::max(0, std::min(yIndex, cols - 1));
 	}
 
-	std::cout << "index : (" << xIndex << ", " << yIndex << ")" << std::endl;
+	std::cout << "World Index : (" << xIndex << ", " << yIndex << ")" << std::endl;
 
 	return sf::Vector2i(xIndex, yIndex);
 }
@@ -408,6 +424,9 @@ sf::Vector2i SceneEditor::GetCurrentPreviewIntIndex()
 		xIndex = std::max(0, std::min(xIndex, maxRangeIndex - 1));
 		yIndex = std::max(0, std::min(yIndex, maxRangeIndex - 1));
 	}
+
+	std::cout << "Preview Index : (" << xIndex << ", " << yIndex << ")" << std::endl;
+
 	return sf::Vector2i(xIndex, yIndex);
 }
 
@@ -428,6 +447,7 @@ void SceneEditor::SaveToCSV(const std::string& path)
 	doc.SetColumnName(9,  "topTextureRectT");
 	doc.SetColumnName(10, "bottomTextureRectL");
 	doc.SetColumnName(11, "bottomTextureRectT");
+	doc.SetColumnName(12, "spawnLocation");
 
 	for (int i = 0; i < rows; i++)
 	{
@@ -441,12 +461,12 @@ void SceneEditor::SaveToCSV(const std::string& path)
 
 				doc.SetCell<int>("tileIndexX", i * cols + j, i);
 				doc.SetCell<int>("tileIndexY", i * cols + j, j);
-				doc.SetCell<int>("tileType",   i * cols + j, (int)tile->GetType());
-				doc.SetCell<int>("tileSize",   i * cols + j, (int)tileSize);
+				doc.SetCell<int>("tileType",   i * cols + j, static_cast<int>(tile->GetType()));
+				doc.SetCell<int>("tileSize",   i * cols + j, static_cast<int>(tileSize));
 				doc.SetCell<int>("tileScale",  i * cols + j, tileScaleFactor);
 				doc.SetCell<int>("tileLayer",  i * cols + j, tile->GetLayer());
 
-				doc.SetCell<std::string>("textureId", i * cols + j, atlas->textureId);
+				doc.SetCell<std::string>("textureId", i * cols + j, tileTextureId);
 
 				sf::IntRect topRect = tile->GetTextureRectTop();
 				doc.SetCell<int>("topTextureRectL", i * cols + j, topRect.left);
@@ -455,6 +475,8 @@ void SceneEditor::SaveToCSV(const std::string& path)
 				sf::IntRect bottomRect = tile->GetTextureRectBottom();
 				doc.SetCell<int>("bottomTextureRectL", i * cols + j, bottomRect.left);
 				doc.SetCell<int>("bottomTextureRectT", i * cols + j, bottomRect.top);
+
+				doc.SetCell<int>("spawnLocation", i * cols + j, static_cast<int>(tile->GetSpawnLocation()));
 			}
 		}
 	}
@@ -508,19 +530,22 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 		int tileScale  = doc.GetCell<int>("tileScale", i);
 		int tileLayer  = doc.GetCell<int>("tileLayer", i);
 
-		textureId = doc.GetCell<std::string>("textureId", i);
+		tileTextureId = doc.GetCell<std::string>("textureId", i);
 
 		sf::IntRect topTextureRect(doc.GetCell<int>("topTextureRectL", i), doc.GetCell<int>("topTextureRectT", i), tileSize, tileSize);
 		sf::IntRect bottomTextureRect(doc.GetCell<int>("bottomTextureRectL", i), doc.GetCell<int>("bottomTextureRectT", i), tileSize, tileSize);
+
+		int spawnLocation = doc.GetCell<int>("spawnLocation", i);
 
 		Tile* tile = (Tile*)FindGo(tileName);
 		tile->SetIndex(tileIndexX, tileIndexY);
 		tile->SetType(static_cast<TileType>(tileType));
 		tile->SetTileSize(tileSize);
 		tile->SetLayer(tileLayer);
-		tile->SetTexture(textureId);
-		tile->SetTextureRectTop(topTextureRect, textureId);
-		tile->SetTextureRectBottom(bottomTextureRect, textureId);
+		tile->SetTexture(tileTextureId);
+		tile->SetTextureRectTop(topTextureRect, tileTextureId);
+		tile->SetTextureRectBottom(bottomTextureRect, tileTextureId);
+		tile->SetSpawnLocation(static_cast<SpawnLocation>(spawnLocation));
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
 	}
@@ -560,7 +585,7 @@ TileCommand::TileState SceneEditor::CaptureTileState(const Tile* tile)
 {
 	TileCommand::TileState state;
 
-	state.textureId  = textureId;
+	state.textureId  = tileTextureId;
 	state.type       = tile-> GetType();
 	state.index      = tile-> GetIndex();
 	state.topRect    = tile-> GetTextureRectTop();
@@ -720,14 +745,14 @@ void SceneEditor::DrawEditorUI()
 	// UI Style
 	ImGui::StyleColorsClassic();
 	ImGuiStyle& style = ImGui::GetStyle();
-	style.WindowPadding.x  = 0.0f;
-	style.WindowRounding   = 4.0f;
+	style.WindowPadding.x = 0.0f;
+	style.WindowRounding = 4.0f;
 	style.WindowBorderSize = 0.0f;
-	style.FrameRounding    = 4.0f;
-	style.FramePadding.x   = 8.0f;
-	style.FramePadding.y   = 4.0f;
-	style.ItemSpacing.x    = 4.0f;
-	style.ItemSpacing.y    = 6.0f;
+	style.FrameRounding = 4.0f;
+	style.FramePadding.x = 8.0f;
+	style.FramePadding.y = 4.0f;
+	style.ItemSpacing.x = 4.0f;
+	style.ItemSpacing.y = 6.0f;
 
 	// UI Window Key Shotcut
 	bool showWindow = false;
@@ -752,11 +777,11 @@ void SceneEditor::DrawEditorUI()
 	ImGui::LabelText("3", "WALL");
 	ImGui::LabelText("4", "NONE");
 	ImGui::Separator();
-	ImGui::LabelText("Ctrl + Z", "UNDO");
-	ImGui::LabelText("Ctrl + X", "REDO");
-	ImGui::LabelText("Ctrl + C", "COPY");
-	ImGui::LabelText("Ctrl + V", "PASTE");
-	ImGui::LabelText("Ctrl + S", "SAVE");
+	ImGui::LabelText("Ctrl+Z", "UNDO");
+	ImGui::LabelText("Ctrl+X", "REDO");
+	ImGui::LabelText("Ctrl+C", "COPY");
+	ImGui::LabelText("Ctrl+V", "PASTE");
+	ImGui::LabelText("Ctrl+S", "SAVE");
 	ImGui::End();
 
 	// UI Window Top
@@ -806,14 +831,26 @@ void SceneEditor::DrawEditorUI()
 	ImGui::SameLine(0.0f, 8.0f);
 
 	// Texture Atlas Drobbox
-	const char* environment[] = { "DungeonTile", "PlazaTile", "DecoObject", "GlowFX" };
-	// Enable / Disable Check box 
-	// Distroy, Glow, Particle, Wall, Damage
-	// 던전 타일인지 아닌지 구분 필요 csv
-
+	const char* environment[] = { "DungeonTile", "DecoObject" };
 	static int environmentIndex = 0;
 	ImGui::SetNextItemWidth(128.0f);
 	ImGui::Combo("##input6", &environmentIndex, environment, IM_ARRAYSIZE(environment));
+
+	switch (environmentIndex)
+	{
+	case 0:
+		tileAtlasPreview->SetActive(true);
+		decoAtlasPreview->SetActive(false);
+		break;
+	case 1:
+		tileAtlasPreview->SetActive(false);
+		decoAtlasPreview->SetActive(true);
+		break;
+	default:
+		tileAtlasPreview->SetActive(true);
+		decoAtlasPreview->SetActive(false);
+		break;
+	}
 
 	ImGui::AlignTextToFramePadding();
 	ImGui::End();
@@ -821,7 +858,7 @@ void SceneEditor::DrawEditorUI()
 	// UI Window Left
 	ImGui::SetNextWindowPos(ImVec2(blankPos, atlasTextureSize + blankPos * 2.0f + windowTopSizeY));
 	ImGui::SetNextWindowSize(ImVec2(atlasTextureSize / 2, windowSize.y - (atlasTextureSize + blankPos * 2.0f)));
-	ImGui::Begin("LEFT UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground );
+	ImGui::Begin("LEFT UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
 
 	// Save
 	static char maxPathLengthSave[128] = "";
@@ -863,7 +900,7 @@ void SceneEditor::DrawEditorUI()
 	ImGui::SetNextItemWidth(64.0f);
 	ImGui::Combo("##input4", &mapSizeIndexX, mapSizeX, IM_ARRAYSIZE(mapSizeX));
 	ImGui::SameLine();
-	const char* mapSizeY[] = { "16", "24", "32", "48", "64", "96", "128", "192", "256"};
+	const char* mapSizeY[] = { "16", "24", "32", "48", "64", "96", "128", "192", "256" };
 	static int mapSizeIndexY = 0;
 	ImGui::SetNextItemWidth(64.0f);
 	ImGui::Combo("##input5", &mapSizeIndexY, mapSizeY, IM_ARRAYSIZE(mapSizeY));
@@ -879,24 +916,24 @@ void SceneEditor::DrawEditorUI()
 
 	// Edit
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "EDIT TOOL");
-	if (ImGui::Button("UNDO")) 
-	{ 
-		commandInvoker.Undo(); 
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("REDO")) 
+	if (ImGui::Button("UNDO"))
 	{
-		commandInvoker.Redo(); 
+		commandInvoker.Undo();
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("COPY")) 
-	{ 
-		CopySelectedTiles(); 
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("PASTE")) 
+	if (ImGui::Button("REDO"))
 	{
-		PasteSelectedTiles(); 
+		commandInvoker.Redo();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("COPY"))
+	{
+		CopySelectedTiles();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("PASTE"))
+	{
+		PasteSelectedTiles();
 	}
 	ImGui::AlignTextToFramePadding();
 	ImGui::End();
@@ -929,7 +966,7 @@ void SceneEditor::DrawEditorUI()
 			std::cout << "ERROR : Exception encountered while loading." << std::endl;
 		}
 	}
-	
+
 	ImGui::Dummy(ImVec2(0.0f, 8.0f));
 
 	// View
@@ -938,7 +975,7 @@ void SceneEditor::DrawEditorUI()
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "LAVER TOGGLE");
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E) || ImGui::RadioButton("LAYER TOP", &layerView, 0))
 	{
-		isTileLayer = true;  
+		isTileLayer = true;
 		std::cout << "Current Layer : Top" << std::endl;
 		layerView = 0;
 	}
@@ -946,7 +983,7 @@ void SceneEditor::DrawEditorUI()
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R) || ImGui::RadioButton("LAYER BOTTOM", &layerView, 1))
 	{
 
-		isTileLayer = false; 
+		isTileLayer = false;
 		std::cout << "Current Layer : Bottom" << std::endl;
 		layerView = 1;
 	}
@@ -954,16 +991,31 @@ void SceneEditor::DrawEditorUI()
 
 	// Zoom
 	ImGui::TextColored(ImVec4(0.4f, 0.5f, 0.7f, 1.0f), "VIEW OPTION");
-	if (ImGui::Button("ZOOM IN")) 
-	{ 
-		scene-> Zoom(zoomInFactor);  
-	} 
-	ImGui::SameLine();
-	if (ImGui::Button("ZOOM OUT")) 
+	if (ImGui::Button("ZOOM IN"))
 	{
-		scene-> Zoom(zoomOutFactor); 
+		scene->Zoom(zoomInFactor);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("ZOOM OUT"))
+	{
+		scene->Zoom(zoomOutFactor);
 	}
 	ImGui::AlignTextToFramePadding();
+	ImGui::End();
+
+	// UI Window Top
+	ImGui::SetNextWindowPos(ImVec2(blankPos * 3.0f + atlasTextureSize, 24.0f));
+	ImGui::SetNextWindowSize(ImVec2(700.0f, blankPos));
+	ImGui::Begin("TOP UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
+
+	ImGui::ColorButton("NONE",   ImVec4(0.5f, 0.5f, 0.5f, 0.2f)); ImGui::SameLine(); ImGui::Text("NONE");      ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("LAVER",  ImVec4(0.8f, 0.2f, 0.2f, 1.0f)); ImGui::SameLine(); ImGui::Text("LAVER");     ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("OBJECT", ImVec4(1.0f, 1.0f, 0.0f, 1.0f)); ImGui::SameLine(); ImGui::Text("OBJECT");    ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("WALL",   ImVec4(0.0f, 0.6f, 1.0f, 1.0f)); ImGui::SameLine(); ImGui::Text("WALL");      ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("TORCH",  ImVec4(1.0f, 0.2f, 0.7f, 1.0f)); ImGui::SameLine(); ImGui::Text("TORCH");     ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("LIGHT1", ImVec4(0.5f, 0.2f, 0.8f, 1.0f)); ImGui::SameLine(); ImGui::Text("LIGHT 1x1"); ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("LIGHT2", ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); ImGui::SameLine(); ImGui::Text("LIGHT 2x2"); ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("PORTAL", ImVec4(0.2f, 0.8f, 0.2f, 1.0f)); ImGui::SameLine(); ImGui::Text("PORTAL");
 	ImGui::End();
 }
 
@@ -971,11 +1023,11 @@ void SceneEditor::InputEditorUI()
 {
 	// Zoom
 	Scene* scene = SCENE_MGR.GetCurrScene();
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z) && INPUT_MGR.GetKey(sf::Keyboard::LControl) == false) { scene->Zoom(zoomInFactor); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X) && INPUT_MGR.GetKey(sf::Keyboard::LControl) == false) { scene->Zoom(zoomOutFactor); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Z) && !INPUT_MGR.GetKey(sf::Keyboard::LControl)) { scene-> Zoom(zoomInFactor);  }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::X) && !INPUT_MGR.GetKey(sf::Keyboard::LControl)) { scene-> Zoom(zoomOutFactor); }
 
 	// Copy, Paste
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { CopySelectedTiles(); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { CopySelectedTiles();  }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::V) && INPUT_MGR.GetKey(sf::Keyboard::LControl)) { PasteSelectedTiles(); }
 
 	// Undo, Redo
@@ -985,15 +1037,21 @@ void SceneEditor::InputEditorUI()
 	// Draw
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q)) { SetSelectedTilesDraw(); }
 
-	// SetTileLayer
-	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::E)) { isTileLeyer = true;  std::cout << "Current Layer : Top" << std::endl; }
-	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::R)) { isTileLeyer = false; std::cout << "Current Layer : Bottom" << std::endl; }
+	// SetSpawnLocation
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F1)) { SetSelectedSpawnLocation(SpawnLocation::None);       }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F2)) { SetSelectedSpawnLocation(SpawnLocation::Monster);    }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F3)) { SetSelectedSpawnLocation(SpawnLocation::Object);     }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F4)) { SetSelectedSpawnLocation(SpawnLocation::WallObject); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F5)) { SetSelectedSpawnLocation(SpawnLocation::Torch);      }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F6)) { SetSelectedSpawnLocation(SpawnLocation::Embers);     }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F7)) { SetSelectedSpawnLocation(SpawnLocation::FireLight);  }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F8)) { SetSelectedSpawnLocation(SpawnLocation::Portal);     }
 
 	// SetTileType
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num1)) { SetSelectedTilesType(TileType::Ground); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(TileType::Cliff); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(TileType::Wall); }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(TileType::None); }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num2)) { SetSelectedTilesType(TileType::Cliff);  }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num3)) { SetSelectedTilesType(TileType::Wall);   }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num4)) { SetSelectedTilesType(TileType::None);   }
 
 	// Deselect
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Right)) { SetSelectedTilesState(Tile::TileState::Blank); }

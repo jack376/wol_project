@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObjects\GlowGo.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
@@ -164,7 +165,7 @@
     <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
     <ClCompile Include="Animation\AnimationClip.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
-    <ClCompile Include="GameObjects\BreakableObj.cpp" />
+    <ClCompile Include="GameObjects\DecoGo.cpp" />
     <ClCompile Include="GameObjects\BoxCollider2D.cpp" />
     <ClCompile Include="GameObjects\Projectile.cpp" />
     <ClCompile Include="GameObjects\Monster\Archer.cpp" />
@@ -225,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
+    <ClInclude Include="GameObjects\GlowGo.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="QuickSlot.h" />
@@ -233,12 +235,11 @@
     <ClInclude Include="GameObjects\AnimationProjectile.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimationClip.h" />
-    <ClInclude Include="GameObjects\BreakableObj.h" />
+    <ClInclude Include="GameObjects\DecoGo.h" />
     <ClInclude Include="GameObjects\BoxCollider2D.h" />
     <ClInclude Include="GameObjects\Projectile.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
-    <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="Framework\Command.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="DataTables\StringTable.h" />

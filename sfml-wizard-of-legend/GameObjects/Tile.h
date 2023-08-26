@@ -19,20 +19,21 @@ public:
 protected:
     TileType type = TileType::Wall;
     TileState state = TileState::Blank;
+    SpawnLocation spawnLocation = SpawnLocation::None;
 
-    int tileLayer = 0;
-    float tileSize = 16.0f;
+    int   tileLayer   = 0;
+    float tileSize    = 16.0f;
 
-    bool isCollision = false;
-    bool isHover = false;
-    bool isTypeView = false;
-    bool isGridView = false;
+    bool  isCollision = false;
+    bool  isHover     = false;
+    bool  isTypeView  = false;
+    bool  isGridView  = false;
 
-    int tileIndexX = 0;
-    int tileIndexY = 0;
+    int   tileIndexX  = 0;
+    int   tileIndexY  = 0;
 
     sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(tileSize, tileSize));
-
+    
     sf::Sprite spriteTop;
     sf::Sprite spriteBottom;
 
@@ -86,6 +87,10 @@ public:
     void SetState(TileState state = TileState::Blank);
     void SetStateColor(TileState state = TileState::Blank);
     TileState GetState() const;
+
+    void SetSpawnLocation(SpawnLocation spawnLocation);
+    void SetSpawnLocationColor(SpawnLocation spawnLocation);
+    SpawnLocation GetSpawnLocation() const;
 
     void SetTexture(const std::string& path);
     void SetTextureRectTop(const sf::IntRect& rect, const std::string& path);

@@ -59,7 +59,7 @@ void Particle::Update(float dt)
 
 void Particle::Draw(sf::RenderWindow& window)
 {
-	window.draw(sprite, sf::BlendAdd);
+	isLighting ? window.draw(sprite, sf::BlendAdd) : window.draw(sprite);
 }
 
 void Particle::SetPosition(const sf::Vector2f& p)

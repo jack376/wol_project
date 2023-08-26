@@ -4,7 +4,7 @@
 
 bool TileInfoTable::Load()
 {
-    rapidcsv::Document doc("tables/TileInfoTable.csv");
+    rapidcsv::Document doc("tables/BossRoom_0822_184837_fix.csv");
 
     std::vector<std::string> tileName = doc.GetColumn<std::string>(0);
 
@@ -21,6 +21,8 @@ bool TileInfoTable::Load()
     std::vector<int> topTextureRectT    = doc.GetColumn<int>(9);
     std::vector<int> bottomTextureRectL = doc.GetColumn<int>(10);
     std::vector<int> bottomTextureRectT = doc.GetColumn<int>(11);
+
+    std::vector<int> spawnLocation = doc.GetColumn<int>(12);
 
     for (int i = 0; i < tileName.size(); ++i)
     {
@@ -41,6 +43,8 @@ bool TileInfoTable::Load()
         tileInfo.topTextureRectT    = topTextureRectT[i];
         tileInfo.bottomTextureRectL = bottomTextureRectL[i];
         tileInfo.bottomTextureRectT = bottomTextureRectT[i];
+        
+        tileInfo.spawnLocation = spawnLocation[i];
 
         table[tileName[i]] = tileInfo;
     }
@@ -72,6 +76,8 @@ bool TileInfoTable::Save(const std::string& path)
     std::vector<int> bottomTextureRectL;
     std::vector<int> bottomTextureRectT;
 
+    std::vector<int> spawnLocation;
+
     for (const auto& pair : table)
     {
         const TileInfo& tileInfo = pair.second;
@@ -91,6 +97,8 @@ bool TileInfoTable::Save(const std::string& path)
         topTextureRectT.push_back(tileInfo.topTextureRectT);
         bottomTextureRectL.push_back(tileInfo.bottomTextureRectL);
         bottomTextureRectT.push_back(tileInfo.bottomTextureRectT);
+
+        spawnLocation.push_back(tileInfo.spawnLocation);
     }
 
     doc.SetColumn(0,  tileName);
@@ -108,6 +116,8 @@ bool TileInfoTable::Save(const std::string& path)
     doc.SetColumn(9,  topTextureRectT);
     doc.SetColumn(10, bottomTextureRectL);
     doc.SetColumn(11, bottomTextureRectT);
+
+    doc.SetColumn(12, spawnLocation);
 
     try
     {

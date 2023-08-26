@@ -6,7 +6,7 @@
 
 class TextGo;
 class SpriteGo;
-class BreakableObj;
+class DecoGo;
 class Particle;
 class BaseUI;
 class Tile;
@@ -23,11 +23,17 @@ protected:
 	float blankPos = 32.0f;
 	float resolutionScaleFactor = 1.0f;
 
-	std::string textureId = "graphics/editor/FireTileSet.png";
+	//bool toggleCurrentPalette = true;
+
+	std::string tileTextureId = "graphics/editor/FireTileSet.png";
 	std::vector<std::vector<sf::IntRect>> tileTextureAtlas;
 	int atlasTextureSize = 512;
 	int tileTextureSize = 16;
 	int tileScaleFactor = 4;
+	bool isTileLayer = false;
+
+	std::string decoTextureId = "graphics/editor/DecoSet.png";
+	//bool isDecoLayer = false;
 
 	std::vector<std::vector<Tile*>> tilesWorld;
 	std::vector<std::vector<Tile*>> tilesPreview;
@@ -62,9 +68,10 @@ protected:
 	int copiedWidth = 0;
 	int copiedHeight = 0;
 
-	bool isTileLayer = false;
-
 	std::vector<std::vector<TileCommand::TileState>> tempTileStates;
+
+	SpriteGo* tileAtlasPreview = nullptr;
+	SpriteGo* decoAtlasPreview = nullptr;
 
 public:
 	SceneEditor();
@@ -84,13 +91,16 @@ public:
 
 	std::vector<Tile*> GetAllTiles();
 	std::vector<Tile*> GetSelectedTiles();
+
 	void SetSelectedTilesState(Tile::TileState state = Tile::TileState::Blank);
 	void SetSelectedTilesType(TileType type);
+	void SetSelectedSpawnLocation(SpawnLocation spawn);
+
 	void SetSelectedTilesDraw();
 	void SetSelectedTilesArea();
 	sf::Vector2i GetCurrentTileIntIndex();
 
-	Tile* CreateTilePreview(const std::string& name, float posX, float posY, int sort = 100);
+	Tile* CreateTilePreview(const std::string& name, float posX, float posY, int sort = 110);
 	void SetSelectedPreviewState(Tile::TileState state);
 	void SetSelectedPreviewArea();
 	sf::Vector2i GetCurrentPreviewIntIndex();

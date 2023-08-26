@@ -12,7 +12,7 @@ class Tile;
 class Player;
 class Monster;
 class ElementalSpell;
-class BreakableObj;
+class DecoGo;
 class Particle;
 class Monster;
 class CustomEffect;

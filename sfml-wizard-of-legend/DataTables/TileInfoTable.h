@@ -11,13 +11,15 @@ struct TileInfo
     int tileSize;
     int tileScale;
     int tileLayer;
-
+   
     std::string textureId;
 
     int topTextureRectL;
     int topTextureRectT;
     int bottomTextureRectL;
     int bottomTextureRectT;
+
+    int spawnLocation;
 };
 
 class TileInfoTable : public DataTable

@@ -7,8 +7,9 @@
 #include "Framework.h"
 
 Tile::Tile(const std::string& n, TileState state, TileType type) : GameObject(n)
-{
+{   
 }
+
 
 Tile::~Tile()
 {
@@ -17,10 +18,16 @@ Tile::~Tile()
 
 void Tile::Reset()
 {
+    //glow.setTexture(*RESOURCE_MGR.GetTexture("graphics/editor/FireTileSet.png"));
+
     shape.setFillColor(sf::Color::Transparent);
+    if (SCENE_MGR.GetCurrSceneId() == SceneId::Game)
+    {
+        shape.setOutlineThickness(0.0f);
+    }
     if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
     {
-        shape.setOutlineThickness(1.0f);
+        SetSpawnLocationColor(spawnLocation);
     }
 }
 
@@ -97,30 +104,21 @@ void Tile::Update(float dt)
         else if (isGridView && INPUT_MGR.GetKeyDown(sf::Keyboard::Y))
         {
             isGridView = !isGridView;
-            shape.setOutlineThickness(1.0f);
+            SetSpawnLocationColor(spawnLocation);
         }
     }
 }
 
 void Tile::Draw(sf::RenderWindow& window)
 {
-    if (SCENE_MGR.GetCurrSceneId() == SceneId::Game)
-    {
-        sf::View currentView = window.getView();
-        sf::FloatRect viewBounds(currentView.getCenter() - currentView.getSize() / 2.f, currentView.getSize());
+    sf::View currentView = window.getView();
+    sf::FloatRect viewBounds(currentView.getCenter() - currentView.getSize() / 2.f, currentView.getSize());
 
-        if (shape.getGlobalBounds().intersects(viewBounds))
-        {
-            window.draw(spriteBottom);
-            window.draw(spriteTop);
-        }
-    }
-
-    if (SCENE_MGR.GetCurrSceneId() == SceneId::Editor)
+    if (shape.getGlobalBounds().intersects(viewBounds)) 
     {
         window.draw(spriteBottom);
         window.draw(spriteTop);
-        window.draw(shape, sf::BlendAlpha);
+        window.draw(shape);
     }
 }
 
@@ -221,10 +219,10 @@ void Tile::SetTypeColor(TileType type)
 {
     std::map<TileType, sf::Color> typeColor =
     {
-        { TileType::None,         sf::Color::Transparent      },
-        { TileType::Ground,       sf::Color(0, 192, 0, 128)   },
-        { TileType::Cliff,        sf::Color(255, 0, 0, 128)   },
-        { TileType::Wall,         sf::Color(255, 160, 0, 128) },
+        { TileType::None,   sf::Color::Transparent     },
+        { TileType::Ground, sf::Color(0, 192, 0, 64)   },
+        { TileType::Cliff,  sf::Color(192, 0, 0, 64)   },
+        { TileType::Wall,   sf::Color(255, 128, 0, 64) },
     };
     shape.setFillColor(typeColor[type]);
 }
@@ -277,6 +275,34 @@ void Tile::SetStateColor(TileState state)
 Tile::TileState Tile::GetState() const
 {
     return state;
+}
+
+void Tile::SetSpawnLocation(SpawnLocation spawnLocation)
+{
+    this->spawnLocation = spawnLocation;
+}
+
+void Tile::SetSpawnLocationColor(SpawnLocation spawnLocation)
+{
+    std::map<SpawnLocation, sf::Color> spawnColor =
+    {
+        { SpawnLocation::None,       sf::Color(128, 128, 128, 48)  },
+        { SpawnLocation::Monster,    sf::Color(224, 48, 48, 255)   },
+        { SpawnLocation::Object,     sf::Color(255, 255, 0, 255)   },
+        { SpawnLocation::WallObject, sf::Color(0, 160, 255, 255)   },
+        { SpawnLocation::Torch,      sf::Color(255, 48, 192, 255)  },
+        { SpawnLocation::Embers,     sf::Color(128, 64, 224, 255)  },
+        { SpawnLocation::FireLight,  sf::Color(255, 128, 128, 255) },
+        { SpawnLocation::Portal,     sf::Color(64, 224, 48, 255)   },
+    };
+
+    shape.setOutlineColor(spawnColor[spawnLocation]);
+    shape.setOutlineThickness(-1.5f);
+}
+
+SpawnLocation Tile::GetSpawnLocation() const
+{
+    return spawnLocation;
 }
 
 void Tile::SetTexture(const std::string& path)
