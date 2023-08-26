@@ -92,10 +92,6 @@ void SceneGame::Init()
 	monster->SetPosition(700, 500);
 	monsters.push_back(monster);
 
-
-
-
-
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
 
@@ -162,6 +158,12 @@ void SceneGame::Enter()
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
+	//miniMapView.setSize(sf::Vector2f(200, 200));
+	//miniMapView.setViewport(sf::FloatRect(0.1f, 0.1f, 0.25f, 0.25f));
+	//miniMapBackground.setSize(sf::Vector2f(200, 200));
+	//miniMapBackground.setFillColor(sf::Color(50, 50, 50));
+	//miniMapBackground.setPosition(-200, 0);
+
 	Scene::Enter();
 
 	ClearObjectPool(particlePool);
@@ -226,6 +228,9 @@ inline void SceneGame::ClearObjectPool(ObjectPool<T>& pool)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+
+	window.setView(miniMapView);
+	window.draw(miniMapBackground);
 }
 
 Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)

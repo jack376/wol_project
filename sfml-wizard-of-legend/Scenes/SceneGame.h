@@ -53,6 +53,8 @@ protected:
 	ObjectPool<Particle> fireParticlePool;
 	int count = 0;
 
+	sf::View miniMapView;
+	sf::RectangleShape miniMapBackground;
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
