@@ -34,8 +34,16 @@ void CustomEffect::Update(float dt)
 {
 	if (animation.IsPlaying())
 	{
-		animation.Update(dt);
 		SetOrigin(origin);
+		std::cout << sprite.getOrigin().x << "\t" << sprite.getOrigin().y << std::endl;
+		animation.Update(dt);
+	}
+
+	if (type == EffectTypes::Circle && animation.IsAnimEndFrame())
+	{
+		SetActive(false);
+		SCENE_MGR.GetCurrScene()->RemoveGo(this);
+		pool->Return(this);
 	}
 
 	//Debug Mode
@@ -64,6 +72,14 @@ void CustomEffect::Play(std::string name, sf::Vector2f pos, sf::Vector2f dir)
 	this->dir = dir;
 	SetPosition(pos);
 	sprite.setRotation(Utils::Angle(this->dir) + 90);
+	if (type == EffectTypes::Circle)
+	{
+		sprite.setScale(3, 3);
+		sprite.setColor(sf::Color::Red);
+		sf::Color spriteColor = sprite.getColor();
+		spriteColor.a = 100;
+		sprite.setColor(spriteColor);
+	}
 	SetActive(true);
 	animation.Play(name);
 }
@@ -86,4 +102,9 @@ void CustomEffect::SetRectBox()
 	rect.setOrigin(sprite.getOrigin());
 	rect.setPosition(sprite.getPosition());
 	rect.setRotation(sprite.getRotation());
+}
+
+void CustomEffect::SetEffectPool(ObjectPool<CustomEffect>* pool)
+{
+	this->pool = pool;
 }

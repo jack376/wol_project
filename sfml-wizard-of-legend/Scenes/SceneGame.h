@@ -16,10 +16,10 @@ class BreakableObj;
 class Particle;
 class Monster;
 class CustomEffect;
-enum class MonsterId;
 class Slot;
 class MenuInventory;
 class QuickSlot;
+enum class MonsterId;
 
 class SceneGame : public Scene
 {
@@ -45,7 +45,6 @@ protected:
 	std::list<Monster*> monsters;
 
 	bool isMenuOn = false;
-
 	bool isCol = false;
 
 	float debugTimer = 0.f;
