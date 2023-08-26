@@ -1,5 +1,5 @@
 ID,FPS,LOOPTYPE,,
-FireBossDeadRight,2,0,,
+FireBossDeath,2,0,,
 ,,,,
 TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
 graphics/Texture2D/fireboss2.png,304,294,15,33

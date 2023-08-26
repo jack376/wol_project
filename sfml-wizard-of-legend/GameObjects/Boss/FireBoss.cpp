@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "FireBoss.h"
+#include "Framework.h"
 #include "ResourceMgr.h"
 #include "DataTableMgr.h"
 #include "MonsterTable.h"
@@ -46,6 +47,7 @@ void FireBoss::Init()
 
     attackEffect.AddClip("animations/FireBoss/FireWings.csv");
     attackEffect.SetOrigin(Origins::BC);
+
     ObjectPool<AnimationProjectile>* ptr = &projectilePool;
     projectilePool.OnCreate = [ptr, this](AnimationProjectile* skill)
     {
@@ -58,6 +60,15 @@ void FireBoss::Init()
     };
     projectilePool.Init();
 
+    ObjectPool<CustomEffect>* ptr2 = &castingCirclePool;
+    castingCirclePool.OnCreate = [ptr2, this](CustomEffect* circle)
+    {
+        circle->AddClip("animations/FireBoss/CastingCircle.csv");
+        circle->pool = ptr2;
+        circle->SetType(EffectTypes::Circle);
+    };
+    castingCirclePool.Init();
+
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineThickness(1.f);
     rect.setOutlineColor(sf::Color::Green);
@@ -67,6 +78,7 @@ void FireBoss::Release()
 {
     Monster::Release();
     projectilePool.Release();
+    castingCirclePool.Release();
 }
 
 void FireBoss::Reset()
@@ -79,6 +91,12 @@ void FireBoss::Reset()
         SCENE_MGR.GetCurrScene()->RemoveGo(bullet);
     }
     projectilePool.Clear();
+
+    for (auto effect : castingCirclePool.GetUseList())
+    {
+        SCENE_MGR.GetCurrScene()->RemoveGo(effect);
+    }
+    castingCirclePool.Clear();
 }
 
 void FireBoss::Update(float dt)
@@ -109,6 +127,11 @@ void FireBoss::SetPosition(const sf::Vector2f& p)
 void FireBoss::SetPosition(float x, float y)
 {
     Monster::SetPosition(x, y);
+}
+
+void FireBoss::SetActive(bool active)
+{
+    GameObject::SetActive(active);
 }
 
 void FireBoss::HandleState(float dt)
@@ -196,6 +219,7 @@ void FireBoss::Idle()
         stateStart = false;
         return;
     }
+    
 }
 
 void FireBoss::Attack(float dt)
@@ -251,10 +275,18 @@ void FireBoss::Attack(float dt)
 
 void FireBoss::Die()
 {
+    if (animation.GetCurrentClipId() != stat.name + "Death")
+    {
+        animation.Play(stat.name + "Death");
+        SetOrigin(origin);
+        SetRectBox();
+        std::cout << "FireBoss::Die()" << std::endl;
+    }
 }
 
 void FireBoss::KnockBack(float dt)
 {
+    Monster::KnockBack(dt);
 }
 
 void FireBoss::Dash(float dt)
@@ -429,16 +461,24 @@ void FireBoss::Meteor(float dt)
             if (animation.IsAnimEndFrame() && fireballTimer > fireballRate && fireCount < 10)
             {
                 AnimationProjectile* Meteor = projectilePool.Get();
+                CustomEffect* effect = castingCirclePool.Get();
 
-                sf::Vector2f createPos = player->GetPosition() - sf::Vector2f(400, 700);
-                sf::Vector2f dir = Utils::Normalize(player->GetPosition() - createPos);
+                sf::Vector2f randomPos = getRandomPositionInRadius({ 1024, 980 }, 700.f);
 
+                sf::Vector2f createPos = randomPos - sf::Vector2f(400, 700);
+                sf::Vector2f dir = Utils::Normalize(randomPos - createPos);
+
+                Meteor->SetOrigin(Origins::MC);
                 Meteor->SetPosition(createPos);
                 Meteor->SetRotation(Utils::Angle(dir) - 90);
                 Meteor->Play("MeteorStrike");
-                Meteor->MeteorFire(createPos, player->GetPosition(), stat.damage);
-
+                Meteor->MeteorFire(createPos, randomPos, stat.damage);
                 SCENE_MGR.GetCurrScene()->AddGo(Meteor);
+
+                effect->SetOrigin(Origins::MC);
+                effect->Play("CastingCircle", randomPos);
+                SCENE_MGR.GetCurrScene()->AddGo(effect);
+
                 fireCount++;
                 fireballTimer = 0;
             }
@@ -476,6 +516,15 @@ void FireBoss::SetAttackPattern(FireBossAttackPattern pattern)
 
 void FireBoss::OnAttacked(float damage)
 {
+    if (currentState != MonsterState::Dead && currentState == MonsterState::Idle)
+    {
+        SetState(MonsterState::KnockBack);
+        hp -= damage;
+    }
+    else
+    {
+        hp -= damage;
+    }
 }
 
 std::vector<sf::Vector2f> FireBoss::CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count, float angleRange) {
@@ -497,4 +546,21 @@ std::vector<sf::Vector2f> FireBoss::CalculateProjectilePositions(const sf::Vecto
         positions.emplace_back(projectilePosition);
     }
     return positions;
+}
+
+sf::Vector2f FireBoss::getRandomPositionInRadius(const sf::Vector2f& center, float radius)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> distAngle(0, 2 * 3.14159); // 0부터 2π까지의 랜덤 각도
+    std::uniform_real_distribution<float> distRadius(0, radius);     // 0부터 반경까지의 랜덤 반지름
+
+    float angle = distAngle(gen);
+    float randomRadius = distRadius(gen);
+
+    sf::Vector2f randomPosition;
+    randomPosition.x = center.x + randomRadius * std::cos(angle);
+    randomPosition.y = center.y + randomRadius * std::sin(angle);
+
+    return randomPosition;
 }

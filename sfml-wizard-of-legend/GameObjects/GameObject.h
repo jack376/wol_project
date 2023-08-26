@@ -18,7 +18,7 @@ public:
 	virtual ~GameObject();
 
 	bool GetActive() const;
-	void SetActive(bool active);
+	virtual void SetActive(bool active);
 
 	const std::string& GetName();
 	virtual void SetName(const std::string& n);

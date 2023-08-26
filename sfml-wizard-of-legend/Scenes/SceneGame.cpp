@@ -27,6 +27,7 @@
 #include "Slot.h"
 #include "MenuInventory.h"
 #include "QuickSlot.h"
+#include "HPBar.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -70,6 +71,18 @@ void SceneGame::Init()
 	monster->particlePool = &this->particlePool;
 	monsters.push_back(monster);
 
+	HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
+	hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
+	hpb->SetOrigin(Origins::ML);
+	hpb->SetPosition(size.x * 0.4, size.y * 0.1);
+	hpb->sortLayer = 105;
+
+	hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("PlayerHP")));
+	hpb->SetTarget(player->GetMaxHP(), player->GetHP());
+	hpb->SetOrigin(Origins::ML);
+	hpb->SetPosition(size.x * 0.05, size.y * 0.05);
+	hpb->sortLayer = 105;
+
 	monster = CreateMonster(MonsterId::Ghoul);
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
@@ -77,8 +90,6 @@ void SceneGame::Init()
 	monster->SetNonGroundTiles(&nongroundTiles);
 	monster->SetPosition(700, 500);
 	monsters.push_back(monster);
-
-
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
@@ -152,6 +163,12 @@ void SceneGame::Enter()
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
+	//miniMapView.setSize(sf::Vector2f(200, 200));
+	//miniMapView.setViewport(sf::FloatRect(0.1f, 0.1f, 0.25f, 0.25f));
+	//miniMapBackground.setSize(sf::Vector2f(200, 200));
+	//miniMapBackground.setFillColor(sf::Color(50, 50, 50));
+	//miniMapBackground.setPosition(-200, 0);
+
 	Scene::Enter();
 
 	ClearObjectPool(particlePool);
@@ -216,6 +233,9 @@ inline void SceneGame::ClearObjectPool(ObjectPool<T>& pool)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+
+	window.setView(miniMapView);
+	window.draw(miniMapBackground);
 }
 
 Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)

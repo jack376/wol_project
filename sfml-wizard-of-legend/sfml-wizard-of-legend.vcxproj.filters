@@ -63,6 +63,7 @@
     <ClCompile Include="Slot.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
+    <ClCompile Include="HPBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Slot.h" />
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="QuickSlot.h" />
+    <ClInclude Include="HPBar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

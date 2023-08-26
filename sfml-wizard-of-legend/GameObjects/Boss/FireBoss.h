@@ -2,7 +2,7 @@
 #include "Monster.h"
 #include "ObjectPool.h"
 #include "AnimationProjectile.h"
-
+#include "CustomEffect.h"
 
 enum class FireBossAttackPattern
 {
@@ -22,6 +22,7 @@ protected:
 
 	sf::Vector2f jumpDownPos;
 	sf::Vector2f jumpUpPos;
+
 	int patternCount = 0;
 	int fireCount = 0;
 	int shotCount = 0;
@@ -38,9 +39,9 @@ protected:
 
 	FireBossAttackPattern currentAttackPattern;
 	ObjectPool<AnimationProjectile> projectilePool;
+	ObjectPool<CustomEffect> castingCirclePool;
 public:
-
-	FireBoss(MonsterId id, const std::string& textureId = "", const std::string& n = "");
+	FireBoss(MonsterId id, const std::string& textureId = "", const std::string& n = "FireBoss");
 	virtual ~FireBoss() override;
 
 	virtual void Init() override;
@@ -51,6 +52,7 @@ public:
 
 	virtual void SetPosition(const sf::Vector2f& p) override;
 	virtual void SetPosition(float x, float y) override;
+	virtual void SetActive(bool active) override;
 
 	virtual void HandleState(float dt);
 	void HandleAttackPattern(float dt);
@@ -68,8 +70,10 @@ public:
 	void Meteor(float dt);
 	void SetAttackPattern(FireBossAttackPattern pattern);
 
-	virtual void OnAttacked(float damage);
+	virtual void OnAttacked(float damage) override;
 	std::vector<sf::Vector2f> CalculateProjectilePositions(const sf::Vector2f& playerPosition, const sf::Vector2f& monsterPosition, float radius, int count, float angleRange);
+	// 주어진 중심 위치(center)와 반경(radius) 내에서 랜덤 좌표를 생성하는 함수
+	sf::Vector2f getRandomPositionInRadius(const sf::Vector2f& center, float radius);
 
 
 };
