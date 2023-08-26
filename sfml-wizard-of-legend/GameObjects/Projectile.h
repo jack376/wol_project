@@ -2,14 +2,19 @@
 #include "SpriteGo.h"
 #include "BoxCollider2D.h"
 #include "Beam.h"
+#include "ObjectPool.h"
 
 class Player;
 class Tile;
+class SpriteEffect;
+
 
 class Projectile :
     public SpriteGo
 {
 protected:
+	ObjectPool<SpriteEffect> playerHitEffectPool;
+
 	sf::Vector2f direction;
 	
 	float speed = 0.f;

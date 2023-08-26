@@ -10,6 +10,7 @@
 #include "CustomEffect.h"
 #include "AS.h"
 #include "Particle.h"
+#include "SpriteEffect.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -34,15 +35,30 @@ void Monster::Init()
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineThickness(1.f);
     rect.setOutlineColor(sf::Color::Green);
+
+    playerHitEffectPool.OnCreate = [this](SpriteEffect* effect) {
+        effect->sprite.setScale(3, 3);
+        effect->SetAnimId("HitEffect");
+        effect->SetDuration(0.5f);
+        effect->sortLayer = 20;
+    };
+    playerHitEffectPool.Init();
+
 }
 
 void Monster::Release()
 {
+    for (auto obj : playerHitEffectPool.GetUseList())
+    {
+        SCENE_MGR.GetCurrScene()->RemoveGo(obj);
+    }
+    playerHitEffectPool.Clear();
 }
 
 void Monster::Reset()
 {
     SpriteGo::Reset();
+    playerHitEffectPool.Clear();
     attackEffect.Reset();
 
     SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
@@ -199,6 +215,13 @@ void Monster::Attack(float dt)
     {
         if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
         {
+            SpriteEffect* playerHitEffect = playerHitEffectPool.Get();
+            sf::Vector2f randPos(Utils::RandomRange(0.f, 10.f), Utils::RandomRange(0.f, 10.f));
+            playerHitEffect->SetPosition(player->GetPosition() + randPos);
+            float randAngle = Utils::RandomRange(0.f, 360.f);
+            playerHitEffect->sprite.setRotation(randAngle);
+            SCENE_MGR.GetCurrScene()->AddGo(playerHitEffect);
+
             attackTimer = 0.f;
             player->SetHp(-stat.damage);
             isAttacked = true;

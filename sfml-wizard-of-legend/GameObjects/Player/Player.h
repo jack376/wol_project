@@ -194,7 +194,7 @@ private:
 	std::string attackName;
 
 	Tile* currentTile = nullptr;
-	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
+	std::vector<std::vector<Tile*>>* worldTiles = nullptr;
 
 public:
 	Player(const std::string& textureId = "", const std::string& n = "");
@@ -252,7 +252,7 @@ public:
 	// 애니메이션 이름 등록
 	void InsertAnimId();
 
-	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
+	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
 

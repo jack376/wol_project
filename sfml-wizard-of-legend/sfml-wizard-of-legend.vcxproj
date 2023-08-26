@@ -224,6 +224,7 @@
     <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
     <ClCompile Include="DataTables\SkillTable.cpp" />
     <ClCompile Include="Slot.cpp" />
+    <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -277,6 +278,7 @@
     <ClInclude Include="GameObjects\Skill.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\TileCommand.h" />
+    <ClInclude Include="SpriteEffect.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
     <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />

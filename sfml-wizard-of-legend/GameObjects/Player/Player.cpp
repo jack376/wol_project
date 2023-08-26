@@ -227,7 +227,7 @@ void Player::Update(float dt)
 	}
 
 	// 맞으면 무적상태와 맞는 상태 표시
-	if (isHit)
+	if (isHit && isAlive)
 	{
 		scene->SetIsMenuOn(false);
 		CalHitLookAngle();
@@ -933,7 +933,7 @@ void Player::CalculatorCurrentTile()
 	int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
 	int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
 
- 	currentTile = (*wouldTiles)[rowIndex][columnIndex];
+ 	currentTile = (*worldTiles)[rowIndex][columnIndex];
 }
 
 std::vector<Tile*> Player::CalculatorRangeTiles(int row, int col)
@@ -945,13 +945,13 @@ std::vector<Tile*> Player::CalculatorRangeTiles(int row, int col)
 	sf::Vector2i index = currentTile->GetIndex();
 	std::vector<Tile*> tiles;
 
-	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > wouldTiles->size() * _TileSize ? wouldTiles->size() * _TileSize : index.x;
-	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > wouldTiles[0].size() * _TileSize ? wouldTiles[0].size() * _TileSize : index.y;
+	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > worldTiles->size() * _TileSize ? worldTiles->size() * _TileSize : index.x;
+	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > worldTiles[0].size() * _TileSize ? worldTiles[0].size() * _TileSize : index.y;
 	for (int i = topRowIndex; i < index.x + searchRowRange; i++)
 	{
 		for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
 		{
-			tiles.push_back((*this->wouldTiles)[i][j]);
+			tiles.push_back((*this->worldTiles)[i][j]);
 		}
 	}
 

@@ -64,6 +64,7 @@
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="HPBar.cpp" />
+    <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -186,7 +187,6 @@
     <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="GameObjects\DecoGo.h" />
-
     <ClInclude Include="GameObjects\Particle.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="stdafx.h" />
@@ -218,6 +218,7 @@
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="HPBar.h" />
+    <ClInclude Include="SpriteEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
