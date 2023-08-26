@@ -114,6 +114,7 @@ void SceneGame::Init()
 		skillTable.second->SetPlayer(player);
 		skillTable.second->SetMonsterList(monsters);
 		skillTable.second->SetPlayer(player);
+		skillTable.second->Init();
 		SKILL_MGR.EquipSkill(skillTable.second);
 	}
 
@@ -211,6 +212,7 @@ inline void SceneGame::ClearObjectPool(ObjectPool<T>& pool)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+
 }
 
 Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)

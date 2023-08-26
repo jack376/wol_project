@@ -89,9 +89,9 @@ void Projectile::Draw(sf::RenderWindow& window)
 	if (collider.GetActive())
 		collider.Draw(window);
 
-	std::cout << "Pos( " << position.x << ", " << position.y << " ) Origin( " << sprite.getOrigin().x << ", " << sprite.getOrigin().y << " ) Rot( " << sprite.getRotation() << " )\t" <<
-		"Pos( " << collider.obbCol.getPosition().x << ", " << collider.obbCol.getPosition().y << " ) Origin( " << collider.obbCol.getOrigin().x << ", " << collider.obbCol.getOrigin().y << " ) Rot( " << collider.obbCol.getRotation() << " )\t"
-		<< std::endl;
+	//std::cout << "Pos( " << position.x << ", " << position.y << " ) Origin( " << sprite.getOrigin().x << ", " << sprite.getOrigin().y << " ) Rot( " << sprite.getRotation() << " )\t" <<
+	//	"Pos( " << collider.obbCol.getPosition().x << ", " << collider.obbCol.getPosition().y << " ) Origin( " << collider.obbCol.getOrigin().x << ", " << collider.obbCol.getOrigin().y << " ) Rot( " << collider.obbCol.getRotation() << " )\t"
+	//	<< std::endl;
 }
 
 void Projectile::SetRotation(const sf::Vector2f dir)
