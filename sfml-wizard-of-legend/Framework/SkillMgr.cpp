@@ -22,6 +22,7 @@ void SkillMgr::Init()
 		skill.second->SetPlayer(player);
 		skill.second->SetEditorPlayer(editorPlayer);
 		skill.second->Init();
+		skill.second->PoolInit();
 	}
 }
 

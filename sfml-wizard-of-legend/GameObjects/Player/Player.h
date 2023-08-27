@@ -83,13 +83,6 @@ private:
 
 	//BoxCollider2D obb;
 
-	// 스킬 클래스
-	//4개는 고정이란 뜻
-	// 스킬 매니저 생성 swap함수 느낌으로
-	//Skill fireball;
-	//Skill wdash;
-	//Skill wslash;
-
 	int maxHp = 10;
 	int hp = 10;
 

@@ -221,13 +221,7 @@ void Player::Update(float dt)
 		ChangeState(States::Die);
 	}
 
-	// 무적 상태 분리
-	if (isInvincible)
-	{
 
-	}
-
-	// 맞으면 무적상태와 맞는 상태 표시
 	if (isHit && isAlive && !isFalling)
 	{
 		scene->SetIsMenuOn(false);
@@ -235,8 +229,15 @@ void Player::Update(float dt)
 		ChangeState(States::Hit);
 	}
 
+
 	if (scene->GetIsMenuOn() || scene->GetIsGameEnd())
+	{
+		isRun = false;
+		isDash = false;
+		isSlide = false;
+		isAttack = false;
 		return;
+	}
 
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
@@ -588,12 +589,18 @@ void Player::HitUpdate(float dt)
 
 	currentDir = (Dir)((int)hitDir + 4);
 
+
+
 	// 몬스터의 공격과 동기화가 되지 않음
 	if (!isHitAnim)
 	{
 		anim.Play(hitId[(int)hitDir]);
 		sprite.setColor(sf::Color::Red);
 		isHitAnim = true;
+		isRun = false;
+		isAttack = false;
+		isDash = false;
+		isSlide = false;
 	}
 
 	//애니메이션이 너무 한 프레임에 처리되어서 시간초를 둠
@@ -645,8 +652,6 @@ void Player::HitUpdate(float dt)
 		sprite.setColor(playerColor);
 		isHit = false;
 		isHitAnim = false;
-		isRun = false;
-		isAttack = false;
 		ChangeState(States::Idle);
 	}
 }
@@ -753,6 +758,7 @@ void Player::DieUpdate(float dt)
 
 	if (anim.IsAnimEndFrame())
 	{
+		ChangeState(States::Idle);
 		scene->SetIsGameEnd(true);
 	}
 }

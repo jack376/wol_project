@@ -76,6 +76,11 @@ void SceneTitle::Init()
 		isChangeScene = true;
 	};
 
+	quit->OnClick = [this]() {
+		SCENE_MGR.GetCurrScene()->Exit();
+		FRAMEWORK.GetWindow().close();
+	};
+
 	for (auto go : gameObjects)
 	{
 		go->Init();
@@ -191,7 +196,6 @@ void SceneTitle::AllSetLangText(Languages lang)
 	StringTable* stringTable = DATATABLE_MGR.Get<StringTable>(DataTable::Ids::String);
 	for (auto& pair : textLangList)
 	{
-
 		pair.first.setFont(*RESOURCE_MGR.GetFont("fonts/NanumSquareB.ttf"));
 		pair.first.setCharacterSize(30);
 		pair.first.setString(stringTable->GetUni(pair.second, lang));
