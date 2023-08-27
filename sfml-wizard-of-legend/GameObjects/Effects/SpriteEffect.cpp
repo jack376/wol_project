@@ -14,6 +14,7 @@ void SpriteEffect::Init()
 	// Reset() Init() »ý°¢
 	effectAnim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/AttackEffect.csv"));
 	effectAnim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/HitEffect.csv"));
+	effectAnim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/DieEffect.csv"));
 
 	effectAnim.SetTarget(&sprite);
 	SetOrigin(Origins::MC);
@@ -42,6 +43,7 @@ void SpriteEffect::FadeEffectNRemove(float dt)
 	}
 	isEffect = true;
 	effectAnim.Update(dt);
+	Utils::SetOrigin(sprite, Origins::MC);
 
 	if (timer > duration)
 	{

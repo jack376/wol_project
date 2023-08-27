@@ -11,6 +11,7 @@
 Scene::Scene(SceneId id) : sceneId(id), window(FRAMEWORK.GetWindow())
 {
 	window.setMouseCursorVisible(true);
+
 }
 
 Scene::~Scene()
@@ -161,6 +162,8 @@ void Scene::Enter()
 
 void Scene::Exit()
 {
+	RemoveGo(mouseCursor);
+	delete mouseCursor;
 	for (auto go : removeGameObjects)
 	{
 		gameObjects.remove(go);
@@ -176,11 +179,17 @@ void Scene::Update(float dt)
 {
 	if (sceneId == SceneId::Game)
 	{
+		window.setMouseCursorVisible(false);
 		SetMousePos();
 	}
 	else if (sceneId == SceneId::Editor)
 	{
+		window.setMouseCursorVisible(true);
 		mouseCursor->SetActive(false);
+	}
+	else
+	{
+		SetMousePos();
 	}
 
 	if (isPlaying)

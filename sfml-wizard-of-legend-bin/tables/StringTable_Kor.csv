@@ -1,19 +1,14 @@
 ID,KOREAN
-TITLE1,쿠키런
-TITLE2,오븐브레이크
-PAUSE,일시정지
-CONTINUE,계속하기
-EXIT,그만하기
-REDO,다시하기
-STORAGE,내 쿠키들
-SKIN,스킨
-GROUND,지형
-ITEM,아이템
-COIN,재화
-START,게임 시작
-EDITOR,에디터 제작
-COOKIE_STORAGE,쿠키
-SKIN_STORAGE,스킨
-LOBBY_STORAGE,로비 스킨
-FAILED_TO_BUY,잔액 부족
-GAME_OVER,게임 오버!
+RESULT,결과
+STAGE,도달 스테이지
+GEM,수집 보석
+TOTALTIME,총 시간
+CONTINUE,계속
+EXIT,나가기
+PRESS,아무 버튼이나 누르세요
+SINGLE,싱글 플레이어
+MULTI,2인 플레이
+ARENA,대전
+OPTION,옵션
+CREATE,제작진
+QUIT,종료

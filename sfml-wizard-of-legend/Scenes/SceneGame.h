@@ -22,6 +22,7 @@ class MenuInventory;
 class QuickSlot;
 class TextGo;
 enum class MonsterId;
+class GameResult;
 
 class SceneGame : public Scene
 {
@@ -30,11 +31,11 @@ protected:
 
 	MenuInventory* menu;
 	QuickSlot* quickSlot;
-	Slot* slot1;
-	Slot* slot2;
+	GameResult* gameResult;
 
-	ElementalSpell* tempWindSlash;
-	ElementalSpell* tempFireBall;
+	TextGo* test;
+
+
 	std::vector<std::vector<Tile*>> tilesWorld;
 	std::vector<Tile*> nongroundTiles;
 	std::vector<std::vector<int>> intMap;
@@ -46,7 +47,10 @@ protected:
 	Monster* monster;
 	std::list<Monster*> monsters;
 
+	bool isGameEnd = false;
 	bool isMenuOn = false;
+	bool isReStart = false;
+
 	bool isCol = false;
 
 	float debugTimer = 0.f;
@@ -101,6 +105,10 @@ public:
 
 	bool GetIsMenuOn() { return isMenuOn; }
 	void SetIsMenuOn(bool isOn) { isMenuOn = isOn; }
+	bool GetIsGameEnd() { return isGameEnd; }
+	void SetIsGameEnd(bool isOn) { isGameEnd = isOn; }
+	bool GetIsReStart() { return isReStart; }
+	void SetIsReStart(bool isOn) { isReStart = isOn; }
 	void CreateMiniMap();
 	std::vector<sf::RectangleShape*> CheckMiniMap(int row, int col);
 };

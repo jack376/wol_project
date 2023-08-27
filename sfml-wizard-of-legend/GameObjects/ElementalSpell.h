@@ -5,6 +5,7 @@
 #include "Beam.h"
 #include "ObjectPool.h"
 #include "Skill.h"
+#include "SceneMgr.h"
 
 class SpriteGo;
 class SceneGame;
@@ -144,6 +145,4 @@ public:
 	sf::Vector2f  CalAxisSin(float time, float speed, float frequency, float amplitude, const sf::Vector2f& axis, float angleInDegrees);
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
-
 };
-

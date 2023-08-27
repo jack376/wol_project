@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects\GlowGo.cpp" />
+    <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
@@ -229,6 +230,7 @@
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="GameObjects\GlowGo.h" />
+    <ClInclude Include="GameResult.h" />
     <ClInclude Include="HPBar.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
@@ -278,7 +280,7 @@
     <ClInclude Include="GameObjects\Skill.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\TileCommand.h" />
-    <ClInclude Include="SpriteEffect.h" />
+    <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
     <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />

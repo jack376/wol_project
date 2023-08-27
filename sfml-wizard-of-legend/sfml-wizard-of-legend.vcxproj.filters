@@ -65,6 +65,7 @@
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
+    <ClCompile Include="GameResult.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -218,7 +219,8 @@
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="HPBar.h" />
-    <ClInclude Include="SpriteEffect.h" />
+    <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
+    <ClInclude Include="GameResult.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

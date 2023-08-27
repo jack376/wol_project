@@ -6,6 +6,7 @@
 #include "SkillEditorElementalSpell.h"
 #include "Monster.h"
 #include "Player.h"
+#include "SceneGame.h"
 
 Skill::Skill(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -14,6 +15,7 @@ Skill::Skill(const std::string& textureId, const std::string& n)
 
 Skill::~Skill()
 {
+	Release();
 }
 
 void Skill::Init()
@@ -42,6 +44,12 @@ void Skill::Init()
 
 void Skill::Release()
 {
+	for (auto obj : pool.GetUseList())
+	{
+		SCENE_MGR.GetCurrScene()->RemoveGo(obj);
+	}
+	pool.Clear();
+
 }
 
 void Skill::Reset()
