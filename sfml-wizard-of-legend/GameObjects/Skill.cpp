@@ -68,6 +68,11 @@ void Skill::Draw(sf::RenderWindow& window)
 
 }
 
+void Skill::PoolInit()
+{
+	pool.Init();
+}
+
 void Skill::UseSkill()
 {
 	shotCount = spellInfo.shotCount;

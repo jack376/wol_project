@@ -132,6 +132,7 @@ void SceneGame::Init()
 		skillTable.second->SetPlayer(player);
 		skillTable.second->SetTiles(&tilesWorld);
 		skillTable.second->Init();
+		skillTable.second->PoolInit();
 		SKILL_MGR.EquipSkill(skillTable.second);
 	}
 
@@ -189,8 +190,8 @@ void SceneGame::Update(float dt)
 	lookMap = CheckMiniMap(20, 20);
 	
 	int percent = (float)mapCount / (float)mapMaxCount * 100;
-	std::cout << percent << "=" << mapCount << "/" << mapMaxCount << std::endl;
-	mapDiscovery->SetString(std::to_string(percent) + "%");
+	//std::cout << percent << "=" << mapCount << "/" << mapMaxCount << std::endl;
+	//mapDiscovery->SetString(std::to_string(percent) + "%");
 
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);

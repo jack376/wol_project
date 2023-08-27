@@ -95,6 +95,12 @@ void GameResult::Update(float dt)
 		SceneGame* scene = (SceneGame*)SCENE_MGR.GetCurrScene();
 		scene->SetIsReStart(true);
 	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape) && GetActive())
+	{
+		SCENE_MGR.GetCurrScene()->Exit();
+		FRAMEWORK.GetWindow().close();
+	}
 }
 
 void GameResult::Draw(sf::RenderWindow& window)

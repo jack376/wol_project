@@ -136,6 +136,8 @@ public:
 	void SetSkillInfo(SkillInfo info) { this->skillInfo = info; }
 	void SetSpellInfo(SpellInfo info) { this->skillInfo.spellinfo = info; }
 
+	void PoolInit();
+
 	void UseSkill();
 	void UseEditorSkill();
 
