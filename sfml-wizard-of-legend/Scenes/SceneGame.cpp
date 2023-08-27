@@ -56,7 +56,7 @@ void SceneGame::Init()
 	CreateMiniMap();
 
 	mapDiscovery = dynamic_cast<TextGo*>(AddGo(new TextGo("fonts/neodgm_code.ttf", "MapText")));
-	mapDiscovery->SetPosition(280, 60);
+	mapDiscovery->SetPosition(280, 58);
 	//mapDiscovery->text.setColor(sf::Color::Black);
 	mapDiscovery->sortLayer = 110;
 
