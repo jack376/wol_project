@@ -63,7 +63,7 @@ void SceneGame::Init()
 	CreateMiniMap();
 
 	mapDiscovery = dynamic_cast<TextGo*>(AddGo(new TextGo("fonts/neodgm_code.ttf", "MapText")));
-	mapDiscovery->SetPosition(280, 58);
+	mapDiscovery->SetPosition(280, 65);
 	//mapDiscovery->text.setColor(sf::Color::Black);
 	mapDiscovery->sortLayer = 110;
 
@@ -166,7 +166,7 @@ void SceneGame::Enter()
 	miniMapView.setViewport(sf::FloatRect(0.0f, 0.1f, 0.2f, 0.2f));
 
 	Scene::Enter();
-
+	SetIsGameEnd(false);
 	ClearObjectPool(particlePool);
 	ClearObjectPool(fireParticlePool);
 	ClearObjectPool(portalParticlePoolRed);
@@ -239,19 +239,13 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	Scene::Draw(window);
 
 	window.setView(miniMapView);
+	if (!player->IsAlive() || isGameEnd)
+		return;
 
 	for (auto& cell : lookMap)
 	{
 		window.draw(*cell);
 	}
-	/*for (auto& row : miniMap)
-	{
-		for (auto& cell : row)
-		{
-			if (cell.first->getGlobalBounds().intersects(viewBounds))
-				window.draw(*cell.first);
-		}
-	}*/
 	window.draw(miniMapPlayer);
 	
 }
