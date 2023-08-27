@@ -17,6 +17,7 @@ ElementalSpell::ElementalSpell(const std::string& textureId, const std::string& 
 
 ElementalSpell::~ElementalSpell()
 {
+
 }
 
 void ElementalSpell::Init()
@@ -43,6 +44,10 @@ void ElementalSpell::Release()
 void ElementalSpell::Reset()
 {
 	SpriteGo::Reset();
+	//for (auto obj : monsterHitEffectPool.GetUseList())
+	//{
+	//	scene->RemoveGo(obj);
+	//}
 	monsterHitEffectPool.Clear();
 
 	// 파일로 받아서 실행하는 방법 생각하기

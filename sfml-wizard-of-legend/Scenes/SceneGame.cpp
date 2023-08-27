@@ -28,6 +28,11 @@
 #include "MenuInventory.h"
 #include "QuickSlot.h"
 #include "HPBar.h"
+#include "GameResult.h"
+
+#include "TextGo.h"
+#include "StringTable.h"
+#include "DataTableMgr.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -56,6 +61,8 @@ void SceneGame::Init()
 	
 	menu = (MenuInventory*)AddGo(new MenuInventory());
 	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
+	gameResult = (GameResult*)AddGo(new GameResult());
+
 	menu->SetQuickSlot(quickSlot);
 
 	player->SetTiles(&tilesWorld);
@@ -94,14 +101,6 @@ void SceneGame::Init()
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
 
-	//tempWindSlash->SetTiles(&tilesWorld);
-	//tempFireBall->SetTiles(&tilesWorld);
-
-	//tempWindSlash->SetMonsterList(monsters);
-	//tempFireBall->SetMonsterList(monsters);
-
-	//tempFireBall->SetMonsterList(monsters);
-
 	// Create Particle
 	CreateParticle(1000);
 
@@ -121,10 +120,6 @@ void SceneGame::Init()
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
 
-	// 스킬 임시 장착 / 스킬 구매하면 Tab메뉴에 생성하고
-	// 그 Tab메뉴에서 장착해야 Equip슬롯으로 간다
-	// 스킬 장착 이후에 스킬을 슬롯에 적용시켜야한다.
-
 	for (auto skillTable : SKILL_MGR.GetExistSkillList())
 	{
 		skillTable.second->SetPlayer(player);
@@ -135,16 +130,6 @@ void SceneGame::Init()
 		SKILL_MGR.EquipSkill(skillTable.second);
 	}
 
-	//for (int i = 0; i < SKILL_MGR.GetExistSkillList().size(); i++)
-	//{
-	//	Skill* skill = SKILL_MGR.SearchExistedSkill((SkillIds)i);
-	//	skill->SetSkillEvent((SkillEvents)i);
-	//	skill->SetPlayer(player);
-	//	skill->SetMonsterList(monsters);
-	//	skill->SetTiles(&tilesWorld);
-	//	SKILL_MGR.EquipSkill(skill);
-	//}
-	// 슬롯 작업
 }
 
 void SceneGame::Release()
@@ -164,7 +149,11 @@ void SceneGame::Enter()
 
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
+	player->SetPosition(700, 700);
 
+	isGameEnd = false;
+	isMenuOn = false;
+	isReStart = false;
 	//miniMapView.setSize(sf::Vector2f(200, 200));
 	//miniMapView.setViewport(sf::FloatRect(0.1f, 0.1f, 0.25f, 0.25f));
 	//miniMapBackground.setSize(sf::Vector2f(200, 200));
@@ -174,6 +163,7 @@ void SceneGame::Enter()
 	Scene::Enter();
 
 	ClearObjectPool(particlePool);
+	
 }
 
 void SceneGame::Exit()
@@ -187,19 +177,6 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);	
 	debugTimer += dt;
 	worldView.setCenter(player->GetPosition());
-	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
-	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
-
-	//if (debugTimer > debugDuration && !isCol)
-	//{
-	//	debugTimer = 0.f;
-	//	std::cout << "OBB is Failed" << std::endl;
-	//}
-	//if (isCol)
-	//{
-	//	std::cout << "OBB is Succesd" << std::endl;
-	//}
-	worldView.setCenter(player->GetPosition());
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
 	{
@@ -211,7 +188,6 @@ void SceneGame::Update(float dt)
 		menu->AllSetActive(!menu->GetActive());
 		Slot::selectedSlot = nullptr;
 		isMenuOn = menu->GetActive();
-		std::cout << isMenuOn << std::endl;
 	}
 
 	if (!isMenuOn)
@@ -219,7 +195,21 @@ void SceneGame::Update(float dt)
 		menu->AllSetActive(isMenuOn);
 	}
 
+	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
+	//{
+	//	gameResult->AllSetActive(!gameResult->GetActive());
+	//	isGameEnd = gameResult->GetActive();
+	//}
 
+	if (isGameEnd)
+	{
+		gameResult->AllSetActive(isGameEnd);
+	}
+
+	if (isReStart)
+	{
+		SCENE_MGR.ChangeScene(SceneId::Game);
+	}
 }
 
 template<typename T>

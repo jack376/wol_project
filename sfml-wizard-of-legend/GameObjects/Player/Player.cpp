@@ -7,6 +7,7 @@
 #include "SkillMgr.h"
 #include "Skill.h"
 #include "Tile.h"
+#include "SpriteEffect.h"
 
 Player::Player(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -70,6 +71,17 @@ void Player::Init()
 		spell->SetPool(spellPool);
 	};
 
+	playerDieEffectPool.OnCreate = [this](SpriteEffect* effect) {
+		effect->sprite.setScale(4, 4);
+		effect->SetAnimId("DieEffect");
+		effect->SetDuration(0.5f);
+		effect->sortLayer = 20;
+	};
+	spellPool.Init();
+	playerDieEffectPool.Init();
+
+	
+
 	// Player Shader
 	float yOffset = 15.0f / 31.0f;
 	paletteTexture.loadFromFile("shader/WizardPalette.png");
@@ -81,6 +93,12 @@ void Player::Init()
 void Player::Release()
 {
 	// 클리어를 해줘야 하는지 결정해야함
+	for (auto obj : playerDieEffectPool.GetUseList())
+	{
+		SCENE_MGR.GetCurrScene()->RemoveGo(obj);
+	}
+	playerDieEffectPool.Clear();
+
 	destPos.clear();
 	SpriteGo::Release();
 }
@@ -88,6 +106,8 @@ void Player::Release()
 void Player::Reset()
 {
 	SpriteGo::Reset();
+	playerDieEffectPool.Clear();
+
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Run/RunUp.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Run/RunRight.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Run/RunDown.csv"));
@@ -142,9 +162,10 @@ void Player::Reset()
 	// 플레이어 리셋
 	hp = maxHp;
 	attackCount = 0;
+	isAlive = true;
+	currentDir = Dir::Down;
 
 	portal->SetActive(false);
-	spellPool.Init();
 }
 
 void Player::Update(float dt)
@@ -196,7 +217,7 @@ void Player::Update(float dt)
 		ChangeState(States::Hit);
 	}
 
-	if (scene->GetIsMenuOn())
+	if (scene->GetIsMenuOn() || scene->GetIsGameEnd())
 		return;
 
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
@@ -526,6 +547,12 @@ void Player::AttackUpdate(float dt)
 
 	float t = Utils::Clamp(attackMoveTimer / attackMoveDuration, 0.f, 1.f);
 	SetPosition(Utils::Lerp(attackStart, attackDest, t));
+	CalculatorCurrentTile();
+
+	if (currentTile->GetType() == TileType::Wall || currentTile->GetType() == TileType::Cliff)
+	{
+		SetPosition(prevPos);
+	}
 
 	if (anim.IsAnimEndFrame() && attackMoveTimer > attackMoveDuration)
 	{
@@ -568,6 +595,12 @@ void Player::HitUpdate(float dt)
 
 	float t = Utils::Clamp(hitTimer / hitDuration, 0.f, 1.f);
 	SetPosition(Utils::Lerp(knockBackStart, knockBackDest, t));
+	CalculatorCurrentTile();
+
+	if (currentTile->GetType() == TileType::Wall)
+	{
+		SetPosition(prevPos);
+	}
 
 	switch (hitDir)
 	{
@@ -669,7 +702,38 @@ void Player::DieUpdate(float dt)
 	if (!isDieAnim)
 	{
 		anim.Play("Die");
+
 		isDieAnim = true;
+	}
+
+	if (anim.GetCurrentClipId() == "Die")
+	{
+		anim.GetCurrentClip().frames[1].action = [this]() {
+			anim.SetSpeed(0.1f);
+			SpriteEffect* playerHitEffect = playerDieEffectPool.Get();
+			sf::Vector2f randPos(Utils::RandomRange(0.f, 1.f), Utils::RandomRange(0.f, 1.f));
+			playerHitEffect->SetPosition(GetPosition()+ randPos);
+			float randAngle = Utils::RandomRange(0.f, 360.f);
+			playerHitEffect->sprite.setRotation(randAngle);
+			playerHitEffect->sprite.setColor(sf::Color::Red);
+			SCENE_MGR.GetCurrScene()->AddGo(playerHitEffect);
+
+		};
+	
+		anim.GetCurrentClip().frames[3].action = [this]() {
+			anim.SetSpeed(0.8f);
+
+		};
+		anim.GetCurrentClip().frames[5].action = [this]() {
+			anim.SetSpeed(1.0f);
+
+		};
+	}
+
+
+	if (anim.IsAnimEndFrame())
+	{
+		scene->SetIsGameEnd(true);
 	}
 }
 

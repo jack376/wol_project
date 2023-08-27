@@ -52,6 +52,7 @@ enum class States
 class SceneGame;
 class Monster;
 class Tile;
+class SpriteEffect;
 
 class Player : public SpriteGo
 {
@@ -66,6 +67,7 @@ private:
 	SkillEvents sEvent = SkillEvents::None;
 
 	ObjectPool<ElementalSpell> spellPool;
+	ObjectPool<SpriteEffect> playerDieEffectPool;
 
 	SceneGame* scene;
 	Monster* monster;
@@ -88,8 +90,8 @@ private:
 	//Skill wdash;
 	//Skill wslash;
 
-	int maxHp = 500;
-	int hp = 500;
+	int maxHp = 10;
+	int hp = 10;
 
 	// 공격 포즈
 	int attackCount = 0;
