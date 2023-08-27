@@ -28,6 +28,7 @@
 #include "MenuInventory.h"
 #include "QuickSlot.h"
 #include "HPBar.h"
+#include "TextGo.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -52,8 +53,13 @@ void SceneGame::Init()
 
 	TilesToIntMap();
 	CalculatorNongroundTiles();
+	CreateMiniMap();
 
-	
+	mapDiscovery = dynamic_cast<TextGo*>(AddGo(new TextGo("fonts/neodgm_code.ttf", "MapText")));
+	mapDiscovery->SetPosition(280, 60);
+	//mapDiscovery->text.setColor(sf::Color::Black);
+	mapDiscovery->sortLayer = 110;
+
 	menu = (MenuInventory*)AddGo(new MenuInventory());
 	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
 	menu->SetQuickSlot(quickSlot);
@@ -165,11 +171,8 @@ void SceneGame::Enter()
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
-	//miniMapView.setSize(sf::Vector2f(200, 200));
-	//miniMapView.setViewport(sf::FloatRect(0.1f, 0.1f, 0.25f, 0.25f));
-	//miniMapBackground.setSize(sf::Vector2f(200, 200));
-	//miniMapBackground.setFillColor(sf::Color(50, 50, 50));
-	//miniMapBackground.setPosition(-200, 0);
+	miniMapView.setSize(size * 1.2f);
+	miniMapView.setViewport(sf::FloatRect(0.0f, 0.1f, 0.2f, 0.2f));
 
 	Scene::Enter();
 
@@ -187,6 +190,14 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);	
 	debugTimer += dt;
 	worldView.setCenter(player->GetPosition());
+	miniMapView.setCenter(player->GetPosition() );
+
+	lookMap = CheckMiniMap(20, 20);
+	
+	int percent = (float)mapCount / (float)mapMaxCount * 100;
+	std::cout << percent << "=" << mapCount << "/" << mapMaxCount << std::endl;
+	mapDiscovery->SetString(std::to_string(percent) + "%");
+
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 
@@ -237,7 +248,21 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	Scene::Draw(window);
 
 	window.setView(miniMapView);
-	window.draw(miniMapBackground);
+
+	for (auto& cell : lookMap)
+	{
+		window.draw(*cell);
+	}
+	/*for (auto& row : miniMap)
+	{
+		for (auto& cell : row)
+		{
+			if (cell.first->getGlobalBounds().intersects(viewBounds))
+				window.draw(*cell.first);
+		}
+	}*/
+	window.draw(miniMapPlayer);
+	
 }
 
 Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)
@@ -541,6 +566,87 @@ void SceneGame::CalculatorNongroundTiles()
 		{
 			if (tile->GetType() != TileType::Ground)
 				nongroundTiles.push_back(tile);
+			else
+				mapMaxCount++;
 		}
 	}
+}
+
+void SceneGame::CreateMiniMap()
+{
+	miniMapPlayer.setFillColor(sf::Color::Green);
+	miniMapPlayer.setSize({ 64, 64 });
+	for (auto& tiles : tilesWorld)
+	{
+		std::vector<std::pair<sf::RectangleShape*, bool>> row;
+		for (auto& tile : tiles)
+		{
+			if (tile->GetType() == TileType::Ground)
+			{
+				sf::RectangleShape* rectangle = new sf::RectangleShape({ 64, 64 });
+				rectangle->setFillColor(sf::Color::White);
+				sf::Color color = rectangle->getFillColor();
+				color.a = 0;
+				rectangle->setFillColor(color);
+				rectangle->setPosition(tile->GetPosition());
+				row.push_back(std::pair<sf::RectangleShape*, bool>(rectangle, false));
+			}	
+			else
+			{
+				sf::RectangleShape* rectangle = new sf::RectangleShape({ 64, 64 });
+				rectangle->setFillColor({128, 128, 128});
+				sf::Color color = rectangle->getFillColor();
+				color.a = 0;
+				rectangle->setFillColor(color);
+				rectangle->setPosition(tile->GetPosition());
+				row.push_back(std::pair<sf::RectangleShape*, bool>(rectangle, false));
+			}	
+		}
+		miniMap.push_back(row);
+	}
+}
+
+std::vector<sf::RectangleShape*> SceneGame::CheckMiniMap(int row, int col)
+{
+	int searchRowRange = row;
+	int searchColRange = col;
+
+	sf::Vector2i index = player->GetCurrentTile()->GetIndex();
+	std::vector<sf::RectangleShape*> tiles;
+
+	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x - searchRowRange;
+	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y - searchColRange;
+	int bottomRowIndex = index.x + searchRowRange >= miniMap.size() ? miniMap.size() - 1 : index.x + searchRowRange;
+	int rightColumnIndex = index.y + searchColRange >= miniMap[0].size() ? miniMap[0].size() - 1 : index.y + searchColRange;
+
+	miniMapPlayer.setPosition(miniMap[index.x][index.y].first->getPosition());
+
+	for (int i = topRowIndex; i < bottomRowIndex; i++)
+	{
+		for (int j = leftColumnIndex; j < rightColumnIndex; j++)
+		{
+			if (!miniMap[i][j].second)
+			{
+				miniMap[i][j].second = true;
+				if (intMap[i][j] == 0)
+					mapCount++;
+			}
+			
+			
+			if (intMap[i][j] == 0)
+			{
+				sf::Color color = sf::Color::White;
+				color.a = 255;
+				miniMap[i][j].first->setFillColor(color);
+			}
+			else
+			{
+				sf::Color color = {128, 128, 128};
+				color.a = 100;
+				miniMap[i][j].first->setFillColor(color);
+			}
+			tiles.push_back(miniMap[i][j].first);
+		}
+	}
+	return tiles;
 }

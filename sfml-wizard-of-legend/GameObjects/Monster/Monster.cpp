@@ -276,6 +276,12 @@ void Monster::Move(float dt)
             Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
             Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
             path = _AS.aStarSearch(*intMap, src, dst);  //false면 isAwake를 false로. SetState(Idle).
+            if (!path.first)
+            {
+                SetState(MonsterState::Idle);
+                isAwake = false;
+                return;
+            }
             pathUpdateTimer = 0.f;
         }
         else if (!path.second.empty())
@@ -402,7 +408,6 @@ void Monster::CalculatorCurrentTile()
     currentTile = (*tilesWorld)[rowIndex][columnIndex];
 }
 
-//��ü�� �߽����� ���� ���� ���� Ÿ���� ��ȯ
 std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 {
     int searchRowRange = row;
