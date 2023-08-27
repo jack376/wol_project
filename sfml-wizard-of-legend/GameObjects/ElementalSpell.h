@@ -5,12 +5,14 @@
 #include "Beam.h"
 #include "ObjectPool.h"
 #include "Skill.h"
+#include "SceneMgr.h"
 
 class SpriteGo;
 class SceneGame;
 class Player;
 class Monster;
 class Tile;
+class SpriteEffect;
 
 class ElementalSpell : public SpriteGo
 {
@@ -24,6 +26,7 @@ protected:
 	Beam raycaster;
 
 	ObjectPool<ElementalSpell> pool;
+	ObjectPool<SpriteEffect> monsterHitEffectPool;
 
 	AnimationController anim;
 	
@@ -102,7 +105,7 @@ protected:
 
 
 	Tile* currentTile = nullptr;
-	std::vector<std::vector<Tile*>>* wouldTiles = nullptr;
+	std::vector<std::vector<Tile*>>* worldTiles = nullptr;
 
 public:
 	ElementalSpell(const std::string& textureId = "", const std::string& n = "");
@@ -137,11 +140,9 @@ public:
 
 	sf::RectangleShape& GetCollider();
 
-	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->wouldTiles = tiles; }
+	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }
 
 	sf::Vector2f  CalAxisSin(float time, float speed, float frequency, float amplitude, const sf::Vector2f& axis, float angleInDegrees);
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
-
 };
-

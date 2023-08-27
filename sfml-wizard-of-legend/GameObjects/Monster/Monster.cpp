@@ -10,6 +10,7 @@
 #include "CustomEffect.h"
 #include "AS.h"
 #include "Particle.h"
+#include "SpriteEffect.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -34,15 +35,30 @@ void Monster::Init()
     rect.setFillColor(sf::Color::Transparent);
     rect.setOutlineThickness(1.f);
     rect.setOutlineColor(sf::Color::Green);
+
+    playerHitEffectPool.OnCreate = [this](SpriteEffect* effect) {
+        effect->sprite.setScale(3, 3);
+        effect->SetAnimId("HitEffect");
+        effect->SetDuration(0.5f);
+        effect->sortLayer = 20;
+    };
+    playerHitEffectPool.Init();
+
 }
 
 void Monster::Release()
 {
+    for (auto obj : playerHitEffectPool.GetUseList())
+    {
+        SCENE_MGR.GetCurrScene()->RemoveGo(obj);
+    }
+    playerHitEffectPool.Clear();
 }
 
 void Monster::Reset()
 {
     SpriteGo::Reset();
+    playerHitEffectPool.Clear();
     attackEffect.Reset();
 
     SceneGame* scene = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrScene());
@@ -199,6 +215,13 @@ void Monster::Attack(float dt)
     {
         if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
         {
+            SpriteEffect* playerHitEffect = playerHitEffectPool.Get();
+            sf::Vector2f randPos(Utils::RandomRange(0.f, 10.f), Utils::RandomRange(0.f, 10.f));
+            playerHitEffect->SetPosition(player->GetPosition() + randPos);
+            float randAngle = Utils::RandomRange(0.f, 360.f);
+            playerHitEffect->sprite.setRotation(randAngle);
+            SCENE_MGR.GetCurrScene()->AddGo(playerHitEffect);
+
             attackTimer = 0.f;
             player->SetHp(-stat.damage);
             isAttacked = true;
@@ -253,6 +276,12 @@ void Monster::Move(float dt)
             Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
             Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
             path = _AS.aStarSearch(*intMap, src, dst);  //false면 isAwake를 false로. SetState(Idle).
+            if (!path.first)
+            {
+                SetState(MonsterState::Idle);
+                isAwake = false;
+                return;
+            }
             pathUpdateTimer = 0.f;
         }
         else if (!path.second.empty())
@@ -379,7 +408,7 @@ void Monster::CalculatorCurrentTile()
     currentTile = (*tilesWorld)[rowIndex][columnIndex];
 }
 
-//��ü�� �߽����� ���� ���� ���� Ÿ���� ��ȯ
+//객체를 중심으로 임의 범위 내의 타일을 반환
 std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 {
     int searchRowRange = row;

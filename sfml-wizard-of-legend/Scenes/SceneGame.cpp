@@ -29,6 +29,11 @@
 #include "MenuInventory.h"
 #include "QuickSlot.h"
 #include "HPBar.h"
+#include "GameResult.h"
+
+#include "TextGo.h"
+#include "StringTable.h"
+#include "DataTableMgr.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -53,16 +58,23 @@ void SceneGame::Init()
 
 	TilesToIntMap();
 	CalculatorNongroundTiles();
+	CreateMiniMap();
 
-	
+	mapDiscovery = dynamic_cast<TextGo*>(AddGo(new TextGo("fonts/neodgm_code.ttf", "MapText")));
+	mapDiscovery->SetPosition(280, 58);
+	//mapDiscovery->text.setColor(sf::Color::Black);
+	mapDiscovery->sortLayer = 110;
+
 	menu = (MenuInventory*)AddGo(new MenuInventory());
 	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
+	gameResult = (GameResult*)AddGo(new GameResult());
+
 	menu->SetQuickSlot(quickSlot);
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
 
-	/*
+	
 	monster = CreateMonster(MonsterId::FireBoss);
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
@@ -91,7 +103,6 @@ void SceneGame::Init()
 	monster->SetNonGroundTiles(&nongroundTiles);
 	monster->SetPosition(700, 500);
 	monsters.push_back(monster);
-	*/
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
@@ -100,8 +111,6 @@ void SceneGame::Init()
 	//tempFireBall->SetTiles(&tilesWorld);
 
 	//tempWindSlash->SetMonsterList(monsters);
-	//tempFireBall->SetMonsterList(monsters);
-
 	//tempFireBall->SetMonsterList(monsters);
 
 	// Create Particle
@@ -126,29 +135,16 @@ void SceneGame::Init()
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
 
-	// 스킬 임시 장착 / 스킬 구매하면 Tab메뉴에 생성하고
-	// 그 Tab메뉴에서 장착해야 Equip슬롯으로 간다
-	// 스킬 장착 이후에 스킬을 슬롯에 적용시켜야한다.
-
 	for (auto skillTable : SKILL_MGR.GetExistSkillList())
 	{
 		skillTable.second->SetPlayer(player);
 		skillTable.second->SetMonsterList(monsters);
 		skillTable.second->SetPlayer(player);
+		skillTable.second->SetTiles(&tilesWorld);
 		skillTable.second->Init();
 		SKILL_MGR.EquipSkill(skillTable.second);
 	}
 
-	//for (int i = 0; i < SKILL_MGR.GetExistSkillList().size(); i++)
-	//{
-	//	Skill* skill = SKILL_MGR.SearchExistedSkill((SkillIds)i);
-	//	skill->SetSkillEvent((SkillEvents)i);
-	//	skill->SetPlayer(player);
-	//	skill->SetMonsterList(monsters);
-	//	skill->SetTiles(&tilesWorld);
-	//	SKILL_MGR.EquipSkill(skill);
-	//}
-	// 슬롯 작업
 }
 
 void SceneGame::Release()
@@ -168,6 +164,18 @@ void SceneGame::Enter()
 
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
+	player->SetPosition(700, 700);
+
+	isGameEnd = false;
+	isMenuOn = false;
+	isReStart = false;
+	//miniMapView.setSize(sf::Vector2f(200, 200));
+	//miniMapView.setViewport(sf::FloatRect(0.1f, 0.1f, 0.25f, 0.25f));
+	//miniMapBackground.setSize(sf::Vector2f(200, 200));
+	//miniMapBackground.setFillColor(sf::Color(50, 50, 50));
+	//miniMapBackground.setPosition(-200, 0);
+	miniMapView.setSize(size * 1.2f);
+	miniMapView.setViewport(sf::FloatRect(0.0f, 0.1f, 0.2f, 0.2f));
 
 	Scene::Enter();
 
@@ -189,6 +197,14 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);	
 	debugTimer += dt;
 	worldView.setCenter(player->GetPosition());
+	miniMapView.setCenter(player->GetPosition() );
+
+	lookMap = CheckMiniMap(20, 20);
+	
+	int percent = (float)mapCount / (float)mapMaxCount * 100;
+	std::cout << percent << "=" << mapCount << "/" << mapMaxCount << std::endl;
+	mapDiscovery->SetString(std::to_string(percent) + "%");
+
 	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
 	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 
@@ -239,7 +255,21 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	Scene::Draw(window);
 
 	window.setView(miniMapView);
-	window.draw(miniMapBackground);
+
+	for (auto& cell : lookMap)
+	{
+		window.draw(*cell);
+	}
+	/*for (auto& row : miniMap)
+	{
+		for (auto& cell : row)
+		{
+			if (cell.first->getGlobalBounds().intersects(viewBounds))
+				window.draw(*cell.first);
+		}
+	}*/
+	window.draw(miniMapPlayer);
+	
 }
 
 Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)
@@ -695,6 +725,87 @@ void SceneGame::CalculatorNongroundTiles()
 		{
 			if (tile->GetType() != TileType::Ground)
 				nongroundTiles.push_back(tile);
+			else
+				mapMaxCount++;
 		}
 	}
+}
+
+void SceneGame::CreateMiniMap()
+{
+	miniMapPlayer.setFillColor(sf::Color::Green);
+	miniMapPlayer.setSize({ 64, 64 });
+	for (auto& tiles : tilesWorld)
+	{
+		std::vector<std::pair<sf::RectangleShape*, bool>> row;
+		for (auto& tile : tiles)
+		{
+			if (tile->GetType() == TileType::Ground)
+			{
+				sf::RectangleShape* rectangle = new sf::RectangleShape({ 64, 64 });
+				rectangle->setFillColor(sf::Color::White);
+				sf::Color color = rectangle->getFillColor();
+				color.a = 0;
+				rectangle->setFillColor(color);
+				rectangle->setPosition(tile->GetPosition());
+				row.push_back(std::pair<sf::RectangleShape*, bool>(rectangle, false));
+			}	
+			else
+			{
+				sf::RectangleShape* rectangle = new sf::RectangleShape({ 64, 64 });
+				rectangle->setFillColor({128, 128, 128});
+				sf::Color color = rectangle->getFillColor();
+				color.a = 0;
+				rectangle->setFillColor(color);
+				rectangle->setPosition(tile->GetPosition());
+				row.push_back(std::pair<sf::RectangleShape*, bool>(rectangle, false));
+			}	
+		}
+		miniMap.push_back(row);
+	}
+}
+
+std::vector<sf::RectangleShape*> SceneGame::CheckMiniMap(int row, int col)
+{
+	int searchRowRange = row;
+	int searchColRange = col;
+
+	sf::Vector2i index = player->GetCurrentTile()->GetIndex();
+	std::vector<sf::RectangleShape*> tiles;
+
+	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x - searchRowRange;
+	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y - searchColRange;
+	int bottomRowIndex = index.x + searchRowRange >= miniMap.size() ? miniMap.size() - 1 : index.x + searchRowRange;
+	int rightColumnIndex = index.y + searchColRange >= miniMap[0].size() ? miniMap[0].size() - 1 : index.y + searchColRange;
+
+	miniMapPlayer.setPosition(miniMap[index.x][index.y].first->getPosition());
+
+	for (int i = topRowIndex; i < bottomRowIndex; i++)
+	{
+		for (int j = leftColumnIndex; j < rightColumnIndex; j++)
+		{
+			if (!miniMap[i][j].second)
+			{
+				miniMap[i][j].second = true;
+				if (intMap[i][j] == 0)
+					mapCount++;
+			}
+			
+			
+			if (intMap[i][j] == 0)
+			{
+				sf::Color color = sf::Color::White;
+				color.a = 255;
+				miniMap[i][j].first->setFillColor(color);
+			}
+			else
+			{
+				sf::Color color = {128, 128, 128};
+				color.a = 100;
+				miniMap[i][j].first->setFillColor(color);
+			}
+			tiles.push_back(miniMap[i][j].first);
+		}
+	}
+	return tiles;
 }

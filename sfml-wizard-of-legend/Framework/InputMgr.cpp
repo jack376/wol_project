@@ -53,6 +53,7 @@ void InputMgr::Update(float dt)
 
 void InputMgr::UpdateEvent(const sf::Event& ev)
 {
+	inputEv = ev;
 	switch (ev.type)
 	{
 	case sf::Event::KeyPressed:

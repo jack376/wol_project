@@ -6,6 +6,7 @@
 #include "SkillEditorElementalSpell.h"
 #include "Monster.h"
 #include "Player.h"
+#include "SceneGame.h"
 
 Skill::Skill(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -14,6 +15,7 @@ Skill::Skill(const std::string& textureId, const std::string& n)
 
 Skill::~Skill()
 {
+	Release();
 }
 
 void Skill::Init()
@@ -42,6 +44,12 @@ void Skill::Init()
 
 void Skill::Release()
 {
+	for (auto obj : pool.GetUseList())
+	{
+		SCENE_MGR.GetCurrScene()->RemoveGo(obj);
+	}
+	pool.Clear();
+
 }
 
 void Skill::Reset()
@@ -102,6 +110,7 @@ void Skill::UseSkill()
 			elementalSpell->SetRangeType(currentRangeType);
 			elementalSpell->SetSpellInfo(spellInfo);
 			elementalSpell->SetPlayer(player);
+			elementalSpell->SetTiles(worldTiles);
 			elementalSpell->SetDir(Utils::Angle(adjustedAngle));
 
 			if (skillId == 6 || skillId == 7)
@@ -129,6 +138,7 @@ void Skill::UseSkill()
 		elementalSpell->SetSpellInfo(spellInfo);
 		elementalSpell->SetPlayer(player);
 		elementalSpell->SetDir(player->GetLook());
+		elementalSpell->SetTiles(worldTiles);
 		elementalSpell->SetAngle(player->GetPlayerLookAngle());
 
 		elementalSpell->sortLayer = 21;

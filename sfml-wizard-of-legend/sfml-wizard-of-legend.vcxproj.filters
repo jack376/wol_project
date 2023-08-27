@@ -64,6 +64,8 @@
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="HPBar.cpp" />
+    <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
+    <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="GameObjects\RoofGo.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +220,8 @@
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="HPBar.h" />
+    <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
+    <ClInclude Include="GameResult.h" />
     <ClInclude Include="GameObjects\RoofGo.h" />
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 class Player;
 class Tile;
 class Particle;
+class SpriteEffect;
 
 enum class MonsterState 
 {
@@ -67,7 +68,7 @@ protected:
 	AnimationController animation;
 
 	CustomEffect attackEffect;
-	//ObjectPool<SpriteEffect> hitEffects;
+	ObjectPool<SpriteEffect> playerHitEffectPool;
 
 	int hp = 0;
 	float attackTimer = 0.f;

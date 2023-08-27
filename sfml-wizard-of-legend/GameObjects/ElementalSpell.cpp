@@ -8,6 +8,7 @@
 #include "Framework.h"
 #include "Tile.h"
 #include "SceneMgr.h"
+#include "SpriteEffect.h"
 
 ElementalSpell::ElementalSpell(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -16,20 +17,38 @@ ElementalSpell::ElementalSpell(const std::string& textureId, const std::string& 
 
 ElementalSpell::~ElementalSpell()
 {
+
 }
 
 void ElementalSpell::Init()
 {
 	Collider.Init();
+	monsterHitEffectPool.OnCreate = [this](SpriteEffect* effect) {
+		effect->sprite.setScale(3, 3);
+		effect->SetAnimId("AttackEffect");
+		effect->SetDuration(0.5f);
+		effect->sortLayer = 20;
+	};
+	monsterHitEffectPool.Init();
 }
 
 void ElementalSpell::Release()
 {
+	for (auto obj : monsterHitEffectPool.GetUseList())
+	{
+		SCENE_MGR.GetCurrScene()->RemoveGo(obj);
+	}
+	monsterHitEffectPool.Clear();
 }
 
 void ElementalSpell::Reset()
 {
 	SpriteGo::Reset();
+	//for (auto obj : monsterHitEffectPool.GetUseList())
+	//{
+	//	scene->RemoveGo(obj);
+	//}
+	monsterHitEffectPool.Clear();
 
 	// 파일로 받아서 실행하는 방법 생각하기
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/WindSlash/WindSlash.csv"));
@@ -71,6 +90,7 @@ void ElementalSpell::Reset()
 void ElementalSpell::Update(float dt)
 {
 	SpriteGo::Update(dt);
+	CalculatorCurrentTile();
 
 	Collider.SetSprite(sprite);
 	Collider.SetColSize();
@@ -101,7 +121,6 @@ void ElementalSpell::Update(float dt)
 	anim.Update(dt);
 	SetOrigin(Origins::MC);
 	Collider.SetOrigin(Origins::MC);
-	//CalculatorCurrentTile();
 }
 
 void ElementalSpell::Draw(sf::RenderWindow& window)
@@ -119,9 +138,6 @@ void ElementalSpell::Draw(sf::RenderWindow& window)
 
 void ElementalSpell::MeleeUpdate(float dt)
 {
-	// isCol은 콜라이더끼리 부딪혀야 true
-	// player->IsAttack() 가 진짜 공격 타이밍 
-
 	// 공격 스윙
 	if (!isSpawn)
 	{
@@ -180,13 +196,15 @@ void ElementalSpell::MeleeUpdate(float dt)
 		{
 			// 레이캐스트의 닿은 포지션 구해주기
 			attackTimer = 0.f;
-			raycaster.GetEndPos();
+			SpriteEffect* monsterHitEffect = monsterHitEffectPool.Get();
+			monsterHitEffect->SetPosition(raycaster.GetEndPos());
+			float randAngle = Utils::RandomRange(0.f, 360.f);
+			monsterHitEffect->sprite.setRotation(randAngle);
+			SCENE_MGR.GetCurrScene()->AddGo(monsterHitEffect);
 			monster->OnAttacked(damage);
 			colMonsters.push_back(monster);
 		}
 	}
-
-
 
 	// 중복 공격 방지용
 	if (isSpawn)
@@ -248,11 +266,25 @@ void ElementalSpell::RangeUpdate(float dt)
 		if (isCol && it == colMonsters.end())	// 한번이 아닌 실시간으로 실행됨
 		{
 			// 레이캐스트의 닿은 포지션 구해주기
-			raycaster.GetEndPos();
+			SpriteEffect* monsterHitEffect = monsterHitEffectPool.Get();
+			monsterHitEffect->SetPosition(raycaster.GetEndPos());
+			float randAngle = Utils::RandomRange(0.f, 360.f);
+			monsterHitEffect->sprite.setRotation(randAngle);
+			SCENE_MGR.GetCurrScene()->AddGo(monsterHitEffect);
 			monster->OnAttacked(damage);
 			monster->SetIsHit(true);
 			colMonsters.push_back(monster);
 		}
+	}
+
+	if (currentTile->GetType() == TileType::Wall)
+	{
+		SpriteEffect* wallHitEffect = monsterHitEffectPool.Get();
+		wallHitEffect->SetPosition(GetPosition());
+		float randAngle = Utils::RandomRange(0.f, 360.f);
+		wallHitEffect->sprite.setRotation(randAngle);
+		SCENE_MGR.GetCurrScene()->AddGo(wallHitEffect);
+		isSpawn = false;
 	}
 
 
@@ -344,7 +376,7 @@ void ElementalSpell::CalculatorCurrentTile()
 	int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
 	int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
 
-	currentTile = (*wouldTiles)[rowIndex][columnIndex];
+	currentTile = (*worldTiles)[rowIndex][columnIndex];
 }
 
 std::vector<Tile*> ElementalSpell::CalculatorRangeTiles(int row, int col)
@@ -356,13 +388,13 @@ std::vector<Tile*> ElementalSpell::CalculatorRangeTiles(int row, int col)
 	sf::Vector2i index = currentTile->GetIndex();
 	std::vector<Tile*> tiles;
 
-	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > wouldTiles->size() * _TileSize ? wouldTiles->size() * _TileSize : index.x;
-	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > wouldTiles[0].size() * _TileSize ? wouldTiles[0].size() * _TileSize : index.y;
+	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > worldTiles->size() * _TileSize ? worldTiles->size() * _TileSize : index.x;
+	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > worldTiles[0].size() * _TileSize ? worldTiles[0].size() * _TileSize : index.y;
 	for (int i = topRowIndex; i < index.x + searchRowRange; i++)
 	{
 		for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
 		{
-			tiles.push_back((*this->wouldTiles)[i][j]);
+			tiles.push_back((*this->worldTiles)[i][j]);
 		}
 	}
 
