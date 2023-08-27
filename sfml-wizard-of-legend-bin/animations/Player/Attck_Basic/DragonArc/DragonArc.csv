@@ -1,0 +1,8 @@
+ID,FPS,LOOPTYPE,,
+DragonArc,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/Attck_Basic/DragonArc/DragonArc.png,9,7,37,23
+graphics/Player/Attck_Basic/DragonArc/DragonArc.png,50,4,37,24
+graphics/Player/Attck_Basic/DragonArc/DragonArc.png,50,35,37,24
+graphics/Player/Attck_Basic/DragonArc/DragonArc.png,4,36,38,26

@@ -83,8 +83,8 @@ private:
 
 	//BoxCollider2D obb;
 
-	int maxHp = 10;
-	int hp = 10;
+	int maxHp = 500;
+	int hp = 500;
 
 	// 공격 포즈
 	int attackCount = 0;

@@ -1,8 +1,8 @@
 Id,SkillNames,"ElementTypes / -1: None / 0: Fire / 1: Water / 2: Thunder / 3: Earth / 4: Wind /","SkillTypes / -1: None / 0: Melee / 1: Range / 2: Petrol /","RangeTypes / -1: None / 0: Straight / 1: Curve /","EventTypes / -1: None / 0: Left / 1: Right / 2: Space / 3: Q /","PlayerActions / -1: None / 0: Hand / 1: Kick / 2: Jump / 3: Slam / 4: Focus / 5: JumpKick / 6: JumpSlam /",Damages,ComboDamages,ComboMaxCounts,ComboDurations,MaxSkillChages,ShotCounts,Speeds,Ranges,ExplosionRanges,Amplitudes,Frequencys,DelayDurations,DamageDelays,CoolTimes,SpreadAngles,IsPenetratings,CanMoveDuringSkills
 1,WindSlash,4,0,-1,0,0,10,2,3,0.600000024,0,0,500,500,400,0,0,0.600000024,0,0,0,1,0
-0,ExplodingFireball,0,1,1,2,0,50,0,0,0,8,1,15,500,400,8,1.20000005,0.600000024,0,0.800000012,0,0,0
-8,IceDagger,1,0,-1,4,0,6,2,4,0.600000024,0,0,500,500,0,0,0,0.600000024,0,0,0,1,0
-2,DragonArc,0,1,1,-1,0,8,0,0,0,8,1,15,500,0,8,1.20000005,0.600000024,0,0.800000012,0,1,0
-6,FrostFan,1,1,0,1,0,25,0,0,0,1,5,800,500,0,0,0,0.600000024,0,5,60,0,0
+8,IceDagger,1,0,-1,4,0,6,2,4,0.600000024,0,0,500,500,0,0,0,0.300000012,0,0,0,1,0
+0,ExplodingFireball,0,1,1,-1,0,50,0,0,0,8,1,20,500,400,8,1.20000005,0.600000024,0,0.800000012,0,0,0
+2,DragonArc,0,1,1,2,0,30,0,0,0,8,1,22,500,0,8,1.20000005,0.600000024,0,0.800000012,0,1,0
+6,FrostFan,1,1,0,1,0,25,0,0,0,1,5,1500,700,0,0,0,0.600000024,0,5,60,0,0
 7,GustVolley,4,1,0,3,4,12,0,0,0,1,6,1000,500,0,0,0,0.600000024,0,5,60,1,0
-10,VoltDisc,2,1,0,5,0,20,0,0,0.600000024,1,1,400,500,0,0,0,0.600000024,0,3,0,1,0
+10,VoltDisc,2,1,0,5,0,30,0,0,0.600000024,1,1,800,500,0,0,0,0.600000024,0,3,0,1,0

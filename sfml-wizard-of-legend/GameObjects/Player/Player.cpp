@@ -209,12 +209,6 @@ void Player::Update(float dt)
 
 	isMove = dir.x != 0 || dir.y != 0;
 	isDashing = dashDir.x != 0 || dashDir.y != 0;
-	
-	if (currentTile->GetType() == TileType::Ground && isMove)
-	{
-
-	}
-
 
 	if (!isAlive)
 	{

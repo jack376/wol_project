@@ -57,7 +57,7 @@ void ElementalSpell::Reset()
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/IceDagger/IceDagger.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/GustVolley/GustVolley.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/VoltDisc/VoltDisc.csv"));
-
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/DragonArc/DragonArc.csv"));
 	
 	amplitude = currentInfo.amplitude;
 	damage = currentInfo.damage;
@@ -78,6 +78,14 @@ void ElementalSpell::Reset()
 		sprite.setScale(4, 4);
 	}
 	else if (currentAnimId.compare("VoltDisc") == 0)
+	{
+		sprite.setScale(4, 4);
+	}
+	else if (currentAnimId.compare("DragonArc") == 0)
+	{
+		sprite.setScale(4, 4);
+	}
+	else if (currentAnimId.compare("IceDagger") == 0)
 	{
 		sprite.setScale(4, 4);
 	}
@@ -239,7 +247,6 @@ void ElementalSpell::MeleeUpdate(float dt)
 
 void ElementalSpell::RangeUpdate(float dt)
 {
-
 	// °ø°Ý ½ºÀ®
 	if (!isSpawn)
 	{
@@ -340,7 +347,15 @@ void ElementalSpell::RangeUpdate(float dt)
 void ElementalSpell::CurveUpdate(float dt)
 {
 	time += dt;
-	sf::Vector2f movePos = GetPosition() + CalAxisSin(time, curveSpeed, frequency, amplitude, dir, curveAngle);
+	sf::Vector2f sinAngle = CalAxisSin(time, curveSpeed, frequency, amplitude, dir, curveAngle);
+	sf::Vector2f movePos = GetPosition() + sinAngle;
+
+	angle = Utils::Angle(sinAngle);
+
+	if(player->GetPlayerLookAngle() >= 90 && player->GetPlayerLookAngle() <= 270)
+		SetFlipY(false);
+		
+	sprite.setRotation(angle);
 	SetPosition(movePos);
 	Collider.SetPosition(GetPosition());
 }
