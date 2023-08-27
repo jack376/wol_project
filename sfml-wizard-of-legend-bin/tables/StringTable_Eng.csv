@@ -1,5 +1,19 @@
 ID,ENGLISH
-HELLO,Hello
-BYE,Bye
-YOU_DIE,You Die¡¦
-TITLE,Zomvie Survival
+RESULT,Result
+STAGE,Reach stage
+GEM,Collect jewelry
+TOTALTIME,Total time
+CONTINUE,Continue
+EXIT,Exit
+PRESS,Press any button
+SINGLE,Single player
+MULTI,2 Player play
+ARENA,Arena
+OPTION,Option
+CREATE,Creator
+QUIT,Quit
+LANGAUGE,Langauge
+KOREAN,Korean
+ENGLISH,English
+JAPANESE,Japanese
+CHINESE,Chinese

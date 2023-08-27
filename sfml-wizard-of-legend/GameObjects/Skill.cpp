@@ -29,6 +29,7 @@ void Skill::Init()
 	{
 		spell->SetPool(editorPool);
 	};
+	//pool.Init();
 
 	spellInfo = skillInfo.spellinfo;
 	skillId = skillInfo.skillId;

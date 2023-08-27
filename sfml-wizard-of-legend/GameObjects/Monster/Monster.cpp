@@ -298,10 +298,20 @@ void Monster::Move(float dt)
         SetPosition(position + direction * stat.speed * dt);
     }
     
+    if (isFrozen)
+    {
+        isFrozenTimer += dt;
+    }
+
+    if (isFrozenTimer > isFrozenDuration)
+    {
+        isFrozen = false;
+        isFrozenTimer = 0.f;
+    }
 
     CalculatorCurrentTile();
     if (currentTile->GetType() == TileType::Wall
-        || currentTile->GetType() == TileType::Cliff)
+        || currentTile->GetType() == TileType::Cliff || isFrozen)
         SetPosition(prevPos);
 
     float distance = Utils::Distance(playerPos, position);

@@ -104,6 +104,8 @@ void MenuInventory::Reset()
 	}
 	for (int i = 0; i < 6; i++)
 	{
+		SkillEvents sEvent = slotList[slotKey[i]]->GetSlotEvent();
+		Skill* skill = SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent());
 		slotList[slotKey[i]]->SetSkillIconId(SKILL_MGR.SearchSkill(slotList[slotKey[i]]->GetSlotEvent())->GetSkillIconId());
 		slotList[slotKey[i]]->SetSkillIcon();
 		slotList[slotKey[i]]->SetQuickSlot(quickSlot);

@@ -15,15 +15,15 @@ void SkillMgr::Init()
 	if (!equipedSkillList.empty())
 		LoadEquipedSkill();
 
-	for (auto skill : equipedSkillList)
-	{
-		skill.second->SetTiles(worldTiles);
-		skill.second->SetMonsterList(monsters);
-		skill.second->SetPlayer(player);
-		skill.second->SetEditorPlayer(editorPlayer);
-		skill.second->Init();
-		skill.second->PoolInit();
-	}
+	//for (auto skill : equipedSkillList)
+	//{
+	//	skill.second->SetTiles(worldTiles);
+	//	skill.second->SetMonsterList(monsters);
+	//	skill.second->SetPlayer(player);
+	//	skill.second->SetEditorPlayer(editorPlayer);
+	//	skill.second->Init();
+	//	skill.second->PoolInit();
+	//}
 }
 
 void SkillMgr::UseSkill(SkillEvents sEvent)
@@ -71,9 +71,9 @@ void SkillMgr::LoadExistSkill()
 {
 	for (auto table : DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->GetTable()[(int)SkillDatas::Exist])
 	{
+		//skill->Init();
 		Skill* skill = new Skill(); 
 		skill->SetSkillInfo(DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)table.first, SkillDatas::Exist));
-		skill->Init();
 		existSkillList[skill->GetSkillId()] = skill;
 	}
 }

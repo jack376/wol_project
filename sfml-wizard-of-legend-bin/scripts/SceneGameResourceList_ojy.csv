@@ -99,3 +99,5 @@
 0,graphics/UI/Title/TitleLogo.png
 0,graphics/Player/Attck_Basic/DragonArc/DragonArc.png
 3,animations/Player/Attck_Basic/DragonArc/DragonArc.csv
+0,graphics/effect/IceCrystals.png
+3,animations/Player/Effects/IceEffect.csv

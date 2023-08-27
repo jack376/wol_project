@@ -27,9 +27,19 @@ void ElementalSpell::Init()
 		effect->sprite.setScale(3, 3);
 		effect->SetAnimId("AttackEffect");
 		effect->SetDuration(0.5f);
+		effect->SetPool(&monsterHitEffectPool);
 		effect->sortLayer = 20;
 	};
-	monsterHitEffectPool.Init();
+	monsterHitEffectPool.Init();	
+	
+	iceEffectPool.OnCreate = [this](SpriteEffect* effect) {
+		effect->sprite.setScale(5, 5);
+		effect->SetAnimId("IceEffect");
+		effect->SetDuration(1.5f);
+		effect->sortLayer = 20;
+		effect->SetPool(&iceEffectPool);
+	};
+	iceEffectPool.Init();
 }
 
 void ElementalSpell::Release()
@@ -39,6 +49,12 @@ void ElementalSpell::Release()
 		SCENE_MGR.GetCurrScene()->RemoveGo(obj);
 	}
 	monsterHitEffectPool.Clear();
+
+	for (auto obj : iceEffectPool.GetUseList())
+	{
+		SCENE_MGR.GetCurrScene()->RemoveGo(obj);
+	}
+	iceEffectPool.Clear();
 }
 
 void ElementalSpell::Reset()
@@ -49,6 +65,7 @@ void ElementalSpell::Reset()
 	//	scene->RemoveGo(obj);
 	//}
 	monsterHitEffectPool.Clear();
+	iceEffectPool.Clear();
 
 	// 파일로 받아서 실행하는 방법 생각하기
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/WindSlash/WindSlash.csv"));
@@ -278,6 +295,15 @@ void ElementalSpell::RangeUpdate(float dt)
 			float randAngle = Utils::RandomRange(0.f, 360.f);
 			monsterHitEffect->sprite.setRotation(randAngle);
 			SCENE_MGR.GetCurrScene()->AddGo(monsterHitEffect);
+			int rand = Utils::RandomRange(0, 4);
+			if (currentElementType == ElementTypes::Water && (rand ==0  || rand == 1))
+			{
+				SpriteEffect* iceEffect = iceEffectPool.Get();
+				iceEffect->SetPosition(monster->GetPosition());
+				SCENE_MGR.GetCurrScene()->AddGo(iceEffect);
+				monster->SetIsFrozen(true);
+			}
+
 			monster->OnAttacked(damage);
 			monster->SetIsHit(true);
 			colMonsters.push_back(monster);

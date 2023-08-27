@@ -65,11 +65,7 @@ void SceneGame::Init()
 	//mapDiscovery->text.setColor(sf::Color::Black);
 	mapDiscovery->sortLayer = 110;
 
-	menu = (MenuInventory*)AddGo(new MenuInventory());
-	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
 	gameResult = (GameResult*)AddGo(new GameResult());
-
-	menu->SetQuickSlot(quickSlot);
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
@@ -124,12 +120,6 @@ void SceneGame::Init()
 	SpawnGlowGo();
 	SpawnPortalGlowGo();
 	ModifyWallToRoof();
-
-	for (auto go : gameObjects)
-	{
-		go->Init();
-	}
-
 	SKILL_MGR.SetTiles(&tilesWorld);
 	SKILL_MGR.SetMonsterList(monsters);
 	SKILL_MGR.SetPlayer(player);
@@ -139,12 +129,22 @@ void SceneGame::Init()
 	{
 		skillTable.second->SetPlayer(player);
 		skillTable.second->SetMonsterList(monsters);
-		skillTable.second->SetPlayer(player);
 		skillTable.second->SetTiles(&tilesWorld);
 		skillTable.second->Init();
 		skillTable.second->PoolInit();
 		SKILL_MGR.EquipSkill(skillTable.second);
 	}
+	menu = (MenuInventory*)AddGo(new MenuInventory());
+	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
+
+	menu->SetQuickSlot(quickSlot);
+
+	for (auto go : gameObjects)
+	{
+		go->Init();
+	}
+
+
 
 }
 

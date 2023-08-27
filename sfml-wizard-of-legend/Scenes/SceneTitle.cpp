@@ -46,7 +46,6 @@ void SceneTitle::Init()
 	buttonList.push_back(creator);
 	buttonList.push_back(quit);
 
-	textLangList.push_back(std::make_pair(pressKeyInfo, "PRESS"));
 
 	//textLangList.push_back(std::make_pair(singlePlay->text, "SINGLE"));
 	//textLangList.push_back(std::make_pair(multiPlay->text, "MULTI"));
@@ -55,8 +54,6 @@ void SceneTitle::Init()
 	//textLangList.push_back(std::make_pair(creator->text, "CREATE"));
 	//textLangList.push_back(std::make_pair(quit->text, "QUIT"));
 
-	AllSetLangText(Variables::CurrentLang);
-	textLangList[0].first.setPosition(windowSize.x * 0.5f, windowSize.y * 0.85f);
 
 	//textLangList[1].first.setPosition(windowSize.x * 0.5f, windowSize.y * 0.5f);
 	//textLangList[2].first.setPosition(windowSize.x * 0.5f, windowSize.y * 0.58f);
@@ -65,21 +62,7 @@ void SceneTitle::Init()
 	//textLangList[5].first.setPosition(windowSize.x * 0.5f, windowSize.y * 0.82f);
 	//textLangList[6].first.setPosition(windowSize.x * 0.5f, windowSize.y * 0.9f);
 
-	ButtonInit(singlePlay, { windowSize.x * 0.5f, windowSize.y * 0.5f }, {175, 45}, "SINGLE", Variables::CurrentLang);
-	ButtonInit(multiPlay, { windowSize.x * 0.5f, windowSize.y * 0.58f }, {145, 45}, "MULTI", Variables::CurrentLang);
-	ButtonInit(arena, { windowSize.x * 0.5f, windowSize.y * 0.66f }, {65, 45}, "ARENA", Variables::CurrentLang);
-	ButtonInit(option, { windowSize.x * 0.5f, windowSize.y * 0.74f }, {65, 45}, "OPTION", Variables::CurrentLang);
-	ButtonInit(creator, { windowSize.x * 0.5f, windowSize.y * 0.82f }, {100, 45}, "CREATE", Variables::CurrentLang);
-	ButtonInit(quit, { windowSize.x * 0.5f, windowSize.y * 0.9f }, {65, 45}, "QUIT", Variables::CurrentLang);
 
-	singlePlay->OnClick = [this]() {
-		isChangeScene = true;
-	};
-
-	quit->OnClick = [this]() {
-		SCENE_MGR.GetCurrScene()->Exit();
-		FRAMEWORK.GetWindow().close();
-	};
 
 	for (auto go : gameObjects)
 	{
@@ -99,13 +82,35 @@ void SceneTitle::Release()
 
 void SceneTitle::Enter()
 {
-	auto size = FRAMEWORK.GetWindowSize();
-	worldView.setSize(size);
+	auto windowSize = FRAMEWORK.GetWindowSize();
+	worldView.setSize(windowSize);
 	worldView.setCenter(0, 0);
 
-	uiView.setSize(size);
-	uiView.setCenter(size * 0.5f);
+	uiView.setSize(windowSize);
+	uiView.setCenter(windowSize * 0.5f);
 	Scene::Enter();
+	textLangList.push_back(std::make_pair(pressKeyInfo, "PRESS"));
+	AllSetLangText(Variables::CurrentLang);
+	textLangList[0].first.setPosition(windowSize.x * 0.5f, windowSize.y * 0.85f);
+
+	ButtonInit(singlePlay, { windowSize.x * 0.5f, windowSize.y * 0.5f }, { 175, 45 }, "SINGLE", Variables::CurrentLang);
+	ButtonInit(multiPlay, { windowSize.x * 0.5f, windowSize.y * 0.58f }, { 145, 45 }, "MULTI", Variables::CurrentLang);
+	ButtonInit(arena, { windowSize.x * 0.5f, windowSize.y * 0.66f }, { 65, 45 }, "ARENA", Variables::CurrentLang);
+	ButtonInit(option, { windowSize.x * 0.5f, windowSize.y * 0.74f }, { 65, 45 }, "OPTION", Variables::CurrentLang);
+	ButtonInit(creator, { windowSize.x * 0.5f, windowSize.y * 0.82f }, { 100, 45 }, "CREATE", Variables::CurrentLang);
+	ButtonInit(quit, { windowSize.x * 0.5f, windowSize.y * 0.9f }, { 65, 45 }, "QUIT", Variables::CurrentLang);
+	singlePlay->OnClick = [this]() {
+		isChangeScene = true;
+	};
+
+	quit->OnClick = [this]() {
+		SCENE_MGR.GetCurrScene()->Exit();
+		FRAMEWORK.GetWindow().close();
+	};
+
+	option->OnClick = [this]() {
+
+	};
 
 }
 

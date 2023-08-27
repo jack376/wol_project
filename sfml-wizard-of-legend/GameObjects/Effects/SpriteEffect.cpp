@@ -2,6 +2,7 @@
 #include "SpriteEffect.h"
 #include "SceneMgr.h"
 #include "ResourceMgr.h"
+#include "Monster.h"
 
 SpriteEffect::SpriteEffect(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -15,6 +16,7 @@ void SpriteEffect::Init()
 	effectAnim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/AttackEffect.csv"));
 	effectAnim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/HitEffect.csv"));
 	effectAnim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/DieEffect.csv"));
+	effectAnim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Effects/IceEffect.csv"));
 
 	effectAnim.SetTarget(&sprite);
 	SetOrigin(Origins::MC);
@@ -41,6 +43,7 @@ void SpriteEffect::FadeEffectNRemove(float dt)
 	{
 		effectAnim.Play(animId);
 	}
+
 	isEffect = true;
 	effectAnim.Update(dt);
 	Utils::SetOrigin(sprite, Origins::MC);

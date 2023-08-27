@@ -3,6 +3,7 @@
 #include "ObjectPool.h"
 #include "AnimationController.h"
 
+class Monster;
 
 class SpriteEffect : public SpriteGo
 {
@@ -16,6 +17,7 @@ protected:
 	std::string animId;
 
 	ObjectPool<SpriteEffect>* pool = nullptr;
+	Monster* monster;
 public:
 	SpriteEffect(const std::string& textureId = "", const std::string& n = "");
 	virtual ~SpriteEffect() override { };
@@ -28,8 +30,11 @@ public:
 
 	virtual void Update(float dt) override;
 
+	AnimationController& GetAnimController() { return effectAnim; }
+
 	void FadeEffectNRemove(float dt);
 	void SetAnimId(const std::string& id) { animId = id; }
+	void SetMonster(Monster* monster) { this->monster = monster; }
 
 };
 

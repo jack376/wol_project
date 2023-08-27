@@ -27,6 +27,7 @@ protected:
 
 	ObjectPool<ElementalSpell> pool;
 	ObjectPool<SpriteEffect> monsterHitEffectPool;
+	ObjectPool<SpriteEffect> iceEffectPool;
 
 	AnimationController anim;
 	

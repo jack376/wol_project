@@ -19,6 +19,7 @@ bool StringTable::Load()
 	filenames.push_back("tables/StringTable_Kor.csv");
 	filenames.push_back("tables/StringTable_Eng.csv");
 	filenames.push_back("tables/StringTable_Jp.csv");
+	filenames.push_back("tables/StringTable_China.csv");
 
 	for (int i = 0; i < tables.size(); ++i)
 	{
@@ -45,20 +46,48 @@ void StringTable::Release()
 	//tables.clear();
 }
 
-std::wstring multibyte_to_uni(const std::string& str) {
+//std::wstring multibyte_to_uni(const std::string& str) {
+//	int nLen = str.size();
+//	wchar_t warr[256];
+//	MultiByteToWideChar(CP_ACP, 0, (LPCSTR)str.c_str(), -1, warr, nLen);
+//
+//	return warr;
+//	//char carr[256];
+//	//memset(carr, '\0', sizeof(carr));
+//	//WideCharToMultiByte(CP_UTF8, 0, warr, -1, carr, 256, NULL, NULL);
+//	//return carr;
+//}
+
+std::wstring multibyte_to_uni(const std::string& str, UINT codePage)
+{
 	int nLen = str.size();
 	wchar_t warr[256];
-	MultiByteToWideChar(CP_ACP, 0, (LPCSTR)str.c_str(), -1, warr, nLen);
+	MultiByteToWideChar(codePage, 0, str.c_str(), -1, warr, nLen);
 
 	return warr;
-	//char carr[256];
-	//memset(carr, '\0', sizeof(carr));
-	//WideCharToMultiByte(CP_UTF8, 0, warr, -1, carr, 256, NULL, NULL);
-	//return carr;
 }
+//
+//const std::wstring StringTable::GetUni(const std::string& id, Languages lang)
+//{
+//	std::string multibyteString = Get(id, lang);
+//	return multibyte_to_uni(multibyteString);
+//}
 
 const std::wstring StringTable::GetUni(const std::string& id, Languages lang)
 {
 	std::string multibyteString = Get(id, lang);
-	return multibyte_to_uni(multibyteString);
+
+	UINT codePage = CP_ACP; // 기본적으로 CP_ACP 사용
+
+	// 중국어와 일본어 코드 페이지 설정
+	if (lang == Languages::CHINA)
+	{
+		codePage = 936; // 중국어 코드 페이지
+	}
+	else if (lang == Languages::JP)
+	{
+		codePage = 932; // 일본어 코드 페이지
+	}
+
+	return multibyte_to_uni(multibyteString, codePage);
 }

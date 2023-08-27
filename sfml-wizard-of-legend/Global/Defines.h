@@ -86,6 +86,7 @@ enum class Languages
 	KOR,
 	ENG,
 	JP,
+	CHINA,
 	COUNT,
 };
 

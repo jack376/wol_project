@@ -1,0 +1,10 @@
+ID,FPS,LOOPTYPE,,
+IceEffect,6,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/effect/IceCrystals.png,89,35,20,19
+graphics/effect/IceCrystals.png,43,22,37,33
+graphics/effect/IceCrystals.png,0,0,38,55
+graphics/effect/IceCrystals.png,2,61,36,39
+graphics/effect/IceCrystals.png,47,63,39,37
+graphics/effect/IceCrystals.png,93,68,35,29

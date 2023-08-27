@@ -76,9 +76,15 @@ protected:
 	float knockBackTimer = 0.f;
 	float pathUpdateRate = 1.f;
 	float pathUpdateTimer = 0.f;
+
+	float isFrozenTimer = 0.f;
+	float isFrozenDuration = 1.0f;
+
 	bool isAttacked = false;
 	bool isAwake = false;
 	bool isHit = false;
+
+	bool isFrozen = false;
 
 	Player* player = nullptr;
 	Tile* currentTile = nullptr;
@@ -136,10 +142,12 @@ public:
 	void SetIntMap(std::vector<std::vector<int>>* intMap) { this->intMap = intMap; }
 	void SetNonGroundTiles(std::vector<Tile*>* tiles) { nongroundTiles = tiles; }
 	void SetIsHit(bool isHit) { this->isHit = isHit; }
+	void SetIsFrozen(bool isFrozen) { this->isFrozen = isFrozen; }
 
 	bool GetIsHit() { return isHit; }
 	int* GetMaxHP() { return &stat.maxHp; }
 	int* GetHP() { return &hp; }
+	bool GetIsFrozen() { return isFrozen; }
 	void CalculatorCurrentTile();
 	std::vector<Tile*> CalculatorRangeTiles(int row, int col);
 	void SetParticle(sf::Vector2f position, int count);
