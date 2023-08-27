@@ -12,36 +12,54 @@ void Particle::Reset()
 	sf::Texture* tex = RESOURCE_MGR.GetTexture(textureId);
 	if (tex != nullptr) { sprite.setTexture(*tex); }
 
-	// Reset Member Variable
-	flowTime = 0.0f;
-	velocity = 0.0f;
-	duration = 0.75f;
-	speed    = 750.0f;
+	flowTime = setFlowTime;
+	velocity = setVelocity;
+	duration = setDuration;
+	speed    = setSpeed;
+	rotation = setRotation;
+
+	currentTime = 0.0f;
 
 	float randomVal = Utils::RandomRange(0.2f, 1.0f);
 	sf::Vector2f randomDir = Utils::RandomOnCircle(1.0f);
 
 	direction  = randomDir;
 	speed     *= randomVal;
-	rotation   = randomVal;
 	duration  *= randomVal;
 
-	SetOrigin(origin);
-	SetRotation(rotation * 360.0f);
-	SetPosition(0.0f, 0.0f);
+	sprite.setRotation((rotation * randomVal) * 360.0f);
+	sprite.setOrigin(8.0f, 8.0f); // Based 16px, Origin MC
+	sprite.setPosition(0.0f, 0.0f);
+	sprite.setScale(setScale);
+	sprite.setColor(setColor);
 }
 
 void Particle::Update(float dt)
 {		
 	flowTime += dt;
+	currentTime += dt;
 	speed -= slowdown * dt;
 	velocity += gravity * flowTime;
 
 	position += direction * speed * dt;
-	sprite.setPosition(position.x, position.y + velocity);
+	sprite.setPosition(setAddPosition.x + position.x, setAddPosition.y + position.y + velocity);
 
 	UINT8 alpha = Utils::Lerp(255, 0, (flowTime / duration));
-	sprite.setColor({ 255, 255, 255, alpha });
+	sprite.setColor({ setColor.r, setColor.g, setColor.b, alpha });
+
+	if (isAnimation)
+	{
+		if (currentFrame == 5)
+		{
+			currentFrame = 0;
+		}
+		if (currentTime >= frameTime)
+		{
+			sprite.setTextureRect(animationRect);
+			currentFrame++;
+			currentTime = 0.0f;
+		}
+	}
 
 	if (flowTime > duration)
 	{
@@ -65,7 +83,7 @@ void Particle::Draw(sf::RenderWindow& window)
 void Particle::SetPosition(const sf::Vector2f& p)
 {
 	position = p;
-	sprite.setPosition(p);
+	sprite.setPosition(position);
 }
 
 void Particle::SetPosition(float x, float y)
@@ -97,11 +115,6 @@ void Particle::SetOrigin(float x, float y)
 	sprite.setOrigin(x, y);
 }
 
-void Particle::SetRotation(float angle)
-{
-	sprite.setRotation(angle);
-}
-
 void Particle::SetTexture(const std::string& id)
 {
 	sprite.setTexture(*RESOURCE_MGR.GetTexture(id));
@@ -111,5 +124,26 @@ void Particle::SetTexture(const std::string& id)
 void Particle::SetTextureRect(const sf::IntRect& rect)
 {
 	sprite.setTexture(*RESOURCE_MGR.GetTexture(textureId));
-	sprite.setTextureRect(rect);
+	animationRect = rect;
+	sprite.setTextureRect(animationRect);
+}
+
+void Particle::SetScale(float x, float y)
+{
+	setScale = { x, y };
+	sprite.setScale(setScale);
+}
+
+void Particle::SetColor(sf::Color color)
+{
+	setColor = color;
+	sprite.setColor(setColor);
+}
+
+sf::Vector2f Particle::ScaleAnimation(float defaultScale, float scaleRange, float flowTimeBySpeed)
+{
+	float animation = sin(flowTimeBySpeed * 10.0f * M_PI);
+	float scale = defaultScale + ((animation + 1.0f) / 2.0f) * scaleRange;
+
+	return sf::Vector2f(scale, scale);
 }

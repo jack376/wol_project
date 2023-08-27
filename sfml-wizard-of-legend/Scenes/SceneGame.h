@@ -14,6 +14,7 @@ class Monster;
 class ElementalSpell;
 class DecoGo;
 class GlowGo;
+class RoofGo;
 class Particle;
 class Monster;
 class CustomEffect;
@@ -41,6 +42,13 @@ protected:
 	float debugTimer = 0.f;
 	float debugDuration = 1.f;
 	ObjectPool<Particle> particlePool;
+<<<<<<< Updated upstream
+=======
+	ObjectPool<Particle> fireParticlePool;
+	ObjectPool<Particle> portalParticlePoolRed;
+	ObjectPool<Particle> portalParticlePoolGreen;
+	ObjectPool<Particle> portalParticlePoolPurple;
+>>>>>>> Stashed changes
 	int count = 0;
 
 public:
@@ -61,17 +69,19 @@ public:
 
 	Player* GetPlayer() { return player; }
 
-	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 1);
+	Tile* CreateTile(const std::string& name, float posX, float posY, int sort = 0);
 	void LoadFromCSV(const std::string& path);
 	void CreateTile2dVector(int rows, int cols);
 	void CreateParticle(int count);
+	void CreatePortalParticle(int count);
+	void CreateFireParticle(int count);
 	Monster* CreateMonster(MonsterId id);
 
 	void SpawnDecoGo(int count);
 	void SpawnWallDecoGo(int count);
-	void SpawnGlowGoLarge();
-	void SpawnGlowGoSmall();
-
+	void SpawnGlowGo();
+	void SpawnPortalGlowGo();
+	void ModifyWallToRoof();
 	void DestroyDecoGo(DecoGo* obj);
 
 	void TilesToIntMap();

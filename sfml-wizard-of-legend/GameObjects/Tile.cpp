@@ -291,7 +291,7 @@ void Tile::SetSpawnLocationColor(SpawnLocation spawnLocation)
         { SpawnLocation::Object,     sf::Color(255, 255, 0, 255)   },
         { SpawnLocation::WallObject, sf::Color(0, 160, 255, 255)   },
         { SpawnLocation::Torch,      sf::Color(255, 48, 192, 255)  },
-        { SpawnLocation::Embers,     sf::Color(128, 64, 224, 255)  },
+        { SpawnLocation::Roof,       sf::Color(128, 64, 224, 255)  },
         { SpawnLocation::FireLight,  sf::Color(255, 128, 128, 255) },
         { SpawnLocation::Portal,     sf::Color(64, 224, 48, 255)   },
     };

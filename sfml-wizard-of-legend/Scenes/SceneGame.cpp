@@ -20,6 +20,7 @@
 #include "BoxCollider2D.h"
 #include "DecoGo.h"
 #include "GlowGo.h"
+#include "RoofGo.h"
 #include "Particle.h"
 #include "Skill.h"
 #include "SkillMgr.h"
@@ -34,14 +35,14 @@ void SceneGame::Init()
 	auto size = FRAMEWORK.GetWindowSize();
 
 	player = (Player*)AddGo(new Player());
-	player->SetPosition(700, 700);
+	player->SetPosition(62 * _TileSize, 85 * _TileSize);
 	player->sprite.setScale(4, 4);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 5;
 	player->SetScene(this);
 
 	// Load Tilemap CSV
-	LoadFromCSV("tables/EntireRoom_0825_182721.csv");
+	LoadFromCSV("tables/EntireRoom_0827_134822.csv");
 
 	TilesToIntMap();
 	CalculatorNongroundTiles();
@@ -59,6 +60,7 @@ void SceneGame::Init()
 	//tempFireBall->SetSkillType(SkillTypes::Range);
 	//tempFireBall->SetRangeType(RangeTypes::Curve);
 
+<<<<<<< Updated upstream
 	Skill* fireBall = (Skill*)AddGo(new Skill());
 	fireBall->SetSkillEvent(SkillEvents::Right);
 	fireBall->SetElementType(ElementTypes::Fire);
@@ -78,10 +80,41 @@ void SceneGame::Init()
 
 	Monster* go = CreateMonster(MonsterId::Mage);
 	monster = go;
+=======
+	/*
+	monster = CreateMonster(MonsterId::FireBoss);
+>>>>>>> Stashed changes
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
+<<<<<<< Updated upstream
+=======
+	monster->SetPosition(512, 1024);
+	monster->particlePool = &this->particlePool;
+	monsters.push_back(monster);
+
+	HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
+	hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
+	hpb->SetOrigin(Origins::ML);
+	hpb->SetPosition(size.x * 0.4, size.y * 0.1);
+	hpb->sortLayer = 105;
+
+	hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("PlayerHP")));
+	hpb->SetTarget(player->GetMaxHP(), player->GetHP());
+	hpb->SetOrigin(Origins::ML);
+	hpb->SetPosition(size.x * 0.05, size.y * 0.05);
+	hpb->sortLayer = 105;
+
+	monster = CreateMonster(MonsterId::Ghoul);
+	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
+	monster->SetIntMap(&intMap);
+	monster->SetNonGroundTiles(&nongroundTiles);
+	monster->SetPosition(700, 500);
+	monsters.push_back(monster);
+	*/
+>>>>>>> Stashed changes
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
@@ -94,12 +127,15 @@ void SceneGame::Init()
 
 	// Create Particle
 	CreateParticle(1000);
+	CreateFireParticle(1000);
+	CreatePortalParticle(1000);
 
 	// Spawn Deco
 	SpawnDecoGo(100);
 	SpawnWallDecoGo(15);
-	SpawnGlowGoLarge();
-	//SpawnGlowGoSmall();
+	SpawnGlowGo();
+	SpawnPortalGlowGo();
+	ModifyWallToRoof();
 
 	for (auto go : gameObjects)
 	{
@@ -133,6 +169,10 @@ void SceneGame::Enter()
 	Scene::Enter();
 
 	ClearObjectPool(particlePool);
+	ClearObjectPool(fireParticlePool);
+	ClearObjectPool(portalParticlePoolRed);
+	ClearObjectPool(portalParticlePoolGreen);
+	ClearObjectPool(portalParticlePoolPurple);
 }
 
 void SceneGame::Exit()
@@ -238,6 +278,14 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetSpawnLocation(static_cast<SpawnLocation>(spawnLocation));
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
+		
+		/*
+		if (topTextureRect.left >= 0 && topTextureRect.left <= 176 && topTextureRect.top == 192
+			|| bottomTextureRect.left >= 0 && bottomTextureRect.left <= 176 && bottomTextureRect.top == 192)
+		{
+			tile->sortLayer = 50;
+		}
+		*/
 
 		if (tile->GetType() == TileType::None)
 		{
@@ -288,12 +336,15 @@ void SceneGame::CreateParticle(int count)
 {
 	particlePool.OnCreate = [this](Particle* particle)
 	{
-		int rand = 16 * Utils::RandomRange(0, 8);
+		int random = 16 * Utils::RandomRange(0, 6);
 
 		particle->SetName("Particle");
-		particle->SetDuration(1.0f);
-		particle->SetTexture("graphics/game/Fire.png");
-		particle->SetTextureRect(sf::IntRect(rand, 0, 16, 16));
+		particle->SetDuration(0.75f);
+		particle->SetGravity(20.0f);
+		particle->SetRotation(1.0f);
+		particle->SetTexture("graphics/effect/PotDebris.png");
+		particle->SetTextureRect(sf::IntRect(0, random, 16, 16));
+		particle->SetScale(4.0f, 4.0f);
 		particle->sortLayer = 25;
 		particle->sortOrder = 0;
 		particle->SetPool(&particlePool);
@@ -301,6 +352,116 @@ void SceneGame::CreateParticle(int count)
 		particle->SetActive(false);
 	};
 	particlePool.Init(count);
+}
+
+void SceneGame::CreatePortalParticle(int count)
+{
+	portalParticlePoolRed.OnCreate = [this](Particle* portalParticle)
+	{
+		int random = 16 * Utils::RandomRange(0, 8);
+		float randomScale = Utils::RandomRange(0.1f, 0.65f);
+		sf::Vector2f randomOffset = Utils::RandomOnCircle(50.0f);
+
+		portalParticle->SetName("PortalParticleRed");
+		portalParticle->SetScale(randomScale, randomScale);
+		portalParticle->SetLighting(true);
+		portalParticle->SetDuration(2.0f);
+		portalParticle->SetSpeed(3.0f);
+		portalParticle->SetSlowdown(1.5f);
+		portalParticle->SetGravity(-0.5f);
+		portalParticle->SetRotation(0.0f);
+		portalParticle->SetColor(sf::Color(255, 0, 0, 255));
+		portalParticle->SetAddPosition(sf::Vector2f(randomOffset.x, randomOffset.y * 1.625f));
+		portalParticle->SetTexture("graphics/game/Fire.png");
+		portalParticle->SetTextureRect(sf::IntRect(random, 0, 16, 16));
+		portalParticle->sortLayer = 25;
+		portalParticle->sortOrder = 0;
+		portalParticle->SetPool(&portalParticlePoolRed);
+		portalParticle->Reset();
+		portalParticle->SetActive(false);
+	};
+	portalParticlePoolRed.Init(count);
+
+	portalParticlePoolGreen.OnCreate = [this](Particle* portalParticle)
+	{
+		int random = 16 * Utils::RandomRange(0, 8);
+		float randomScale = Utils::RandomRange(0.1f, 0.65f);
+		sf::Vector2f randomOffset = Utils::RandomOnCircle(50.0f);
+
+		portalParticle->SetName("PortalParticleGreen");
+		portalParticle->SetScale(randomScale, randomScale);
+		portalParticle->SetLighting(true);
+		portalParticle->SetDuration(2.0f);
+		portalParticle->SetSpeed(3.0f);
+		portalParticle->SetSlowdown(1.5f);
+		portalParticle->SetGravity(-0.5f);
+		portalParticle->SetRotation(0.0f);
+		portalParticle->SetColor(sf::Color(0, 255, 0, 255));
+		portalParticle->SetAddPosition(sf::Vector2f(randomOffset.x, randomOffset.y * 1.625f));
+		portalParticle->SetTexture("graphics/game/Fire.png");
+		portalParticle->SetTextureRect(sf::IntRect(random, 0, 16, 16));
+		portalParticle->sortLayer = 25;
+		portalParticle->sortOrder = 0;
+		portalParticle->SetPool(&portalParticlePoolGreen);
+		portalParticle->Reset();
+		portalParticle->SetActive(false);
+	};
+	portalParticlePoolGreen.Init(count);
+
+	portalParticlePoolPurple.OnCreate = [this](Particle* portalParticle)
+	{
+		int random = 16 * Utils::RandomRange(0, 8);
+		float randomScale = Utils::RandomRange(0.1f, 0.65f);
+		sf::Vector2f randomOffset = Utils::RandomOnCircle(50.0f);
+
+		portalParticle->SetName("PortalParticlePurple");
+		portalParticle->SetScale(randomScale, randomScale);
+		portalParticle->SetLighting(true);
+		portalParticle->SetDuration(2.0f);
+		portalParticle->SetSpeed(3.0f);
+		portalParticle->SetSlowdown(1.5f);
+		portalParticle->SetGravity(-0.5f);
+		portalParticle->SetRotation(0.0f);
+		portalParticle->SetColor(sf::Color(255, 0, 255, 255));
+		portalParticle->SetAddPosition(sf::Vector2f(randomOffset.x, randomOffset.y * 1.625f));
+		portalParticle->SetTexture("graphics/game/Fire.png");
+		portalParticle->SetTextureRect(sf::IntRect(random, 0, 16, 16));
+		portalParticle->sortLayer = 25;
+		portalParticle->sortOrder = 0;
+		portalParticle->SetPool(&portalParticlePoolPurple);
+		portalParticle->Reset();
+		portalParticle->SetActive(false);
+	};
+	portalParticlePoolPurple.Init(count);
+}
+
+void SceneGame::CreateFireParticle(int count)
+{
+	fireParticlePool.OnCreate = [this](Particle* portalParticle)
+	{
+		int random = 16 * Utils::RandomRange(0, 8);
+		float randomScale = Utils::RandomRange(0.2f, 0.4f);
+		sf::Vector2f randomOffset = Utils::RandomOnCircle(50.0f);
+
+		portalParticle->SetName("FireParticle");
+		portalParticle->SetLighting(true);
+		portalParticle->SetScale(randomScale, randomScale);
+		portalParticle->SetDuration(3.0f);
+		portalParticle->SetSpeed(1.5f);
+		portalParticle->SetSlowdown(1.5f);
+		portalParticle->SetGravity(-0.3f);
+		portalParticle->SetRotation(0.0f);
+		portalParticle->SetColor(sf::Color(255, random, 0, 255));
+		portalParticle->SetAddPosition(randomOffset);
+		portalParticle->SetTexture("graphics/game/Fire.png");
+		portalParticle->SetTextureRect(sf::IntRect(random, 0, 16, 16));
+		portalParticle->sortLayer = 25;
+		portalParticle->sortOrder = 0;
+		portalParticle->SetPool(&fireParticlePool);
+		portalParticle->Reset();
+		portalParticle->SetActive(false);
+	};
+	fireParticlePool.Init(count);
 }
 
 void SceneGame::SpawnDecoGo(int count)
@@ -385,7 +546,7 @@ void SceneGame::SpawnWallDecoGo(int count)
 	}
 }
 
-void SceneGame::SpawnGlowGoLarge()
+void SceneGame::SpawnGlowGo()
 {
 	std::vector<sf::Vector2f> objectSpawnArea;
 
@@ -407,15 +568,16 @@ void SceneGame::SpawnGlowGoLarge()
 
 	for (int i = 0; i < objectSpawnArea.size() && !objectSpawnArea.empty(); i++)
 	{
-		GlowGo* object = (GlowGo*)AddGo(new GlowGo("graphics/effect/Glow.png", "GlowL" + i));
+		GlowGo* object = (GlowGo*)AddGo(new GlowGo("graphics/effect/Glow.png", "Glow" + i));
 		object->sortLayer = 10;
-		object->SetActive(true);
 		object->SetPlayer(player);
 		object->SetPosition(objectSpawnArea[i]);
+		object->SetParticlePool(&fireParticlePool);
+		object->OnFireParticle();
 	}
 }
 
-void SceneGame::SpawnGlowGoSmall()
+void SceneGame::SpawnPortalGlowGo()
 {
 	std::vector<sf::Vector2f> objectSpawnArea;
 
@@ -423,7 +585,7 @@ void SceneGame::SpawnGlowGoSmall()
 	{
 		for (size_t col = 0; col < tilesWorld[row].size(); col++)
 		{
-			if (tilesWorld[row][col]->GetSpawnLocation() == SpawnLocation::Embers);
+			if (tilesWorld[row][col]->GetSpawnLocation() == SpawnLocation::Portal)
 			{
 				objectSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
 			}
@@ -437,12 +599,42 @@ void SceneGame::SpawnGlowGoSmall()
 
 	for (int i = 0; i < objectSpawnArea.size() && !objectSpawnArea.empty(); i++)
 	{
-		GlowGo* object = (GlowGo*)AddGo(new GlowGo("graphics/effect/Glow.png", "GlowS" + i));
+		GlowGo* object = (GlowGo*)AddGo(new GlowGo("graphics/effect/Portal.png", "Portal" + i));
 		object->sortLayer = 10;
-		object->SetActive(true);
 		object->SetPlayer(player);
-		object->SetScale(0.66f, 0.66f);
+		object->SetOrigin(128.0f, 128.0f);
 		object->SetPosition(objectSpawnArea[i]);
+		object->OnPortalParticle();
+
+		switch (i)
+		{
+		case 0:
+			object->SetColor(sf::Color(0, 255, 0, 255));
+			object->SetParticlePool(&portalParticlePoolGreen);
+			break;
+		case 1:
+			object->SetColor(sf::Color(255, 0, 0, 255));
+			object->SetParticlePool(&portalParticlePoolRed);
+			break;
+		case 2:
+			object->SetColor(sf::Color(255, 0, 255, 255));
+			object->SetParticlePool(&portalParticlePoolPurple);
+			break;
+		}
+	}
+}
+
+void SceneGame::ModifyWallToRoof()
+{
+	for (auto& tiles : tilesWorld)
+	{
+		for (Tile* tile : tiles)
+		{
+			if (tile->GetSpawnLocation() == SpawnLocation::Roof)
+			{
+				tile->sortLayer = 50;
+			}
+		}
 	}
 }
 

@@ -55,8 +55,7 @@ void DecoGo::Update(float dt)
 void DecoGo::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
-	window.draw(glow, sf::BlendAdd);
-
+	//window.draw(glow, sf::BlendAdd);
 	//window.draw(shape);
 }
 

@@ -131,8 +131,8 @@ private:
 
 	float attackDistance = 100.f;
 
-	float speed = 400.f;
-	float dashDistance = 400.f;
+	float speed = 600.f;
+	float dashDistance = 600.f;
 
 	float dashTimer = 0.f;
 	float dashDuration = 0.3f;

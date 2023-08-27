@@ -129,7 +129,7 @@ enum class SpawnLocation
 	Object,
 	WallObject,
 	Torch,
-	Embers,
+	Roof,
 	FireLight,
 	Portal,
 };

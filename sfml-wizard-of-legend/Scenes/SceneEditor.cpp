@@ -525,10 +525,10 @@ void SceneEditor::LoadFromCSV(const std::string& path)
 
 		int tileIndexX = doc.GetCell<int>("tileIndexX", i);
 		int tileIndexY = doc.GetCell<int>("tileIndexY", i);
-		int tileType   = doc.GetCell<int>("tileType", i);
-		int tileSize   = doc.GetCell<int>("tileSize", i);
-		int tileScale  = doc.GetCell<int>("tileScale", i);
-		int tileLayer  = doc.GetCell<int>("tileLayer", i);
+		int tileType = doc.GetCell<int>("tileType", i);
+		int tileSize = doc.GetCell<int>("tileSize", i);
+		int tileScale = doc.GetCell<int>("tileScale", i);
+		int tileLayer = doc.GetCell<int>("tileLayer", i);
 
 		tileTextureId = doc.GetCell<std::string>("textureId", i);
 
@@ -1008,13 +1008,13 @@ void SceneEditor::DrawEditorUI()
 	ImGui::SetNextWindowSize(ImVec2(700.0f, blankPos));
 	ImGui::Begin("TOP UI", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBackground);
 
-	ImGui::ColorButton("NONE",   ImVec4(0.5f, 0.5f, 0.5f, 0.2f)); ImGui::SameLine(); ImGui::Text("NONE");      ImGui::SameLine(0.0f, 16.0f);
-	ImGui::ColorButton("LAVER",  ImVec4(0.8f, 0.2f, 0.2f, 1.0f)); ImGui::SameLine(); ImGui::Text("LAVER");     ImGui::SameLine(0.0f, 16.0f);
-	ImGui::ColorButton("OBJECT", ImVec4(1.0f, 1.0f, 0.0f, 1.0f)); ImGui::SameLine(); ImGui::Text("OBJECT");    ImGui::SameLine(0.0f, 16.0f);
-	ImGui::ColorButton("WALL",   ImVec4(0.0f, 0.6f, 1.0f, 1.0f)); ImGui::SameLine(); ImGui::Text("WALL");      ImGui::SameLine(0.0f, 16.0f);
-	ImGui::ColorButton("TORCH",  ImVec4(1.0f, 0.2f, 0.7f, 1.0f)); ImGui::SameLine(); ImGui::Text("TORCH");     ImGui::SameLine(0.0f, 16.0f);
-	ImGui::ColorButton("LIGHT1", ImVec4(0.5f, 0.2f, 0.8f, 1.0f)); ImGui::SameLine(); ImGui::Text("LIGHT 1x1"); ImGui::SameLine(0.0f, 16.0f);
-	ImGui::ColorButton("LIGHT2", ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); ImGui::SameLine(); ImGui::Text("LIGHT 2x2"); ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("NONE",   ImVec4(0.5f, 0.5f, 0.5f, 0.2f)); ImGui::SameLine(); ImGui::Text("NONE");   ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("LAVER",  ImVec4(0.8f, 0.2f, 0.2f, 1.0f)); ImGui::SameLine(); ImGui::Text("LAVER");  ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("OBJECT", ImVec4(1.0f, 1.0f, 0.0f, 1.0f)); ImGui::SameLine(); ImGui::Text("OBJECT"); ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("WALL",   ImVec4(0.0f, 0.6f, 1.0f, 1.0f)); ImGui::SameLine(); ImGui::Text("WALL");   ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("TORCH",  ImVec4(1.0f, 0.2f, 0.7f, 1.0f)); ImGui::SameLine(); ImGui::Text("TORCH");  ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("ROOF",   ImVec4(0.5f, 0.2f, 0.8f, 1.0f)); ImGui::SameLine(); ImGui::Text("ROOF");   ImGui::SameLine(0.0f, 16.0f);
+	ImGui::ColorButton("GLOW",   ImVec4(1.0f, 0.5f, 0.5f, 1.0f)); ImGui::SameLine(); ImGui::Text("GLOW");   ImGui::SameLine(0.0f, 16.0f);
 	ImGui::ColorButton("PORTAL", ImVec4(0.2f, 0.8f, 0.2f, 1.0f)); ImGui::SameLine(); ImGui::Text("PORTAL");
 	ImGui::End();
 }
@@ -1043,7 +1043,7 @@ void SceneEditor::InputEditorUI()
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F3)) { SetSelectedSpawnLocation(SpawnLocation::Object);     }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F4)) { SetSelectedSpawnLocation(SpawnLocation::WallObject); }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F5)) { SetSelectedSpawnLocation(SpawnLocation::Torch);      }
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F6)) { SetSelectedSpawnLocation(SpawnLocation::Embers);     }
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F6)) { SetSelectedSpawnLocation(SpawnLocation::Roof);       }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F7)) { SetSelectedSpawnLocation(SpawnLocation::FireLight);  }
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::F8)) { SetSelectedSpawnLocation(SpawnLocation::Portal);     }
 

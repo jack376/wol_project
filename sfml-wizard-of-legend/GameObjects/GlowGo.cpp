@@ -5,6 +5,7 @@
 #include "SceneMgr.h"
 #include "SceneEditor.h"
 #include "SceneGame.h"
+#include "Particle.h"
 
 void GlowGo::Reset()
 {
@@ -14,6 +15,30 @@ void GlowGo::Reset()
 
 void GlowGo::Update(float dt)
 {
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	timer += dt;
+	if (isFireLight)
+	{
+		if (this->name == name && timer > cooldown)
+		{
+			FireParticleAnimation();
+			timer = 0.0f;
+		}
+	}
+	if (isPortal)
+	{
+		if (this->name == name && timer > cooldown)
+		{
+			PortalParticleAnimation();
+			timer = 0.0f;
+		}
+	}
+
+
 	/*
 	UINT8 alpha = Utils::Lerp(255, 0, (flowTime / duration));
 	sprite.setColor({ 255, 255, 255, alpha });
@@ -78,8 +103,41 @@ void GlowGo::SetScale(float x, float y)
 	sprite.setScale(x, y);
 }
 
+void GlowGo::SetColor(sf::Color color)
+{
+	sprite.setColor(color);
+}
+
 void GlowGo::SetTexture(const std::string& id)
 {
 	sprite.setTexture(*RESOURCE_MGR.GetTexture(id));
 	textureId = id;
+}
+
+void GlowGo::SetParticle(sf::Vector2f position, int count)
+{
+	for (int i = 0; i < count; i++)
+	{
+		Particle* particle = particlePool->Get();
+		particle->SetPosition(position);
+		SCENE_MGR.GetCurrScene()->AddGo(particle);
+	}
+}
+
+void GlowGo::SetParticlePool(ObjectPool<Particle>* pool)
+{
+	particlePool = pool;
+};
+
+void GlowGo::FireParticleAnimation()
+{
+	sf::Vector2f pos = { position.x + 128.0f, position.y + 96.0f };
+	SetParticle(pos, 1);
+}
+
+void GlowGo::PortalParticleAnimation()
+{
+	//sf::Vector2f pos = { 62 * _TileSize, 85 * _TileSize };
+	sf::Vector2f pos = { position.x + 32.0f, position.y + 32.0f };
+	SetParticle(pos, 15);
 }

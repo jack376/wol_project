@@ -157,6 +157,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects\GlowGo.cpp" />
+<<<<<<< Updated upstream
+=======
+    <ClCompile Include="HPBar.cpp" />
+    <ClCompile Include="MenuInventory.cpp" />
+    <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
+    <ClCompile Include="QuickSlot.cpp" />
+    <ClCompile Include="GameObjects\RoofGo.cpp" />
+>>>>>>> Stashed changes
     <ClCompile Include="Scenes\PathfindingScene.cpp" />
     <ClCompile Include="PathFinding\AS.cpp" />
     <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
@@ -223,6 +231,14 @@
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="GameObjects\GlowGo.h" />
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="HPBar.h" />
+    <ClInclude Include="MenuInventory.h" />
+    <ClInclude Include="GameObjects\Boss\FireBoss.h" />
+    <ClInclude Include="QuickSlot.h" />
+    <ClInclude Include="GameObjects\RoofGo.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="Scenes\PathfindingScene.h" />
     <ClInclude Include="PathFinding\AS.h" />
     <ClInclude Include="GameObjects\AnimationProjectile.h" />
