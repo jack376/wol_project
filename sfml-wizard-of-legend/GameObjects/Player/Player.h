@@ -260,4 +260,6 @@ public:
 
 	Tile* GetCurrentTile() { return currentTile; }
 	const sf::FloatRect GetGlobalBounds() { return rect.getGlobalBounds(); }
+	int* GetMaxHP() { return &maxHp; }
+	int* GetHP() { return &hp; }
 };

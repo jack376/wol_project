@@ -8,7 +8,7 @@ const MonsterStat& MonsterTable::Get(int id) const
 	auto find = table.find(id);
 	if (find == table.end())
 	{
-		std::cout << "ERR: Undefined ID" << std::endl;
+		//std::cout << "ERR: Undefined ID" << std::endl;
 	}
 	return find->second;
 }

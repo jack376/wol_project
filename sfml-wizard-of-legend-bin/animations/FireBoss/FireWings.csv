@@ -1,0 +1,13 @@
+ID,FPS,LOOPTYPE,,
+FireWings,10,0,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/FireWings.png,21,47,56,14
+graphics/Texture2D/FireWings.png,116,47,59,14
+graphics/Texture2D/FireWings.png,200,26,81,38
+graphics/Texture2D/FireWings.png,298,25,77,36
+graphics/Texture2D/FireWings.png,397,22,69,39
+graphics/Texture2D/FireWings.png,14,116,64,40
+graphics/Texture2D/FireWings.png,110,113,63,38
+graphics/Texture2D/FireWings.png,206,106,63,42
+graphics/Texture2D/FireWings.png,304,100,62,44

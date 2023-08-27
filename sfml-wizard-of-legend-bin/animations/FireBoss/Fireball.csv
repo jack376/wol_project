@@ -1,0 +1,9 @@
+ID,FPS,LOOPTYPE,,
+Fireball,7,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Texture2D/Fireball.png,10,5,62,36
+graphics/Texture2D/Fireball.png,16,53,56,37
+graphics/Texture2D/Fireball.png,13,102,59,34
+graphics/Texture2D/Fireball.png,25,150,47,34
+graphics/Texture2D/Fireball.png,20,198,52,35

@@ -59,15 +59,12 @@
     <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
     <ClCompile Include="DataTables\SkillTable.cpp" />
     <ClCompile Include="GameObjects\GlowGo.cpp" />
-<<<<<<< Updated upstream
-=======
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="Slot.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="GameObjects\RoofGo.cpp" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -190,10 +187,6 @@
     <ClInclude Include="Framework\TileCommand.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="GameObjects\DecoGo.h" />
-<<<<<<< Updated upstream
-    <ClInclude Include="GameObjects\DestructibleGo.h" />
-=======
->>>>>>> Stashed changes
     <ClInclude Include="GameObjects\Particle.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="stdafx.h" />
@@ -219,8 +212,6 @@
     <ClInclude Include="DataTables\SkillTable.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\GlowGo.h" />
-<<<<<<< Updated upstream
-=======
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="Slot.h" />
@@ -228,7 +219,6 @@
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="HPBar.h" />
     <ClInclude Include="GameObjects\RoofGo.h" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

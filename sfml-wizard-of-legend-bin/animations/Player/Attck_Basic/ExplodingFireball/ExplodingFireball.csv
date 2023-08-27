@@ -1,0 +1,10 @@
+ID,FPS,LOOPTYPE,,
+ExplodingFireball,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+graphics/Player/Attck_Basic/ExplodingFireball/ExplodingFireball.png,30,288,37,35
+graphics/Player/Attck_Basic/ExplodingFireball/ExplodingFireball.png,20,198,52,35
+graphics/Player/Attck_Basic/ExplodingFireball/ExplodingFireball.png,25,150,47,34
+graphics/Player/Attck_Basic/ExplodingFireball/ExplodingFireball.png,13,102,59,34
+graphics/Player/Attck_Basic/ExplodingFireball/ExplodingFireball.png,16,53,56,37
+graphics/Player/Attck_Basic/ExplodingFireball/ExplodingFireball.png,10,5,62,36

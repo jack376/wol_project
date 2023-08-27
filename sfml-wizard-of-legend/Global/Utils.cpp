@@ -134,6 +134,12 @@ float Utils::Angle(const sf::Vector2f& dir)
 	return (float)(atan2(dir.y, dir.x) * (180.f / M_PI));
 }
 
+sf::Vector2f Utils::Angle(float angle)
+{
+	float angleInRadians = angle * (M_PI / 180.0f);
+	return sf::Vector2f(std::cos(angleInRadians), std::sin(angleInRadians));
+}
+
 void Utils::SetShader(sf::Shader& shader, sf::Sprite& sprite, sf::Texture& palette)
 {
 	shader.setUniform("texture", sprite.getTexture());

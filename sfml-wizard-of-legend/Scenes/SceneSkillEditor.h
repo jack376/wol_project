@@ -84,8 +84,8 @@ protected:
 	UIButton* coolTime;
 	UIButton* coolTimeValue;
 
-	UIButton* rotateSpeed;
-	UIButton* rotateSpeedValue;
+	UIButton* spreadAngle;
+	UIButton* spreadAngleValue;
 
 	UIButton* isPenetrating;
 	UIButton* isPenetratingValue;
@@ -132,6 +132,7 @@ public:
 	void SaveCSV(std::vector<SkillInfo>& info);
 	void Apply();
 	void Play();
+
 	void ConvertEnumToInt();
 	void ConvertBoolToInt();
 	void ConvertNameToId();

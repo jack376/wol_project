@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\imgui\;./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./Raycaster;./Scenes;./GameObjects;./PathFinding;./GameObjects/Player;./GameObjects/Monster;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\imgui\;./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./GameObjects/Boss;./Raycaster;./Scenes;./GameObjects;./PathFinding;./GameObjects/Player;./GameObjects/Monster;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalBMIDirectories>./;./GameObjects;./Framework;./3rd;./DataTables;./Global;./Animation;./Scenes;%(AdditionalBMIDirectories)</AdditionalBMIDirectories>
       <DisableSpecificWarnings>4996;6031;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -157,14 +157,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects\GlowGo.cpp" />
-<<<<<<< Updated upstream
-=======
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="GameObjects\RoofGo.cpp" />
->>>>>>> Stashed changes
     <ClCompile Include="Scenes\PathfindingScene.cpp" />
     <ClCompile Include="PathFinding\AS.cpp" />
     <ClCompile Include="GameObjects\AnimationProjectile.cpp" />
@@ -227,18 +224,16 @@
     <ClCompile Include="GameObjects\Player\SkillEditorPlayer.cpp" />
     <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
     <ClCompile Include="DataTables\SkillTable.cpp" />
+    <ClCompile Include="Slot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="GameObjects\GlowGo.h" />
-<<<<<<< Updated upstream
-=======
     <ClInclude Include="HPBar.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="GameObjects\RoofGo.h" />
->>>>>>> Stashed changes
     <ClInclude Include="Scenes\PathfindingScene.h" />
     <ClInclude Include="PathFinding\AS.h" />
     <ClInclude Include="GameObjects\AnimationProjectile.h" />
@@ -249,7 +244,6 @@
     <ClInclude Include="GameObjects\Projectile.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="GameObjects\Monster\Archer.h" />
-    <ClInclude Include="GameObjects\DestructibleGo.h" />
     <ClInclude Include="Framework\Command.h" />
     <ClInclude Include="Framework\CommandInvoker.h" />
     <ClInclude Include="DataTables\StringTable.h" />
@@ -289,6 +283,7 @@
     <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
     <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />
     <ClInclude Include="DataTables\SkillTable.h" />
+    <ClInclude Include="Slot.h" />
     <ClInclude Include="UI\InGame\GameOver.h" />
     <ClInclude Include="Global\Defines.h" />
     <ClInclude Include="Framework\Framework.h" />

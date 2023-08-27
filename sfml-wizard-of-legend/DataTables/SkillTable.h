@@ -5,15 +5,16 @@
 class SkillTable : public DataTable
 {
 protected:
-	std::unordered_map<int, SkillInfo> table;
+	std::vector<std::unordered_map<int, SkillInfo>> tables;
 
 public:
-	SkillTable() : DataTable(DataTable::Ids::Monster), table() {}
+	SkillTable() : DataTable(DataTable::Ids::Skill), tables((int)SkillDatas::Buyed) {}
 	virtual ~SkillTable() override { Release(); }
 
 	virtual bool Load() override;
 	virtual void Release() override;
 
-	const SkillInfo& Get(int id) const;
+	const SkillInfo& Get(int id, SkillDatas dataType) const;
+	const std::vector<std::unordered_map<int, SkillInfo>>& GetTable() { return tables; }
 };
 

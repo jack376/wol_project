@@ -18,12 +18,21 @@ class RoofGo;
 class Particle;
 class Monster;
 class CustomEffect;
+class Slot;
+class MenuInventory;
+class QuickSlot;
 enum class MonsterId;
 
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
+
+	MenuInventory* menu;
+	QuickSlot* quickSlot;
+	Slot* slot1;
+	Slot* slot2;
+
 	ElementalSpell* tempWindSlash;
 	ElementalSpell* tempFireBall;
 	std::vector<std::vector<Tile*>> tilesWorld;
@@ -37,20 +46,20 @@ protected:
 	Monster* monster;
 	std::list<Monster*> monsters;
 
+	bool isMenuOn = false;
 	bool isCol = false;
 
 	float debugTimer = 0.f;
 	float debugDuration = 1.f;
 	ObjectPool<Particle> particlePool;
-<<<<<<< Updated upstream
-=======
 	ObjectPool<Particle> fireParticlePool;
 	ObjectPool<Particle> portalParticlePoolRed;
 	ObjectPool<Particle> portalParticlePoolGreen;
 	ObjectPool<Particle> portalParticlePoolPurple;
->>>>>>> Stashed changes
 	int count = 0;
 
+	sf::View miniMapView;
+	sf::RectangleShape miniMapBackground;
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
@@ -86,5 +95,8 @@ public:
 
 	void TilesToIntMap();
 	void CalculatorNongroundTiles();
+
+	bool GetIsMenuOn() { return isMenuOn; }
+	void SetIsMenuOn(bool isOn) { isMenuOn = isOn; }
 };
 

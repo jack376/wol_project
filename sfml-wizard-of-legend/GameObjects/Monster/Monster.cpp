@@ -9,6 +9,7 @@
 #include "Tile.h"
 #include "CustomEffect.h"
 #include "AS.h"
+#include "Particle.h"
 
 Monster::Monster(MonsterId id, const std::string& textureId, const std::string& n)
     : monsterId(id)
@@ -53,7 +54,7 @@ void Monster::Reset()
     animation.SetTarget(&sprite);
     animation.Play(stat.name + "Idle");
 
-    SetPosition({ 500, 500 });
+    SetPosition(position);
     SetOrigin(Origins::MC);
     SetFlipX(false);
     SetRectBox();
@@ -90,11 +91,6 @@ void Monster::Update(float dt)
     animation.Update(dt);
     attackTimer += dt;
 
-    if (position.x < 0)
-    {
-        std::cout << "position erro" << std::endl;
-    }
-
     CalculatorCurrentTile();
     HandleState(dt);
 
@@ -107,12 +103,15 @@ void Monster::Update(float dt)
 void Monster::Draw(sf::RenderWindow& window)
 {
     //SpriteGo::Draw(window);
-    window.draw(sprite, &shader);
+    if (monsterId == MonsterId::Ghoul || monsterId == MonsterId::GhoulLarge)
+        window.draw(sprite);
+    else
+        window.draw(sprite, &shader);
 
     //Debug Mode
-    window.draw(searchRange);
-    window.draw(attackRange);
-    raycaster.draw(window);
+    //window.draw(searchRange);
+    //window.draw(attackRange);
+    //raycaster.draw(window);
 }
 
 void Monster::SetPosition(const sf::Vector2f& p)
@@ -172,7 +171,7 @@ void Monster::Idle()
         SetState(MonsterState::Dead);
         return;
     }
-    else if (distance <= stat.searchRange || isAwake)  //°ø°Ý¹üÀ§ ~ Å½»ö ¹üÀ§
+    else if (distance <= stat.searchRange || isAwake)  //ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½ ~ Å½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         isAwake = true;
         if (distance <= stat.attackRange)
@@ -216,7 +215,7 @@ void Monster::Attack(float dt)
         SetState(MonsterState::Dead);
         return;
     }
-    else if (distance <= stat.searchRange || isAwake)  //°ø°Ý¹üÀ§ ~ Å½»ö ¹üÀ§
+    else if (distance <= stat.searchRange || isAwake)  //ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½ ~ Å½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (distance > stat.attackRange)
         {
@@ -253,7 +252,7 @@ void Monster::Move(float dt)
         {
             Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
             Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
-            path = _AS.aStarSearch(*intMap, src, dst);
+            path = _AS.aStarSearch(*intMap, src, dst);  //falseë©´ isAwakeë¥¼ falseë¡œ. SetState(Idle).
             pathUpdateTimer = 0.f;
         }
         else if (!path.second.empty())
@@ -302,6 +301,7 @@ void Monster::Die()
         animation.Play(stat.name + "Death");
         SetOrigin(origin);
         SetRectBox();
+        std::cout << "Monster::Die()" << std::endl;
     }
     else if (animation.IsAnimEndFrame())
         SetActive(false);
@@ -316,7 +316,6 @@ void Monster::KnockBack(float dt)
         SetRectBox();
     }
 
-    //°ø°Ý ´çÇÑ ¹Ý´ë ¹æÇâÀ¸·Î ÀÌµ¿ (°ø°ÝÀÇ ÁÖÃ¼°¡ ÇÃ·¹ÀÌ¾î°¡ ¾Æ´Ï¶ó ¹ß»çÃ¼¶ó¸é ¹ß»çÃ¼ÀÇ À§Ä¡¸¦ ³Ñ°Ü ¹Þ¾Æ ¼öÁ¤)
     prevPos = position;
     SetPosition(position + -look * 500.f * dt);
     CalculatorCurrentTile();
@@ -363,7 +362,7 @@ const sf::Vector2f Monster::SetLook(sf::Vector2f playerPos)
     return look;
 }
 
-void Monster::OnAttacked(float damage)  //ÇÃ·¹ÀÌ¾î¿¡¼­ ¸ó½ºÅÍ¸¦ °ø°ÝÇÒ ¶§ È£Ãâ
+void Monster::OnAttacked(float damage)  //ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
 {
     if (currentState != MonsterState::Dead)
     {
@@ -380,7 +379,7 @@ void Monster::CalculatorCurrentTile()
     currentTile = (*tilesWorld)[rowIndex][columnIndex];
 }
 
-//°´Ã¼¸¦ Áß½ÉÀ¸·Î ÀÓÀÇ ¹üÀ§ ³»ÀÇ Å¸ÀÏÀ» ¹ÝÈ¯
+//ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ß½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
 {
     int searchRowRange = row;
@@ -404,10 +403,24 @@ std::vector<Tile*> Monster::CalculatorRangeTiles(int row, int col)
     return tiles;
 }
 
-
 void Monster::SetRectBox()
 {
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
     rect.setSize({ spriteBounds.width, spriteBounds.height });
     Utils::SetOrigin(rect, Origins::MC);
 }
+
+void Monster::SetParticle(sf::Vector2f position, int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        Particle* particle = particlePool->Get();
+        particle->SetPosition(position);
+        SCENE_MGR.GetCurrScene()->AddGo(particle);
+    }
+}
+
+void Monster::SetParticlePool(ObjectPool<Particle>* pool)
+{
+    particlePool = pool;
+};

@@ -32,13 +32,39 @@ void ElementalSpell::Reset()
 	SpriteGo::Reset();
 
 	// 파일로 받아서 실행하는 방법 생각하기
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/WindSlash/WindSlashLarge.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/WindSlash/WindSlashMed.csv"));
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/WindSlash/WindSlashSmall.csv"));
-	
-	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/FireBall/FireBall.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/WindSlash/WindSlash.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/ExplodingFireball/ExplodingFireball.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/FrostFan/FrostFan.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/IceDagger/IceDagger.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/GustVolley/GustVolley.csv"));
+	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Attck_Basic/VoltDisc/VoltDisc.csv"));
 
-	sprite.setScale(2, 2);
+	
+	amplitude = currentInfo.amplitude;
+	damage = currentInfo.damage;
+	attackDuration = currentInfo.delayDuration;
+	currentInfo.explosionRange;
+	frequency = currentInfo.frequency;
+	range = currentInfo.range;
+	currentAnimId = currentInfo.skillName;
+	speed = currentInfo.speed;
+	curveSpeed = currentInfo.speed;
+
+	if (currentAnimId.compare("FrostFan") == 0)
+	{
+		sprite.setScale(2, 3);
+	}
+	else if (currentAnimId.compare("GustVolley") == 0)
+	{
+		sprite.setScale(4, 4);
+	}
+	else if (currentAnimId.compare("VoltDisc") == 0)
+	{
+		sprite.setScale(4, 4);
+	}
+	else
+		sprite.setScale(2, 2);
+
 	anim.SetTarget(&sprite);
 }
 
@@ -57,24 +83,6 @@ void ElementalSpell::Update(float dt)
 			raycaster.checkCollision(monster);
 	}
 
-	// 이걸 플레이어에서 받는게 아니라 스킬에서 받는다.
-	//currentEvent = player->GetSkillEvent();
-	//switch(currentEvent)
-	//{
-	//case SkillEvents::Left:
-	//	currentSkillType = SkillTypes::Melee;
-
-	//	break;
-	//case SkillEvents::Right:
-	//	currentSkillType = SkillTypes::Range;
-	//	break;
-	//case SkillEvents::Q:
-	//	break;
-	//case SkillEvents::Space:
-	//	break;
-	//}
-
-
 	switch (currentSkillType)
 	{
 	case SkillTypes::Melee:
@@ -83,7 +91,7 @@ void ElementalSpell::Update(float dt)
 		break;
 
 	case SkillTypes::Range:
-		angle = player->GetPlayerLookAngle();
+		//angle = player->GetPlayerLookAngle() + 90;
 		RangeUpdate(dt);
 		break;
 	}
@@ -99,9 +107,14 @@ void ElementalSpell::Update(float dt)
 void ElementalSpell::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
-	if(Collider.GetActive())
+	//if(Collider.GetActive())
+	//	Collider.Draw(window);
+	//raycaster.draw(window);
+	if (isSpawn)
+	{
 		Collider.Draw(window);
-	raycaster.draw(window);
+		raycaster.draw(window);
+	}
 }
 
 void ElementalSpell::MeleeUpdate(float dt)
@@ -128,31 +141,28 @@ void ElementalSpell::MeleeUpdate(float dt)
 		if (comboQueue.front() - prevComboTime > comboDuration)
 		{
 			attackCount = 0;
-			//std::cout << "combo is Failed" << std::endl;
 		}
 
 		if (comboQueue.front() - prevComboTime < comboDuration)
 		{
 			attackCount++;
-			//std::cout << "combo is Succesed" << std::endl;
 		}
+		anim.Play(currentAnimId);
 
 		// 인덱스를 이용해서 벡터 컨테이너 값 참조후 해당 애니메이션 실행하는 방법 생각
-		if (attackCount % 3 == 0)
-		{
-			anim.Play("WindSlashSmall");
-		}
-		if (attackCount % 3 == 1)
-		{
-			anim.Play("WindSlashMed");
-		}
-		if (attackCount % 3 == 2)
-		{
-			anim.Play("WindSlashLarge");
-		}
+		//if (attackCount % 3 == 0)
+		//{
+		//	anim.Play("WindSlashSmall");
+		//}
+		//if (attackCount % 3 == 1)
+		//{
+		//	anim.Play("WindSlashMed");
+		//}
+		//if (attackCount % 3 == 2)
+		//{
+		//	anim.Play("WindSlashLarge");
+		//}
 
-		//std::cout << attackCount << std::endl;
-		//std::cout << comboQueue.front() - prevComboTime << std::endl;
 		prevComboTime = comboQueue.front();
 		comboQueue.pop();
 	}
@@ -171,7 +181,7 @@ void ElementalSpell::MeleeUpdate(float dt)
 			// 레이캐스트의 닿은 포지션 구해주기
 			attackTimer = 0.f;
 			raycaster.GetEndPos();
-			monster->OnAttacked(1);
+			monster->OnAttacked(damage);
 			colMonsters.push_back(monster);
 		}
 	}
@@ -194,14 +204,18 @@ void ElementalSpell::MeleeUpdate(float dt)
 
 	// 사정거리 밖이면 isSpawn false로
 
-
+	range -= speed * dt;
+	if (range < 0)
+	{
+		isSpawn = false;
+	}
 
 	// isSpawn 이 false가 되면 사라진다
 	if (!isSpawn)
 	{
 		colMonsters.clear();
-		scene->RemoveGo(this);
 		pool.Return(this);
+		SCENE_MGR.GetCurrScene()->RemoveGo(this);
 	}
 }
 
@@ -217,8 +231,8 @@ void ElementalSpell::RangeUpdate(float dt)
 		sprite.setRotation(angle);
 		raycaster.Rotation(player->GetPlayerLookAngle());
 		Collider.GetObbCol().setRotation(angle);
-		anim.Play("FireBall");
-		dir = player->GetLook();
+		anim.Play(currentAnimId);
+		//dir = player->GetLook();
 		curveAngle = angle;
 		time = 0.f;
 	}
@@ -235,11 +249,12 @@ void ElementalSpell::RangeUpdate(float dt)
 		{
 			// 레이캐스트의 닿은 포지션 구해주기
 			raycaster.GetEndPos();
-			monster->OnAttacked(1);
+			monster->OnAttacked(damage);
 			monster->SetIsHit(true);
 			colMonsters.push_back(monster);
 		}
 	}
+
 
 
 	// 중복 공격 방지용
@@ -254,17 +269,10 @@ void ElementalSpell::RangeUpdate(float dt)
 		//isSpawn = false;
 		Collider.SetActive(false);
 	}
-	// 사정거리 밖이면 isSpawn false로
 
 
 
-// isSpawn 이 false가 되면 사라진다
-	if (!isSpawn)
-	{
-		pool.Return(this);
-		colMonsters.clear();
-		scene->RemoveGo(this);
-	}
+
 	
 	// 곡선 직선 표현
 	switch (currentRangeType)
@@ -278,6 +286,22 @@ void ElementalSpell::RangeUpdate(float dt)
 		break;
 	}
 
+
+	// 사정거리 밖이면 isSpawn false로
+	// isSpawn 이 false가 되면 사라진다
+
+	range -= speed * dt;
+	if (range < 0)
+	{
+		isSpawn = false;
+	}
+
+	if (!isSpawn)
+	{
+		pool.Return(this);
+		colMonsters.clear();
+		SCENE_MGR.GetCurrScene()->RemoveGo(this);
+	}
 
 }
 

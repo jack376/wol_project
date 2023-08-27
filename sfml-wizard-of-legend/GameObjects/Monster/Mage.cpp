@@ -17,7 +17,6 @@ Mage::~Mage()
 void Mage::Init()
 {
 	stat = DATATABLE_MGR.Get<MonsterTable>(DataTable::Ids::Monster)->Get((int)monsterId);
-
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Run.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Death.csv"));
 	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/" + stat.name + "_Idle.csv"));
@@ -31,6 +30,7 @@ void Mage::Init()
 		fireball.AddClip("animations/Mage_FireballActive.csv");
 		fireball.Init();
 		fireball.SetTiles(tilesWorld);
+		fireball.SetShader("shader/FireColorIndex.png", 3.0f / 8.0f);
 	}
 }
 
@@ -85,7 +85,7 @@ void Mage::HandleAttackState(float dt)
 		Shoot(dt);
 		break;
 	default:
-		std::cout << "HandleAttackState default" << std::endl;
+		//std::cout << "HandleAttackState default" << std::endl;
 		break;
 	}
 }
@@ -120,7 +120,7 @@ void Mage::Aim(float dt)
 
 		std::vector<sf::Vector2f> fireballPoss = CalculateProjectilePositions(playerPos, position, 150, 5, 120);
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5 ; i++)
 		{
 			fireballs[i].Reset();
 			fireballs[i].SetActive(true);

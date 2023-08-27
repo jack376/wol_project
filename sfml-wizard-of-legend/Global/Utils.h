@@ -31,6 +31,7 @@ public:
 
 	static float Angle(const sf::Vector2f& start, const sf::Vector2f& end);
 	static float Angle(const sf::Vector2f& dir);
+	static sf::Vector2f Angle(float angle);
 
 	// 팔레트 함수
 	// 쉐이더 적용 방법 window.draw(sprite, &shader);

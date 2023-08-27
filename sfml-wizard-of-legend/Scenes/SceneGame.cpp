@@ -11,6 +11,7 @@
 #include "Lancer.h"
 #include "Archer.h"
 #include "Mage.h"
+#include "FireBoss.h"
 #include "Player.h"
 #include "ElementalSpell.h"
 #include "Monster.h"
@@ -24,6 +25,10 @@
 #include "Particle.h"
 #include "Skill.h"
 #include "SkillMgr.h"
+#include "Slot.h"
+#include "MenuInventory.h"
+#include "QuickSlot.h"
+#include "HPBar.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -32,7 +37,9 @@ SceneGame::SceneGame() : Scene(SceneId::Game)
 void SceneGame::Init()
 {
 	Release();
+
 	auto size = FRAMEWORK.GetWindowSize();
+
 
 	player = (Player*)AddGo(new Player());
 	player->SetPosition(62 * _TileSize, 85 * _TileSize);
@@ -47,49 +54,20 @@ void SceneGame::Init()
 	TilesToIntMap();
 	CalculatorNongroundTiles();
 
-	//tempWindSlash = (ElementalSpell*)AddGo(new ElementalSpell());
-	//tempWindSlash->SetScene(this);
-	//tempWindSlash->SetPlayer(player);
-	//tempWindSlash->sortLayer = 21;
-	//tempWindSlash->SetSkillType(SkillTypes::Melee);
+	
+	menu = (MenuInventory*)AddGo(new MenuInventory());
+	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
+	menu->SetQuickSlot(quickSlot);
 
-	//tempFireBall = (ElementalSpell*)AddGo(new ElementalSpell());
-	//tempFireBall->SetScene(this);
-	//tempFireBall->SetPlayer(player);
-	//tempFireBall->sortLayer = 21;
-	//tempFireBall->SetSkillType(SkillTypes::Range);
-	//tempFireBall->SetRangeType(RangeTypes::Curve);
+	player->SetTiles(&tilesWorld);
+	player->SetMonsterList(monsters);
 
-<<<<<<< Updated upstream
-	Skill* fireBall = (Skill*)AddGo(new Skill());
-	fireBall->SetSkillEvent(SkillEvents::Right);
-	fireBall->SetElementType(ElementTypes::Fire);
-	fireBall->SetSkillType(SkillTypes::Range);
-	fireBall->SetRangeType(RangeTypes::Curve);
-
-	Skill* windSlash = (Skill*)AddGo(new Skill());
-	windSlash->SetSkillEvent(SkillEvents::Left);
-	windSlash->SetElementType(ElementTypes::Wind);
-	windSlash->SetSkillType(SkillTypes::Melee);
-	windSlash->SetRangeType(RangeTypes::Straight);
-
-	SKILL_MGR.InputSkill(windSlash);
-	SKILL_MGR.InputSkill(fireBall);
-
-	std::unordered_map<SkillEvents, Skill*> test = SKILL_MGR.ForTestDebugSize();
-
-	Monster* go = CreateMonster(MonsterId::Mage);
-	monster = go;
-=======
 	/*
 	monster = CreateMonster(MonsterId::FireBoss);
->>>>>>> Stashed changes
 	monster->SetPlayer(player);
 	monster->SetTiles(&tilesWorld);
 	monster->SetIntMap(&intMap);
 	monster->SetNonGroundTiles(&nongroundTiles);
-<<<<<<< Updated upstream
-=======
 	monster->SetPosition(512, 1024);
 	monster->particlePool = &this->particlePool;
 	monsters.push_back(monster);
@@ -114,7 +92,6 @@ void SceneGame::Init()
 	monster->SetPosition(700, 500);
 	monsters.push_back(monster);
 	*/
->>>>>>> Stashed changes
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
@@ -123,6 +100,8 @@ void SceneGame::Init()
 	//tempFireBall->SetTiles(&tilesWorld);
 
 	//tempWindSlash->SetMonsterList(monsters);
+	//tempFireBall->SetMonsterList(monsters);
+
 	//tempFireBall->SetMonsterList(monsters);
 
 	// Create Particle
@@ -146,6 +125,30 @@ void SceneGame::Init()
 	SKILL_MGR.SetMonsterList(monsters);
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
+
+	// 스킬 임시 장착 / 스킬 구매하면 Tab메뉴에 생성하고
+	// 그 Tab메뉴에서 장착해야 Equip슬롯으로 간다
+	// 스킬 장착 이후에 스킬을 슬롯에 적용시켜야한다.
+
+	for (auto skillTable : SKILL_MGR.GetExistSkillList())
+	{
+		skillTable.second->SetPlayer(player);
+		skillTable.second->SetMonsterList(monsters);
+		skillTable.second->SetPlayer(player);
+		skillTable.second->Init();
+		SKILL_MGR.EquipSkill(skillTable.second);
+	}
+
+	//for (int i = 0; i < SKILL_MGR.GetExistSkillList().size(); i++)
+	//{
+	//	Skill* skill = SKILL_MGR.SearchExistedSkill((SkillIds)i);
+	//	skill->SetSkillEvent((SkillEvents)i);
+	//	skill->SetPlayer(player);
+	//	skill->SetMonsterList(monsters);
+	//	skill->SetTiles(&tilesWorld);
+	//	SKILL_MGR.EquipSkill(skill);
+	//}
+	// 슬롯 작업
 }
 
 void SceneGame::Release()
@@ -177,6 +180,7 @@ void SceneGame::Enter()
 
 void SceneGame::Exit()
 {
+	SKILL_MGR.SaveEquipedSkill();
 	Scene::Exit();
 }
 
@@ -203,6 +207,21 @@ void SceneGame::Update(float dt)
 	{
 		SCENE_MGR.ChangeScene(SceneId::Editor);
 	}
+
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tab))
+	{
+		menu->AllSetActive(!menu->GetActive());
+		Slot::selectedSlot = nullptr;
+		isMenuOn = menu->GetActive();
+		std::cout << isMenuOn << std::endl;
+	}
+
+	if (!isMenuOn)
+	{
+		menu->AllSetActive(isMenuOn);
+	}
+
+
 }
 
 template<typename T>
@@ -218,6 +237,9 @@ inline void SceneGame::ClearObjectPool(ObjectPool<T>& pool)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
+
+	window.setView(miniMapView);
+	window.draw(miniMapBackground);
 }
 
 Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)
@@ -314,6 +336,9 @@ Monster* SceneGame::CreateMonster(MonsterId id)
 		break;
 	case MonsterId::Mage:
 		monster = dynamic_cast<Monster*>(AddGo(new Mage(id)));
+		break;
+	case MonsterId::FireBoss:
+		monster = dynamic_cast<Monster*>(AddGo(new FireBoss(id)));
 		break;
 	}
 	return monster;

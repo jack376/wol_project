@@ -7,36 +7,36 @@
 struct SpellInfo
 {
 	std::string skillName;
-	std::string playerAction;
+	//std::string playerAction;
 
 	int damage;
 	int comboDamage;
 	int comboMaxCount;
+	float comboDuration;
 	int maxSkillCharge;
 	int shotCount;
 
 	float speed;
 	float range;
 	float explosionRange;
+	float amplitude;
+	float frequency;
 	float delayDuration;
-	float comboDuration;
 	float damageDelay;
 	float coolTime;
-
-	float frquency;
-	float amplitude;
-
-
-	float rotateSpeed;
-
-	float animAngle;
+	float spreadAngle;
 
 	// 관통여부
 	// 0, 1 로 인트형 넘기고 받을때 bool
 	bool isPenetrating = false;
 	bool canMoveDuringSkill = false;
 
-	float petrolDistance;
+
+
+
+
+	//float animAngle;
+	//float petrolDistance;
 };
 
 struct SkillInfo
@@ -62,25 +62,27 @@ protected:
 	// UI아이콘 텍스쳐 필요?
 	// 실제 스킬 애니메이션 클립 어디서 관리할지
 	int skillId;
+	std::string skillName;
+
 	ElementTypes currentElementType = ElementTypes::None;
 	SkillTypes currentSkillType = SkillTypes::None;
 	RangeTypes currentRangeType = RangeTypes::None;
 	SkillEvents currentEventType = SkillEvents::None;
 	PlayerActions currentPlayerActionType = PlayerActions::None;
 
-	sf::Keyboard::Key currentKey = sf::Keyboard::Unknown;
-	sf::Mouse::Button currentButton = sf::Mouse::None;
-
-	SpriteGo* skillIcon;
-
 	// 최대 발사개수
 	int shotCount;
-	float coolTime;
+	int maxSkillCharge;
+	int currentSkillCharge;
 
+	float coolTime;
 	float spreadAngle;
 
-	//SpellInfo spellInfo;
 
+	bool isUsed = false;
+
+
+	SpellInfo spellInfo;
 	SkillInfo skillInfo;
 	
 	// 실제 스킬
@@ -107,7 +109,15 @@ public:
 
 	SkillEvents GetSkillEvent() const { return currentEventType; }
 	int GetSkillId() const { return skillId; }
+	std::string& GetSkillIconId() { return skillName; }
+	SkillInfo& GetSkillInfo() { return skillInfo; }
+	bool GetIsUsed() { return isUsed; }
+	int GetCurrentSkillCharge() { return currentSkillCharge; }
+	int GetMaxSkillCharege() { return maxSkillCharge; }
 
+	void AddCurrentSkillCharge(int charge) { currentSkillCharge += charge; }
+
+	void SetSkillIconId(std::string id) { skillName = id; }
 	void SetSkillEvent(SkillEvents sEvent) { currentEventType = sEvent; }
 	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }
@@ -121,11 +131,14 @@ public:
 
 	void SetEditorPlayer(SkillEditorPlayer*& player) { this->editorPlayer = player; }
 
+
+	void SetIsUsed(bool isUsed) { this->isUsed = isUsed; }
+	void SetSkillInfo(SkillInfo info) { this->skillInfo = info; }
+	void SetSpellInfo(SpellInfo info) { this->skillInfo.spellinfo = info; }
+
 	void UseSkill();
 	void UseEditorSkill();
 
-	void SetSkillInfo(SkillInfo info) { this->skillInfo = info; }
-	void SetSpellInfo(SpellInfo info) { this->skillInfo.spellinfo = info; }
 	void InsertAnimId();
 
 

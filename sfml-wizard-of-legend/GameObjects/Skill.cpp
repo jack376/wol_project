@@ -5,6 +5,7 @@
 #include "ElementalSpell.h"
 #include "SkillEditorElementalSpell.h"
 #include "Monster.h"
+#include "Player.h"
 
 Skill::Skill(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -26,6 +27,17 @@ void Skill::Init()
 	{
 		spell->SetPool(editorPool);
 	};
+
+	spellInfo = skillInfo.spellinfo;
+	skillId = skillInfo.skillId;
+	skillName = spellInfo.skillName;
+	currentElementType = skillInfo.elementType;
+	currentSkillType = skillInfo.skillType;
+	currentRangeType = skillInfo.rangeType;
+	currentEventType = skillInfo.evnetType;
+	currentPlayerActionType = skillInfo.playerAction;
+	maxSkillCharge = spellInfo.maxSkillCharge;
+	currentSkillCharge = maxSkillCharge;
 }
 
 void Skill::Release()
@@ -50,19 +62,82 @@ void Skill::Draw(sf::RenderWindow& window)
 
 void Skill::UseSkill()
 {
-	ElementalSpell* elementalSpell = pool.Get();
+	shotCount = spellInfo.shotCount;
+	coolTime = spellInfo.coolTime;
+	spreadAngle = spellInfo.spreadAngle;
+	maxSkillCharge = spellInfo.maxSkillCharge;
 
-	elementalSpell = (ElementalSpell*)SCENE_MGR.GetCurrScene()->AddGo(new ElementalSpell());
-	elementalSpell->SetElementType(currentElementType);
-	elementalSpell->SetSkillType(currentSkillType);
-	elementalSpell->SetRangeType(currentRangeType);
-	elementalSpell->SetPlayer(player);
- 	elementalSpell->sortLayer = 21;
-	elementalSpell->Init();
-	elementalSpell->Reset();
+	// 중심 투사체 위치 계산 (플레이어 방향)
+	float centerAngle = player->GetPlayerLookAngle(); //360도 기준
 
-	elementalSpell->SetMonsterList(monsters);
-	elementalSpell->SetTiles(worldTiles);
+	// 투사체 위치 계산
+	float angleIncrement = spreadAngle / shotCount;
+	float startAngle = centerAngle - spreadAngle / 2.0f;
+
+	if (isUsed)
+		return;
+	//std::cout << currentSkillCharge << std::endl;
+	currentSkillCharge--;
+
+	if (currentSkillCharge < maxSkillCharge && maxSkillCharge != 0)
+	{
+		// 타이머 돌리고 충전
+		std::cout << currentSkillCharge << std::endl;
+
+	}
+	if(currentSkillCharge <= 0 && maxSkillCharge != 0)
+		isUsed = true;
+
+	if (shotCount > 1)
+	{
+		// 각도 설정
+		for (int i = 0; i < shotCount; i++)
+		{
+			float adjustedAngle = startAngle + i * angleIncrement;
+			
+			ElementalSpell* elementalSpell = pool.Get();
+			elementalSpell = (ElementalSpell*)SCENE_MGR.GetCurrScene()->AddGo(new ElementalSpell());
+			elementalSpell->SetElementType(currentElementType);
+			elementalSpell->SetSkillType(currentSkillType);
+			elementalSpell->SetRangeType(currentRangeType);
+			elementalSpell->SetSpellInfo(spellInfo);
+			elementalSpell->SetPlayer(player);
+			elementalSpell->SetDir(Utils::Angle(adjustedAngle));
+
+			if (skillId == 6 || skillId == 7)
+			{
+				elementalSpell->SetAngle(adjustedAngle + 90);
+			}
+			else
+				elementalSpell->SetAngle(adjustedAngle);
+
+
+			elementalSpell->sortLayer = 21;
+			elementalSpell->Init();
+			elementalSpell->Reset();
+			elementalSpell->SetMonsterList(monsters);
+			elementalSpell->SetTiles(worldTiles);
+		}
+	}
+	else
+	{
+		ElementalSpell* elementalSpell = pool.Get();
+		elementalSpell = (ElementalSpell*)SCENE_MGR.GetCurrScene()->AddGo(new ElementalSpell());
+		elementalSpell->SetElementType(currentElementType);
+		elementalSpell->SetSkillType(currentSkillType);
+		elementalSpell->SetRangeType(currentRangeType);
+		elementalSpell->SetSpellInfo(spellInfo);
+		elementalSpell->SetPlayer(player);
+		elementalSpell->SetDir(player->GetLook());
+		elementalSpell->SetAngle(player->GetPlayerLookAngle());
+
+		elementalSpell->sortLayer = 21;
+		elementalSpell->Init();
+		elementalSpell->Reset();
+		elementalSpell->SetMonsterList(monsters);
+		elementalSpell->SetTiles(worldTiles);
+	}
+
 }
 
 void Skill::UseEditorSkill()

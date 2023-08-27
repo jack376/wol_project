@@ -192,6 +192,7 @@ void Player::Update(float dt)
 	SetAttackPos();
 
 
+
 	// 디버그 타이머
 	//debugTimer += dt;
 	//if (debugTimer > debugDuration)
@@ -212,11 +213,6 @@ void Player::Update(float dt)
 
 	isMove = dir.x != 0 || dir.y != 0;
 	isDashing = dashDir.x != 0 || dashDir.y != 0;
-	
-	if (currentTile->GetType() == TileType::Ground && isMove)
-	{
-
-	}
 
 
 	if (!isAlive)
@@ -233,56 +229,66 @@ void Player::Update(float dt)
 	// 맞으면 무적상태와 맞는 상태 표시
 	if (isHit)
 	{
+		scene->SetIsMenuOn(false);
 		CalHitLookAngle();
 		ChangeState(States::Hit);
 	}
 
+	if (scene->GetIsMenuOn())
+		return;
 
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling)
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Left;
-
-		//ElementalSpell* elemental = spellPool.Get();
-		//elemental->SetPlayer(this);
-		//elemental->sortLayer = 21;
-		//elemental->SetSkillType(SkillTypes::Melee);
-		//elemental->SetTiles(wouldTiles);
-		//elemental->SetMonsterList(monsters);
-		//scene->AddGo(elemental);
-
-		//elemental->SetScene(scene);
-
-		SKILL_MGR.UseSkill(sEvent);
-
-		ChangeState(States::Attack);
-
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
 	}
 
-	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide && !isFalling)
+	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Right) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
 		attackCount++;
 		sEvent = SkillEvents::Right;
-
-		SKILL_MGR.UseSkill(sEvent);
-		//ElementalSpell* elemental = spellPool.Get();
-		//elemental->SetScene(scene);
-		//elemental->SetPlayer(this);
-		//elemental->sortLayer = 21;
-		//elemental->SetSkillType(SkillTypes::Range);
-		//elemental->SetRangeType(RangeTypes::Curve);
-		//elemental->SetTiles(wouldTiles);
-		//elemental->SetMonsterList(monsters);
-		//scene->AddGo(elemental);
-
-		ChangeState(States::Attack);
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
 	}
 	
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide && !isFalling)
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Q) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
+		attackCount++;
 		sEvent = SkillEvents::Q;
-		SKILL_MGR.UseSkill(sEvent);
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
+	{
+		attackCount++;
+		sEvent = SkillEvents::E;
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
+	}
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::R) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
+	{
+		attackCount++;
+		sEvent = SkillEvents::R;
+		if (!SKILL_MGR.SearchSkill(sEvent)->GetIsUsed())
+		{
+			SKILL_MGR.UseSkill(sEvent);
+			ChangeState(States::Attack);
+		}
 	}
 
 	// 대쉬 쿨타임 계산
@@ -295,11 +301,12 @@ void Player::Update(float dt)
 		dashCoolTimer = 0.f;
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack && !isFalling)
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space) && !isDashCool && !isSlide && !isAttack && !isFalling && !isHit && isAlive)
 	{
 		sEvent = SkillEvents::Space;
+		isAttack = true;
+		SKILL_MGR.UseSkill(sEvent);
 		ChangeState(States::Dash);
-		//SKILL_MGR.UseSkill(sEvent);
 	}
 
 
@@ -464,6 +471,7 @@ void Player::DashUpdate(float dt)
 	// 타일 충돌 방지
 	if(currentTile->GetType() == TileType::Wall)
 	{
+		isAttack = false;
 		SetPosition(prevPos);
 		ChangeState(States::Slide);
 	}
@@ -480,10 +488,12 @@ void Player::DashUpdate(float dt)
 		isDash = false;
 		isRun = false;
 		isSlide = false;
+		isAttack = false;
 		isDashCool = true;
+
 		if (currentTile->GetType() == TileType::Cliff)
 		{
-			std::cout << "Cliff" << std::endl;
+			//std::cout << "Cliff" << std::endl;
 			ChangeState(States::Fall);
 		}
 		else
@@ -605,19 +615,19 @@ void Player::HitUpdate(float dt)
 	{
 	case HitDir::Up:
 
-		std::cout << "Hit Up" << std::endl;
+		//std::cout << "Hit Up" << std::endl;
 		break;
 	case HitDir::Right:
-		std::cout << "Hit Right" << std::endl;
+		//std::cout << "Hit Right" << std::endl;
 
 		break;
 	case HitDir::Down:
-		std::cout << "Hit Down" << std::endl;
+		//std::cout << "Hit Down" << std::endl;
 
 		break;
 	case HitDir::Left:
 		SetFlipX(true);
-		std::cout << "Hit Left" << std::endl;
+		//std::cout << "Hit Left" << std::endl;
 		break;
 	}
 
@@ -638,7 +648,7 @@ void Player::FallUpdate(float dt)
 	{
 		anim.Play(fallId[(int)slideDir]);
 		isFalling = true;
-		std::cout << "IsFall" << std::endl;
+		//std::cout << "IsFall" << std::endl;
 
 		switch (slideDir)
 		{
@@ -663,7 +673,7 @@ void Player::FallUpdate(float dt)
 	if (t >= 1.0f && !isFallHit)
 	{
 		isFallHit = true;
-		std::cout << t << std::endl;
+		//std::cout << t << std::endl;
 		originAngle = sprite.getRotation();
 		float randomAngle = Utils::RandomRange(0.f, 360.f);
 		anim.Play("HitEffect");

@@ -29,25 +29,19 @@ void Projectile::Reset()
 {
 	SpriteGo::Reset();
 	collider.Reset();
+	collider.SetColSize();
+	collider.SetSprite(sprite);
 
 	SetPosition(0.f, 0.f);
 	SetOrigin(origin);
 	sprite.setRotation(0.f);
 	sprite.setScale({ 4, 4 });
 
-	collider.SetSprite(sprite);
-	collider.SetObbCol();
-
 	isAttacked = false;
 	isFire = false;
 	speed = 0.f;
 	damage = 0;
 	direction = { 0.f, 0.f };
-
-	paletteTexture.loadFromFile("shader/FireColorIndex.png");
-	shader.loadFromFile("shader/FragShader.frag", sf::Shader::Fragment);
-	shader.setUniform("paletteTexture", paletteTexture);
-	shader.setUniform("paletteYOffset", yOffset);
 }
 
 void Projectile::Update(float dt)
@@ -79,7 +73,7 @@ void Projectile::Update(float dt)
 		}
 	}
 
-	if (currentTile->GetType() == TileType::Wall || currentTile->GetType() == TileType::Cliff)
+	if (currentTile->GetType() == TileType::Wall)
 	{
 		isFire = false;
 		SetActive(false);
@@ -89,8 +83,8 @@ void Projectile::Update(float dt)
 
 void Projectile::Draw(sf::RenderWindow& window)
 {
-	//SpriteGo::Draw(window);
 	window.draw(sprite, &shader);
+
 	if (collider.GetActive())
 		collider.Draw(window);
 }
@@ -132,18 +126,22 @@ void Projectile::SetOrigin(float x, float y)
 	collider.SetOrigin(x, y);
 }
 
+void Projectile::SetShader(std::string filePath, float yOffset)
+{
+	paletteTexture.loadFromFile(filePath);
+	shader.loadFromFile("shader/FragShader.frag", sf::Shader::Fragment);
+	shader.setUniform("paletteTexture", paletteTexture);
+	shader.setUniform("paletteYOffset", yOffset);
+}
+
 void Projectile::Fire(const sf::Vector2f pos, const sf::Vector2f direction, float speed, int damage)
 {
+	collider.SetActive(true);
+	collider.SetColSize();
 	SetActive(true);
 	SetOrigin(origin);
 	SetPosition(pos);
 	SetRotation(Utils::Angle(direction) + 90);
-
-
-	collider.SetActive(true);
-	//collider.SetPosition(pos);
-	//collider.GetObbCol().setRotation(Utils::Angle(direction) + 90);
-	//collider.SetOrigin(origin);
 
 	this->direction = direction;
 	this->speed = speed;
@@ -153,10 +151,10 @@ void Projectile::Fire(const sf::Vector2f pos, const sf::Vector2f direction, floa
 
 void Projectile::Fire(const sf::Vector2f direction, float speed, int damage)
 {
-	SetActive(true);
-	
 	collider.SetActive(true);
-	collider.SetObbCol();
+	collider.SetColSize();
+	SetActive(true);
+	SetOrigin(origin);
 
 	this->direction = direction;
 	this->speed = speed;
@@ -168,6 +166,11 @@ void Projectile::CalculatorCurrentTile()
 {
 	int rowIndex = position.x / _TileSize;
 	int columnIndex = position.y / _TileSize;
-
+	if (rowIndex < 0 || rowIndex >= worldTiles->size() || columnIndex < 0 || columnIndex >= worldTiles[0].size())
+	{
+		rowIndex = 0;
+		columnIndex = 0;
+		std::cout << "erro: Projectile::CalculatorCurrentTile() Over Range" << std::endl;
+	}	
 	currentTile = (*worldTiles)[rowIndex][columnIndex];
 }
