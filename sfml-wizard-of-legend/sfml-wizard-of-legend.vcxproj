@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects\GlowGo.cpp" />
+    <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />

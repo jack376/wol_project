@@ -33,10 +33,7 @@ protected:
 	MenuInventory* menu;
 	QuickSlot* quickSlot;
 	GameResult* gameResult;
-
 	TextGo* test;
-
-
 
 	Slot* slot1;
 	Slot* slot2;

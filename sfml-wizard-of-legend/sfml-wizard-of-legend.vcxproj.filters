@@ -65,8 +65,8 @@
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
-    <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="GameObjects\RoofGo.cpp" />
+    <ClCompile Include="GameResult.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
