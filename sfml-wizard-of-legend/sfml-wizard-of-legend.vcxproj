@@ -161,6 +161,7 @@
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
+    <ClCompile Include="PathFinding\ObstacleAvoider.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="GameObjects\RoofGo.cpp" />
     <ClCompile Include="Scenes\PathfindingScene.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="HPBar.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
+    <ClInclude Include="PathFinding\ObstacleAvoider.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="GameObjects\RoofGo.h" />
     <ClInclude Include="Scenes\PathfindingScene.h" />

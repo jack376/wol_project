@@ -359,7 +359,7 @@ void Player::Update(float dt)
 void Player::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite, &shader);
-	window.draw(rect);
+	//window.draw(rect);
 	window.draw(attackPosCol);
 }
 
@@ -970,10 +970,15 @@ void Player::InsertAnimId()
 
 void Player::CalculatorCurrentTile()
 {
-	int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
-	int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
-
- 	currentTile = (*worldTiles)[rowIndex][columnIndex];
+	int rowIndex = position.x / _TileSize;
+	int columnIndex = position.y / _TileSize;
+	if (rowIndex < 0 || rowIndex >= worldTiles->size() || columnIndex < 0 || columnIndex >= worldTiles[0].size())
+	{
+		rowIndex = 0;
+		columnIndex = 0;
+		std::cout << "erro: Projectile::CalculatorCurrentTile() Over Range" << std::endl;
+	}
+	currentTile = (*worldTiles)[rowIndex][columnIndex];
 }
 
 std::vector<Tile*> Player::CalculatorRangeTiles(int row, int col)

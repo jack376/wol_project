@@ -98,7 +98,7 @@ void Framework::Run()
             }
             INPUT_MGR.UpdateEvent(event);
 
-            if (INPUT_MGR.GetKeyDown(sf::Keyboard::F12))
+            if (INPUT_MGR.GetKeyDown(sf::Keyboard::F))
             {
                 showFps = !showFps;
             }

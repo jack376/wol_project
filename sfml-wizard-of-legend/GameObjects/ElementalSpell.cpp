@@ -137,11 +137,13 @@ void ElementalSpell::Draw(sf::RenderWindow& window)
 	//if(Collider.GetActive())
 	//	Collider.Draw(window);
 	//raycaster.draw(window);
+	/*
 	if (isSpawn)
 	{
 		Collider.Draw(window);
 		raycaster.draw(window);
 	}
+	*/
 }
 
 void ElementalSpell::MeleeUpdate(float dt)

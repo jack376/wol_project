@@ -10,7 +10,7 @@
 
 Scene::Scene(SceneId id) : sceneId(id), window(FRAMEWORK.GetWindow())
 {
-	window.setMouseCursorVisible(true);
+	window.setMouseCursorVisible(false);
 
 }
 

@@ -47,14 +47,16 @@ void SceneGame::Init()
 
 
 	player = (Player*)AddGo(new Player());
-	player->SetPosition(62 * _TileSize, 85 * _TileSize);
+	//player->SetPosition(62 * _TileSize, 85 * _TileSize);
+	player->SetPosition(16 * _TileSize, 32 * _TileSize);
 	player->sprite.setScale(4, 4);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 5;
 	player->SetScene(this);
 
 	// Load Tilemap CSV
-	LoadFromCSV("tables/EntireRoom_0827_134822.csv");
+	//LoadFromCSV("tables/EntireRoom_0827_134822.csv");
+	LoadFromCSV("tables/BossRoom_0827_233200.csv");
 
 	TilesToIntMap();
 	CalculatorNongroundTiles();
@@ -83,12 +85,13 @@ void SceneGame::Init()
 	monster->SetPosition(512, 1024);
 	monster->particlePool = &this->particlePool;
 	monsters.push_back(monster);
-
+	
 	HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
 	hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
 	hpb->SetOrigin(Origins::ML);
 	hpb->SetPosition(size.x * 0.4, size.y * 0.1);
 	hpb->sortLayer = 105;
+	
 
 	hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("PlayerHP")));
 	hpb->SetTarget(player->GetMaxHP(), player->GetHP());
@@ -96,22 +99,8 @@ void SceneGame::Init()
 	hpb->SetPosition(size.x * 0.05, size.y * 0.05);
 	hpb->sortLayer = 105;
 
-	monster = CreateMonster(MonsterId::Ghoul);
-	monster->SetPlayer(player);
-	monster->SetTiles(&tilesWorld);
-	monster->SetIntMap(&intMap);
-	monster->SetNonGroundTiles(&nongroundTiles);
-	monster->SetPosition(700, 500);
-	monsters.push_back(monster);
-
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
-
-	//tempWindSlash->SetTiles(&tilesWorld);
-	//tempFireBall->SetTiles(&tilesWorld);
-
-	//tempWindSlash->SetMonsterList(monsters);
-	//tempFireBall->SetMonsterList(monsters);
 
 	// Create Particle
 	CreateParticle(1000);
@@ -124,6 +113,8 @@ void SceneGame::Init()
 	SpawnGlowGo();
 	SpawnPortalGlowGo();
 	ModifyWallToRoof();
+
+	//SpawnMonster(25);
 
 	for (auto go : gameObjects)
 	{
@@ -145,7 +136,6 @@ void SceneGame::Init()
 		skillTable.second->PoolInit();
 		SKILL_MGR.EquipSkill(skillTable.second);
 	}
-
 }
 
 void SceneGame::Release()
@@ -165,16 +155,13 @@ void SceneGame::Enter()
 
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
-	player->SetPosition(700, 700);
+
+	player->SetPosition(16 * _TileSize, 32 * _TileSize);
 
 	isGameEnd = false;
 	isMenuOn = false;
 	isReStart = false;
-	//miniMapView.setSize(sf::Vector2f(200, 200));
-	//miniMapView.setViewport(sf::FloatRect(0.1f, 0.1f, 0.25f, 0.25f));
-	//miniMapBackground.setSize(sf::Vector2f(200, 200));
-	//miniMapBackground.setFillColor(sf::Color(50, 50, 50));
-	//miniMapBackground.setPosition(-200, 0);
+
 	miniMapView.setSize(size * 1.2f);
 	miniMapView.setViewport(sf::FloatRect(0.0f, 0.1f, 0.2f, 0.2f));
 
@@ -203,21 +190,8 @@ void SceneGame::Update(float dt)
 	lookMap = CheckMiniMap(20, 20);
 	
 	int percent = (float)mapCount / (float)mapMaxCount * 100;
-	//std::cout << percent << "=" << mapCount << "/" << mapMaxCount << std::endl;
-	//mapDiscovery->SetString(std::to_string(percent) + "%");
+	mapDiscovery->SetString(std::to_string(percent) + "%");
 
-	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
-	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
-
-	//if (debugTimer > debugDuration && !isCol)
-	//{
-	//	debugTimer = 0.f;
-	//	std::cout << "OBB is Failed" << std::endl;
-	//}
-	//if (isCol)
-	//{
-	//	std::cout << "OBB is Succesd" << std::endl;
-	//}
 	worldView.setCenter(player->GetPosition());
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
@@ -340,14 +314,6 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetSpawnLocation(static_cast<SpawnLocation>(spawnLocation));
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
-		
-		/*
-		if (topTextureRect.left >= 0 && topTextureRect.left <= 176 && topTextureRect.top == 192
-			|| bottomTextureRect.left >= 0 && bottomTextureRect.left <= 176 && bottomTextureRect.top == 192)
-		{
-			tile->sortLayer = 50;
-		}
-		*/
 
 		if (tile->GetType() == TileType::None)
 		{
@@ -686,6 +652,40 @@ void SceneGame::SpawnPortalGlowGo()
 			object->SetParticlePool(&portalParticlePoolPurple);
 			break;
 		}
+	}
+}
+
+void SceneGame::SpawnMonster(int count)
+{
+	std::vector<sf::Vector2f> monsterSpawnArea;
+
+	for (size_t row = 0; row < tilesWorld.size(); row++)
+	{
+		for (size_t col = 0; col < tilesWorld[row].size(); col++)
+		{
+			if (tilesWorld[row][col]->GetSpawnLocation() == SpawnLocation::Monster)
+			{
+				monsterSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
+			}
+		}
+	}
+
+	if (monsterSpawnArea.empty())
+	{
+		return;
+	}
+
+	for (int i = 0; i < count && !monsterSpawnArea.empty(); i++) // monsterSpawnArea.size()
+	{
+		int random = Utils::RandomRange(0, 5);
+
+		monster = CreateMonster((MonsterId)random);
+		monster->SetPlayer(player);
+		monster->SetTiles(&tilesWorld);
+		monster->SetIntMap(&intMap);
+		monster->SetNonGroundTiles(&nongroundTiles);
+		monster->SetPosition(monsterSpawnArea[i]);
+		monsters.push_back(monster);
 	}
 }
 

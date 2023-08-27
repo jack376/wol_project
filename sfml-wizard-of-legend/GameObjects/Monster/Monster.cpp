@@ -276,12 +276,14 @@ void Monster::Move(float dt)
             Pair src(currentTile->GetIndex().x, currentTile->GetIndex().y);
             Pair dst(player->GetCurrentTile()->GetIndex().x, player->GetCurrentTile()->GetIndex().y);
             path = _AS.aStarSearch(*intMap, src, dst);  //false면 isAwake를 false로. SetState(Idle).
+            
             if (!path.first)
             {
                 SetState(MonsterState::Idle);
                 isAwake = false;
-                return;
+                //return;
             }
+            
             pathUpdateTimer = 0.f;
         }
         else if (!path.second.empty())

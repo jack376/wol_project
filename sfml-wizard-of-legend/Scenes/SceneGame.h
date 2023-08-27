@@ -106,6 +106,7 @@ public:
 	void SpawnWallDecoGo(int count);
 	void SpawnGlowGo();
 	void SpawnPortalGlowGo();
+	void SpawnMonster(int count);
 	void ModifyWallToRoof();
 	void DestroyDecoGo(DecoGo* obj);
 

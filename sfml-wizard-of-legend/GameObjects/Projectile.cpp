@@ -107,8 +107,8 @@ void Projectile::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite, &shader);
 
-	if (collider.GetActive())
-		collider.Draw(window);
+	//if (collider.GetActive())
+	//	collider.Draw(window);
 }
 
 void Projectile::SetRotation(const sf::Vector2f dir)
