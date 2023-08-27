@@ -238,6 +238,11 @@ void SceneGame::Update(float dt)
 		menu->AllSetActive(isMenuOn);
 	}
 
+	if (isGameEnd && !gameResult->GetActive())
+	{
+		gameResult->AllSetActive(true);
+	}
+
 
 }
 

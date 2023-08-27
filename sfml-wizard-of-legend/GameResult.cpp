@@ -216,6 +216,5 @@ void GameResult::AllSetLangText(Languages lang)
 
 void GameResult::AllSetActive(bool isActive)
 {
-
 	SetActive(isActive);
 }

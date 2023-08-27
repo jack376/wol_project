@@ -150,7 +150,7 @@ void Scene::Enter()
 	mouseCursor = (SpriteGo*)AddGo(new SpriteGo("graphics/UI/MouseCursor.png"));
 	mouseCursor->SetOrigin(Origins::MC);
 	mouseCursor->sprite.setScale(3.5, 3.5);
-	mouseCursor->sortLayer = 101;
+	mouseCursor->sortLayer = 120;
 
 	for (auto go : gameObjects)
 	{
