@@ -243,6 +243,10 @@ void SceneGame::Update(float dt)
 		gameResult->AllSetActive(true);
 	}
 
+	if (isReStart)
+	{
+		SCENE_MGR.ChangeScene(SceneId::Game);
+	}
 
 }
 
