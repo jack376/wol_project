@@ -72,9 +72,9 @@ void SkillMgr::LoadExistSkill()
 	for (auto table : DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->GetTable()[(int)SkillDatas::Exist])
 	{
 		//skill->Init();
-		Skill* skill = new Skill(); 
-		skill->SetSkillInfo(DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)table.first, SkillDatas::Exist));
-		existSkillList[skill->GetSkillId()] = skill;
+		Skill skill;
+		skill.SetSkillInfo(DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)table.first, SkillDatas::Exist));
+		existSkillList[skill.GetSkillId()] = &skill;
 	}
 }
 

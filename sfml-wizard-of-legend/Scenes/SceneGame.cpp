@@ -125,10 +125,10 @@ void SceneGame::Init()
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
 
-	for (auto skillTable : SKILL_MGR.GetExistSkillList())
+	for (auto& skillTable : SKILL_MGR.GetExistSkillList())
 	{
 		skillTable.second->SetPlayer(player);
-		skillTable.second->SetMonsterList(monsters);
+		skillTable.second->SetMonsterList(&monsters);
 		skillTable.second->SetTiles(&tilesWorld);
 		skillTable.second->Init();
 		skillTable.second->PoolInit();

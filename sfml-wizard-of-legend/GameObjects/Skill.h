@@ -124,9 +124,9 @@ public:
 	void SetRangeType(RangeTypes type) { currentRangeType = type; }
 	void SetPlayerAction(PlayerActions type) { currentPlayerActionType = type; }
 	
-	void SetPool(ObjectPool<ElementalSpell>& pool) { this->pool = pool; }
+	void SetPool(ObjectPool<ElementalSpell>* pool) { this->pool = *pool; }
 	void SetTiles(std::vector<std::vector<Tile*>>* tiles) { this->worldTiles = tiles; }
-	void SetMonsterList(std::list<Monster*>& monsters) { this->monsters = monsters; }
+	void SetMonsterList(std::list<Monster*>* monsters) { this->monsters = *monsters; }
 	void SetPlayer(Player*& player) { this->player = player; }
 
 	void SetEditorPlayer(SkillEditorPlayer*& player) { this->editorPlayer = player; }
