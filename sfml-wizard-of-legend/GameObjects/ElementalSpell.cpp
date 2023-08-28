@@ -105,7 +105,7 @@ void ElementalSpell::Update(float dt)
 
 
 	raycaster.move(position.x, position.y);
-	for (auto monster : monsters)
+	for (auto& monster : *monsters)
 	{
 		if(monster->GetActive())
 			raycaster.checkCollision(monster);
@@ -195,7 +195,7 @@ void ElementalSpell::MeleeUpdate(float dt)
 
 
 	// 이걸로 실행
-	for (auto monster : monsters)
+	for (auto& monster : *monsters)
 	{
 		isCol = Collider.ObbCol(monster->rect) && monster->GetActive();
 
@@ -242,7 +242,7 @@ void ElementalSpell::MeleeUpdate(float dt)
 	if (!isSpawn)
 	{
 		colMonsters.clear();
-		pool.Return(this);
+		//pool->Return(this);
 		SCENE_MGR.GetCurrScene()->RemoveGo(this);
 	}
 }
@@ -266,7 +266,7 @@ void ElementalSpell::RangeUpdate(float dt)
 
 
 	// 이걸로 실행
-	for (auto monster : monsters)
+	for (auto& monster : *monsters)
 	{
 		isCol = Collider.ObbCol(monster->rect);
 		auto it = std::find(colMonsters.begin(), colMonsters.end(), monster);
@@ -339,7 +339,7 @@ void ElementalSpell::RangeUpdate(float dt)
 
 	if (!isSpawn)
 	{
-		pool.Return(this);
+		//pool->Return(this);
 		colMonsters.clear();
 		SCENE_MGR.GetCurrScene()->RemoveGo(this);
 	}

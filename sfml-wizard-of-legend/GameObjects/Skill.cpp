@@ -23,7 +23,7 @@ void Skill::Init()
 	pool.OnCreate = [this](ElementalSpell* spell)
 	{
 		spell->SetMonsterList(monsters);
-		spell->SetPool(pool);
+		//spell->SetPool(pool);
 	};
 	editorPool.OnCreate = [this](SkillEditorElementalSpell* spell)
 	{

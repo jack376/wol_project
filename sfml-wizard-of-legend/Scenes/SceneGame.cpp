@@ -126,7 +126,7 @@ void SceneGame::Init()
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
 
-	for (auto skillTable : SKILL_MGR.GetExistSkillList())
+	for (auto& skillTable : SKILL_MGR.GetExistSkillList())
 	{
 		skillTable.second->SetPlayer(player);
 		skillTable.second->SetMonsterList(monsters);

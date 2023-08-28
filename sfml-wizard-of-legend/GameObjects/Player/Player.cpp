@@ -68,7 +68,7 @@ void Player::Init()
 	spellPool.OnCreate = [this](ElementalSpell* spell)
 	{
 		spell->SetMonsterList(monsters);
-		spell->SetPool(spellPool);
+		//spell->SetPool(spellPool);
 	};
 
 	playerDieEffectPool.OnCreate = [this](SpriteEffect* effect) {

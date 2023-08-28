@@ -21,11 +21,11 @@ protected:
 	SceneGame* scene;
 	Player* player;
 	Monster* monster;
-	std::list<Monster*> monsters;
+	std::list<Monster*>* monsters;
 	std::list<Monster*> colMonsters;
 	Beam raycaster;
 
-	ObjectPool<ElementalSpell> pool;
+	ObjectPool<ElementalSpell>* pool;
 	ObjectPool<SpriteEffect> monsterHitEffectPool;
 
 	AnimationController anim;
@@ -128,8 +128,8 @@ public:
 	void SetScene(SceneGame* scene) { this->scene = scene; }
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetMonster(Monster* monster) { this->monster = monster; }
-	void SetMonsterList(std::list<Monster*>& monsters) { this->monsters = monsters; }
-	void SetPool(ObjectPool<ElementalSpell>& pool) { this->pool = pool; }
+	void SetMonsterList(std::list<Monster*>& monsters) { this->monsters = &monsters; }
+	void SetPool(ObjectPool<ElementalSpell>& pool) { this->pool = &pool; }
 	
 	void SetElementType(ElementTypes type) { currentElementType = type; }
 	void SetSkillType(SkillTypes type) { currentSkillType = type; }

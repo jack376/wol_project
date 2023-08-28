@@ -23,7 +23,6 @@ void SceneSkillEditor::Init()
 	sf::Vector2f nameSize = { 2.5f, 0.3f };
 	sf::Vector2f valueSize = { 4.0f, 0.3f };
 
-
 	skillName = CreateUI("SkillName", uiStandardPosX, uiStandardPosY + offsetY * 0, nameSize);
 	skillNameValue = CreateInputField("WindSlash", uiStandardPosX + offsetX, uiStandardPosY + offsetY * 0, valueSize);
 	
