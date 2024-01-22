@@ -77,27 +77,27 @@ void SceneGame::Init()
 	player->SetMonsterList(monsters);
 
 	
-	monster = CreateMonster(MonsterId::FireBoss);
-	monster->SetPlayer(player);
-	monster->SetTiles(&tilesWorld);
-	monster->SetIntMap(&intMap);
-	monster->SetNonGroundTiles(&nongroundTiles);
-	monster->SetPosition(512, 1024);
-	monster->particlePool = &this->particlePool;
-	monsters.push_back(monster);
+	//monster = CreateMonster(MonsterId::FireBoss);
+	//monster->SetPlayer(player);
+	//monster->SetTiles(&tilesWorld);
+	//monster->SetIntMap(&intMap);
+	//monster->SetNonGroundTiles(&nongroundTiles);
+	//monster->SetPosition(512, 1024);
+	//monster->particlePool = &this->particlePool;
+	//monsters.push_back(monster);
 	
-	HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
-	hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
-	hpb->SetOrigin(Origins::ML);
-	hpb->SetPosition(size.x * 0.4, size.y * 0.1);
-	hpb->sortLayer = 105;
-	
+	//HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
+	//hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
+	//hpb->SetOrigin(Origins::ML);
+	//hpb->SetPosition(size.x * 0.4, size.y * 0.1);
+	//hpb->sortLayer = 105;
+	//
 
-	hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("PlayerHP")));
-	hpb->SetTarget(player->GetMaxHP(), player->GetHP());
-	hpb->SetOrigin(Origins::ML);
-	hpb->SetPosition(size.x * 0.05, size.y * 0.05);
-	hpb->sortLayer = 105;
+	//hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("PlayerHP")));
+	//hpb->SetTarget(player->GetMaxHP(), player->GetHP());
+	//hpb->SetOrigin(Origins::ML);
+	//hpb->SetPosition(size.x * 0.05, size.y * 0.05);
+	//hpb->sortLayer = 105;
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);

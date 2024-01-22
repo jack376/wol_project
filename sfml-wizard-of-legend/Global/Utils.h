@@ -48,11 +48,11 @@ public:
 
 	// 축 정의 및 관련 함수
 	// OBB의 꼭지점을 주어진 축에 투영후, 투영된 범위의 최소 최대값 반환
-	static sf::Vector2f ProjectOnAxis(const RectVertexArray& vertices, const sf::Vector2f& axis);
+	static float ProjectOnAxis(const RectVertexArray& vertices, const sf::Vector2f& axis);
 	// 두 범위 충돌검사
-	static bool AreOverlapping(const sf::Vector2f& a, const sf::Vector2f& b);
+	static bool AreOverlapping(const float a, const float b);
 	// 충돌범위 길이 계산
-	static float GetOverlapLength(const sf::Vector2f& a, const sf::Vector2f& b);
+	//static float GetOverlapLength(const sf::Vector2f& a, const sf::Vector2f& b);
 
 	// OBB 관련 함수
 	// OBB의 중심점 반환
