@@ -8,6 +8,12 @@ enum class Axis
 	Vertical,
 };
 
+enum class SOCDType
+{
+	Neutrality,
+	After,
+};
+
 struct AxisInfo
 {
 	Axis axis;
@@ -56,7 +62,7 @@ public:
 
 	// Axis
 	float GetAxis(Axis axis);
-	float GetAxisRaw(Axis axis);
+	float GetAxisRaw(Axis axis, SOCDType type);
 
 	std::vector<char>& GetTextList() { return textList;};
 };

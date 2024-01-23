@@ -5,6 +5,8 @@
 #include "TextGo.h"
 #include "Utils.h"
 
+
+
 InputMgr::InputMgr()
 {
 	{
@@ -37,7 +39,7 @@ void InputMgr::Update(float dt)
 	for (auto& it : axisInfoMap)
 	{
 		auto& axisInfo = it.second;
-		float raw = GetAxisRaw(axisInfo.axis);	// -1.0, 0, 1.0
+		float raw = GetAxisRaw(axisInfo.axis, SOCDType::Neutrality);	// -1.0, 0, 1.0
 		if (raw == 0.f && axisInfo.value != 0.f)
 		{
 			raw = axisInfo.value > 0.f ? -1.f : 1.f;
@@ -144,7 +146,7 @@ float InputMgr::GetAxis(Axis axis)
 	return it->second.value;
 }
 
-float InputMgr::GetAxisRaw(Axis axis)
+float InputMgr::GetAxisRaw(Axis axis, SOCDType type)
 {
 	const auto& it = axisInfoMap.find(axis);
 	if (it == axisInfoMap.end())
@@ -155,19 +157,41 @@ float InputMgr::GetAxisRaw(Axis axis)
 	auto rit = ingList.rbegin();
 
 	float raw = 0.f;
-
-	while (rit != ingList.rend())
+	switch (type)
 	{
-		int code = *rit;
-		if (std::find(info.positivies.begin(), info.positivies.end(), code) != info.positivies.end())
-		{
-			raw+= 1.f;
-		}
-		if (std::find(info.negatives.begin(), info.negatives.end(), code) != info.negatives.end())
-		{
-			raw += -1.f;
-		}
-		++rit;
+		case SOCDType::Neutrality:
+			while (rit != ingList.rend())
+			{
+				int code = *rit;
+				if (std::find(info.positivies.begin(), info.positivies.end(), code) != info.positivies.end())
+				{
+					raw += 1.f;
+				}
+				if (std::find(info.negatives.begin(), info.negatives.end(), code) != info.negatives.end())
+				{
+					raw += -1.f;
+				}
+				++rit;
+			}
+			break;
+		case SOCDType::After:
+			while (rit != ingList.rend())
+			{
+				int code = *rit;
+				if (std::find(info.positivies.begin(), info.positivies.end(), code) != info.positivies.end())
+				{
+					return 1.f;
+				}
+				if (std::find(info.negatives.begin(), info.negatives.end(), code) != info.negatives.end())
+				{
+					return -1.f;
+				}
+				++rit;
+			}
+			break;
+		default:
+			break;
 	}
+
 	return raw;
 }
