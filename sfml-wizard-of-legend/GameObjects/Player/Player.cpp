@@ -202,7 +202,7 @@ void Player::Update(float dt)
 	//}
 
 
-	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
+	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal, SOCDType::Neutral), INPUT_MGR.GetAxisRaw(Axis::Vertical, SOCDType::Neutral) };
 	// 입력에 따른 방향 설정
 	CalDir();
 	prevPos = GetPosition();

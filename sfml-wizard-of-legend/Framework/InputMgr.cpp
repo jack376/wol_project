@@ -39,7 +39,7 @@ void InputMgr::Update(float dt)
 	for (auto& it : axisInfoMap)
 	{
 		auto& axisInfo = it.second;
-		float raw = GetAxisRaw(axisInfo.axis, SOCDType::Neutrality);	// -1.0, 0, 1.0
+		float raw = GetAxisRaw(axisInfo.axis, SOCDType::Neutral);
 		if (raw == 0.f && axisInfo.value != 0.f)
 		{
 			raw = axisInfo.value > 0.f ? -1.f : 1.f;
@@ -159,7 +159,7 @@ float InputMgr::GetAxisRaw(Axis axis, SOCDType type)
 	float raw = 0.f;
 	switch (type)
 	{
-		case SOCDType::Neutrality:
+		case SOCDType::Neutral:
 			while (rit != ingList.rend())
 			{
 				int code = *rit;
@@ -174,7 +174,7 @@ float InputMgr::GetAxisRaw(Axis axis, SOCDType type)
 				++rit;
 			}
 			break;
-		case SOCDType::After:
+		case SOCDType::LastWins:
 			while (rit != ingList.rend())
 			{
 				int code = *rit;
@@ -192,6 +192,5 @@ float InputMgr::GetAxisRaw(Axis axis, SOCDType type)
 		default:
 			break;
 	}
-
 	return raw;
 }

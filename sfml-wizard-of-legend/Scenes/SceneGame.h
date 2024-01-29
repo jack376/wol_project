@@ -110,6 +110,8 @@ public:
 	void ModifyWallToRoof();
 	void DestroyDecoGo(DecoGo* obj);
 
+	void SpawnMonster(MonsterId monsterId, float xPos, float yPos);
+
 	void TilesToIntMap();
 	void CalculatorNongroundTiles();
 

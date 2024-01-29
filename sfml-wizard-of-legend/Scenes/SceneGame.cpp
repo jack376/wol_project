@@ -55,8 +55,8 @@ void SceneGame::Init()
 	player->SetScene(this);
 
 	// Load Tilemap CSV
-	//LoadFromCSV("tables/EntireRoom_0827_134822.csv");
-	LoadFromCSV("tables/BossRoom_0827_233200.csv");
+	LoadFromCSV("tables/EntireRoom_0827_134822.csv");
+	//LoadFromCSV("tables/BossRoom_0827_233200.csv");
 
 	TilesToIntMap();
 	CalculatorNongroundTiles();
@@ -76,15 +76,13 @@ void SceneGame::Init()
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
 
-	
-	//monster = CreateMonster(MonsterId::FireBoss);
-	//monster->SetPlayer(player);
-	//monster->SetTiles(&tilesWorld);
-	//monster->SetIntMap(&intMap);
-	//monster->SetNonGroundTiles(&nongroundTiles);
-	//monster->SetPosition(512, 1024);
-	//monster->particlePool = &this->particlePool;
-	//monsters.push_back(monster);
+	int archerOffset;
+	for (int i = 0; i < 10; ++i)
+	{
+		SpawnMonster(MonsterId::Archer, _TileSize * ((i * 5) + 16), _TileSize * (32));
+	}
+
+
 	
 	//HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
 	//hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
@@ -113,8 +111,6 @@ void SceneGame::Init()
 	SpawnGlowGo();
 	SpawnPortalGlowGo();
 	ModifyWallToRoof();
-
-	//SpawnMonster(25);
 
 	for (auto go : gameObjects)
 	{
@@ -701,6 +697,18 @@ void SceneGame::DestroyDecoGo(DecoGo* obj)
 {
 	RemoveGo(obj);
 	count++; // юс╫ц
+}
+
+void SceneGame::SpawnMonster(MonsterId monsterId, float xPos, float yPos)
+{
+	Monster* mon = CreateMonster(monsterId);
+	mon->SetPlayer(player);
+	mon->SetTiles(&tilesWorld);
+	mon->SetIntMap(&intMap);
+	mon->SetNonGroundTiles(&nongroundTiles);
+	mon->SetPosition(xPos, yPos);
+	mon->particlePool = &this->particlePool;
+	monsters.push_back(mon);
 }
 
 void SceneGame::TilesToIntMap()

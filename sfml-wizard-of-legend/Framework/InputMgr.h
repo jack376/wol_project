@@ -10,8 +10,8 @@ enum class Axis
 
 enum class SOCDType
 {
-	Neutrality,
-	After,
+	Neutral,
+	LastWins,
 };
 
 struct AxisInfo
