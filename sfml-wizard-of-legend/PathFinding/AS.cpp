@@ -73,7 +73,7 @@ std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<in
 	cellDetails[sy][sx].parent_x = sx;
 	cellDetails[sy][sx].parent_y = sy;
 
-	std::set<pPair> openList;
+	std::set<pPair> openList;	// 균형이진탐색트리로 구현되어 있기 때문에 우선순위 큐 역할을 함.
 	openList.insert({ 0.0, { sy, sx } });
 
 	while (!openList.empty()) {
@@ -87,7 +87,7 @@ std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<in
 
 		double ng, nf, nh;
 
-		// 방향 검사
+		// 인접 노드 탐색
 		for (int i = 0; i < 4; ++i) {
 			int ny = y + dy1[i];
 			int nx = x + dx1[i];
