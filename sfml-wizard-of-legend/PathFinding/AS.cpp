@@ -15,7 +15,8 @@ bool AS::isUnBlocked(std::vector<std::vector<int>>& map, int row, int col) {
 }
 
 double AS::GethValue(int row, int col, Pair dst) {
-	return (double)std::sqrt(std::pow(row - dst.first, 2) + std::pow(col - dst.second, 2));
+	//(double)std::sqrt(std::pow(row - dst.first, 2) + std::pow(col - dst.second, 2));
+	return std::abs(dst.first - row) + std::abs(dst.second - col);
 }
 
 std::stack<AS::Pair> AS::tracePath(Cell cellDetails[MAX][MAX], Pair dst, std::vector<std::vector<int>>& data) {
@@ -51,13 +52,12 @@ std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<in
 	if (!isUnBlocked(map, src.first, src.second) || !isUnBlocked(map, dst.first, dst.second)) return std::pair<bool, std::stack<AS::Pair>>(false, path);
 	if (isDestination(src.first, src.second, dst)) return std::pair<bool, std::stack<AS::Pair>>(false, path);
 
-	bool closedList[MAX][MAX];
+	bool closedList[MAX][MAX];	// 방문 노드 리스트
 	std::memset(closedList, false, sizeof(closedList));
 
 	Cell cellDetails[MAX][MAX];
 
 	// 내용초기화
-	// 최대유량알고리즘과 유사
 	// 계산해야할 값부분은 INF로하고, 계산할 경로는 -1로 초기화
 	for (int i = 0; i < ROW; ++i) {
 		for (int j = 0; j < COL; ++j) {
@@ -66,7 +66,7 @@ std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<in
 		}
 	}
 
-	// src의 좌표가 첫좌표가 된다.
+	// 출발지 초기화
 	int sy = src.first;
 	int sx = src.second;
 	cellDetails[sy][sx].f = cellDetails[sy][sx].g = cellDetails[sy][sx].h = 0.0;
@@ -76,9 +76,9 @@ std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<in
 	std::set<pPair> openList;
 	openList.insert({ 0.0, { sy, sx } });
 
-	// 이 반복구조 bfs와 엄청 똑같습니다.
 	while (!openList.empty()) {
-		pPair p = *openList.begin();
+
+	    const pPair& p = *openList.begin();
 		openList.erase(openList.begin());
 
 		int y = p.second.first;
@@ -87,7 +87,7 @@ std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<in
 
 		double ng, nf, nh;
 
-		// 직선
+		// 방향 검사
 		for (int i = 0; i < 4; ++i) {
 			int ny = y + dy1[i];
 			int nx = x + dx1[i];
@@ -99,16 +99,13 @@ std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<in
 					path = tracePath(cellDetails, dst, map);
 					return std::pair<bool, std::stack<AS::Pair>>(true, path);
 				}
-
-				// bfs와 굳이 비교하자면, closedList를 방문여부라고 생각하시면 됩니다.
 				else if (!closedList[ny][nx] && isUnBlocked(map, ny, nx)) {
-					// 이부분 y x, ny nx 헷갈리는거 조심
+
 					ng = cellDetails[y][x].g + 1.0;
 					nh = GethValue(ny, nx, dst);
 					nf = ng + nh;
 
-					// 만약 한번도 갱신이 안된f거나, 새로갱신될 f가 기존f보다 작을시 참
-					if (cellDetails[ny][nx].f == INF || cellDetails[ny][nx].f > nf) {
+					if (cellDetails[ny][nx].f > nf) {
 						cellDetails[ny][nx].f = nf;
 						cellDetails[ny][nx].g = ng;
 						cellDetails[ny][nx].h = nh;

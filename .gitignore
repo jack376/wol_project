@@ -2,3 +2,4 @@ team_project_wizard_of_legend-bin/Resources
 sfml-wizard-of-legend/.vs/
 sfml-wizard-of-legend/x64/
 sfml-wizard-of-legend-bin/sfml-wizard-of-legend-d.pdb
+sfml-wizard-of-legend/Framework/SceneMgr.h

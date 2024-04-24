@@ -11,20 +11,20 @@ class AS : public Singleton<AS>
 	friend Singleton<AS>;
 
 public:
-	// 직선
+	// 방향
 	const int dx1[4] = { 0, 0, 1, -1 };
 	const int dy1[4] = { -1, 1, 0, 0 };
 
-	using Pair = std::pair<int, int>;
-	using pPair = std::pair<double, Pair>;
+	using Pair = std::pair<int, int>;		// 좌표
+	using pPair = std::pair<double, Pair>;	// 가중치
 
 	struct Cell {
 		int parent_x, parent_y;
 		double f, g, h;
 	};
 
-	char zmap[MAX][MAX];
-	int ROW = 32, COL = 32;
+	//char zmap[MAX][MAX];
+	const int ROW = 32, COL = 32;
 
 	//주어진 현재 셀의 좌표가 목적지 셀의 좌표와 일치하는지 확인하여 결과를 반환
 	bool isDestination(int row, int col, Pair dst);
