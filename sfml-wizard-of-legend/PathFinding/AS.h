@@ -23,7 +23,6 @@ public:
 		double f, g, h;
 	};
 
-	//char zmap[MAX][MAX];
 	const int ROW = 32, COL = 32;
 
 	//주어진 현재 셀의 좌표가 목적지 셀의 좌표와 일치하는지 확인하여 결과를 반환
@@ -34,7 +33,7 @@ public:
 	//주어진 행과 열 인덱스에 해당하는 맵의 값이 0인지 (통행 가능) 확인하여 결과를 반환
 	bool isUnBlocked(std::vector<std::vector<int>>& map, int row, int col);
 
-	//현재 셀과 목적지 셀 사이의 유클리드 거리를 계산하여 휴리스틱 값으로 반환
+	//현재 셀과 목적지 셀 사이의 맨하탄 거리를 계산하여 휴리스틱 값으로 반환
 	double GethValue(int row, int col, Pair dst);
 
 	//목적지에서 출발지까지의 경로를 cellDetails 정보를 사용하여 추적하고, 해당 경로를 data 맵 데이터에 표시

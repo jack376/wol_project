@@ -20,28 +20,23 @@ double AS::GethValue(int row, int col, Pair dst) {
 }
 
 std::stack<AS::Pair> AS::tracePath(Cell cellDetails[MAX][MAX], Pair dst, std::vector<std::vector<int>>& data) {
-	std::stack<Pair> s;
+	std::stack<Pair> path;
 	int y = dst.first;
 	int x = dst.second;
 
-	s.push({ y, x });
+	path.push({ y, x });
 	// cellDetails의 x, y의 부모좌표가 모두 현재좌표와 동일할때까지 반복
 	while (!(cellDetails[y][x].parent_x == x && cellDetails[y][x].parent_y == y)) {
 		int tempy = cellDetails[y][x].parent_y;
 		int tempx = cellDetails[y][x].parent_x;
 		y = tempy;
 		x = tempx;
-		s.push({ y, x });
+		path.push({ y, x });
 	}
-	
-	std::stack<Pair> path = s;
 
-	while (!s.empty()) {
-		data[s.top().first][s.top().second] = 0;
-		s.pop();
-	}
 
 	return path;
+;
 }
 
 std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<int>>& map, Pair src, Pair dst) {
@@ -56,7 +51,6 @@ std::pair<bool, std::stack<AS::Pair>> AS::aStarSearch(std::vector<std::vector<in
 	std::memset(closedList, false, sizeof(closedList));
 
 	Cell cellDetails[MAX][MAX];
-
 	// 내용초기화
 	// 계산해야할 값부분은 INF로하고, 계산할 경로는 -1로 초기화
 	for (int i = 0; i < ROW; ++i) {
