@@ -3,7 +3,7 @@
 #include "Utils.h"
 
 #define PI 3.14159265
-#define RAD 3.14159265 / 180.0
+#define RAD 3.14159265 / 180.0  // 1도의 라디안 값
 
 #define SX 1280
 #define SY 720
@@ -11,6 +11,9 @@
 Line::Line(int x1, int y1, int x2, int y2, int thickness)
     : m_x1(x1), m_y1(y1), m_x2(x2), m_y2(y2), m_thickness(thickness), m_rect(sf::Vector2f(sqrt(pow(float(m_x2 - m_x1), 2) + pow(float(m_y2 - m_y1), 2)), m_thickness))
 {
+    // float(m_y2 - m_y1) / float(m_x2 - m_x1)) = 기울기
+    // atan() = 라디안 단위 변환
+    // 라디안 * 180 / PI = 도로 변환 
     m_angle = atan(float(m_y2 - m_y1) / float(m_x2 - m_x1)) * 180 / PI;
     init();
     m_rect.setFillColor(sf::Color::Red);
@@ -36,7 +39,7 @@ void Line::setEndPoint(int x, int y)
     m_rect.setSize(sf::Vector2f(sqrt(pow(float(m_x2 - m_x1), 2) + pow(float(m_y2 - m_y1), 2)), m_thickness));
 }
 
-float Line::GetLength()
+float Line::getLength()
 {
     return Utils::Distance({ m_x1, m_y1 }, { m_x2, m_y2 });
 }
@@ -75,7 +78,7 @@ void Line::move(int x, int y)
     m_rect.setPosition(sf::Vector2f(m_x1, m_y1));
 }
 
-void Line::Rotation(float angle)
+void Line::rotation(float angle)
 {
     m_angle = angle;
     m_rect.setRotation(m_angle);

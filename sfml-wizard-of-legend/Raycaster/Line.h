@@ -14,7 +14,7 @@ public:
     ~Line();
     void draw(sf::RenderWindow &window) const;
     void move(int x, int y);
-    void Rotation(float angle);
+    void rotation(float angle);
     int getX1() const { return m_x1; }
     int getY1() const { return m_y1; }
     int getX2() const { return m_x2; }
@@ -23,5 +23,5 @@ public:
     void setEndPoint(int x, int y);
    
     sf::Vector2f getEndPoint() { return { m_x2, m_y2 }; }
-    float GetLength();
+    float getLength();
 };

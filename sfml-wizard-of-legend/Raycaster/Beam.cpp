@@ -285,7 +285,7 @@ void Beam::move(int x, int y)
 void Beam::Rotation(float angle)
 {
     m_angle = angle;
-    m_line.Rotation(m_angle);
+    m_line.rotation(m_angle);
 }
 
 

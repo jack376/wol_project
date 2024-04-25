@@ -25,6 +25,7 @@ public:
     void move(int x, int y);
     void Rotation(float angle);
 
+    // 시작점, 도착점, 장애물 타일 리스트, 전체 타일 리스트
     const std::pair<bool, Tile*> CheckShortestPath(const sf::Vector2f start, const sf::Vector2f goal, const std::vector<Tile*> tiles, const std::vector<std::vector<Tile*>>* worldTiles);  //tiles == Wall, Cliffs
 
     bool checkCollision(const std::vector<Tile*> tiles, Player* player);
