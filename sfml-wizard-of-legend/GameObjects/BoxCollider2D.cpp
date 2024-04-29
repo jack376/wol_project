@@ -86,34 +86,14 @@ bool BoxCollider2D::ObbCol(const sf::RectangleShape& other)
 
 	for (const auto& axis : axes)
 	{
-		float proj1 = Utils::ProjectOnAxis(vertices1, axis);
-		float proj2 = Utils::ProjectOnAxis(vertices2, axis);
+		sf::Vector2f proj1 = Utils::ProjectOnAxis(vertices1, axis);
+		sf::Vector2f proj2 = Utils::ProjectOnAxis(vertices2, axis);
 
 		if (!Utils::AreOverlapping(proj1, proj2))
 		{
 			return false;
 		}
 	}
-
-	    // 네 축에 대한 정사영 값 계산
-    float totalHalfSizeProjectionX = Utils::ProjectOnAxis(vertices1, axes[0]) +
-                                     Utils::ProjectOnAxis(vertices2, axes[0]);
-    float totalHalfSizeProjectionY = Utils::ProjectOnAxis(vertices1, axes[1]) +
-                                     Utils::ProjectOnAxis(vertices2, axes[1]);
-
-    // OBB의 중점과 다른 사각형의 중점을 각 축에 투영
-    sf::Vector2f obbCenter = obbCol.getPosition();
-    sf::Vector2f otherCenter = other.getPosition();
-
-	float centerProjectionX = Utils::ProjectOnAxis({ obbCenter, otherCenter }, axes[0]);
-	float centerProjectionY = Utils::ProjectOnAxis({ obbCenter, otherCenter }, axes[1]);    
-	
-	// 중점을 각 축에 투영한 값과 네 축에 대한 정사영 값의 합 비교
-    if (fabs(centerProjectionX) > totalHalfSizeProjectionX ||
-        fabs(centerProjectionY) > totalHalfSizeProjectionY) {
-        return false;  // 중점의 투영 값과 네 축에 대한 투영 값의 합이 겹치지 않으면 충돌 없음
-    }
-
 	return true;
 }
 

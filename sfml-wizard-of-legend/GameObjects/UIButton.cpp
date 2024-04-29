@@ -17,12 +17,11 @@ UIButton::~UIButton()
 void UIButton::Init()
 {
 	SpriteGo::Init();
-	//font.loadFromFile("fonts/NanumSquareEB.ttf");
-	//text.setFont(font);
-	//text.setCharacterSize(20);
-	//text.setFillColor(sf::Color::White);
+	font.loadFromFile("fonts/NanumSquareEB.ttf");
+	text.setFont(font);
+	text.setCharacterSize(20);
+	text.setFillColor(sf::Color::White);
 
-	sortLayer = 101;
 }
 
 void UIButton::Release()
@@ -45,10 +44,8 @@ void UIButton::Update(float dt)
 	sf::Vector2f uiMousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
 
 	bool prevHover = isHover;
-	isHover = sprite.getGlobalBounds().contains(uiMousePos) 
-		|| rect.getGlobalBounds().contains(uiMousePos)
-		|| text.getGlobalBounds().contains(uiMousePos);	// 들어가는 순간 지금 isHover는 true 전 프레임은 false
-	
+	isHover = sprite.getGlobalBounds().contains(uiMousePos);	// 들어가는 순간 지금 isHover는 true 전 프레임은 false
+
 	if (!prevHover && isHover)	// 엔터
 	{
 		if (OnEnter != nullptr)

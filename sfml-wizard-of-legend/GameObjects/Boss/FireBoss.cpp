@@ -7,7 +7,6 @@
 #include "SceneMgr.h"
 #include "Player.h"
 #include "Particle.h"
-#include "SceneGame.h"
 
 #define _CenterPos sf::Vector2f(1024, 1024);
 
@@ -278,8 +277,6 @@ void FireBoss::Die()
 {
     if (animation.GetCurrentClipId() != stat.name + "Death")
     {
-        SceneGame* scene = (SceneGame*)SCENE_MGR.GetCurrScene();
-        scene->SetIsGameEnd(true);
         animation.Play(stat.name + "Death");
         SetOrigin(origin);
         SetRectBox();
@@ -446,11 +443,12 @@ void FireBoss::Meteor(float dt)
     }
     if (jumpTimer > meteoJumpDuration)
     {
+        SetParticle(position, 50);
+
         if (!isAttacked && player->IsAlive())
         {
             if (sprite.getGlobalBounds().intersects(player->sprite.getGlobalBounds()))
             {
-                SetParticle(position, 50);
                 attackTimer = 0.f;
                 player->SetHp(-stat.damage);
                 isAttacked = true;

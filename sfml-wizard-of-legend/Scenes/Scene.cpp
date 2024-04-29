@@ -10,8 +10,7 @@
 
 Scene::Scene(SceneId id) : sceneId(id), window(FRAMEWORK.GetWindow())
 {
-	window.setMouseCursorVisible(false);
-
+	window.setMouseCursorVisible(true);
 }
 
 Scene::~Scene()
@@ -150,7 +149,7 @@ void Scene::Enter()
 	mouseCursor = (SpriteGo*)AddGo(new SpriteGo("graphics/UI/MouseCursor.png"));
 	mouseCursor->SetOrigin(Origins::MC);
 	mouseCursor->sprite.setScale(3.5, 3.5);
-	mouseCursor->sortLayer = 120;
+	mouseCursor->sortLayer = 101;
 
 	for (auto go : gameObjects)
 	{
@@ -162,8 +161,6 @@ void Scene::Enter()
 
 void Scene::Exit()
 {
-	RemoveGo(mouseCursor);
-	delete mouseCursor;
 	for (auto go : removeGameObjects)
 	{
 		gameObjects.remove(go);
@@ -179,17 +176,11 @@ void Scene::Update(float dt)
 {
 	if (sceneId == SceneId::Game)
 	{
-		window.setMouseCursorVisible(false);
 		SetMousePos();
 	}
 	else if (sceneId == SceneId::Editor)
 	{
-		window.setMouseCursorVisible(true);
 		mouseCursor->SetActive(false);
-	}
-	else
-	{
-		SetMousePos();
 	}
 
 	if (isPlaying)

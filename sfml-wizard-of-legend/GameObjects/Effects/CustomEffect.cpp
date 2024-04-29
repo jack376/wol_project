@@ -35,7 +35,7 @@ void CustomEffect::Update(float dt)
 	if (animation.IsPlaying())
 	{
 		SetOrigin(origin);
-		//std::cout << sprite.getOrigin().x << "\t" << sprite.getOrigin().y << std::endl;
+		std::cout << sprite.getOrigin().x << "\t" << sprite.getOrigin().y << std::endl;
 		animation.Update(dt);
 	}
 

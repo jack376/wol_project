@@ -7,7 +7,6 @@
 #include "SkillMgr.h"
 #include "Skill.h"
 #include "Tile.h"
-#include "SpriteEffect.h"
 
 Player::Player(const std::string& textureId, const std::string& n)
 	: SpriteGo(textureId, n)
@@ -34,6 +33,7 @@ void Player::Init()
 	destPos.push_back({ 0 , dashDistance });
 	destPos.push_back({ -dashDistance , 0 });
 
+	//SCENE_MGR.GetCurrScene()->ScreenToUiPos(GetPosition());
 	dirIcon = (SpriteGo*)scene->AddGo(new SpriteGo("graphics/Player/UI/PlayerMarker.png"));
 	dirIcon->sprite.setScale(5, 5);
 	dirIcon->sprite.setColor(sf::Color::Color(255, 255, 255, 100));
@@ -68,19 +68,8 @@ void Player::Init()
 	spellPool.OnCreate = [this](ElementalSpell* spell)
 	{
 		spell->SetMonsterList(monsters);
-		//spell->SetPool(spellPool);
+		spell->SetPool(spellPool);
 	};
-
-	playerDieEffectPool.OnCreate = [this](SpriteEffect* effect) {
-		effect->sprite.setScale(4, 4);
-		effect->SetAnimId("DieEffect");
-		effect->SetDuration(0.5f);
-		effect->sortLayer = 20;
-	};
-	spellPool.Init();
-	playerDieEffectPool.Init();
-
-	
 
 	// Player Shader
 	float yOffset = 15.0f / 31.0f;
@@ -93,12 +82,6 @@ void Player::Init()
 void Player::Release()
 {
 	// 클리어를 해줘야 하는지 결정해야함
-	for (auto obj : playerDieEffectPool.GetUseList())
-	{
-		SCENE_MGR.GetCurrScene()->RemoveGo(obj);
-	}
-	playerDieEffectPool.Clear();
-
 	destPos.clear();
 	SpriteGo::Release();
 }
@@ -106,8 +89,6 @@ void Player::Release()
 void Player::Reset()
 {
 	SpriteGo::Reset();
-	playerDieEffectPool.Clear();
-
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Run/RunUp.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Run/RunRight.csv"));
 	anim.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Player/Run/RunDown.csv"));
@@ -162,10 +143,33 @@ void Player::Reset()
 	// 플레이어 리셋
 	hp = maxHp;
 	attackCount = 0;
-	isAlive = true;
-	currentDir = Dir::Down;
-
 	portal->SetActive(false);
+
+
+	spellPool.Init();
+
+
+	// 팔레트 적용시키기
+	//palette.setTexture(*RESOURCE_MGR.GetTexture("graphics/Player/WizardPalette.png"));
+	//palette.setTextureRect(sf::IntRect{0, 62, 54, 2});
+	////palette.setScale(16, 16);
+
+	//sf::Image grayImage = sprite.getTexture()->copyToImage();
+	//sf::Image paletteImage = palette.getTexture()->copyToImage();
+	//paletteTexture.loadFromImage(grayImage);
+
+	//sprite = Utils::SetPixelColor(grayImage, paletteImage);
+
+	// 얽히고 섥혀서 문제 발생 여지 있음..
+	// &로 넘기긴 하는데 적용이 되는건지 확인 필요
+	//Utils::SetShader(currentShader, sprite, paletteTexture);
+
+	//sf::Texture* tex = RESOURCE_MGR.GetTexture(frame.textureId);
+
+	////여기서 target의 texture와 Rect를 정함!
+	//target->setTexture(*tex);
+	//target->setTextureRect(frame.texCoord);
+
 }
 
 void Player::Update(float dt)
@@ -202,7 +206,7 @@ void Player::Update(float dt)
 	//}
 
 
-	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal, SOCDType::Neutral), INPUT_MGR.GetAxisRaw(Axis::Vertical, SOCDType::Neutral) };
+	dir = { INPUT_MGR.GetAxisRaw(Axis::Horizontal), INPUT_MGR.GetAxisRaw(Axis::Vertical) };
 	// 입력에 따른 방향 설정
 	CalDir();
 	prevPos = GetPosition();
@@ -210,28 +214,28 @@ void Player::Update(float dt)
 	isMove = dir.x != 0 || dir.y != 0;
 	isDashing = dashDir.x != 0 || dashDir.y != 0;
 
+
 	if (!isAlive)
 	{
 		ChangeState(States::Die);
 	}
 
+	// 무적 상태 분리
+	if (isInvincible)
+	{
 
-	if (isHit && isAlive && !isFalling)
+	}
+
+	// 맞으면 무적상태와 맞는 상태 표시
+	if (isHit)
 	{
 		scene->SetIsMenuOn(false);
 		CalHitLookAngle();
 		ChangeState(States::Hit);
 	}
 
-
-	if (scene->GetIsMenuOn() || scene->GetIsGameEnd())
-	{
-		isRun = false;
-		isDash = false;
-		isSlide = false;
-		isAttack = false;
+	if (scene->GetIsMenuOn())
 		return;
-	}
 
 	if (INPUT_MGR.GetMouseButtonDown(sf::Mouse::Button::Left) && !isAttack && !isDash && !isSlide && !isFalling && !isHit && isAlive)
 	{
@@ -358,8 +362,9 @@ void Player::Update(float dt)
 
 void Player::Draw(sf::RenderWindow& window)
 {
+	//SpriteGo::Draw(window);
 	window.draw(sprite, &shader);
-	//window.draw(rect);
+	window.draw(rect);
 	window.draw(attackPosCol);
 }
 
@@ -472,6 +477,11 @@ void Player::DashUpdate(float dt)
 	}
 
 
+	//if (currentTile->GetType() == TileType::Cliff)
+	//{
+	//	SetPosition(prevPos);
+	//}
+
 	if (t >= 1.0f)
 	{
 		dashTimer = 0.f;
@@ -545,31 +555,29 @@ void Player::AttackUpdate(float dt)
 			SetFlipX(true);
 			break;
 		}
-	}
-	if (!isAttack)
-	{
-		sf::Vector2f hitDir = Utils::Angle(playerLookAngle);
-		attackStart = GetPosition();
-		attackDest = GetPosition() + sf::Vector2f{ hitDir.x * 50, hitDir.y * 50 };
+
+		switch (sEvent)
+		{
+		case SkillEvents::Left:
+			//mgr.
+			// fireball.//
+			break;
+		case SkillEvents::Right:
+			// fireball//
+			break;
+		case SkillEvents::Space:
+
+			break;
+		case SkillEvents::Q:
+
+			break;
+		}
 	}
 
 	isAttack = true;
 
-	if (isAttack)
-		attackMoveTimer += dt;
-
-	float t = Utils::Clamp(attackMoveTimer / attackMoveDuration, 0.f, 1.f);
-	SetPosition(Utils::Lerp(attackStart, attackDest, t));
-	CalculatorCurrentTile();
-
-	if (currentTile->GetType() == TileType::Wall || currentTile->GetType() == TileType::Cliff)
+	if (anim.IsAnimEndFrame())
 	{
-		SetPosition(prevPos);
-	}
-
-	if (anim.IsAnimEndFrame() && attackMoveTimer > attackMoveDuration)
-	{
-		attackMoveTimer = 0.f;
 		isRun = false;
 		isAttack = false;
 		ChangeState(States::Idle);
@@ -578,12 +586,8 @@ void Player::AttackUpdate(float dt)
 
 void Player::HitUpdate(float dt)
 {
-	if (currentTile->GetType() == TileType::Wall)
-		SetPosition(prevPos);
 
 	currentDir = (Dir)((int)hitDir + 4);
-
-
 
 	// 몬스터의 공격과 동기화가 되지 않음
 	if (!isHitAnim)
@@ -591,19 +595,12 @@ void Player::HitUpdate(float dt)
 		anim.Play(hitId[(int)hitDir]);
 		sprite.setColor(sf::Color::Red);
 		isHitAnim = true;
-		isRun = false;
-		isAttack = false;
-		isDash = false;
-		isSlide = false;
 	}
 
 	//애니메이션이 너무 한 프레임에 처리되어서 시간초를 둠
 	if (isHitAnim)
 	{
 		hitTimer += dt;
-		sf::Vector2f hitKnockBackDir = Utils::Angle(hitLookAngle - 180);
-		knockBackStart = GetPosition();
-		knockBackDest = GetPosition() + sf::Vector2f{ hitKnockBackDir.x * 5, hitKnockBackDir.y * 5 };
 	}
 
 	if (hitTimer > hitDuration)
@@ -612,15 +609,8 @@ void Player::HitUpdate(float dt)
 		isHitAnim = false;
 	}
 
-	float t = Utils::Clamp(hitTimer / hitDuration, 0.f, 1.f);
-	SetPosition(Utils::Lerp(knockBackStart, knockBackDest, t));
-	CalculatorCurrentTile();
-
-	if (currentTile->GetType() == TileType::Wall)
-	{
-		SetPosition(prevPos);
-	}
-
+	// 맞을때 떄린 방향이기에
+	// 때릴때 피하고 다른 방향에서 맞아도 그게 적용
 	switch (hitDir)
 	{
 	case HitDir::Up:
@@ -646,6 +636,8 @@ void Player::HitUpdate(float dt)
 		sprite.setColor(playerColor);
 		isHit = false;
 		isHitAnim = false;
+		isRun = false;
+		isAttack = false;
 		ChangeState(States::Idle);
 	}
 }
@@ -680,7 +672,6 @@ void Player::FallUpdate(float dt)
 	// 다 떨어지면
 	if (t >= 1.0f && !isFallHit)
 	{
-		SetHp(-25);
 		isFallHit = true;
 		//std::cout << t << std::endl;
 		originAngle = sprite.getRotation();
@@ -721,39 +712,7 @@ void Player::DieUpdate(float dt)
 	if (!isDieAnim)
 	{
 		anim.Play("Die");
-
 		isDieAnim = true;
-	}
-
-	if (anim.GetCurrentClipId() == "Die")
-	{
-		anim.GetCurrentClip().frames[1].action = [this]() {
-			anim.SetSpeed(0.1f);
-			SpriteEffect* playerHitEffect = playerDieEffectPool.Get();
-			sf::Vector2f randPos(Utils::RandomRange(0.f, 1.f), Utils::RandomRange(0.f, 1.f));
-			playerHitEffect->SetPosition(GetPosition()+ randPos);
-			float randAngle = Utils::RandomRange(0.f, 360.f);
-			playerHitEffect->sprite.setRotation(randAngle);
-			playerHitEffect->sprite.setColor(sf::Color::Red);
-			SCENE_MGR.GetCurrScene()->AddGo(playerHitEffect);
-
-		};
-	
-		anim.GetCurrentClip().frames[3].action = [this]() {
-			anim.SetSpeed(0.8f);
-
-		};
-		anim.GetCurrentClip().frames[5].action = [this]() {
-			anim.SetSpeed(1.0f);
-
-		};
-	}
-
-
-	if (anim.IsAnimEndFrame())
-	{
-		ChangeState(States::Idle);
-		scene->SetIsGameEnd(true);
 	}
 }
 
@@ -948,6 +907,7 @@ void Player::InsertAnimId()
 	slideId.push_back("SlideDown");
 	slideId.push_back("SlideRight");
 
+	// 중간에 attackName Insert하기
 	attackId.push_back("AttackUp");
 	attackId.push_back("AttackRight");
 	attackId.push_back("AttackDown");
@@ -970,15 +930,10 @@ void Player::InsertAnimId()
 
 void Player::CalculatorCurrentTile()
 {
-	int rowIndex = position.x / _TileSize;
-	int columnIndex = position.y / _TileSize;
-	if (rowIndex < 0 || rowIndex >= worldTiles->size() || columnIndex < 0 || columnIndex >= worldTiles[0].size())
-	{
-		rowIndex = 0;
-		columnIndex = 0;
-		std::cout << "erro: Projectile::CalculatorCurrentTile() Over Range" << std::endl;
-	}
-	currentTile = (*worldTiles)[rowIndex][columnIndex];
+	int rowIndex = position.x < 0 ? 0 : position.x / _TileSize;
+	int columnIndex = position.y < 0 ? 0 : position.y / _TileSize;
+
+ 	currentTile = (*wouldTiles)[rowIndex][columnIndex];
 }
 
 std::vector<Tile*> Player::CalculatorRangeTiles(int row, int col)
@@ -990,13 +945,13 @@ std::vector<Tile*> Player::CalculatorRangeTiles(int row, int col)
 	sf::Vector2i index = currentTile->GetIndex();
 	std::vector<Tile*> tiles;
 
-	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > worldTiles->size() * _TileSize ? worldTiles->size() * _TileSize : index.x;
-	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > worldTiles[0].size() * _TileSize ? worldTiles[0].size() * _TileSize : index.y;
+	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x > wouldTiles->size() * _TileSize ? wouldTiles->size() * _TileSize : index.x;
+	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y > wouldTiles[0].size() * _TileSize ? wouldTiles[0].size() * _TileSize : index.y;
 	for (int i = topRowIndex; i < index.x + searchRowRange; i++)
 	{
 		for (int j = leftColumnIndex; j < index.y + searchColRange; j++)
 		{
-			tiles.push_back((*this->worldTiles)[i][j]);
+			tiles.push_back((*this->wouldTiles)[i][j]);
 		}
 	}
 

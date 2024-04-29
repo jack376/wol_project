@@ -7,17 +7,13 @@
 #include "ResourceMgr.h"
 #include "SceneEditor.h"
 
-Framework::Framework(int w, int h, const std::string& t)
-    : screenWidth(w), screenHeight(h), title(t)
-{
-}
+Framework::Framework(int w, int h, const std::string& t) : screenWidth(w), screenHeight(h), title(t) {}
 
 void Framework::Init(int width, int height, const std::string& title)
 {
     window.create(sf::VideoMode(width, height), title);
 
     DATATABLE_MGR.LoadAll();
-    // Resource
     RESOURCE_MGR.Init();
     SCENE_MGR.Init();
 
@@ -98,7 +94,7 @@ void Framework::Run()
             }
             INPUT_MGR.UpdateEvent(event);
 
-            if (INPUT_MGR.GetKeyDown(sf::Keyboard::F))
+            if (INPUT_MGR.GetKeyDown(sf::Keyboard::F12))
             {
                 showFps = !showFps;
             }

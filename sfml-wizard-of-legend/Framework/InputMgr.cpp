@@ -5,8 +5,6 @@
 #include "TextGo.h"
 #include "Utils.h"
 
-
-
 InputMgr::InputMgr()
 {
 	{
@@ -39,7 +37,7 @@ void InputMgr::Update(float dt)
 	for (auto& it : axisInfoMap)
 	{
 		auto& axisInfo = it.second;
-		float raw = GetAxisRaw(axisInfo.axis, SOCDType::Neutral);
+		float raw = GetAxisRaw(axisInfo.axis);	// -1.0, 0, 1.0
 		if (raw == 0.f && axisInfo.value != 0.f)
 		{
 			raw = axisInfo.value > 0.f ? -1.f : 1.f;
@@ -55,7 +53,6 @@ void InputMgr::Update(float dt)
 
 void InputMgr::UpdateEvent(const sf::Event& ev)
 {
-	inputEv = ev;
 	switch (ev.type)
 	{
 	case sf::Event::KeyPressed:
@@ -146,7 +143,7 @@ float InputMgr::GetAxis(Axis axis)
 	return it->second.value;
 }
 
-float InputMgr::GetAxisRaw(Axis axis, SOCDType type)
+float InputMgr::GetAxisRaw(Axis axis)
 {
 	const auto& it = axisInfoMap.find(axis);
 	if (it == axisInfoMap.end())
@@ -157,40 +154,19 @@ float InputMgr::GetAxisRaw(Axis axis, SOCDType type)
 	auto rit = ingList.rbegin();
 
 	float raw = 0.f;
-	switch (type)
+
+	while (rit != ingList.rend())
 	{
-		case SOCDType::Neutral:
-			while (rit != ingList.rend())
-			{
-				int code = *rit;
-				if (std::find(info.positivies.begin(), info.positivies.end(), code) != info.positivies.end())
-				{
-					raw += 1.f;
-				}
-				if (std::find(info.negatives.begin(), info.negatives.end(), code) != info.negatives.end())
-				{
-					raw += -1.f;
-				}
-				++rit;
-			}
-			break;
-		case SOCDType::LastWins:
-			while (rit != ingList.rend())
-			{
-				int code = *rit;
-				if (std::find(info.positivies.begin(), info.positivies.end(), code) != info.positivies.end())
-				{
-					return 1.f;
-				}
-				if (std::find(info.negatives.begin(), info.negatives.end(), code) != info.negatives.end())
-				{
-					return -1.f;
-				}
-				++rit;
-			}
-			break;
-		default:
-			break;
+		int code = *rit;
+		if (std::find(info.positivies.begin(), info.positivies.end(), code) != info.positivies.end())
+		{
+			raw+= 1.f;
+		}
+		if (std::find(info.negatives.begin(), info.negatives.end(), code) != info.negatives.end())
+		{
+			raw += -1.f;
+		}
+		++rit;
 	}
 	return raw;
 }

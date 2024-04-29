@@ -22,7 +22,6 @@ void SkillMgr::Init()
 		skill.second->SetPlayer(player);
 		skill.second->SetEditorPlayer(editorPlayer);
 		skill.second->Init();
-		skill.second->PoolInit();
 	}
 }
 
@@ -75,10 +74,6 @@ void SkillMgr::LoadExistSkill()
 		skill->SetSkillInfo(DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)table.first, SkillDatas::Exist));
 		skill->Init();
 		existSkillList[skill->GetSkillId()] = skill;
-		//Skill skill = new; 
-		//skill->SetSkillInfo(DATATABLE_MGR.Get<SkillTable>(DataTable::Ids::Skill)->Get((int)table.first, SkillDatas::Exist));
-		//skill->Init();
-		//existSkillList[skill->GetSkillId()] = skill;
 	}
 }
 

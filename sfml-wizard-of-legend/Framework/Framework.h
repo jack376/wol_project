@@ -16,7 +16,7 @@ protected:
 	sf::Time gamePlayTime = sf::Time::Zero;
 
 	int screenWidth = 1920;
-	int screenHeight = 1000;
+	int screenHeight = 1080;
 	std::string title = "SFML_Wizard_Of_Legend";
 
 	// FPS Monitor

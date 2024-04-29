@@ -81,11 +81,11 @@ void Slot::Init()
 
 	coolTimeText.setCharacterSize(25);
 	coolTimeText.setFont(*RESOURCE_MGR.GetFont("fonts/NanumSquareB.ttf"));
-	coolTimeText.setColor(sf::Color::White);
+	coolTimeText.setFillColor(sf::Color::White);
 
 	skillChargeText.setCharacterSize(25);
 	skillChargeText.setFont(*RESOURCE_MGR.GetFont("fonts/NanumSquareB.ttf"));
-	skillChargeText.setColor(sf::Color::White);
+	skillChargeText.setFillColor(sf::Color::White);
 	skillChargeText.setOutlineColor(sf::Color::Black);
 	skillChargeText.setOutlineThickness(3);
 	

@@ -29,11 +29,6 @@
 #include "MenuInventory.h"
 #include "QuickSlot.h"
 #include "HPBar.h"
-#include "GameResult.h"
-
-#include "TextGo.h"
-#include "StringTable.h"
-#include "DataTableMgr.h"
 
 SceneGame::SceneGame() : Scene(SceneId::Game)
 {
@@ -47,8 +42,7 @@ void SceneGame::Init()
 
 
 	player = (Player*)AddGo(new Player());
-	//player->SetPosition(62 * _TileSize, 85 * _TileSize);
-	player->SetPosition(16 * _TileSize, 32 * _TileSize);
+	player->SetPosition(62 * _TileSize, 85 * _TileSize);
 	player->sprite.setScale(4, 4);
 	player->SetOrigin(Origins::MC);
 	player->sortLayer = 5;
@@ -56,49 +50,59 @@ void SceneGame::Init()
 
 	// Load Tilemap CSV
 	LoadFromCSV("tables/EntireRoom_0827_134822.csv");
-	//LoadFromCSV("tables/BossRoom_0827_233200.csv");
 
 	TilesToIntMap();
 	CalculatorNongroundTiles();
-	CreateMiniMap();
 
-	mapDiscovery = dynamic_cast<TextGo*>(AddGo(new TextGo("fonts/neodgm_code.ttf", "MapText")));
-	mapDiscovery->SetPosition(280, 65);
-	//mapDiscovery->text.setColor(sf::Color::Black);
-	mapDiscovery->sortLayer = 110;
-
+	
 	menu = (MenuInventory*)AddGo(new MenuInventory());
 	quickSlot = (QuickSlot*)AddGo(new QuickSlot());
-	gameResult = (GameResult*)AddGo(new GameResult());
-
 	menu->SetQuickSlot(quickSlot);
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
 
-	int archerOffset;
-	for (int i = 0; i < 10; ++i)
-	{
-		SpawnMonster(MonsterId::Archer, _TileSize * ((i * 5) + 16), _TileSize * (32));
-	}
+	/*
+	monster = CreateMonster(MonsterId::FireBoss);
+	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
+	monster->SetIntMap(&intMap);
+	monster->SetNonGroundTiles(&nongroundTiles);
+	monster->SetPosition(512, 1024);
+	monster->particlePool = &this->particlePool;
+	monsters.push_back(monster);
 
+	HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
+	hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
+	hpb->SetOrigin(Origins::ML);
+	hpb->SetPosition(size.x * 0.4, size.y * 0.1);
+	hpb->sortLayer = 105;
 
-	
-	//HPBar* hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("BossHP")));
-	//hpb->SetTarget(monster->GetMaxHP(), monster->GetHP());
-	//hpb->SetOrigin(Origins::ML);
-	//hpb->SetPosition(size.x * 0.4, size.y * 0.1);
-	//hpb->sortLayer = 105;
-	//
+	hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("PlayerHP")));
+	hpb->SetTarget(player->GetMaxHP(), player->GetHP());
+	hpb->SetOrigin(Origins::ML);
+	hpb->SetPosition(size.x * 0.05, size.y * 0.05);
+	hpb->sortLayer = 105;
 
-	//hpb = dynamic_cast<HPBar*>(AddGo(new HPBar("PlayerHP")));
-	//hpb->SetTarget(player->GetMaxHP(), player->GetHP());
-	//hpb->SetOrigin(Origins::ML);
-	//hpb->SetPosition(size.x * 0.05, size.y * 0.05);
-	//hpb->sortLayer = 105;
+	monster = CreateMonster(MonsterId::Ghoul);
+	monster->SetPlayer(player);
+	monster->SetTiles(&tilesWorld);
+	monster->SetIntMap(&intMap);
+	monster->SetNonGroundTiles(&nongroundTiles);
+	monster->SetPosition(700, 500);
+	monsters.push_back(monster);
+	*/
 
 	player->SetTiles(&tilesWorld);
 	player->SetMonsterList(monsters);
+
+	//tempWindSlash->SetTiles(&tilesWorld);
+	//tempFireBall->SetTiles(&tilesWorld);
+
+	//tempWindSlash->SetMonsterList(monsters);
+	//tempFireBall->SetMonsterList(monsters);
+
+	//tempFireBall->SetMonsterList(monsters);
 
 	// Create Particle
 	CreateParticle(1000);
@@ -122,16 +126,29 @@ void SceneGame::Init()
 	SKILL_MGR.SetPlayer(player);
 	SKILL_MGR.Init();
 
-	for (auto& skillTable : SKILL_MGR.GetExistSkillList())
+	// 스킬 임시 장착 / 스킬 구매하면 Tab메뉴에 생성하고
+	// 그 Tab메뉴에서 장착해야 Equip슬롯으로 간다
+	// 스킬 장착 이후에 스킬을 슬롯에 적용시켜야한다.
+
+	for (auto skillTable : SKILL_MGR.GetExistSkillList())
 	{
 		skillTable.second->SetPlayer(player);
 		skillTable.second->SetMonsterList(monsters);
 		skillTable.second->SetPlayer(player);
-		skillTable.second->SetTiles(&tilesWorld);
 		skillTable.second->Init();
-		skillTable.second->PoolInit();
 		SKILL_MGR.EquipSkill(skillTable.second);
 	}
+
+	//for (int i = 0; i < SKILL_MGR.GetExistSkillList().size(); i++)
+	//{
+	//	Skill* skill = SKILL_MGR.SearchExistedSkill((SkillIds)i);
+	//	skill->SetSkillEvent((SkillEvents)i);
+	//	skill->SetPlayer(player);
+	//	skill->SetMonsterList(monsters);
+	//	skill->SetTiles(&tilesWorld);
+	//	SKILL_MGR.EquipSkill(skill);
+	//}
+	// 슬롯 작업
 }
 
 void SceneGame::Release()
@@ -152,17 +169,8 @@ void SceneGame::Enter()
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
 
-	player->SetPosition(16 * _TileSize, 32 * _TileSize);
-
-	isGameEnd = false;
-	isMenuOn = false;
-	isReStart = false;
-
-	miniMapView.setSize(size * 1.2f);
-	miniMapView.setViewport(sf::FloatRect(0.0f, 0.1f, 0.2f, 0.2f));
-
 	Scene::Enter();
-	SetIsGameEnd(false);
+
 	ClearObjectPool(particlePool);
 	ClearObjectPool(fireParticlePool);
 	ClearObjectPool(portalParticlePoolRed);
@@ -181,13 +189,18 @@ void SceneGame::Update(float dt)
 	Scene::Update(dt);	
 	debugTimer += dt;
 	worldView.setCenter(player->GetPosition());
-	miniMapView.setCenter(player->GetPosition() );
+	//isCol = colliderManager.ObbCol(monster->rect, tempWindSlash->GetCollider());
+	//isCol = colliderManager.ObbCol(tempWindSlash->GetCollider(), monster->rect);
 
-	lookMap = CheckMiniMap(20, 20);
-	
-	int percent = (float)mapCount / (float)mapMaxCount * 100;
-	mapDiscovery->SetString(std::to_string(percent) + "%");
-
+	//if (debugTimer > debugDuration && !isCol)
+	//{
+	//	debugTimer = 0.f;
+	//	std::cout << "OBB is Failed" << std::endl;
+	//}
+	//if (isCol)
+	//{
+	//	std::cout << "OBB is Succesd" << std::endl;
+	//}
 	worldView.setCenter(player->GetPosition());
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Tilde))
@@ -208,15 +221,6 @@ void SceneGame::Update(float dt)
 		menu->AllSetActive(isMenuOn);
 	}
 
-	if (isGameEnd && !gameResult->GetActive())
-	{
-		gameResult->AllSetActive(true);
-	}
-
-	if (isReStart)
-	{
-		SCENE_MGR.ChangeScene(SceneId::Game);
-	}
 
 }
 
@@ -235,15 +239,7 @@ void SceneGame::Draw(sf::RenderWindow& window)
 	Scene::Draw(window);
 
 	window.setView(miniMapView);
-	if (!player->IsAlive() || isGameEnd)
-		return;
-
-	for (auto& cell : lookMap)
-	{
-		window.draw(*cell);
-	}
-	window.draw(miniMapPlayer);
-	
+	window.draw(miniMapBackground);
 }
 
 Tile* SceneGame::CreateTile(const std::string& name, float posX, float posY, int sort)
@@ -304,6 +300,14 @@ void SceneGame::LoadFromCSV(const std::string& path)
 		tile->SetSpawnLocation(static_cast<SpawnLocation>(spawnLocation));
 		tile->SetOrigin(Origins::TL);
 		tilesWorld[tileIndexX][tileIndexY] = tile;
+		
+		/*
+		if (topTextureRect.left >= 0 && topTextureRect.left <= 176 && topTextureRect.top == 192
+			|| bottomTextureRect.left >= 0 && bottomTextureRect.left <= 176 && bottomTextureRect.top == 192)
+		{
+			tile->sortLayer = 50;
+		}
+		*/
 
 		if (tile->GetType() == TileType::None)
 		{
@@ -645,40 +649,6 @@ void SceneGame::SpawnPortalGlowGo()
 	}
 }
 
-void SceneGame::SpawnMonster(int count)
-{
-	std::vector<sf::Vector2f> monsterSpawnArea;
-
-	for (size_t row = 0; row < tilesWorld.size(); row++)
-	{
-		for (size_t col = 0; col < tilesWorld[row].size(); col++)
-		{
-			if (tilesWorld[row][col]->GetSpawnLocation() == SpawnLocation::Monster)
-			{
-				monsterSpawnArea.push_back(tilesWorld[row][col]->GetPosition());
-			}
-		}
-	}
-
-	if (monsterSpawnArea.empty())
-	{
-		return;
-	}
-
-	for (int i = 0; i < count && !monsterSpawnArea.empty(); i++) // monsterSpawnArea.size()
-	{
-		int random = Utils::RandomRange(0, 5);
-
-		monster = CreateMonster((MonsterId)random);
-		monster->SetPlayer(player);
-		monster->SetTiles(&tilesWorld);
-		monster->SetIntMap(&intMap);
-		monster->SetNonGroundTiles(&nongroundTiles);
-		monster->SetPosition(monsterSpawnArea[i]);
-		monsters.push_back(monster);
-	}
-}
-
 void SceneGame::ModifyWallToRoof()
 {
 	for (auto& tiles : tilesWorld)
@@ -697,18 +667,6 @@ void SceneGame::DestroyDecoGo(DecoGo* obj)
 {
 	RemoveGo(obj);
 	count++; // 임시
-}
-
-void SceneGame::SpawnMonster(MonsterId monsterId, float xPos, float yPos)
-{
-	Monster* mon = CreateMonster(monsterId);
-	mon->SetPlayer(player);
-	mon->SetTiles(&tilesWorld);
-	mon->SetIntMap(&intMap);
-	mon->SetNonGroundTiles(&nongroundTiles);
-	mon->SetPosition(xPos, yPos);
-	mon->particlePool = &this->particlePool;
-	monsters.push_back(mon);
 }
 
 void SceneGame::TilesToIntMap()
@@ -737,87 +695,6 @@ void SceneGame::CalculatorNongroundTiles()
 		{
 			if (tile->GetType() != TileType::Ground)
 				nongroundTiles.push_back(tile);
-			else
-				mapMaxCount++;
 		}
 	}
-}
-
-void SceneGame::CreateMiniMap()
-{
-	miniMapPlayer.setFillColor(sf::Color::Green);
-	miniMapPlayer.setSize({ 64, 64 });
-	for (auto& tiles : tilesWorld)
-	{
-		std::vector<std::pair<sf::RectangleShape*, bool>> row;
-		for (auto& tile : tiles)
-		{
-			if (tile->GetType() == TileType::Ground)
-			{
-				sf::RectangleShape* rectangle = new sf::RectangleShape({ 64, 64 });
-				rectangle->setFillColor(sf::Color::White);
-				sf::Color color = rectangle->getFillColor();
-				color.a = 0;
-				rectangle->setFillColor(color);
-				rectangle->setPosition(tile->GetPosition());
-				row.push_back(std::pair<sf::RectangleShape*, bool>(rectangle, false));
-			}	
-			else
-			{
-				sf::RectangleShape* rectangle = new sf::RectangleShape({ 64, 64 });
-				rectangle->setFillColor({128, 128, 128});
-				sf::Color color = rectangle->getFillColor();
-				color.a = 0;
-				rectangle->setFillColor(color);
-				rectangle->setPosition(tile->GetPosition());
-				row.push_back(std::pair<sf::RectangleShape*, bool>(rectangle, false));
-			}	
-		}
-		miniMap.push_back(row);
-	}
-}
-
-std::vector<sf::RectangleShape*> SceneGame::CheckMiniMap(int row, int col)
-{
-	int searchRowRange = row;
-	int searchColRange = col;
-
-	sf::Vector2i index = player->GetCurrentTile()->GetIndex();
-	std::vector<sf::RectangleShape*> tiles;
-
-	int topRowIndex = index.x - searchRowRange < 0 ? 0 : index.x - searchRowRange;
-	int leftColumnIndex = index.y - searchColRange < 0 ? 0 : index.y - searchColRange;
-	int bottomRowIndex = index.x + searchRowRange >= miniMap.size() ? miniMap.size() - 1 : index.x + searchRowRange;
-	int rightColumnIndex = index.y + searchColRange >= miniMap[0].size() ? miniMap[0].size() - 1 : index.y + searchColRange;
-
-	miniMapPlayer.setPosition(miniMap[index.x][index.y].first->getPosition());
-
-	for (int i = topRowIndex; i < bottomRowIndex; i++)
-	{
-		for (int j = leftColumnIndex; j < rightColumnIndex; j++)
-		{
-			if (!miniMap[i][j].second)
-			{
-				miniMap[i][j].second = true;
-				if (intMap[i][j] == 0)
-					mapCount++;
-			}
-			
-			
-			if (intMap[i][j] == 0)
-			{
-				sf::Color color = sf::Color::White;
-				color.a = 255;
-				miniMap[i][j].first->setFillColor(color);
-			}
-			else
-			{
-				sf::Color color = {128, 128, 128};
-				color.a = 100;
-				miniMap[i][j].first->setFillColor(color);
-			}
-			tiles.push_back(miniMap[i][j].first);
-		}
-	}
-	return tiles;
 }

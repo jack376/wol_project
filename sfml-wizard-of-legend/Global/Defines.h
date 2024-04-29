@@ -2,7 +2,6 @@
 
 #define _USE_MATH_DEFINES
 
-
 enum class SkillDatas
 {
 	Exist,

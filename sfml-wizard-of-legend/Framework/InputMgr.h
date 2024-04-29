@@ -8,12 +8,6 @@ enum class Axis
 	Vertical,
 };
 
-enum class SOCDType
-{
-	Neutral,
-	LastWins,
-};
-
 struct AxisInfo
 {
 	Axis axis;
@@ -28,7 +22,7 @@ struct AxisInfo
 class InputMgr : public Singleton<InputMgr>
 {
 	friend Singleton<InputMgr>;
-	sf::Event inputEv;
+
 protected:
 	InputMgr();
 	virtual ~InputMgr() override = default;
@@ -46,8 +40,6 @@ public:
 	void Update(float dt);
 	void UpdateEvent(const sf::Event& ev);
 
-	sf::Event& GetEvent() { return inputEv; }
-
 	// Keyboard
 	bool GetKeyDown(sf::Keyboard::Key key);
 	bool GetKey(sf::Keyboard::Key key);
@@ -59,10 +51,9 @@ public:
 	bool GetMouseButton(sf::Mouse::Button button);
 	bool GetMouseButtonUp(sf::Mouse::Button button);
 
-
 	// Axis
 	float GetAxis(Axis axis);
-	float GetAxisRaw(Axis axis, SOCDType type);
+	float GetAxisRaw(Axis axis);
 
 	std::vector<char>& GetTextList() { return textList;};
 };

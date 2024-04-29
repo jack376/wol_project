@@ -21,9 +21,7 @@ class CustomEffect;
 class Slot;
 class MenuInventory;
 class QuickSlot;
-class TextGo;
 enum class MonsterId;
-class GameResult;
 
 class SceneGame : public Scene
 {
@@ -32,9 +30,6 @@ protected:
 
 	MenuInventory* menu;
 	QuickSlot* quickSlot;
-	GameResult* gameResult;
-	TextGo* test;
-
 	Slot* slot1;
 	Slot* slot2;
 
@@ -51,10 +46,7 @@ protected:
 	Monster* monster;
 	std::list<Monster*> monsters;
 
-	bool isGameEnd = false;
 	bool isMenuOn = false;
-	bool isReStart = false;
-
 	bool isCol = false;
 
 	float debugTimer = 0.f;
@@ -67,15 +59,7 @@ protected:
 	int count = 0;
 
 	sf::View miniMapView;
-	std::vector<std::vector<std::pair<sf::RectangleShape*, bool>>> miniMap;
-	std::vector<sf::RectangleShape*> lookMap;
-	sf::RectangleShape miniMapPlayer;
-	TextGo* mapDiscovery = nullptr;
-	float miniMapTimer = 0.f;
-	float miniMapDuration = 1.f;
-	int mapMaxCount = 0;
-	int mapCount = 0;
-	 
+	sf::RectangleShape miniMapBackground;
 public:
 	SceneGame();
 	virtual ~SceneGame() override = default;
@@ -106,22 +90,13 @@ public:
 	void SpawnWallDecoGo(int count);
 	void SpawnGlowGo();
 	void SpawnPortalGlowGo();
-	void SpawnMonster(int count);
 	void ModifyWallToRoof();
 	void DestroyDecoGo(DecoGo* obj);
-
-	void SpawnMonster(MonsterId monsterId, float xPos, float yPos);
 
 	void TilesToIntMap();
 	void CalculatorNongroundTiles();
 
 	bool GetIsMenuOn() { return isMenuOn; }
 	void SetIsMenuOn(bool isOn) { isMenuOn = isOn; }
-	bool GetIsGameEnd() { return isGameEnd; }
-	void SetIsGameEnd(bool isOn) { isGameEnd = isOn; }
-	bool GetIsReStart() { return isReStart; }
-	void SetIsReStart(bool isOn) { isReStart = isOn; }
-	void CreateMiniMap();
-	std::vector<sf::RectangleShape*> CheckMiniMap(int row, int col);
 };
 

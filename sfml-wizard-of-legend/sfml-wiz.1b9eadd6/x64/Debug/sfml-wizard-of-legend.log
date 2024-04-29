@@ -1,0 +1,541 @@
+﻿  Framework.cpp
+  SceneMgr.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/Framework/SceneMgr.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Framework/SceneMgr.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Framework/SceneMgr.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Framework/SceneMgr.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Framework/SceneMgr.cpp'을(를) 컴파일하는 중)
+  
+  AnimationProjectile.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/AnimationProjectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/AnimationProjectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/AnimationProjectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/AnimationProjectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/AnimationProjectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/AnimationProjectile.cpp'을(를) 컴파일하는 중)
+  
+  BaseUI.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\BaseUI.cpp(57,39): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/BaseUI.cpp'을(를) 컴파일하는 중)
+  
+  FireBoss.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(268,36): warning C4353: 비표준 확장을 사용했습니다. 함수 식으로 상수 0을 사용했습니다.  '__noop' 내장 함수를 대신 사용하십시오.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(310,17): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(339,40): warning C4353: 비표준 확장을 사용했습니다. 함수 식으로 상수 0을 사용했습니다.  '__noop' 내장 함수를 대신 사용하십시오.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(412,40): warning C4353: 비표준 확장을 사용했습니다. 함수 식으로 상수 0을 사용했습니다.  '__noop' 내장 함수를 대신 사용하십시오.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(440,17): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(496,44): warning C4353: 비표준 확장을 사용했습니다. 함수 식으로 상수 0을 사용했습니다.  '__noop' 내장 함수를 대신 사용하십시오.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(522,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(526,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(555,58): warning C4305: '인수': 'double'에서 '_Ty'(으)로 잘립니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(555,58): warning C4305:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(555,58): warning C4305:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(555,58): warning C4305:             _Ty=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Boss\FireBoss.cpp(555,58): warning C4305:         ]
+  (소스 파일 '/GameObjects/Boss/FireBoss.cpp'을(를) 컴파일하는 중)
+  
+  DecoGo.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/DecoGo.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/DecoGo.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/DecoGo.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/DecoGo.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/DecoGo.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/DecoGo.cpp'을(를) 컴파일하는 중)
+  
+  CustomEffect.cpp
+  ElementalSpell.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,37): warning C4244: '인수': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,37): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,37): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,37): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,37): warning C4244:         ]
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,25): warning C4244: '인수': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,25): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,25): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,25): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(79,25): warning C4244:         ]
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(184,24): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(252,24): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(332,10): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(335,23): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(344,15): warning C4244: '초기화 중': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(344,15): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(344,15): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(344,15): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(344,15): warning C4244:         ]
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(345,18): warning C4244: '초기화 중': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(345,18): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(345,18): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(345,18): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(345,18): warning C4244:         ]
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(359,18): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\ElementalSpell.cpp(360,22): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/ElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+  GlowGo.cpp
+  Monster.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,26): warning C4244: '인수': 'const T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,26): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,26): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,26): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,26): warning C4244:         ]
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,21): warning C4244: '인수': 'const T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,21): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,21): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,21): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(120,21): warning C4244:         ]
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(126,23): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(126,20): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(227,32): warning C4353: 비표준 확장을 사용했습니다. 함수 식으로 상수 0을 사용했습니다.  '__noop' 내장 함수를 대신 사용하십시오.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(370,15): warning C4244: '-=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(376,18): warning C4244: '초기화 중': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(376,18): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(376,18): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(376,18): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(376,18): warning C4244:         ]
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(377,21): warning C4244: '초기화 중': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(377,21): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(377,21): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(377,21): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(377,21): warning C4244:         ]
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(393,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.cpp(394,26): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Monster/Monster.cpp'을(를) 컴파일하는 중)
+  
+  Particle.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Particle.cpp(47,14): warning C4244: '초기화 중': 'float'에서 'UINT8'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Particle.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Particle.cpp(145,18): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Particle.cpp'을(를) 컴파일하는 중)
+  
+  Player.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(933,15): warning C4244: '초기화 중': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(933,15): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(933,15): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(933,15): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(933,15): warning C4244:         ]
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(934,18): warning C4244: '초기화 중': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(934,18): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(934,18): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(934,18): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(934,18): warning C4244:         ]
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(948,18): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.cpp(949,22): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/Player.cpp'을(를) 컴파일하는 중)
+  
+  SkillEditorPlayer.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/SkillEditorPlayer.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/SkillEditorPlayer.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/SkillEditorPlayer.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Player/SkillEditorPlayer.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\SkillEditorPlayer.h(145,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/Player/SkillEditorPlayer.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/Player/SkillEditorPlayer.cpp'을(를) 컴파일하는 중)
+  
+  Projectile.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Projectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Projectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Projectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Projectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/Projectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/Projectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(167,15): warning C4244: '초기화 중': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(167,15): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(167,15): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(167,15): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(167,15): warning C4244:         ]
+  (소스 파일 '/GameObjects/Projectile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(168,18): warning C4244: '초기화 중': 'T'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(168,18): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(168,18): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(168,18): warning C4244:             T=float
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Projectile.cpp(168,18): warning C4244:         ]
+  (소스 파일 '/GameObjects/Projectile.cpp'을(를) 컴파일하는 중)
+  
+  RoofGo.cpp
+  Skill.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/Skill.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Skill.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Skill.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Skill.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Skill.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/Skill.cpp'을(를) 컴파일하는 중)
+  
+  SkillEditorElementalSpell.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/SkillEditorElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/SkillEditorElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/SkillEditorElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/SkillEditorElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\SkillEditorPlayer.h(145,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/GameObjects/SkillEditorElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameObjects/SkillEditorElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\SkillEditorElementalSpell.cpp(215,10): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/SkillEditorElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\SkillEditorElementalSpell.cpp(218,23): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/SkillEditorElementalSpell.cpp'을(를) 컴파일하는 중)
+  
+  Tile.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Tile.cpp(184,22): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Tile.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Tile.cpp(189,12): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/GameObjects/Tile.cpp'을(를) 컴파일하는 중)
+  
+  UIButton.cpp
+  MenuInventory.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/MenuInventory.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/MenuInventory.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/MenuInventory.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/MenuInventory.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/MenuInventory.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\MenuInventory.cpp(95,26): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/MenuInventory.cpp'을(를) 컴파일하는 중)
+  
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  QuickSlot.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/QuickSlot.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/QuickSlot.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/QuickSlot.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/QuickSlot.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/QuickSlot.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\QuickSlot.cpp(91,26): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/QuickSlot.cpp'을(를) 컴파일하는 중)
+  
+  PathfindingScene.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/Scenes/PathfindingScene.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/PathfindingScene.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/PathfindingScene.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/PathfindingScene.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/PathfindingScene.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/Scenes/PathfindingScene.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\PathfindingScene.cpp(183,18): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/PathfindingScene.cpp'을(를) 컴파일하는 중)
+  
+  Scene.cpp
+  SceneEditor.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(61,127): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(61,106): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,127): warning C4244: '인수': 'float'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,127): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,127): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,127): warning C4244:             T=int
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,127): warning C4244:         ]
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,117): warning C4244: '인수': 'float'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,117): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,117): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,117): warning C4244:             T=int
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,117): warning C4244:         ]
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,105): warning C4244: '인수': 'float'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,105): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,105): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,105): warning C4244:             T=int
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,105): warning C4244:         ]
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,67): warning C4244: '인수': 'float'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,67): warning C4244:         with
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,67): warning C4244:         [
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,67): warning C4244:             T=int
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(274,67): warning C4244:         ]
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(318,13): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(319,13): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(420,13): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(421,13): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(862,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneEditor.cpp(956,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneEditor.cpp'을(를) 컴파일하는 중)
+  
+  SceneGame.cpp
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Monster\Monster.h(5,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(18,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(19,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(20,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Raycaster\Line.h(21,32): warning C4244: 'return': 'const float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\GameObjects\Player\Player.h(156,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneGame.cpp(295,18): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneGame.cpp(514,66): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+E:\source\wol_team_project\sfml-wizard-of-legend\Scenes\SceneGame.cpp(555,66): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Scenes/SceneGame.cpp'을(를) 컴파일하는 중)
+  
+  SceneTitle.cpp
+  코드를 생성하고 있습니다...
+  LINK : ..\sfml-wizard-of-legend-bin\sfml-wizard-of-legend-d.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+  sfml-wizard-of-legend.vcxproj -> E:\source\wol_team_project\sfml-wizard-of-legend-bin\sfml-wizard-of-legend-d.exe

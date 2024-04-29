@@ -100,7 +100,7 @@ inline void ObjectPool<T>::Return(T* obj)
 {
 	if (std::find(useList.begin(), useList.end(), obj) == useList.end())
 	{
-		//std::cout << "Return Error!!!" << std::endl;
+		std::cout << "Return Error!!!" << std::endl;
 		return;
 	}
 	useList.remove(obj);

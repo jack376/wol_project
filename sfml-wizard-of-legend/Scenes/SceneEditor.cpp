@@ -12,6 +12,9 @@
 #include "Tile.h"
 #include "Particle.h"
 #include "rapidcsv.h"
+#include <chrono>
+#include <iomanip>
+#include <sstream>
 
 SceneEditor::SceneEditor() : Scene(SceneId::Editor)
 {
@@ -23,7 +26,6 @@ void SceneEditor::Init()
 
 	windowSize = FRAMEWORK.GetWindowSize();
 	resolutionScaleFactor = windowSize.x / fhdWidth;
-
 
 	// Texture Atlas
 	tileAtlasPreview = (SpriteGo*)AddGo(new SpriteGo("graphics/editor/FireTileSet.png", "TileAtlasPreview"));
@@ -873,7 +875,18 @@ void SceneEditor::DrawEditorUI()
 		std::time_t now_time = std::chrono::system_clock::to_time_t(now);
 
 		std::stringstream ss;
-		ss << std::put_time(std::localtime(&now_time), "_%m%d_%H%M%S"); // e.g., "_0820_143059"
+		//ss << std::put_time(std::localtime(&now_time), "_%m%d_%H%M%S"); // e.g., "_0820_143059"
+
+		auto in_time_t = std::chrono::system_clock::to_time_t(now);
+		std::tm timeinfo;
+		if (localtime_s(&timeinfo, &in_time_t) == 0) 
+		{
+			ss << std::put_time(&timeinfo, "_%m%d_%H%M%S");
+		}
+		else {
+			ss << "Error converting time";
+		}
+
 		std::string timestamp = ss.str();
 		std::string filename = "tables/" + str + timestamp + ".csv";
 
@@ -908,8 +921,8 @@ void SceneEditor::DrawEditorUI()
 	if (ImGui::Button("OK"))
 	{
 		int width, height;
-		sscanf(mapSizeX[mapSizeIndexX], "%d", &width);
-		sscanf(mapSizeY[mapSizeIndexY], "%d", &height);
+		sscanf_s(mapSizeX[mapSizeIndexX], "%d", &width);
+		sscanf_s(mapSizeY[mapSizeIndexY], "%d", &height);
 		ResizeWorld(width, height);
 	}
 	ImGui::Dummy(ImVec2(0.0f, 8.0f));

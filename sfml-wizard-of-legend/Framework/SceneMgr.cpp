@@ -18,9 +18,8 @@ void SceneMgr::Init()
 	scenes.push_back(new SceneTitle());
 	scenes.push_back(new SceneGame());
 	scenes.push_back(new SceneEditor());
-	scenes.push_back(new SceneSkillEditor());
-	scenes.push_back(new PathfindingScene());
-
+	//scenes.push_back(new SceneSkillEditor());
+	//scenes.push_back(new PathfindingScene());
 
 	for (auto scene : scenes)
 	{

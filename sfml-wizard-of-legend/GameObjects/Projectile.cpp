@@ -4,7 +4,6 @@
 #include "SceneMgr.h"
 #include "BoxCollider2D.h"
 #include "Tile.h"
-#include "SpriteEffect.h"
 
 Projectile::Projectile(const std::string& textureId, const std::string& n)
 {
@@ -18,31 +17,17 @@ void Projectile::Init()
 {
 	SpriteGo::Init();
 	collider.Init();
-
-	playerHitEffectPool.OnCreate = [this](SpriteEffect* effect) {
-		effect->sprite.setScale(3, 3);
-		effect->SetAnimId("HitEffect");
-		effect->SetDuration(0.5f);
-		effect->sortLayer = 20;
-	};
-	playerHitEffectPool.Init();
 }
 
 void Projectile::Release()
 {
 	SpriteGo::Release();
 	collider.Release();
-	for (auto obj : playerHitEffectPool.GetUseList())
-	{
-		SCENE_MGR.GetCurrScene()->RemoveGo(obj);
-	}
-	playerHitEffectPool.Clear();
 }
 
 void Projectile::Reset()
 {
 	SpriteGo::Reset();
-	playerHitEffectPool.Clear();
 	collider.Reset();
 	collider.SetColSize();
 	collider.SetSprite(sprite);
@@ -79,13 +64,6 @@ void Projectile::Update(float dt)
 	{
 		if (collider.ObbCol(player->rect))
 		{
-			SpriteEffect* playerHitEffect = playerHitEffectPool.Get();
-			sf::Vector2f randPos(Utils::RandomRange(0.f, 10.f), Utils::RandomRange(0.f, 10.f));
-			playerHitEffect->SetPosition(player->GetPosition() + randPos);
-			float randAngle = Utils::RandomRange(0.f, 360.f);
-			playerHitEffect->sprite.setRotation(randAngle);
-			SCENE_MGR.GetCurrScene()->AddGo(playerHitEffect);
-
 			player->SetHitDir(direction);
 			player->SetHp(-damage);
 			isAttacked = true;
@@ -107,8 +85,8 @@ void Projectile::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite, &shader);
 
-	//if (collider.GetActive())
-	//	collider.Draw(window);
+	if (collider.GetActive())
+		collider.Draw(window);
 }
 
 void Projectile::SetRotation(const sf::Vector2f dir)

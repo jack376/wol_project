@@ -48,9 +48,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
+    <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -84,8 +84,9 @@
     <IncludePath>./imgui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>..\$(ProjectName)-bin\</OutDir>
+    <TargetName>$(ProjectName)-d</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -143,25 +144,23 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\imgui\;./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./GameObjects/Raycaster;./Scenes;./GameObjects;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\imgui\;./;./3rd;./DataTables;./SFML-2.5.1/include;./Global;./Framework;./GameObjects/Boss;./Raycaster;./Scenes;./GameObjects;./PathFinding;./GameObjects/Player;./GameObjects/Monster;./GameObjects/Effects;./Animation;./UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalBMIDirectories>./;./GameObjects;./Framework;./3rd;./DataTables;./Global;./Animation;./Scenes;%(AdditionalBMIDirectories)</AdditionalBMIDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>./SFML-2.5.1/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-network.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-network-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObjects\GlowGo.cpp" />
-    <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="MenuInventory.cpp" />
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
-    <ClCompile Include="PathFinding\ObstacleAvoider.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="GameObjects\RoofGo.cpp" />
     <ClCompile Include="Scenes\PathfindingScene.cpp" />
@@ -227,16 +226,13 @@
     <ClCompile Include="GameObjects\SkillEditorElementalSpell.cpp" />
     <ClCompile Include="DataTables\SkillTable.cpp" />
     <ClCompile Include="Slot.cpp" />
-    <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="GameObjects\GlowGo.h" />
-    <ClInclude Include="GameResult.h" />
     <ClInclude Include="HPBar.h" />
     <ClInclude Include="MenuInventory.h" />
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
-    <ClInclude Include="PathFinding\ObstacleAvoider.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="GameObjects\RoofGo.h" />
     <ClInclude Include="Scenes\PathfindingScene.h" />
@@ -284,7 +280,6 @@
     <ClInclude Include="GameObjects\Skill.h" />
     <ClInclude Include="DataTables\TileInfoTable.h" />
     <ClInclude Include="Framework\TileCommand.h" />
-    <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="GameObjects\Player\SkillEditorPlayer.h" />
     <ClInclude Include="GameObjects\SkillEditorElementalSpell.h" />

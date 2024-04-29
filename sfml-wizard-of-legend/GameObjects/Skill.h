@@ -135,9 +135,6 @@ public:
 	void SetIsUsed(bool isUsed) { this->isUsed = isUsed; }
 	void SetSkillInfo(SkillInfo info) { this->skillInfo = info; }
 	void SetSpellInfo(SpellInfo info) { this->skillInfo.spellinfo = info; }
-	void SetInfo();
-
-	void PoolInit();
 
 	void UseSkill();
 	void UseEditorSkill();

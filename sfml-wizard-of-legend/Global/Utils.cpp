@@ -198,7 +198,7 @@ sf::Vector2f Utils::GetNormal(const sf::Vector2f& v)
 	return sf::Vector2f(-v.y, v.x);
 }
 
-float Utils::ProjectOnAxis(const RectVertexArray& vertices, const sf::Vector2f& axis)
+sf::Vector2f Utils::ProjectOnAxis(const RectVertexArray& vertices, const sf::Vector2f& axis)
 {
 	float min = std::numeric_limits<float>::infinity();
 	float max = -std::numeric_limits<float>::infinity();
@@ -210,19 +210,19 @@ float Utils::ProjectOnAxis(const RectVertexArray& vertices, const sf::Vector2f& 
 		if (projection > max)
 			max = projection;
 	}
-	return max - min;  // 스칼라 값 반환 (max와 min의 차이)
+	return sf::Vector2f(min, max);
 }
 
-bool Utils::AreOverlapping(const float a, const float b)
+bool Utils::AreOverlapping(const sf::Vector2f& a, const sf::Vector2f& b)
 {
-	return a <= b;
+	return a.x <= b.y && a.y >= b.x;
 }
 
-//float Utils::GetOverlapLength(const float a, const float b)
-//{
-//	if (!AreOverlapping(a, b)) return 0.f;
-//	return std::min(a.y, b.y) - std::max(a.x, b.x);
-//}
+float Utils::GetOverlapLength(const sf::Vector2f& a, const sf::Vector2f& b)
+{
+	if (!AreOverlapping(a, b)) return 0.f;
+	return std::min(a.y, b.y) - std::max(a.x, b.x);
+}
 
 sf::Vector2f Utils::GetCenter(const sf::RectangleShape& shape)
 {

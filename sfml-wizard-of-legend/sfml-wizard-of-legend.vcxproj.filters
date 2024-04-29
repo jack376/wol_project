@@ -64,10 +64,7 @@
     <ClCompile Include="GameObjects\Boss\FireBoss.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="HPBar.cpp" />
-    <ClCompile Include="GameObjects\Effects\SpriteEffect.cpp" />
     <ClCompile Include="GameObjects\RoofGo.cpp" />
-    <ClCompile Include="GameResult.cpp" />
-    <ClCompile Include="PathFinding\ObstacleAvoider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -221,10 +218,7 @@
     <ClInclude Include="GameObjects\Boss\FireBoss.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="HPBar.h" />
-    <ClInclude Include="GameObjects\Effects\SpriteEffect.h" />
-    <ClInclude Include="GameResult.h" />
     <ClInclude Include="GameObjects\RoofGo.h" />
-    <ClInclude Include="PathFinding\ObstacleAvoider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

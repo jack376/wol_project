@@ -35,9 +35,6 @@ public:
 
 	void SetFrame(const AnimationFrame& frame);
 	void SetFramePos(int index, sf::Vector2f pos);
-
-	int GetCurrentFrame() { return currentFrame; }
-	AnimationClip& GetCurrentClip() { return *currentClip; }
 	sf::FloatRect GetCurrentRect();
 
 	const std::string& GetCurrentClipId() { return currentClip->id; }
